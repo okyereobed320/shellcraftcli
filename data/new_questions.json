@@ -1,0 +1,536 @@
+[
+  {
+    "question": "Which sysctl parameter controls the maximum number of open file descriptors system-wide?",
+    "options": ["fs.file-max", "kernel.pid_max", "vm.max_map_count", "fs.nr_open"],
+    "answer": "fs.file-max",
+    "explanation": "fs.file-max defines the maximum number of file handles that the Linux kernel will allocate."
+  },
+  {
+    "question": "What does the 'kernel.panic' sysctl parameter represent?",
+    "options": ["The type of panic occurred", "Seconds to wait before rebooting after a panic", "Whether to dump core on panic", "Maximum number of panics allowed"],
+    "answer": "Seconds to wait before rebooting after a panic",
+    "explanation": "If non-zero, it specifies the number of seconds the kernel should wait before rebooting after a kernel panic."
+  },
+  {
+    "question": "Which system call is used to create a new process by duplicating the calling process, but with a new namespace?",
+    "options": ["fork", "vfork", "clone", "execve"],
+    "answer": "clone",
+    "explanation": "The 'clone' system call allows for fine-grained control over what parts of the execution context are shared between the parent and child, including namespaces."
+  },
+  {
+    "question": "What is the purpose of the 'pivot_root' system call?",
+    "options": ["To rotate log files", "To move the root file system to a different directory", "To change the root password", "To switch between kernel versions"],
+    "answer": "To move the root file system to a different directory",
+    "explanation": "pivot_root moves the root file system of the current process to a directory and mounts a new root file system, commonly used in container runtimes."
+  },
+  {
+    "question": "Which sysctl parameter controls the 'swappiness' of the Linux kernel?",
+    "options": ["vm.swappiness", "kernel.swap", "fs.swappiness", "mem.swappiness"],
+    "answer": "vm.swappiness",
+    "explanation": "vm.swappiness (0-100) controls how aggressively the kernel swaps memory pages to disk."
+  },
+  {
+    "question": "What does 'kernel.randomize_va_space' control?",
+    "options": ["Randomizing PID allocation", "Address Space Layout Randomization (ASLR)", "File system block allocation", "CPU scheduling jitter"],
+    "answer": "Address Space Layout Randomization (ASLR)",
+    "explanation": "This parameter enables or disables ASLR, a security feature that randomizes the memory addresses used by a process."
+  },
+  {
+    "question": "Which sysctl parameter limits the maximum size of a single message in a System V message queue?",
+    "options": ["kernel.msgmax", "kernel.msgmnb", "kernel.msgmni", "kernel.shmmax"],
+    "answer": "kernel.msgmax",
+    "explanation": "kernel.msgmax defines the maximum size of a message that can be sent in a message queue."
+  },
+  {
+    "question": "What is the function of 'kernel.msgmni'?",
+    "options": ["Maximum number of message queues system-wide", "Maximum size of a message queue", "Minimum message size", "Total messages allowed"],
+    "answer": "Maximum number of message queues system-wide",
+    "explanation": "kernel.msgmni sets the system-wide limit on the number of message queue identifiers."
+  },
+  {
+    "question": "Which tool is a high-level tracing language that uses eBPF for Linux kernel and application analysis?",
+    "options": ["strace", "bpftrace", "ltrace", "gdb"],
+    "answer": "bpftrace",
+    "explanation": "bpftrace is a powerful tool for tracing kernel and user-space events using eBPF."
+  },
+  {
+    "question": "In the 'perf' tool, what does 'perf stat' provide?",
+    "options": ["A live view of system calls", "Hardware performance counter statistics for a specific command", "A list of open files", "Network traffic statistics"],
+    "answer": "Hardware performance counter statistics for a specific command",
+    "explanation": "perf stat runs a command and gathers performance counter statistics like instructions per cycle and cache misses."
+  },
+  {
+    "question": "What is the purpose of 'perf record -g'?",
+    "options": ["To record global events", "To record a command with call-graphs (stack traces)", "To generate a report", "To record GPU activity"],
+    "answer": "To record a command with call-graphs (stack traces)",
+    "explanation": "The '-g' flag enables call-graph recording, allowing you to see which functions called the ones taking up CPU time."
+  },
+  {
+    "question": "Which command-line tool provides a real-time, interactive view of the most frequent system calls?",
+    "options": ["top", "perf top", "htop", "sysstat"],
+    "answer": "perf top",
+    "explanation": "perf top provides a real-time view of where the system is spending its time, broken down by function and module."
+  },
+  {
+    "question": "Which bpftrace command lists all available tracepoints on the system?",
+    "options": ["bpftrace -l", "bpftrace --list", "bpftrace -v", "bpftrace --show"],
+    "answer": "bpftrace -l",
+    "explanation": "The '-l' flag lists all probe points that bpftrace can instrument."
+  },
+  {
+    "question": "What is a 'uprobe' in the context of Linux tracing?",
+    "options": ["A kernel-space probe", "A user-space probe that instruments functions in executables or libraries", "A hardware-level probe", "A network-specific probe"],
+    "answer": "A user-space probe that instruments functions in executables or libraries",
+    "explanation": "uprobes allow you to trace the execution of user-space programs."
+  },
+  {
+    "question": "What is the primary difference between 'kprobe' and 'kretprobe'?",
+    "options": ["kprobe traces entry, kretprobe traces return from a kernel function", "kprobe is for user-space, kretprobe for kernel-space", "They are identical", "kretprobe is for networking only"],
+    "answer": "kprobe traces entry, kretprobe traces return from a kernel function",
+    "explanation": "kprobes fire when a function is called; kretprobes fire when the function returns, allowing you to capture return values."
+  },
+  {
+    "question": "Which framework uses a C-like scripting language to compile probes into kernel modules for deep system instrumentation?",
+    "options": ["DTrace", "bpftrace", "SystemTap", "LTTng"],
+    "answer": "SystemTap",
+    "explanation": "SystemTap provides a scripting language for deep kernel analysis, often by compiling scripts into kernel modules."
+  },
+  {
+    "question": "In NFS, what does the 'no_root_squash' option mean?",
+    "options": ["The root user on the client is treated as the root user on the server", "The root user is denied access", "Root files are deleted upon access", "Root access is logged only"],
+    "answer": "The root user on the client is treated as the root user on the server",
+    "explanation": "By default, NFS 'squashes' root (maps it to nobody) for security; 'no_root_squash' disables this mapping."
+  },
+  {
+    "question": "Which command updates the NFS exports table without restarting the service?",
+    "options": ["nfs-reload", "exportfs -a", "mount -a", "exportfs -f"],
+    "answer": "exportfs -a",
+    "explanation": "exportfs -a (usually with -r) synchronizes the /etc/exports file with the kernel's export table."
+  },
+  {
+    "question": "What is the main configuration file for the Samba suite?",
+    "options": ["/etc/samba.conf", "/etc/samba/smb.conf", "/etc/smb/config", "/var/lib/samba/smb.conf"],
+    "answer": "/etc/samba/smb.conf",
+    "explanation": "The smb.conf file defines the shares and global settings for Samba."
+  },
+  {
+    "question": "In GlusterFS, what is a 'brick'?",
+    "options": ["A physical hard drive", "An export directory on a server that contributes to a volume", "A client connection", "A metadata server"],
+    "answer": "An export directory on a server that contributes to a volume",
+    "explanation": "A brick is the basic unit of storage in GlusterFS, consisting of a server and a directory path."
+  },
+  {
+    "question": "Which Ceph component is responsible for storing and managing the actual data on disk?",
+    "options": ["MON (Monitor)", "OSD (Object Storage Daemon)", "MDS (Metadata Server)", "RGW (RADOS Gateway)"],
+    "answer": "OSD (Object Storage Daemon)",
+    "explanation": "OSDs handle data storage, replication, recovery, and rebalancing."
+  },
+  {
+    "question": "What is the role of the Ceph MDS (Metadata Server)?",
+    "options": ["To store block data", "To provide metadata services for the Ceph File System (CephFS)", "To monitor cluster health", "To provide an S3 API"],
+    "answer": "To provide metadata services for the Ceph File System (CephFS)",
+    "explanation": "The MDS stores directory hierarchy and metadata for CephFS clients."
+  },
+  {
+    "question": "Which protocol does Ceph use to provide block storage devices to clients?",
+    "options": ["ISCSI", "RBD (RADOS Block Device)", "NFS", "Fibre Channel"],
+    "answer": "RBD (RADOS Block Device)",
+    "explanation": "RBD allows Ceph to provide striped, replicated block storage to Linux kernels and VMs."
+  },
+  {
+    "question": "Which Samba command is used to check the smb.conf file for syntax errors?",
+    "options": ["smbcheck", "testparm", "samba-tool check", "testsmb"],
+    "answer": "testparm",
+    "explanation": "testparm parses the configuration file and reports errors."
+  },
+  {
+    "question": "What does 'showmount -e' do?",
+    "options": ["Shows all mounted filesystems", "Lists the exports on a remote NFS server", "Shows the mount status of the local machine", "Displays disk usage for mounts"],
+    "answer": "Lists the exports on a remote NFS server",
+    "explanation": "The '-e' (exports) flag queries the mount daemon on a remote host to see what shares it offers."
+  },
+  {
+    "question": "How do you create a VLAN interface 'eth0.50' for VLAN ID 50 using the 'ip' command?",
+    "options": ["ip vlan add eth0 50", "ip link add link eth0 name eth0.50 type vlan id 50", "ifconfig eth0 vlan 50", "ip link add eth0.50 vlanid 50"],
+    "answer": "ip link add link eth0 name eth0.50 type vlan id 50",
+    "explanation": "The modern iproute2 syntax for creating a VLAN interface involves 'ip link add' with the 'vlan' type."
+  },
+  {
+    "question": "Which command creates a software bridge named 'br0'?",
+    "options": ["brctl create br0", "ip link add name br0 type bridge", "bridge link br0", "ip bridge add br0"],
+    "answer": "ip link add name br0 type bridge",
+    "explanation": "'ip link' is the modern way to create bridges, replacing the legacy 'brctl' tool."
+  },
+  {
+    "question": "What is 'network bonding' in Linux?",
+    "options": ["Encrypting network traffic", "Combining multiple physical network interfaces into a single logical interface", "Connecting two servers with a crossover cable", "Limiting bandwidth per user"],
+    "answer": "Combining multiple physical network interfaces into a single logical interface",
+    "explanation": "Bonding (or Link Aggregation) provides redundancy and increased throughput."
+  },
+  {
+    "question": "In 'ip route', what does the 'src' parameter allow you to do?",
+    "options": ["Specify the destination source", "Define the source IP address to be used for packets matching the route", "Specify the source interface", "Encrypt the source IP"],
+    "answer": "Define the source IP address to be used for packets matching the route",
+    "explanation": "This is useful for multi-homed systems to ensure packets leave with the correct IP for that specific network."
+  },
+  {
+    "question": "Which command is used to create a new network namespace named 'testing'?",
+    "options": ["ip netns add testing", "netns create testing", "ip namespace add testing", "unshare --net testing"],
+    "answer": "ip netns add testing",
+    "explanation": "'ip netns' is the standard tool for managing network namespaces."
+  },
+  {
+    "question": "How do you run 'ifconfig' inside the network namespace 'myns'?",
+    "options": ["ip netns run myns ifconfig", "ip netns exec myns ifconfig", "nsenter --net=myns ifconfig", "chroot myns ifconfig"],
+    "answer": "ip netns exec myns ifconfig",
+    "explanation": "The 'exec' subcommand runs a program in the context of the specified namespace."
+  },
+  {
+    "question": "Which tool is the primary interface for configuring Traffic Control (TC) and QoS in the kernel?",
+    "options": ["tc", "qos-tool", "ip qos", "traffic"],
+    "answer": "tc",
+    "explanation": "'tc' manages queuing disciplines (qdiscs), classes, and filters for controlling traffic."
+  },
+  {
+    "question": "What is a 'VETH' pair?",
+    "options": ["A virtual Ethernet cable connecting two network namespaces", "A pair of bonded interfaces", "A redundant power supply", "A type of VPN"],
+    "answer": "A virtual Ethernet cable connecting two network namespaces",
+    "explanation": "VETH devices are created as pairs; packets sent into one come out the other."
+  },
+  {
+    "question": "Which command displays the neighbor (ARP) cache using the 'ip' suite?",
+    "options": ["ip arp show", "ip neighbor show", "ip route get", "arp -a"],
+    "answer": "ip neighbor show",
+    "explanation": "'ip neighbor' (or 'ip n') is the iproute2 replacement for the 'arp' command."
+  },
+  {
+    "question": "In QEMU/KVM, what does the '-enable-kvm' flag do?",
+    "options": ["Enables networking", "Uses hardware acceleration via the KVM kernel module", "Enables the GUI", "Starts a VNC server"],
+    "answer": "Uses hardware acceleration via the KVM kernel module",
+    "explanation": "Without it, QEMU uses slow software emulation."
+  },
+  {
+    "question": "What is 'cloud-init' commonly used for?",
+    "options": ["Monitoring cloud weather", "Early initialization and configuration of cloud instances (SSH keys, users, etc.)", "Backing up cloud databases", "Managing cloud billing"],
+    "answer": "Early initialization and configuration of cloud instances (SSH keys, users, etc.)",
+    "explanation": "It processes 'user-data' provided during instance creation."
+  },
+  {
+    "question": "Which 'virsh' command allows you to edit a virtual machine's XML configuration file?",
+    "options": ["virsh modify", "virsh edit", "virsh config", "virsh setxml"],
+    "answer": "virsh edit",
+    "explanation": "It opens the VM's XML in the default editor and validates changes upon saving."
+  },
+  {
+    "question": "What are 'VirtIO' drivers?",
+    "options": ["Drivers for old hardware", "Paravirtualized drivers for efficient disk and network I/O in virtual machines", "Drivers for virtual reality", "Video drivers for QEMU"],
+    "answer": "Paravirtualized drivers for efficient disk and network I/O in virtual machines",
+    "explanation": "VirtIO provides a standardized, efficient interface for guests to communicate with the hypervisor."
+  },
+  {
+    "question": "In a Xen environment, what is 'Dom0'?",
+    "options": ["A guest operating system", "The privileged management domain that controls the hardware", "The Xen kernel itself", "A database of virtual machines"],
+    "answer": "The privileged management domain that controls the hardware",
+    "explanation": "Dom0 is the first domain started by Xen and runs the toolstack to manage other domains (DomUs)."
+  },
+  {
+    "question": "Which 'qemu-img' command creates a 20GB disk image in 'qcow2' format?",
+    "options": ["qemu-img new 20G disk.qcow2", "qemu-img create -f qcow2 disk.img 20G", "qemu-img build qcow2 disk.img 20G", "qemu-img convert disk.img 20G"],
+    "answer": "qemu-img create -f qcow2 disk.img 20G",
+    "explanation": "The 'create' subcommand with '-f' specifies the format."
+  },
+  {
+    "question": "How do you take a live snapshot of a running VM named 'webserver' using virsh?",
+    "options": ["virsh snap webserver", "virsh snapshot-create-as webserver snap1", "virsh pause webserver; virsh copy", "virsh backup webserver"],
+    "answer": "virsh snapshot-create-as webserver snap1",
+    "explanation": "This command creates a snapshot of the VM's disk and memory state."
+  },
+  {
+    "question": "What is 'guestfish'?",
+    "options": ["A game for Linux users", "A tool for interacting with and modifying virtual machine disk images", "A terminal-based browser", "A virtualization monitor"],
+    "answer": "A tool for interacting with and modifying virtual machine disk images",
+    "explanation": "Guestfish allows you to mount and edit files inside disk images without starting the VM."
+  },
+  {
+    "question": "Which file in a Debian source package contains the metadata and build-time dependencies?",
+    "options": ["debian/rules", "debian/control", "debian/changelog", "debian/copyright"],
+    "answer": "debian/control",
+    "explanation": "The 'control' file defines the package name, version, dependencies, and description."
+  },
+  {
+    "question": "Which command builds a binary .deb package from a Debian source directory?",
+    "options": ["dpkg-build", "dpkg-buildpackage", "debuild", "Both B and C"],
+    "answer": "Both B and C",
+    "explanation": "Both commands invoke the Debian build process; 'debuild' is a helpful wrapper."
+  },
+  {
+    "question": "What is the role of the '.spec' file in RPM packaging?",
+    "options": ["It stores the binary data", "It contains instructions on how to build and package the software", "It lists the package mirrors", "It is the package installation script"],
+    "answer": "It contains instructions on how to build and package the software",
+    "explanation": "The spec file defines the build process, files to include, and metadata for the RPM."
+  },
+  {
+    "question": "Which command is used to create the metadata for a local directory to act as an RPM repository?",
+    "options": ["repomake", "createrepo", "rpm-repo", "yum-build"],
+    "answer": "createrepo",
+    "explanation": "'createrepo' generates the XML metadata required by YUM/DNF."
+  },
+  {
+    "question": "Which tool initializes a directory with Debian packaging templates?",
+    "options": ["deb-init", "dh_make", "apt-init", "new-package"],
+    "answer": "dh_make",
+    "explanation": "dh_make creates the 'debian/' directory and template files for a new package."
+  },
+  {
+    "question": "In the context of Ubuntu, what is a 'PPA'?",
+    "options": ["Private Package Archive", "Personal Package Archive", "Public Package Access", "Python Package Archive"],
+    "answer": "Personal Package Archive",
+    "explanation": "PPAs allow users to distribute their own packages via Launchpad."
+  },
+  {
+    "question": "Which command can convert an RPM package to a Debian package?",
+    "options": ["convert-pkg", "alien", "dpkg-conv", "rpm2deb"],
+    "answer": "alien",
+    "explanation": "'alien' can convert between RPM, DEB, Stampede, and Slackware formats."
+  },
+  {
+    "question": "What is 'reprepro' used for?",
+    "options": ["To re-install a package", "To manage and produce local Debian repositories", "To fix broken dependencies", "To report bugs"],
+    "answer": "To manage and produce local Debian repositories",
+    "explanation": "Reprepro is a tool to create and maintain repositories of .deb packages."
+  },
+  {
+    "question": "What is a 'systemd generator'?",
+    "options": ["A tool to generate passwords", "An executable that creates systemd unit files on the fly during boot", "A backup power system", "A script that starts services"],
+    "answer": "An executable that creates systemd unit files on the fly during boot",
+    "explanation": "Generators translate other configuration formats (like /etc/fstab) into systemd units at runtime."
+  },
+  {
+    "question": "Where are systemd generators located on the filesystem?",
+    "options": ["/etc/systemd/generators/", "/lib/systemd/system-generators/", "/usr/local/bin/", "Both A and B"],
+    "answer": "Both A and B",
+    "explanation": "Systemd searches for generators in several directories, including /lib/systemd/system-generators/ and /etc/systemd/system-generators/."
+  },
+  {
+    "question": "Which 'dracut' flag forces the regeneration of an existing initramfs image?",
+    "options": ["--regen", "-f (or --force)", "--overwrite", "-u"],
+    "answer": "-f (or --force)",
+    "explanation": "By default, dracut won't overwrite an existing file unless '-f' is specified."
+  },
+  {
+    "question": "In the GRUB2 menu, which key do you press to edit the boot parameters for an entry?",
+    "options": ["Enter", "e", "c", "F2"],
+    "answer": "e",
+    "explanation": "Pressing 'e' enters edit mode for the selected menu entry."
+  },
+  {
+    "question": "What is the purpose of the 'rd.break' kernel parameter?",
+    "options": ["To break the RAM disk", "To drop to a shell in the initramfs before the switch to the real root", "To stop the boot process after the network is up", "To debug CPU errors"],
+    "answer": "To drop to a shell in the initramfs before the switch to the real root",
+    "explanation": "This is often used for troubleshooting boot issues or resetting the root password."
+  },
+  {
+    "question": "Which systemd target is equivalent to 'rescue mode' (single-user shell)?",
+    "options": ["multi-user.target", "rescue.target", "emergency.target", "single.target"],
+    "answer": "rescue.target",
+    "explanation": "rescue.target starts a base system and a rescue shell."
+  },
+  {
+    "question": "What is 'systemd-boot'?",
+    "options": ["A command to boot systemd", "A simple UEFI-only boot manager", "A replacement for systemctl", "A tool to profile boot time"],
+    "answer": "A simple UEFI-only boot manager",
+    "explanation": "Formerly known as gummiboot, it is a lightweight alternative to GRUB for UEFI systems."
+  },
+  {
+    "question": "How do you declare an associative array named 'config' in Bash 4.0 or newer?",
+    "options": ["config=()", "declare -A config", "assoc config", "set -A config"],
+    "answer": "declare -A config",
+    "explanation": "The '-A' flag is required to create an associative array (keys are strings)."
+  },
+  {
+    "question": "In Bash, what does the expansion '${var^}' do?",
+    "options": ["Deletes var", "Capitalizes the first character of the string in var", "Converts var to a number", "Reverses var"],
+    "answer": "Capitalizes the first character of the string in var",
+    "explanation": "Bash 4.0 introduced case modification expansions: '^' for uppercase first, ',' for lowercase first."
+  },
+  {
+    "question": "What does '${var,,}' do in Bash?",
+    "options": ["Increments var", "Converts the entire string in var to lowercase", "Counts characters in var", "Appends a comma"],
+    "answer": "Converts the entire string in var to lowercase",
+    "explanation": "Double comma (,,) lowercase the whole string; double caret (^^) uppercase it."
+  },
+  {
+    "question": "Which special variable in Bash 5.0+ contains the number of seconds since the Unix Epoch?",
+    "options": ["$SECONDS", "$EPOCH", "$EPOCHSECONDS", "$TIME"],
+    "answer": "$EPOCHSECONDS",
+    "explanation": "$EPOCHSECONDS was added in Bash 5.0; $SECONDS only counts from when the shell started."
+  },
+  {
+    "question": "How do you read a file 'data.txt' line-by-line into an array 'lines' in Bash?",
+    "options": ["lines=(cat data.txt)", "mapfile -t lines < data.txt", "read -a lines < data.txt", "lines=($(<data.txt))"],
+    "answer": "mapfile -t lines < data.txt",
+    "explanation": "'mapfile' (and its alias 'readarray') is the most efficient way to read lines into an array."
+  },
+  {
+    "question": "What is a 'Nameref' in Bash (created with 'declare -n')?",
+    "options": ["A variable that stores its own name", "A variable that acts as a reference (pointer) to another variable", "A constant variable", "A global variable"],
+    "answer": "A variable that acts as a reference (pointer) to another variable",
+    "explanation": "Operations on the nameref variable actually affect the variable it points to."
+  },
+  {
+    "question": "In Bash, how do you perform a search and replace on every element of an array 'arr'?",
+    "options": ["${arr[@]/search/replace}", "${arr[*]:search:replace}", "sed 's/search/replace/' arr", "arr --replace search replace"],
+    "answer": "${arr[@]/search/replace}",
+    "explanation": "This expansion applies the substitution to each individual element of the array."
+  },
+  {
+    "question": "What does 'set -o pipefail' do?",
+    "options": ["Disables pipes in the shell", "Causes a pipeline to return the exit status of the last command to fail", "Speeds up piping", "Ignore pipe errors"],
+    "answer": "Causes a pipeline to return the exit status of the last command to fail",
+    "explanation": "By default, a pipeline returns the exit status of the very last command; 'pipefail' makes it more robust for error checking."
+  },
+  {
+    "question": "How do you iterate over the keys of an associative array 'myarray' in Bash?",
+    "options": ["for i in ${myarray[@]}", "for i in ${!myarray[@]}", "for i in keys(myarray)", "foreach myarray as i"],
+    "answer": "for i in ${!myarray[@]}",
+    "explanation": "The '!' prefix in the expansion returns the indices (keys) instead of the values."
+  },
+  {
+    "question": "Which command is used to toggle SELinux booleans to change system behavior without changing the policy?",
+    "options": ["setenforce", "setsebool", "getenforce", "semanage bool"],
+    "answer": "setsebool",
+    "explanation": "'setsebool' changes the value of SELinux booleans. Use '-P' to make it permanent."
+  },
+  {
+    "question": "What does 'getsebool -a' do?",
+    "options": ["Lists all users", "Lists all SELinux booleans and their current state (on/off)", "Displays policy version", "Lists all blocked processes"],
+    "answer": "Lists all SELinux booleans and their current state (on/off)",
+    "explanation": "It provides a comprehensive list of all tunable SELinux settings."
+  },
+  {
+    "question": "In AppArmor, what happens in 'Complain' mode?",
+    "options": ["Violations are blocked and logged", "Violations are allowed but logged", "Violations are ignored completely", "The system shuts down"],
+    "answer": "Violations are allowed but logged",
+    "explanation": "Complain mode (also called Learning mode) is used for developing and testing profiles."
+  },
+  {
+    "question": "Which command adds an audit rule to watch '/etc/shadow' for write/attribute changes with the key 'creds'?",
+    "options": ["audit -w /etc/shadow -p wa", "auditctl -w /etc/shadow -p wa -k creds", "auditwatch /etc/shadow", "ausearch -w /etc/shadow"],
+    "answer": "auditctl -w /etc/shadow -p wa -k creds",
+    "explanation": "'-w' specifies the file, '-p wa' targets writes and attribute changes, and '-k' adds a searchable key."
+  },
+  {
+    "question": "Where are the default AppArmor profile files stored?",
+    "options": ["/etc/apparmor/", "/etc/apparmor.d/", "/var/lib/apparmor/", "/usr/share/apparmor/"],
+    "answer": "/etc/apparmor.d/",
+    "explanation": "This directory contains the text files defining AppArmor profiles."
+  },
+  {
+    "question": "What is 'Linux Capabilities'?",
+    "options": ["A list of what the CPU can do", "A way to break down 'root' privileges into smaller, distinct units", "The system's RAM capacity", "A hardware compatibility list"],
+    "answer": "A way to break down 'root' privileges into smaller, distinct units",
+    "explanation": "Capabilities allow giving a process specific privileges (like binding to a low port) without making it full root."
+  },
+  {
+    "question": "Which command shows the capabilities of a specific running process?",
+    "options": ["cap-show", "getpcaps PID", "ps --caps", "ls -cap"],
+    "answer": "getpcaps PID",
+    "explanation": "'getpcaps' displays the permitted, effective, and inheritable capabilities of a process."
+  },
+  {
+    "question": "What does 'kubectl get nodes' display?",
+    "options": ["All files on the disk", "A list of all physical or virtual machines in the Kubernetes cluster", "A list of running containers", "A list of users"],
+    "answer": "kubectl get nodes",
+    "explanation": "Nodes are the worker machines in a Kubernetes cluster."
+  },
+  {
+    "question": "In Kubernetes, what is a 'Pod'?",
+    "options": ["A physical server", "The smallest unit of deployment, containing one or more containers", "A network storage device", "A type of load balancer"],
+    "answer": "The smallest unit of deployment, containing one or more containers",
+    "explanation": "Containers in a Pod share the same network IP and storage volumes."
+  },
+  {
+    "question": "What is the function of the 'kubelet'?",
+    "options": ["To manage the cluster database", "An agent that runs on each node and manages containers in pods", "The command-line tool for users", "A web-based dashboard"],
+    "answer": "An agent that runs on each node and manages containers in pods",
+    "explanation": "The kubelet takes a set of PodSpecs and ensures that the corresponding containers are running and healthy."
+  },
+  {
+    "question": "What is 'etcd' in the context of Kubernetes?",
+    "options": ["A container runtime", "A distributed key-value store for cluster state data", "A networking plugin", "A logging service"],
+    "answer": "A distributed key-value store for cluster state data",
+    "explanation": "Etcd is the 'source of truth' for the Kubernetes cluster configuration."
+  },
+  {
+    "question": "What does the Kubernetes 'Service' object provide?",
+    "options": ["A stable IP address and DNS name for a set of Pods", "A way to store passwords", "A method for building images", "A backup for the database"],
+    "answer": "A stable IP address and DNS name for a set of Pods",
+    "explanation": "Services provide load balancing and persistent networking for dynamic Pods."
+  },
+  {
+    "question": "Which command allows you to view the logs of a container in a specific Kubernetes pod?",
+    "options": ["kubectl logs pod_name", "docker logs pod_name", "journalctl pod_name", "kubectl get logs pod_name"],
+    "answer": "kubectl logs pod_name",
+    "explanation": "'kubectl logs' fetches the stdout/stderr of a container in a pod."
+  },
+  {
+    "question": "In Kubernetes, what is a 'Namespace' used for?",
+    "options": ["To name the cluster", "To logically isolate resources within the same physical cluster", "To define the DNS domain", "To group physical nodes"],
+    "answer": "To logically isolate resources within the same physical cluster",
+    "explanation": "Namespaces are intended for use in environments with many users across multiple teams."
+  },
+  {
+    "question": "When chrooting into a dead system for rescue, which virtual filesystems should be bind-mounted from the host?",
+    "options": ["/etc, /var, /home", "/proc, /sys, /dev, /run", "/tmp, /opt, /root", "/bin, /lib, /usr"],
+    "answer": "/proc, /sys, /dev, /run",
+    "explanation": "These provide access to kernel information, hardware, and system state required by many tools (like grub-install)."
+  },
+  {
+    "question": "Which tool can recover deleted files from an unmounted ext4 partition by searching the journal?",
+    "options": ["rm -r", "extundelete", "fsck", "grep"],
+    "answer": "extundelete",
+    "explanation": "extundelete is a utility that can recover deleted files from an ext3 or ext4 partition."
+  },
+  {
+    "question": "What is 'TestDisk' primarily used for?",
+    "options": ["CPU stress testing", "Recovering lost partitions and fixing non-booting disks", "Testing disk speed", "Checking for viruses"],
+    "answer": "Recovering lost partitions and fixing non-booting disks",
+    "explanation": "It is a powerful free data recovery software."
+  },
+  {
+    "question": "Which tool is best for 'file carving' (recovering files based on magic headers) from a disk image?",
+    "options": ["strings", "Photorec", "cat", "dd"],
+    "answer": "Photorec",
+    "explanation": "Photorec ignores the filesystem and looks for underlying data signatures."
+  },
+  {
+    "question": "How do you mount all partitions inside a disk image 'image.img' as loop devices automatically?",
+    "options": ["mount -o loop image.img /mnt", "losetup -P -f image.img", "lsblk image.img", "dd if=image.img of=/dev/loop0"],
+    "answer": "losetup -P -f image.img",
+    "explanation": "The '-P' flag tells the kernel to scan the image for partition tables and create /dev/loopXpY devices."
+  },
+  {
+    "question": "Which command displays SMART (Self-Monitoring, Analysis, and Reporting Technology) information for a drive?",
+    "options": ["hdparm", "smartctl -a /dev/sda", "diskcheck /dev/sda", "stat /dev/sda"],
+    "answer": "smartctl -a /dev/sda",
+    "explanation": "'smartctl' (part of smartmontools) is the standard for monitoring disk health."
+  },
+  {
+    "question": "How do you remount a root filesystem that was mounted read-only as read-write?",
+    "options": ["mount -w /", "mount -o remount,rw /", "chmod +w /", "umount /; mount /"],
+    "answer": "mount -o remount,rw /",
+    "explanation": "The 'remount' option allows changing mount flags without unmounting."
+  },
+  {
+    "question": "Which tool is designed to copy data from one file or block device to another, specifically handling read errors on failing media?",
+    "options": ["dd", "ddrescue", "cp", "rsync"],
+    "answer": "ddrescue",
+    "explanation": "ddrescue is intelligent and skips bad blocks, trying to recover as much data as possible from failing drives."
+  },
+  {
+    "question": "What is the purpose of the 'ip link set eth0 promisc on' command?",
+    "options": ["Enables encryption", "Enables promiscuous mode (captures all traffic on the wire)", "Speeds up the interface", "Disables the interface"],
+    "answer": "Enables promiscuous mode (captures all traffic on the wire)",
+    "explanation": "Promiscuous mode allows the network card to pass all traffic it receives to the CPU, even if not addressed to it."
+  }
+]
