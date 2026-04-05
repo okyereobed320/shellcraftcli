@@ -16,22 +16,48 @@ const shuffle = (array) => {
   return array;
 };
 
-export async function startQuiz(moduleName) {
+import { addXP, XP_VALUES } from '../utils/progress.js';
+
+const getLifeDisplay = (lives) => {
+  if (lives <= 0) return chalk.red('Shell Life: 0');
+  return chalk.red('Shell Life: ' + '◉ '.repeat(lives).trim());
+};
+
+export async function startQuiz(moduleName, mode = 'normal', preFilteredQuestions = null, onComplete = null) {
   try {
-    const dataPath = path.join(__dirname, '../../data', moduleName + '.json');
-    const content = await fs.readFile(dataPath, 'utf-8');
-    let questions = JSON.parse(content);
+    let questions;
+    if (preFilteredQuestions) {
+      questions = preFilteredQuestions;
+    } else {
+      const dataPath = path.join(__dirname, '../../data', moduleName + '.json');
+      const content = await fs.readFile(dataPath, 'utf-8');
+      questions = JSON.parse(content);
+    }
+
+    // Mode-specific configuration
+    const isXPMode = mode === 'xp_rank';
+    const isLifeMode = mode === 'life';
+    const isNormalMode = mode === 'normal';
+    
+    let lives = isLifeMode ? 3 : null;
+    let isGameOver = false;
+
+    console.log(chalk.cyan.bold(`\n🕹️  MODE: ${mode.toUpperCase().replace('_', ' ')}`));
+    if (isLifeMode) console.log(getLifeDisplay(lives));
+    console.log(chalk.gray('━'.repeat(50)));
 
     // UX: Randomize questions and pick a sample of 10
     shuffle(questions);
     if (questions.length > 10) questions = questions.slice(0, 10);
 
     let score = 0;
+    let totalGainedXP = 0;
     
     for (const [index, q] of questions.entries()) {
-      console.log(chalk.yellow('\n[Question ' + (index + 1) + '/' + questions.length + ']'));
+      if (isGameOver) break;
+
+      console.log(chalk.yellow(`\n[Question ${index + 1}/${questions.length}]`));
       
-      // UX: Shuffle options for each question
       const options = shuffle([...q.options]);
 
       try {
@@ -47,21 +73,53 @@ export async function startQuiz(moduleName) {
         if (answer.selected === q.answer) {
           console.log(chalk.green.bold('✔ Correct!'));
           score++;
+          
+          if (isXPMode || isLifeMode) { // XP also earned in Life mode? Usually yes in games.
+            const xp = XP_VALUES[q.difficulty?.toLowerCase()] || XP_VALUES.easy;
+            totalGainedXP += xp;
+            console.log(chalk.yellow(`+${xp} XP`));
+          }
         } else {
           console.log(chalk.red.bold('✘ Wrong. The correct answer was: ' + q.answer));
+          
+          if (isLifeMode) {
+            lives--;
+            console.log(getLifeDisplay(lives));
+            if (lives <= 0) {
+              console.log(chalk.red.bold('\n💀 Session failed. You ran out of Shell Life.'));
+              isGameOver = true;
+            }
+          }
         }
         
         if (q.explanation) {
-          console.log(chalk.italic('💡 ' + q.explanation));
+          console.log(chalk.italic.gray('  💡 ' + q.explanation));
         }
       } catch (promptError) {
-        // Handle Ctrl+C or other prompt issues gracefully
         console.log(chalk.gray('\nQuiz session ended. Bye! 👋'));
         return;
       }
     }
 
-    console.log(chalk.cyan.bold('\n🎉 Module complete! Your score: ' + score + '/' + questions.length + '\n'));
+    if (!isGameOver || score > 0) {
+      console.log(chalk.gray('\n' + '━'.repeat(50)));
+      console.log(chalk.cyan.bold(`🎉 Module complete! Your score: ${score}/${questions.length}`));
+
+      if (totalGainedXP > 0 && (isXPMode || isLifeMode)) {
+        const result = addXP(totalGainedXP);
+        console.log(chalk.yellow(`Total XP Gained: ${totalGainedXP}`));
+        if (result.rankUp) {
+          console.log(chalk.bold.green('\n🌟 RANK UP!'));
+          console.log(chalk.white(`New Rank: ${chalk.bold.magenta(result.newRank)}`));
+          console.log(chalk.italic.cyan('🔥 You are getting dangerous with the terminal...'));
+        }
+      }
+    }
+
+    if (onComplete) {
+      await onComplete(score, questions.length);
+    }
+    console.log('');
     
   } catch (error) {
     if (error.code === 'ENOENT') {

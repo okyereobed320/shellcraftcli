@@ -1,0 +1,99 @@
+[
+  {
+    "id": "world_1",
+    "name": "WORLD 1: Shell Initiation",
+    "description": "Learn the fundamentals of the Linux terminal",
+    "missions": [
+      { "id": "m1", "name": "Mission 1: Wake the Terminal", "commands": ["pwd", "whoami", "date"] },
+      { "id": "m2", "name": "Mission 2: Navigate the Filesystem", "commands": ["cd", "ls", "tree"] },
+      { "id": "m3", "name": "Mission 3: Create & Destroy", "commands": ["mkdir", "touch", "rm", "rmdir"] },
+      { "id": "m4", "name": "Mission 4: View the Unknown", "commands": ["cat", "less", "head", "tail"] }
+    ]
+  },
+  {
+    "id": "world_2",
+    "name": "WORLD 2: File Mastery",
+    "description": "Gain control over files and data",
+    "missions": [
+      { "id": "m5", "name": "Mission 5: Copy & Move Operations", "commands": ["cp", "mv"] },
+      { "id": "m6", "name": "Mission 6: Permissions Guardian", "commands": ["chmod", "chown"] },
+      { "id": "m7", "name": "Mission 7: Hidden Secrets", "commands": ["ls -a"] },
+      { "id": "m8", "name": "Mission 8: Search & Discover", "commands": ["find", "locate", "grep"] }
+    ]
+  },
+  {
+    "id": "world_3",
+    "name": "WORLD 3: System Control",
+    "description": "Understand and control system processes",
+    "missions": [
+      { "id": "m9", "name": "Mission 9: Process Hunter", "commands": ["ps", "top", "htop"] },
+      { "id": "m10", "name": "Mission 10: Kill the Rogue Process", "commands": ["kill", "killall"] },
+      { "id": "m11", "name": "Mission 11: System Monitoring", "commands": ["uptime", "free", "df", "du"] },
+      { "id": "m12", "name": "Mission 12: Logs Investigator", "commands": ["journalctl", "/var/log"] }
+    ]
+  },
+  {
+    "id": "world_4",
+    "name": "WORLD 4: Networking Ops",
+    "description": "Understand and troubleshoot network systems",
+    "missions": [
+      { "id": "m13", "name": "Mission 13: Network Explorer", "commands": ["ip a", "hostname", "ifconfig"] },
+      { "id": "m14", "name": "Mission 14: Ping the World", "commands": ["ping", "traceroute", "dig"] },
+      { "id": "m15", "name": "Mission 15: Port Detective", "commands": ["ss", "netstat", "lsof"] },
+      { "id": "m16", "name": "Mission 16: Restore Connectivity", "commands": ["dhclient", "nmcli"] }
+    ]
+  },
+  {
+    "id": "world_5",
+    "name": "WORLD 5: Package Management",
+    "description": "Install and manage software",
+    "missions": [
+      { "id": "m17", "name": "Mission 17: Package Installer", "commands": ["apt install", "yum", "dnf"] },
+      { "id": "m18", "name": "Mission 18: Update & Upgrade", "commands": ["apt update", "apt upgrade"] },
+      { "id": "m19", "name": "Mission 19: Remove & Clean", "commands": ["apt remove", "autoremove"] }
+    ]
+  },
+  {
+    "id": "world_6",
+    "name": "WORLD 6: Users & Access Control",
+    "description": "Manage users and permissions",
+    "missions": [
+      { "id": "m20", "name": "Mission 20: Create a New User", "commands": ["adduser", "useradd"] },
+      { "id": "m21", "name": "Mission 21: Switch Identity", "commands": ["su", "sudo"] },
+      { "id": "m22", "name": "Mission 22: Group Control", "commands": ["usermod", "groups"] }
+    ]
+  },
+  {
+    "id": "world_7",
+    "name": "WORLD 7: Automation & Efficiency",
+    "description": "Improve productivity and automation",
+    "missions": [
+      { "id": "m23", "name": "Mission 23: Command Chaining", "commands": ["&&", "||", ";"] },
+      { "id": "m24", "name": "Mission 24: Pipes Mastery", "commands": ["|"] },
+      { "id": "m25", "name": "Mission 25: Bash Script Initiation", "commands": ["#!/bin/bash", "chmod +x"] },
+      { "id": "m26", "name": "Mission 26: Task Scheduling", "commands": ["crontab", "at"] }
+    ]
+  },
+  {
+    "id": "world_8",
+    "name": "WORLD 8: Server & Cloud Operations",
+    "description": "Apply Linux in real-world environments",
+    "missions": [
+      { "id": "m27", "name": "Mission 27: Secure the Server", "commands": ["ufw", "iptables", "ssh"] },
+      { "id": "m28", "name": "Mission 28: Service Control", "commands": ["systemctl", "service"] },
+      { "id": "m29", "name": "Mission 29: Deploy a Web Server", "commands": ["nginx", "apache", "curl"] },
+      { "id": "m30", "name": "Mission 30: Container Initiation", "commands": ["docker", "container"] }
+    ]
+  },
+  {
+    "id": "world_9",
+    "name": "WORLD 9: Advanced Operations",
+    "description": "Master advanced system tasks",
+    "missions": [
+      { "id": "m31", "name": "Mission 31: Disk & Mount Control", "commands": ["mount", "fstab", "lsblk"] },
+      { "id": "m32", "name": "Mission 32: Backup & Restore", "commands": ["tar", "rsync", "zip"] },
+      { "id": "m33", "name": "Mission 33: Log Analysis Challenge", "commands": ["grep", "awk", "sed"] },
+      { "id": "m34", "name": "Mission 34: Build Mini Infrastructure", "commands": ["setup", "config", "deploy"] }
+    ]
+  }
+]

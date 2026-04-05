@@ -1,0 +1,164 @@
+[
+  {
+    "id": "101",
+    "type": "incident",
+    "title": "The Silent Web Server",
+    "severity": "CRITICAL",
+    "problem": "Users report the website is down. Connection refused on port 80.",
+    "investigations": {
+      "systemctl status nginx": "● nginx.service - A high performance web server\n   Active: inactive (dead)",
+      "curl localhost": "curl: (7) Failed to connect to localhost port 80: Connection refused",
+      "ps aux | grep nginx": "root  1234  0.0  0.0  grep nginx"
+    },
+    "fix_commands": ["systemctl start nginx", "sudo systemctl start nginx", "systemctl restart nginx", "sudo systemctl restart nginx"],
+    "resolution": "Nginx service restored. Website is back online.",
+    "hints": ["Check if nginx is running with systemctl status.", "Try starting the service."],
+    "suggested_tools": ["systemctl", "ps", "curl", "journalctl"]
+  },
+  {
+    "id": "102",
+    "type": "incident",
+    "title": "Permission Denied Crisis",
+    "severity": "MEDIUM",
+    "problem": "Developers cannot update the website. 'Permission denied' when writing to /var/www/html.",
+    "investigations": {
+      "ls -ld /var/www/html": "drwxr-xr-x 2 root root 4096 Apr  5 10:00 /var/www/html",
+      "whoami": "dev-user",
+      "groups": "dev-user developers"
+    },
+    "fix_commands": [
+      "sudo chown -R www-data:www-data /var/www/html",
+      "sudo chown -R dev-user:developers /var/www/html",
+      "sudo chmod -R 775 /var/www/html"
+    ],
+    "resolution": "Ownership and permissions adjusted. Write access restored.",
+    "hints": ["Check directory ownership with ls -ld.", "Use chown or chmod to fix access."],
+    "suggested_tools": ["ls", "chown", "chmod", "whoami"]
+  },
+  {
+    "id": "103",
+    "type": "incident",
+    "title": "Disk Full Disaster",
+    "severity": "HIGH",
+    "problem": "The system is sluggish and logs are failing. Monitoring shows /dev/sda1 at 100%.",
+    "investigations": {
+      "df -h": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        20G   20G     0 100% /",
+      "du -sh /var/log/*": "15G /var/log/syslog.1\n400M /var/log/auth.log",
+      "ls -lh /var/log/syslog.1": "-rw-r----- 1 root adm 15G Apr  5 10:00 /var/log/syslog.1"
+    },
+    "fix_commands": ["rm /var/log/syslog.1", "sudo rm /var/log/syslog.1", "truncate -s 0 /var/log/syslog.1"],
+    "resolution": "Large log file cleared. Disk space reclaimed.",
+    "hints": ["Use df -h to confirm disk usage.", "Find the culprit in /var/log using du -sh."],
+    "suggested_tools": ["df", "du", "rm", "ls"]
+  },
+  {
+    "id": "201",
+    "type": "routine",
+    "title": "Provision New Developer",
+    "severity": "LOW",
+    "problem": "New hire 'sarah' needs a user account with sudo access and a home directory.",
+    "investigations": {
+      "id sarah": "id: 'sarah': no such user",
+      "ls /home": "sysadmin  dev-user"
+    },
+    "fix_commands": [
+      "useradd -m sarah && usermod -aG sudo sarah",
+      "adduser sarah --ingroup sudo",
+      "sudo useradd -m sarah && sudo usermod -aG sudo sarah"
+    ],
+    "resolution": "User 'sarah' created and added to the sudo group.",
+    "hints": ["Use useradd or adduser to create the account.", "Use usermod to add her to the sudo group."],
+    "suggested_tools": ["useradd", "usermod", "id", "groups"]
+  },
+  {
+    "id": "202",
+    "type": "routine",
+    "title": "Configure Log Archival",
+    "severity": "LOW",
+    "problem": "The /var/www/html/backup.tar.gz file needs to be moved to the /mnt/storage/backups directory.",
+    "investigations": {
+      "ls /var/www/html/backup.tar.gz": "/var/www/html/backup.tar.gz",
+      "ls -d /mnt/storage/backups": "/mnt/storage/backups"
+    },
+    "fix_commands": [
+      "mv /var/www/html/backup.tar.gz /mnt/storage/backups/",
+      "sudo mv /var/www/html/backup.tar.gz /mnt/storage/backups/",
+      "cp /var/www/html/backup.tar.gz /mnt/storage/backups/ && rm /var/www/html/backup.tar.gz"
+    ],
+    "resolution": "Backup file moved successfully to long-term storage.",
+    "hints": ["Use the 'mv' command to move the file.", "Confirm the destination directory exists."],
+    "suggested_tools": ["mv", "ls", "cp"]
+  },
+  {
+    "id": "203",
+    "type": "routine",
+    "title": "Patch System Security",
+    "severity": "LOW",
+    "problem": "Weekly maintenance: Update the package list and upgrade only the 'openssh-server' package.",
+    "investigations": {
+      "apt list --upgradable": "openssh-server/stable 1:8.9p1-3 ... [upgradable from: 1:8.2p1-4]"
+    },
+    "fix_commands": [
+      "apt update && apt install --only-upgrade openssh-server",
+      "sudo apt update && sudo apt install --only-upgrade openssh-server",
+      "apt-get update && apt-get install --only-upgrade openssh-server"
+    ],
+    "resolution": "OpenSSH server updated to the latest security patch.",
+    "hints": ["Always run 'apt update' first.", "Use '--only-upgrade' to target a specific package."],
+    "suggested_tools": ["apt", "apt-get", "apt list"]
+  },
+  {
+    "id": "204",
+    "type": "routine",
+    "title": "Schedule Backup Job",
+    "severity": "LOW",
+    "problem": "Management wants /etc/nginx backed up to /backup/nginx.tar.gz every day at midnight.",
+    "investigations": {
+      "crontab -l": "[no crontab for sysadmin]",
+      "ls /etc/nginx": "nginx.conf  sites-available ..."
+    },
+    "fix_commands": [
+      "echo '0 0 * * * tar -czf /backup/nginx.tar.gz /etc/nginx' | crontab -",
+      "crontab -e",
+      "sudo crontab -e"
+    ],
+    "resolution": "Cron job successfully scheduled for daily midnight backups.",
+    "hints": ["Use 'crontab -e' or pipe a string into 'crontab -'.", "The format is 'min hour day month dow command'."],
+    "suggested_tools": ["crontab", "tar", "echo"]
+  },
+  {
+    "id": "205",
+    "type": "routine",
+    "title": "Network Audit",
+    "severity": "LOW",
+    "problem": "Security needs a list of all currently listening TCP ports on this server.",
+    "investigations": {
+      "ss -tulnp": "Netid State Recv-Q Send-Q Local Address:Port ...\ntcp LISTEN 0 128 0.0.0.0:80 ...\ntcp LISTEN 0 128 0.0.0.0:22 ..."
+    },
+    "fix_commands": [
+      "ss -tulnp > /tmp/audit.txt",
+      "netstat -tulnp > /tmp/audit.txt",
+      "sudo ss -tulnp > /tmp/audit.txt"
+    ],
+    "resolution": "Network audit report generated in /tmp/audit.txt.",
+    "hints": ["Use 'ss' or 'netstat' with -tulnp.", "Redirect the output to the specified file."],
+    "suggested_tools": ["ss", "netstat", "cat"]
+  },
+  {
+    "id": "111",
+    "type": "incident",
+    "title": "Website Down: Multi-Stage Recovery",
+    "severity": "CRITICAL",
+    "problem": "The website is showing a '500 Internal Server Error'. Nginx is running, but something is wrong behind the scenes.",
+    "investigations": {
+      "systemctl status nginx": "● nginx.service - Active: active (running)",
+      "curl -I localhost": "HTTP/1.1 500 Internal Server Error",
+      "tail /var/log/nginx/error.log": "connect() failed (111: Connection refused) while connecting to upstream: http://127.0.0.1:3306",
+      "systemctl status mysql": "● mysql.service - Active: inactive (dead)"
+    },
+    "fix_commands": ["systemctl start mysql", "sudo systemctl start mysql", "service mysql restart"],
+    "resolution": "Nginx was OK, but the Backend Database was down. MySQL started.",
+    "hints": ["Check Nginx error logs for clues.", "If it's a 500 error, check backend services like database or app server."],
+    "suggested_tools": ["systemctl", "curl", "tail", "mysql"]
+  }
+]
