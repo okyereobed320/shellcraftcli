@@ -10,7 +10,7 @@ Shellcraft is an open-source, CLI-based training platform designed to help you m
 
 ```bash
 # Clone the repository
-git clone https://github.com/oftechgh/shellcraft.git
+git clone https://github.com/okyereobed320/shellcraftcli.git
 
 # Navigate to the directory
 cd shellcraft
