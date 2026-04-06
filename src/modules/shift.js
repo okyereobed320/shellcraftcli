@@ -1,15 +1,12 @@
 import inquirer from 'inquirer';
-import chalk from 'chalk';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { addXP } from '../utils/progress.js';
+import { COLORS, displayHeader, displayDivider } from '../utils/ui.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Helper for clean UI separators
-const hr = (color = 'gray') => chalk[color]('━'.repeat(60));
 
 export async function startShift(moduleName) {
   try {
@@ -21,31 +18,30 @@ export async function startShift(moduleName) {
     let currentTicket = null;
     let activeScenarios = [...scenarios];
 
-    console.log(chalk.blue.bold('\n🚀 SHELLCRAFT SHIFT: ENTERING INFRASTRUCTURE CONTROL'));
-    console.log(hr('blue'));
-    console.log(chalk.white('  ROLE   : ') + chalk.yellow('Senior Systems Administrator'));
-    console.log(chalk.white('  STATUS : ') + chalk.green('Online & Monitoring'));
-    console.log(chalk.white('  HELP   : ') + chalk.gray('Type "menu" for options or "suggest" for help.'));
-    console.log(hr('blue') + '\n');
+    displayHeader('🚀 SHELLCRAFT SHIFT: ENTERING INFRASTRUCTURE CONTROL', COLORS.primary);
+    console.log(`${COLORS.highlight('  ROLE   : ')}${COLORS.warning('Senior Systems Administrator')}`);
+    console.log(`${COLORS.highlight('  STATUS : ')}${COLORS.accent('Online & Monitoring')}`);
+    console.log(`${COLORS.highlight('  HELP   : ')}${COLORS.muted('Type "menu" for options or "suggest" for help.')}\n`);
+    displayDivider(COLORS.primary);
+    console.log('');
 
     const runShell = async () => {
       // Dynamic Prompt
-      const promptColor = currentTicket ? (currentTicket.severity === 'CRITICAL' ? 'red' : 'yellow') : 'green';
+      const promptColor = currentTicket ? (currentTicket.severity === 'CRITICAL' ? 'error' : 'warning') : 'accent';
       const promptLabel = currentTicket ? `[Ticket #${currentTicket.id}]` : 'idle';
       
       const { command } = await inquirer.prompt([
         {
           type: 'input',
           name: 'command',
-          message: chalk[promptColor](`${promptLabel} sysadmin@shellcraft:~$`),
+          message: COLORS[promptColor](`${promptLabel} sysadmin@shellcraft:~$`),
         }
       ]);
 
       const cmd = command.trim();
       if (!cmd) return runShell();
 
-      // --- META COMMANDS ---
-      
+      // Command Logic
       if (['exit', 'end', 'quit'].includes(cmd)) {
         displayEndReport(resolvedCount, scenarios.length);
         return;
@@ -68,7 +64,7 @@ export async function startShift(moduleName) {
           currentTicket = ticket;
           displayIncidentBrief(currentTicket);
         } else {
-          console.log(chalk.red('\n❌ Error: Ticket ID not found or already closed.\n'));
+          console.log(COLORS.error('\n❌ Error: Ticket ID not found or already closed.\n'));
         }
         return runShell();
       }
@@ -86,9 +82,9 @@ export async function startShift(moduleName) {
       if (['hint', 'tip'].includes(cmd)) {
         if (currentTicket) {
           const hint = currentTicket.hints[Math.floor(Math.random() * currentTicket.hints.length)];
-          console.log(chalk.cyan.bold(`\n💡 ADVISORY: ${hint}\n`));
+          console.log(`\n ${COLORS.secondary.bold('💡 ADVISORY:')} ${COLORS.highlight(hint)}\n`);
         } else {
-          console.log(chalk.gray('\nNo active incident. Check "tickets" first.\n'));
+          console.log(COLORS.muted('\nNo active ticket. Type "tickets" then "open <id>".\n'));
         }
         return runShell();
       }
@@ -97,25 +93,26 @@ export async function startShift(moduleName) {
 
       if (currentTicket) {
         if (currentTicket.fix_commands.includes(cmd)) {
-          console.log('\n' + hr('green'));
-          console.log(chalk.green.bold(`✅ RESOLVED: ${currentTicket.title}`));
-          console.log(chalk.white(`   ${currentTicket.resolution}`));
-          console.log(hr('green'));
-          console.log(chalk.yellow('✨ +40 XP Awarded for Systems Excellence\n'));
+          console.log('\n');
+          displayDivider(COLORS.accent);
+          console.log(COLORS.accent.bold(`✅ RESOLVED: ${currentTicket.title}`));
+          console.log(COLORS.highlight(`   ${currentTicket.resolution}`));
+          displayDivider(COLORS.accent);
+          console.log(COLORS.warning(' ✨ +40 XP Awarded for Systems Excellence\n'));
           
           addXP(40);
           activeScenarios = activeScenarios.filter(s => s.id !== currentTicket.id);
           resolvedCount++;
           currentTicket = null;
         } else if (currentTicket.investigations[cmd]) {
-          console.log(chalk.black.bgWhite('\n--- Terminal Output ---'));
-          console.log(chalk.white(currentTicket.investigations[cmd]));
-          console.log(chalk.black.bgWhite('-----------------------\n'));
+          console.log(COLORS.highlight.bgBlack('\n--- Terminal Output ---'));
+          console.log(COLORS.highlight(currentTicket.investigations[cmd]));
+          console.log(COLORS.highlight.bgBlack('----------------------- \n'));
         } else {
           simulateLinuxOutput(cmd);
         }
       } else {
-        console.log(chalk.gray('\nNo incident active. Use "tickets" then "open <id>" to start.\n'));
+        console.log(COLORS.muted('\nNo ticket active. Type "tickets" then "open <id>" to begin.\n'));
       }
 
       return runShell();
@@ -124,87 +121,90 @@ export async function startShift(moduleName) {
     await runShell();
 
   } catch (error) {
-    console.error(chalk.red('Shift Engine Error:'), error.message);
+    console.error(COLORS.error('Error starting simulation:'), error.message);
   }
 }
 
 // --- UI COMPONENTS ---
 
 function displayMenu() {
-  console.log(chalk.white.bold('\n🛠️  SYSTEM CONTROL COMMANDS:'));
-  console.log(chalk.cyan('  tickets ') + chalk.gray('   - View pending incident & maintenance queue'));
-  console.log(chalk.cyan('  open <id>') + chalk.gray('  - Select a ticket to start working'));
-  console.log(chalk.cyan('  status  ') + chalk.gray('   - Show live infrastructure dashboard'));
-  console.log(chalk.cyan('  suggest ') + chalk.gray('   - Show specific tools for current task'));
-  console.log(chalk.cyan('  hint    ') + chalk.gray('   - Get a nudge from the senior team'));
-  console.log(chalk.cyan('  end     ') + chalk.gray('   - Terminate shift and view report'));
-  console.log(chalk.gray('\n  (You can use real Linux commands like ls, ps, systemctl, etc.)\n'));
+  console.log(COLORS.highlight('\n🛠️  SYSTEM CONTROL COMMANDS:'));
+  console.log(`${COLORS.primary('  tickets ')}${COLORS.muted('   - View pending incident & maintenance queue')}`);
+  console.log(`${COLORS.primary('  open <id>')}${COLORS.muted('  - Select a ticket to start working')}`);
+  console.log(`${COLORS.primary('  status  ')}${COLORS.muted('   - Show live infrastructure dashboard')}`);
+  console.log(`${COLORS.primary('  suggest ')}${COLORS.muted('   - Show specific tools for current task')}`);
+  console.log(`${COLORS.primary('  hint    ')}${COLORS.muted('   - Get a nudge from the senior team')}`);
+  console.log(`${COLORS.primary('  end     ')}${COLORS.muted('   - Terminate shift and view report')}`);
+  console.log(COLORS.muted('\n  (You can use real Linux commands like ls, ps, systemctl, etc.)\n'));
 }
 
 function displayTicketQueue(scenarios) {
-  console.log('\n' + hr('cyan'));
-  console.log(chalk.cyan.bold('🎫 WORK QUEUE'));
-  console.log(hr('cyan'));
+  console.log('\n');
+  displayDivider(COLORS.primary);
+  console.log(COLORS.primary.bold('🎫 WORK QUEUE'));
+  displayDivider(COLORS.primary);
   
   if (scenarios.length === 0) {
-    console.log(chalk.green('   ✨ All systems operational. 0 Tickets pending.'));
+    console.log(COLORS.accent('   ✨ All systems operational. 0 Tickets pending.'));
   } else {
     const incidents = scenarios.filter(s => s.type === 'incident');
     const routines = scenarios.filter(s => s.type === 'routine');
 
     if (incidents.length > 0) {
-      console.log(chalk.red.underline('INCIDENTS:'));
+      console.log(COLORS.error.underline('INCIDENTS:'));
       incidents.forEach(s => {
-        const color = s.severity === 'CRITICAL' ? 'red' : 'magenta';
-        console.log(`${chalk.gray(`[${s.id}]`)} ${chalk[color](s.severity.padEnd(9))} ${chalk.white(s.title)}`);
+        const color = s.severity === 'CRITICAL' ? 'error' : 'secondary';
+        console.log(`${COLORS.muted(`[${s.id}]`)} ${COLORS[color](s.severity.padEnd(9))} ${COLORS.highlight(s.title)}`);
       });
       console.log('');
     }
 
     if (routines.length > 0) {
-      console.log(chalk.blue.underline('MAINTENANCE TASKS:'));
+      console.log(COLORS.primary.underline('MAINTENANCE TASKS:'));
       routines.forEach(s => {
-        console.log(`${chalk.gray(`[${s.id}]`)} ${chalk.yellow('ROUTINE'.padEnd(9))} ${chalk.white(s.title)}`);
+        console.log(`${COLORS.muted(`[${s.id}]`)} ${COLORS.warning('ROUTINE'.padEnd(9))} ${COLORS.highlight(s.title)}`);
       });
     }
   }
-  console.log(hr('cyan'));
-  console.log(chalk.gray('Type "open <id>" to begin working.\n'));
+  displayDivider(COLORS.primary);
+  console.log(COLORS.muted('Type "open <id>" to begin working.\n'));
 }
 
 function displayIncidentBrief(ticket) {
   const isIncident = ticket.type === 'incident';
-  const color = isIncident ? 'red' : 'blue';
+  const color = isIncident ? 'error' : 'primary';
   const label = isIncident ? 'INCIDENT BRIEF' : 'TASK BRIEF';
 
-  console.log('\n' + hr(color));
-  console.log(chalk[color].bold(`🚨 ${label}: TICKET #${ticket.id}`));
-  console.log(hr(color));
-  console.log(chalk.white('TITLE    : ') + chalk.bold(ticket.title));
-  console.log(chalk.white('SEVERITY : ') + (ticket.severity === 'CRITICAL' ? chalk.red.bold(ticket.severity) : chalk.yellow(ticket.severity)));
-  console.log(chalk.white('GOAL     : ') + chalk.italic(ticket.problem));
-  console.log(hr(color));
-  console.log(chalk.cyan('Type "suggest" to see the recommended diagnostic toolbox.\n'));
+  console.log('\n');
+  displayDivider(COLORS[color]);
+  console.log(COLORS[color].bold(`🚨 ${label}: TICKET #${ticket.id}`));
+  displayDivider(COLORS[color]);
+  console.log(`${COLORS.highlight('TITLE    : ')}${COLORS.highlight.bold(ticket.title)}`);
+  console.log(`${COLORS.highlight('SEVERITY : ')}${(ticket.severity === 'CRITICAL' ? COLORS.error.bold(ticket.severity) : COLORS.warning(ticket.severity))}`);
+  console.log(`${COLORS.highlight('GOAL     : ')}${COLORS.muted.italic(ticket.problem)}`);
+  displayDivider(COLORS[color]);
+  console.log(COLORS.primary('Type "suggest" to see the recommended diagnostic toolbox.\n'));
 }
 
 function displayLiveDashboard(scenarios) {
   const getS = (id) => scenarios.find(s => s.id === id);
-  console.log('\n' + chalk.bgBlue.white.bold(' 🖥️  INFRASTRUCTURE DASHBOARD '));
-  console.log(chalk.blue('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'));
-  console.log(`  🌐 WEB LAYER     : ${getS('101') || getS('111') ? chalk.red('🔥 ERROR') : chalk.green('✅ OK')}`);
-  console.log(`  💾 STORAGE       : ${getS('103') || getS('202') ? chalk.yellow('⚠️  FULL') : chalk.green('✅ OK')}`);
-  console.log(`  🔐 SECURITY      : ${getS('203') ? chalk.yellow('⚠️  PATCHING') : chalk.green('✅ OK')}`);
-  console.log(`  ⚙️  SERVICES      : ${scenarios.length > 5 ? chalk.yellow('⚠️  LOAD') : chalk.green('✅ OK')}`);
-  console.log(chalk.blue('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'));
+  console.log('\n' + COLORS.highlight.bgBlue(' 🖥️  INFRASTRUCTURE DASHBOARD '));
+  displayDivider(COLORS.primary);
+  console.log(`  🌐 WEB LAYER     : ${getS('101') || getS('111') ? COLORS.error('🔥 ERROR') : COLORS.accent('✅ OK')}`);
+  console.log(`  💾 STORAGE       : ${getS('103') || getS('202') ? COLORS.warning('⚠️  FULL') : COLORS.accent('✅ OK')}`);
+  console.log(`  🔐 SECURITY      : ${getS('203') ? COLORS.warning('⚠️  PATCHING') : COLORS.accent('✅ OK')}`);
+  console.log(`  ⚙️  SERVICES      : ${scenarios.length > 5 ? COLORS.warning('⚠️  LOAD') : COLORS.accent('✅ OK')}`);
+  displayDivider(COLORS.primary);
+  console.log('');
 }
 
 function displaySuggestedTools(ticket) {
   if (!ticket) {
-    console.log(chalk.gray('\nSelect a ticket first to see suggested tools.\n'));
+    console.log(COLORS.muted('\nSelect a ticket first to see suggested tools.\n'));
     return;
   }
   
-  console.log(chalk.white.bold('\n🔍 DIAGNOSTIC TOOLBOX FOR THIS ' + (ticket.type === 'incident' ? 'INCIDENT' : 'TASK') + ':'));
+  console.log(`${COLORS.highlight('\n🔍 DIAGNOSTIC TOOLBOX FOR THIS ')}${COLORS.highlight(ticket.type === 'incident' ? 'INCIDENT' : 'TASK')}:`);
   
   const toolLibrary = {
     'systemctl': 'Manage system services (status, start, restart)',
@@ -234,9 +234,9 @@ function displaySuggestedTools(ticket) {
 
   ticketTools.forEach(toolName => {
     const desc = toolLibrary[toolName] || 'General Linux utility';
-    console.log(chalk.cyan(`  ${toolName.padEnd(15)}`) + chalk.gray(` - ${desc}`));
+    console.log(`${COLORS.primary(`  ${toolName.padEnd(15)}`)}${COLORS.muted(` - ${desc}`)}`);
   });
-  console.log(chalk.gray('\n(Use these tools to investigate and resolve the ticket)\n'));
+  console.log(COLORS.muted('\n(Use these tools to investigate and resolve the ticket)\n'));
 }
 
 function simulateLinuxOutput(cmd) {
@@ -244,21 +244,22 @@ function simulateLinuxOutput(cmd) {
   
   const baseCmd = cmd.split(' ')[0];
   if (knownCommands.includes(baseCmd)) {
-    console.log(chalk.white(`\n[Simulation] Result of "${cmd}":`));
-    console.log(chalk.gray('  Command executed successfully, but no relevant issues found in this area.\n'));
+    console.log(`${COLORS.highlight(`\n[Simulation] Result of "${cmd}":`)}`);
+    console.log(COLORS.muted('  Command executed successfully, but no relevant issues found in this area.\n'));
   } else {
-    console.log(chalk.red(`\n-bash: ${cmd}: command not found\n`));
+    console.log(COLORS.error(`\n-bash: ${cmd}: command not found\n`));
   }
 }
 
 function displayEndReport(resolved, total) {
-  console.log('\n' + hr('blue'));
-  console.log(chalk.blue.bold('📈 SHIFT PERFORMANCE REPORT'));
-  console.log(hr('blue'));
-  console.log(chalk.white(`  TOTAL TICKETS    : ${total}`));
-  console.log(chalk.white(`  RESOLVED         : ${resolved}`));
-  console.log(chalk.white(`  SUCCESS RATE     : ${Math.round((resolved/total)*100)}%`));
-  console.log(chalk.white(`  RATING           : `) + (resolved === total ? chalk.yellow('⭐⭐⭐⭐⭐ (EXPERT)') : chalk.cyan('⭐⭐⭐ (SOLID)')));
-  console.log(hr('blue'));
-  console.log(chalk.yellow('\nShift ended. Handing over to next rotation. 👋\n'));
+  console.log('\n');
+  displayDivider(COLORS.primary);
+  console.log(COLORS.primary.bold('📈 SHIFT PERFORMANCE REPORT'));
+  displayDivider(COLORS.primary);
+  console.log(`${COLORS.highlight('  TOTAL TICKETS    : ')}${total}`);
+  console.log(`${COLORS.highlight('  RESOLVED         : ')}${resolved}`);
+  console.log(`${COLORS.highlight('  SUCCESS RATE     : ')}${Math.round((resolved/total)*100)}%`);
+  console.log(`${COLORS.highlight('  RATING           : ')}${(resolved === total ? COLORS.warning('⭐⭐⭐⭐⭐ (EXPERT)') : COLORS.primary('⭐⭐⭐ (SOLID)'))}`);
+  displayDivider(COLORS.primary);
+  console.log(COLORS.warning('\nShift ended. Handing over to next rotation. 👋\n'));
 }

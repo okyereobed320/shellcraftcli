@@ -1,0 +1,269 @@
+[
+  {
+    "id": "tool_1",
+    "title": "The Modern Tooling Revolution",
+    "content": "Linux tools like 'ls', 'cat', and 'grep' have existed for 40+ years. While they are reliable, a new generation of tools written in languages like Rust and Go has emerged. These 'Modern' alternatives focus on speed, safety, and better human ergonomics. This volume explores how to upgrade your terminal productivity by leveraging these next-gen utilities.",
+    "insight": "Modern tools aren't just 'flashy'; they provide better defaults and safer operations.",
+    "next": "bat vs cat"
+  },
+  {
+    "id": "tool_2",
+    "title": "bat: cat with Wings",
+    "content": "'bat' is a clone of 'cat' with syntax highlighting and Git integration. While 'cat' just dumps raw text, 'bat' detects the file type and colors the code, making it significantly easier to read logs, scripts, and configuration files directly in the terminal. It also shows line numbers and can display non-printable characters.",
+    "insight": "Use 'bat' for human reading; use 'cat' for script piping.",
+    "next": "eza vs ls",
+    "lab": {
+      "command": "bat config.yaml",
+      "output": "[Syntax Highlighted YAML output...]"
+    }
+  },
+  {
+    "id": "tool_3",
+    "title": "eza: A Modern ls",
+    "content": "'eza' (formerly exa) is a modern replacement for 'ls.' It features vibrant colors, icons for different file types, and built-in Git status indicators. It can also show directory structures as a tree without needing the 'tree' command. It's designed to give you more information at a single glance.",
+    "insight": "eza's '--git' flag lets you see which files have changed without running 'git status'.",
+    "next": "ripgrep: Fast Search",
+    "lab": {
+      "command": "eza -l --git --icons",
+      "output": "[Colorful listing with git status icons...]"
+    }
+  },
+  {
+    "id": "tool_4",
+    "title": "ripgrep (rg): Blazing Fast Search",
+    "content": "'ripgrep' is widely considered the fastest text search tool in existence. It respects your '.gitignore' by default and skips hidden files and binary files automatically. It combines the usability of 'grep' with the performance of 'ag' (The Silver Searcher), but is consistently faster than both.",
+    "insight": "ripgrep is so fast it can search gigabytes of text in milliseconds.",
+    "next": "fd: Simple find",
+    "lab": {
+      "command": "rg 'TODO' src/",
+      "output": "src/index.js:42: // TODO: Implement security check"
+    }
+  },
+  {
+    "id": "tool_5",
+    "title": "fd: A Human-Friendly find",
+    "content": "The 'find' command has a notoriously difficult syntax. 'fd' is a simple, fast, and user-friendly alternative. It uses smart case-sensitivity by default, uses colors to highlight different file types, and is significantly faster than 'find' for common searches. It also supports regular expressions and parallel command execution.",
+    "insight": "Use 'fd' for 90% of your searches; keep 'find' for complex, esoteric system tasks.",
+    "next": "fzf: Fuzzy Finder",
+    "lab": {
+      "command": "fd .js",
+      "output": "src/index.js\nsrc/utils/ui.js\n..."
+    }
+  },
+  {
+    "id": "tool_6",
+    "title": "fzf: The Interactive Search Engine",
+    "content": "'fzf' is a general-purpose command-line fuzzy finder. It is a filter that you can pipe any list into. It allows you to find files, command history, processes, or git commits by typing partial, out-of-order matches. It is often described as the 'most transformative' tool for terminal productivity.",
+    "insight": "Combine 'fzf' with 'cd' or 'vim' to teleport through your filesystem.",
+    "next": "delta: Better Diffs",
+    "lab": {
+      "command": "history | fzf",
+      "output": "[Interactive fuzzy search interface...]"
+    }
+  },
+  {
+    "id": "tool_7",
+    "title": "delta: Syntax-Highlighting Diffs",
+    "content": "The output of 'git diff' is notoriously hard to read. 'delta' is a viewer for git and diff output. It provides syntax highlighting for the code being changed, side-by-side views, and word-level diffing. It makes reviewing changes significantly less straining on the eyes.",
+    "insight": "Delta turns 'Wall of Red/Green' into a readable code review.",
+    "next": "duf: Better Disk Free",
+    "lab": {
+      "command": "git diff | delta",
+      "output": "[Syntax highlighted, clean diff view...]"
+    }
+  },
+  {
+    "id": "tool_8",
+    "title": "duf: Disk Usage/Free Utility",
+    "content": "'duf' is a modern replacement for 'df.' It provides a clean, colorful, and tabular view of your mounted disks and filesystems. It automatically hides obscure kernel filesystems by default, focusing only on the storage that actually matters to you as a user.",
+    "insight": "duf is 'df' but with a dashboard-like readability.",
+    "next": "dust: Better Disk Usage",
+    "lab": {
+      "command": "duf",
+      "output": "[Clean table showing storage, used, and free...]"
+    }
+  },
+  {
+    "id": "tool_9",
+    "title": "dust: Intuitive du",
+    "content": "'dust' is a more intuitive version of 'du' written in Rust. It provides a visual tree of your disk usage, showing you exactly which directories are consuming the most space using small progress bars. It makes finding 'space hogs' almost instantaneous compared to manual 'du | sort' pipelines.",
+    "insight": "dust is the 'X-Ray' for your disk space.",
+    "next": "bottom (btm): Better top",
+    "lab": {
+      "command": "dust",
+      "output": "[Tree view with bars: 80% /home, 15% /var...]"
+    }
+  },
+  {
+    "id": "tool_10",
+    "title": "bottom (btm): A Modern top",
+    "content": "'bottom' is a customizable, cross-platform graphical system monitor. It provides real-time charts for CPU, memory, network, and disk usage. It's more visual than 'htop' and allows you to zoom in on specific time periods or resources to find performance spikes.",
+    "insight": "Use 'bottom' when you need to see 'Trends' over time, not just current state.",
+    "next": "procs: Better ps",
+    "lab": {
+      "command": "btm",
+      "output": "[ASCII charts showing CPU/RAM usage over time...]"
+    }
+  },
+  {
+    "id": "tool_11",
+    "title": "procs: A Modern ps",
+    "content": "'procs' is a replacement for 'ps' that provides colorful output, searchable process lists, and additional information like Docker container names or TCP/UDP ports associated with a process. It makes it easy to see exactly what a process is doing without complex flags.",
+    "insight": "procs links your processes to your containers and network automatically.",
+    "next": "curlie: Better curl",
+    "lab": {
+      "command": "procs nginx",
+      "output": "[Detailed, colorful process info for nginx...]"
+    }
+  },
+  {
+    "id": "tool_12",
+    "title": "curlie: The Power of curl + HTTPie",
+    "content": "'curlie' combines the power of 'curl' with the ease of use of 'HTTPie.' It provides syntax highlighting for JSON/HTML responses and a simpler syntax for making requests, while still being compatible with all 'curl' options. It's the perfect tool for debugging APIs.",
+    "insight": "Curlie makes 'Human-readable' requests with 'Machine-level' power.",
+    "next": "tldr: Simplified man pages",
+    "lab": {
+      "command": "curlie https://api.github.com",
+      "output": "[Pretty-printed, highlighted JSON response...]"
+    }
+  },
+  {
+    "id": "tool_13",
+    "title": "tldr: Too Long; Didn't Read",
+    "content": "Man pages are comprehensive but often overwhelming when you just need a quick example. 'tldr' provides community-maintained, simplified help pages that focus on the top 5 most common use cases for a command. It's the 'Cheat Sheet' for the Linux terminal.",
+    "insight": "Use 'tldr' first; use 'man' when you need to go deep.",
+    "next": "hyperfine: Benchmark Tool",
+    "lab": {
+      "command": "tldr tar",
+      "output": "[Quick examples of creating and extracting archives...]"
+    }
+  },
+  {
+    "id": "tool_14",
+    "title": "hyperfine: Command-line Benchmarking",
+    "content": "When you want to know which tool is faster, 'time' is too basic. 'hyperfine' is a professional benchmarking tool that runs a command multiple times, calculates statistical outliers, and provides a clear comparison. It's essential for optimizing scripts and choosing the best tools.",
+    "insight": "Don't guess; use hyperfine to 'Prove' which command is faster.",
+    "next": "zoxide: Better cd",
+    "lab": {
+      "command": "hyperfine 'fd . /etc' 'find /etc'",
+      "output": "Benchmark 1: fd is 10.5x faster than find"
+    }
+  },
+  {
+    "id": "tool_15",
+    "title": "zoxide: The Smarter cd",
+    "content": "'zoxide' is a smarter 'cd' command that remembers which directories you visit most often. Instead of typing 'cd /var/www/my-project/src', you can just type 'z my-p' and zoxide will teleport you there based on your history. It learns your habits over time.",
+    "insight": "zoxide turns directory navigation from 'Manual Labor' into 'Teleportation.'",
+    "next": "dog: Better dig",
+    "lab": {
+      "command": "z shell",
+      "output": "[Instantly moves to ~/shellcraft/src/modules...]"
+    }
+  },
+  {
+    "id": "tool_16",
+    "title": "dog: A DNS Client for Humans",
+    "content": "'dig' is the classic DNS tool, but its output is dense. 'dog' is a command-line DNS client with colorful output, support for modern protocols like DNS-over-HTTPS (DoH), and a much cleaner interface for inspecting DNS records and response times.",
+    "insight": "dog makes DNS records readable at a glance.",
+    "next": "gping: Visual ping",
+    "lab": {
+      "command": "dog google.com",
+      "output": "[Colorful table of A and AAAA records...]"
+    }
+  },
+  {
+    "id": "tool_17",
+    "title": "gping: Ping with a Graph",
+    "content": "'gping' provides a live, rolling line graph of your network latency. It's much easier to see jitter or dropped packets on a graph than in a scrolling list of text. It allows you to monitor multiple hosts at once to compare their performance.",
+    "insight": "gping visualizes 'Network Stability' in real-time.",
+    "next": "choose: Better cut/awk",
+    "lab": {
+      "command": "gping google.com 8.8.8.8",
+      "output": "[Live ASCII line graph showing latency spikes...]"
+    }
+  },
+  {
+    "id": "tool_18",
+    "title": "choose: A Faster cut/awk",
+    "content": "'choose' is a human-friendly tool for picking columns from text output. It uses Python-style slicing syntax (e.g., [1:3]) and is significantly simpler than 'cut' or the print logic of 'awk.' It's perfect for quick data extraction in pipelines.",
+    "insight": "choose is the 'Quick Selector' for your text columns.",
+    "next": "sd: Better sed",
+    "lab": {
+      "command": "procs | choose 0 1",
+      "output": "PID COMMAND\n1 systemd\n..."
+    }
+  },
+  {
+    "id": "tool_19",
+    "title": "sd: Simple Search & Replace",
+    "content": "'sd' is an intuitive alternative to 'sed.' It uses standard regex syntax (no escaping nightmares), is much faster, and doesn't require complex flags for in-place editing. It's designed to do the 99% of 'find and replace' tasks that sed is usually used for.",
+    "insight": "sd is 'sed' without the 'regex headache'.",
+    "next": "direnv: Per-folder Environment",
+    "lab": {
+      "command": "echo 'Hello' | sd 'Hello' 'Hi'",
+      "output": "Hi"
+    }
+  },
+  {
+    "id": "tool_20",
+    "title": "direnv: Intelligent Environments",
+    "content": "'direnv' automatically loads and unloads environment variables based on your current directory. It looks for a '.envrc' file. This allows you to have different API keys, database URLs, or Python versions for every project without them ever conflicting with each other.",
+    "insight": "direnv automates the 'Context Switch' between your projects.",
+    "next": "starship: The Universal Prompt",
+    "lab": {
+      "command": "cd my-project",
+      "output": "direnv: loading .envrc\ndirenv: export +PROJECT_KEY"
+    }
+  },
+  {
+    "id": "tool_21",
+    "title": "starship: The Elite Shell Prompt",
+    "content": "'starship' is a fast, customizable prompt for any shell. It shows only the information you need at that moment—your git branch, your current node/python version, the execution time of the last command, and more. It is written in Rust for near-zero latency.",
+    "insight": "A good prompt like starship is the 'Cockpit' of your terminal.",
+    "next": "tmuxifier: Session Layouts",
+    "lab": {
+      "command": "starship explain",
+      "output": "[Visual breakdown of your current prompt modules...]"
+    }
+  },
+  {
+    "id": "tool_22",
+    "title": "tmuxifier: Managing tmux Sessions",
+    "content": "Manually setting up tmux panes and windows every time you start work is tedious. 'tmuxifier' allows you to create 'window templates.' With one command, you can launch a complex layout with your editor in one pane, logs in another, and a database shell in a third.",
+    "insight": "tmuxifier turns 'Session Setup' into a single command.",
+    "next": "just: Modern Task Runner",
+    "lab": {
+      "command": "tmuxifier load-session my-app",
+      "output": "[Instantly creates 3 windows and 5 panes...]"
+    }
+  },
+  {
+    "id": "tool_23",
+    "title": "just: A Modern Makefile",
+    "content": "While 'make' is powerful, it has many quirks and is designed for building C code. 'just' is a handy command-line runner for project-specific commands. It provides a cleaner syntax, better error messages, and features like 'recipe parameters' that make it the perfect way to automate your project's workflow.",
+    "insight": "Use 'just' to define the 'Playbook' for your specific project.",
+    "next": "xh: Better curlie",
+    "lab": {
+      "command": "just deploy prod",
+      "output": "==> Deploying to production..."
+    }
+  },
+  {
+    "id": "tool_24",
+    "title": "xh: Fast, Friendly HTTP Client",
+    "content": "'xh' is another Rust-powered HTTP client that focuses on being 'HTTPie' compatible but much faster. It's perfect for large responses where HTTPie might lag. It provides beautiful colors, automatic JSON parsing, and a very intuitive syntax for headers and parameters.",
+    "insight": "xh is the 'Modern Standard' for interacting with web services.",
+    "next": "Conclusion: Building Your Toolkit",
+    "lab": {
+      "command": "xh POST httpbin.org/post name=Shellcraft",
+      "output": "[Highlighted JSON response with your data...]"
+    }
+  },
+  {
+    "id": "tool_25",
+    "title": "The Infinite Toolkit",
+    "content": "The modern Linux ecosystem is always evolving. The key isn't to install everything, but to carefully select the tools that solve your specific bottlenecks. By mastering these next-gen utilities, you are not just 'running commands'—you are building a high-performance environment that works for you, not against you.",
+    "insight": "Your terminal is your 'Workshop'; keep your tools sharp and modern.",
+    "next": "End of Modern Tooling"
+  }
+]

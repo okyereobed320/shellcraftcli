@@ -1,0 +1,177 @@
+[
+  {
+    "id": "net_1",
+    "title": "The Linux Network Stack",
+    "content": "Linux possesses the most robust and advanced TCP/IP stack in existence. Every packet entering the system travels through a series of 'hooks' in the Kernel. The networking subsystem manages everything from hardware interrupts on the NIC to the socket interface used by applications. Understanding the flow—from the Link Layer to the Application Layer—is essential for any high-level engineer.",
+    "insight": "The Linux Kernel is essentially a high-performance router with an OS attached.",
+    "next": "Sockets: The IPC Bridge"
+  },
+  {
+    "id": "net_2",
+    "title": "Sockets: The IPC Bridge",
+    "content": "A socket is an endpoint for communication. In Linux, sockets are treated as file descriptors, following the 'Everything is a File' philosophy. They allow processes to communicate either on the same machine (Unix Domain Sockets) or across the globe (Network Sockets). When an app 'listens' on a port, it is actually waiting for the Kernel to hand it a socket connection.",
+    "insight": "Sockets are the 'Doors' through which data enters and exits your application.",
+    "next": "The iproute2 Suite"
+  },
+  {
+    "id": "net_3",
+    "title": "Modern Networking: iproute2",
+    "content": "The legacy 'net-tools' (ifconfig, route) are deprecated. Modern Linux relies on 'iproute2,' centered around the 'ip' command. This tool interacts directly with the Kernel's Netlink interface. It can manage addresses, routes, tunnels, and even multicast groups with surgical precision. It is the 'Multi-tool' for the modern network engineer.",
+    "insight": "Master 'ip' and 'ss'; forget 'ifconfig' and 'netstat'.",
+    "next": "The Loopback Interface"
+  },
+  {
+    "id": "net_4",
+    "title": "The Loopback: 127.0.0.1",
+    "content": "The loopback interface (lo) is a virtual network interface that the computer uses to communicate with itself. It is essential for testing services locally before exposing them to the world. Traffic sent to 127.0.0.1 never leaves the machine; it is intercepted by the Kernel and routed back to the local stack.",
+    "insight": "The loopback is the 'Safe Haven' for local service development.",
+    "next": "DNS Resolution: /etc/resolv.conf"
+  },
+  {
+    "id": "net_5",
+    "title": "DNS: The Name Resolver",
+    "content": "Linux resolves names to IPs using a hierarchy. First, it checks '/etc/hosts' for static mappings. If not found, it consults the DNS servers listed in '/etc/resolv.conf.' Modern systems often use 'systemd-resolved' to manage this, providing a local cache to speed up repeated lookups and handle complex networking changes dynamically.",
+    "insight": "Always check /etc/hosts first when debugging 'strange' connection issues.",
+    "next": "Routing Tables"
+  },
+  {
+    "id": "net_6",
+    "title": "The Routing Table",
+    "content": "The routing table is the 'Map' the Kernel uses to decide where to send a packet. It looks at the destination IP and finds the most specific matching route. If no specific route exists, it sends the packet to the 'Default Gateway'—usually your router. You can view this map with 'ip route'.",
+    "insight": "A misconfigured default gateway is the #1 cause of 'no internet' on a server.",
+    "next": "ARP: Mapping IP to MAC"
+  },
+  {
+    "id": "net_7",
+    "title": "ARP: The Link Layer Link",
+    "content": "Address Resolution Protocol (ARP) is the bridge between the Network Layer (IP) and the Data Link Layer (MAC). Before a packet can travel over a local wire, the Kernel must know the physical hardware address (MAC) of the next hop. It sends an 'ARP Request' to find this, and stores the result in the 'ARP Cache'.",
+    "insight": "ARP is the 'Last Mile' translation of networking.",
+    "next": "DHCP: Dynamic Configuration"
+  },
+  {
+    "id": "net_8",
+    "title": "DHCP and Lease Management",
+    "content": "Dynamic Host Configuration Protocol (DHCP) allows a machine to join a network and automatically receive an IP address, gateway, and DNS settings. The 'dhclient' or 'networkd' handles the 'DORA' process (Discover, Offer, Request, Acknowledge). Servers often use 'Static IPs' to ensure their address never changes.",
+    "insight": "DHCP makes networking 'Plug and Play,' but Static IPs make it 'Reliable.'",
+    "next": "The SSH Protocol"
+  },
+  {
+    "id": "net_9",
+    "title": "SSH: Secure Remote Access",
+    "content": "Secure Shell (SSH) is the industry standard for remote administration. It provides an encrypted channel over an insecure network. Beyond just a shell, SSH can tunnel other traffic, forward X11 graphics, and securely copy files (SCP/SFTP). Modern best practice is to disable password login and use 'SSH Keys' for much stronger security.",
+    "insight": "SSH is the 'Lifeblood' of remote Linux administration.",
+    "next": "SSH Keys & Agents"
+  },
+  {
+    "id": "net_10",
+    "title": "SSH Keys and Agents",
+    "content": "SSH Keys use asymmetric cryptography (Public/Private). You put your 'Public Key' on the server and keep your 'Private Key' safe on your laptop. An 'SSH Agent' stores your decrypted keys in memory so you don't have to type your passphrase every time you connect to a new server.",
+    "insight": "Public Key Authentication is the gold standard for secure server access.",
+    "next": "Firewalls: iptables and nftables"
+  },
+  {
+    "id": "net_11",
+    "title": "Firewalls: nftables and Netfilter",
+    "content": "The Linux firewall is built into the 'Netfilter' subsystem. While 'iptables' was the standard for decades, modern systems have moved to 'nftables.' It provides a more efficient and readable way to define rules for filtering, NAT, and packet mangling. Tools like 'ufw' or 'firewalld' act as user-friendly fronts for these powerful low-level engines.",
+    "insight": "The firewall is the 'Security Guard' at the entrance of your server.",
+    "next": "Network Address Translation (NAT)"
+  },
+  {
+    "id": "net_12",
+    "title": "Network Address Translation (NAT)",
+    "content": "NAT allows multiple machines on a private network to share a single public IP address. The Linux Kernel handles this by 'Masquerading' outgoing packets—changing the source IP to its own public address and keeping track of the connection so it can route the reply back to the correct internal machine.",
+    "insight": "NAT is the reason why millions of devices can exist on the internet despite the limited number of IPv4 addresses.",
+    "next": "Ports and Protocols: TCP vs UDP"
+  },
+  {
+    "id": "net_13",
+    "title": "TCP vs UDP: Reliability vs Speed",
+    "content": "TCP (Transmission Control Protocol) is 'connection-oriented'—it ensures every packet arrives in order and error-free. It's used for web traffic and SSH. UDP (User Datagram Protocol) is 'connectionless'—it just sends packets as fast as possible with no guarantees. It's used for streaming, gaming, and DNS where speed is more important than perfect delivery.",
+    "insight": "Choose TCP for 'Accuracy,' UDP for 'Velocity.'",
+    "next": "ICMP: The Diagnostic Protocol"
+  },
+  {
+    "id": "net_14",
+    "title": "ICMP: Ping and Diagnostics",
+    "content": "The Internet Control Message Protocol (ICMP) is used for diagnostic and error messages. The 'ping' command uses ICMP 'Echo Requests' to check if a host is alive. 'traceroute' uses ICMP time-exceeded messages to map the path a packet takes across the internet. It is the 'Stethoscope' of the network engineer.",
+    "insight": "If you can't ping it, the network path is likely broken (or hidden by a firewall).",
+    "next": "The OSI Model in Linux"
+  },
+  {
+    "id": "net_15",
+    "title": "The OSI Model in Practice",
+    "content": "While theoretical, the OSI model helps engineers communicate. In Linux: Layer 1 is the cable/NIC, Layer 2 is the MAC/Bridge, Layer 3 is the IP/Route, Layer 4 is TCP/UDP/Port, and Layer 7 is the Application (HTTP/SSH). Knowing which layer a problem exists on is half the battle in troubleshooting.",
+    "insight": "Troubleshoot from the bottom up: start with the cable, end with the application.",
+    "next": "Network Bridges"
+  },
+  {
+    "id": "net_16",
+    "title": "Virtual Bridges",
+    "content": "A bridge (br0) is a virtual switch inside the Kernel. It allows you to connect multiple virtual network interfaces (like those used in VMs or containers) together so they can talk to each other as if they were on the same physical switch. It is a cornerstone of modern virtualization and container networking.",
+    "insight": "Bridges are the 'Virtual Hubs' of your cloud infrastructure.",
+    "next": "VETH Pairs: Virtual Cables"
+  },
+  {
+    "id": "net_17",
+    "title": "VETH Pairs: The Virtual Cable",
+    "content": "A VETH (Virtual Ethernet) pair is exactly what it sounds like—a virtual cable with two ends. Whatever enters one end comes out the other. We use them to connect a 'Network Namespace' (like a container) to a 'Bridge' on the host. It is the 'Plumbing' that allows isolated containers to access the network.",
+    "insight": "VETH pairs are the 'Wires' that connect the isolated rooms of your containers.",
+    "next": "HTTP/HTTPS Fundamentals"
+  },
+  {
+    "id": "net_18",
+    "title": "HTTP and the Web Interface",
+    "content": "HTTP (HyperText Transfer Protocol) is the language of the web. It is a 'Request-Response' protocol where a client (like curl) asks for a resource and the server (like Nginx) provides it. HTTPS adds a layer of TLS encryption, ensuring that the data cannot be read or tampered with by anyone between the client and the server.",
+    "insight": "HTTPS is not an option anymore; it is the mandatory standard for a secure web.",
+    "next": "TLS and Certificates"
+  },
+  {
+    "id": "net_19",
+    "title": "TLS Handshakes and Certificates",
+    "content": "Transport Layer Security (TLS) uses 'Certificates' to verify the identity of a server. When you connect, the server sends its certificate signed by a 'Certificate Authority' (CA). Your system checks this signature against its list of trusted CAs (stored in /etc/ssl/certs). This prevents 'Man-in-the-Middle' attacks.",
+    "insight": "Certificates are the 'ID Cards' of the internet.",
+    "next": "Load Balancing: IPVS and HAProxy"
+  },
+  {
+    "id": "net_20",
+    "title": "Load Balancing Foundations",
+    "content": "A single server can only handle so much traffic. Load balancers like HAProxy or the Kernel's built-in 'IPVS' distribute incoming requests across a pool of multiple servers. This provides both 'Scalability' (handling more users) and 'High Availability' (if one server dies, the others keep the site alive).",
+    "insight": "Load balancing is how 'Small Servers' combine to form 'Big Websites.'",
+    "next": "VPNs and Tunnels"
+  },
+  {
+    "id": "net_21",
+    "title": "VPNs: Private Paths over Public Nets",
+    "content": "A Virtual Private Network (VPN) creates an encrypted 'Tunnel' between two points. It allows you to access private office resources from your home as if you were physically plugged into the office network. In Linux, we use tools like OpenVPN or IPSec to create these secure conduits.",
+    "insight": "A VPN is an 'Encrypted Pipeline' through the public internet.",
+    "next": "WireGuard: Modern VPN"
+  },
+  {
+    "id": "net_22",
+    "title": "WireGuard: The Future of VPNs",
+    "content": "WireGuard is a modern, high-performance VPN protocol that lives directly in the Linux Kernel. It is significantly faster and simpler than OpenVPN. It uses 'State of the Art' cryptography and is designed to be as easy to configure as an SSH key. It is quickly becoming the standard for secure cloud-to-cloud and user-to-cloud connectivity.",
+    "insight": "WireGuard is the 'SSH of VPNs'—fast, secure, and lean.",
+    "next": "Network Namespaces Deep Dive"
+  },
+  {
+    "id": "net_23",
+    "title": "Network Namespaces Deep Dive",
+    "content": "A Network Namespace is a completely isolated instance of the network stack. It has its own interfaces, routing tables, and firewall rules. This is the core technology that allows Docker containers to have their own private IP addresses. You can create one manually with 'ip netns add' to experiment with complex networking without breaking your host system.",
+    "insight": "Network Namespaces are the 'Isolated Containers' for your network stack.",
+    "next": "Debugging: tcpdump and Wireshark"
+  },
+  {
+    "id": "net_24",
+    "title": "Packet Capture: tcpdump",
+    "content": "When all else fails, you must look at the raw traffic. 'tcpdump' is the command-line tool for capturing and inspecting packets in real-time. It allows you to 'sniff' the network interface and see exactly what bytes are flying across the wire. For deeper analysis, you can save these captures to a '.pcap' file and open them in the graphical 'Wireshark' tool.",
+    "insight": "tcpdump is the 'X-Ray' for your network traffic.",
+    "next": "The Future: IPv6"
+  },
+  {
+    "id": "net_25",
+    "title": "The Infinite Net: IPv6",
+    "content": "We are running out of IPv4 addresses. IPv6 solves this with a 128-bit address space, providing enough addresses for every grain of sand on earth to have its own IP. It also removes the need for NAT and includes security features like IPSec by default. Modern Linux systems are 'Dual Stack,' supporting both IPv4 and IPv6 simultaneously.",
+    "insight": "IPv6 isn't just 'more IPs'; it's a cleaner, more efficient networking architecture.",
+    "next": "End of Networking Deep Dive"
+  }
+]

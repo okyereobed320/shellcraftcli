@@ -1,10 +1,10 @@
 import inquirer from 'inquirer';
-import chalk from 'chalk';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { startQuiz } from './quiz.js';
 import { getProgress, completeMission } from '../utils/progress.js';
+import { COLORS, displayHeader } from '../utils/ui.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,14 +17,14 @@ export async function startMissions(moduleName) {
 
     const progress = getProgress();
 
-    console.log(chalk.cyan.bold('\n🗺️  SHELLCRAFT MISSION MAP'));
-    console.log(chalk.gray('Complete missions to conquer the Linux World!\n'));
+    displayHeader('🗺️  SHELLCRAFT MISSION MAP', COLORS.primary);
+    console.log(COLORS.muted(' Complete missions to conquer the Linux World!\n'));
 
     const { worldId } = await inquirer.prompt([
       {
         type: 'list',
         name: 'worldId',
-        message: 'Select a World:',
+        message: COLORS.highlight('Select a World:'),
         choices: worlds.map(w => ({
           name: `${w.name} - ${w.description}`,
           value: w.id
@@ -38,7 +38,7 @@ export async function startMissions(moduleName) {
       {
         type: 'list',
         name: 'missionId',
-        message: 'Select a Mission:',
+        message: COLORS.highlight('Select a Mission:'),
         choices: selectedWorld.missions.map(m => {
           const isDone = progress.completedMissions.includes(m.id);
           return {
@@ -51,8 +51,8 @@ export async function startMissions(moduleName) {
 
     const selectedMission = selectedWorld.missions.find(m => m.id === missionId);
 
-    console.log(chalk.blue.bold(`\n🚀 Starting: ${selectedMission.name}`));
-    console.log(chalk.gray(`Commands: ${selectedMission.commands.join(', ')}\n`));
+    console.log(`\n🚀 ${COLORS.secondary.bold(`Starting: ${selectedMission.name}`)}`);
+    console.log(`${COLORS.muted('Commands: ')}${COLORS.highlight(selectedMission.commands.join(', '))}\n`);
 
     // Filter questions based on mission commands
     const dataPath = path.join(__dirname, '../../data', moduleName + '.json');
@@ -82,7 +82,7 @@ export async function startMissions(moduleName) {
       missionQuestions = [...missionQuestions, ...worldQuestions];
     }
 
-    // Secondary Fallback: If still not enough, add random questions but prioritize short ones or basic ones
+    // Secondary Fallback: If still not enough, add random questions
     if (missionQuestions.length < 20) {
       const randomFill = allQuestions
         .filter(q => !missionQuestions.includes(q))
@@ -91,27 +91,26 @@ export async function startMissions(moduleName) {
       missionQuestions = [...missionQuestions, ...randomFill];
     }
     
-    // Pick 20-30 random ones from the set
     const targetCount = Math.min(missionQuestions.length, Math.floor(Math.random() * 11) + 20); // 20 to 30
     missionQuestions = missionQuestions.sort(() => 0.5 - Math.random()).slice(0, targetCount);
 
     if (missionQuestions.length === 0) {
-      console.log(chalk.red('\nError: No specific questions found for this mission yet.'));
+      console.log(COLORS.error('\nError: No specific questions found for this mission yet.'));
       return;
     }
 
     await startQuiz(moduleName, 'xp_rank', missionQuestions, async (score, total) => {
       const percentage = (score / total) * 100;
       if (percentage >= 90) {
-        console.log(chalk.green.bold(`\n🎉 Mission Accomplished: ${selectedMission.name}! (${score}/${total})`));
+        console.log(COLORS.accent.bold(`\n🎉 Mission Accomplished: ${selectedMission.name}! (${score}/${total})`));
         completeMission(missionId);
       } else {
-        console.log(chalk.yellow(`\nMission failed. You got ${score}/${total} (${percentage.toFixed(1)}%).`));
-        console.log(chalk.white('You need at least 90% to complete a mission. Keep practicing!'));
+        console.log(COLORS.warning(`\nMission failed. You got ${score}/${total} (${percentage.toFixed(1)}%).`));
+        console.log(COLORS.muted('You need at least 90% to complete a mission. Keep practicing!'));
       }
     });
 
   } catch (error) {
-    console.error(chalk.red('Error in Mission Mode:'), error.message);
+    console.error(COLORS.error('Error in Mission Mode:'), error.message);
   }
 }

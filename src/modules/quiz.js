@@ -17,10 +17,11 @@ const shuffle = (array) => {
 };
 
 import { addXP, XP_VALUES } from '../utils/progress.js';
+import { COLORS, displayDivider } from '../utils/ui.js';
 
 const getLifeDisplay = (lives) => {
-  if (lives <= 0) return chalk.red('Shell Life: 0');
-  return chalk.red('Shell Life: ' + '◉ '.repeat(lives).trim());
+  if (lives <= 0) return COLORS.error('Shell Life: 0');
+  return COLORS.error('Shell Life: ' + '◉ '.repeat(lives).trim());
 };
 
 export async function startQuiz(moduleName, mode = 'normal', preFilteredQuestions = null, onComplete = null) {
@@ -42,9 +43,9 @@ export async function startQuiz(moduleName, mode = 'normal', preFilteredQuestion
     let lives = isLifeMode ? 3 : null;
     let isGameOver = false;
 
-    console.log(chalk.cyan.bold(`\n🕹️  MODE: ${mode.toUpperCase().replace('_', ' ')}`));
+    console.log(COLORS.highlight(`\n🕹️  MODE: ${mode.toUpperCase().replace('_', ' ')}`));
     if (isLifeMode) console.log(getLifeDisplay(lives));
-    console.log(chalk.gray('━'.repeat(50)));
+    displayDivider();
 
     // UX: Randomize questions and pick a sample of 10
     shuffle(questions);
@@ -56,62 +57,63 @@ export async function startQuiz(moduleName, mode = 'normal', preFilteredQuestion
     for (const [index, q] of questions.entries()) {
       if (isGameOver) break;
 
-      console.log(chalk.yellow(`\n[Question ${index + 1}/${questions.length}]`));
+      console.log(`${COLORS.warning(`\n[Question ${index + 1}/${questions.length}]`)} ${COLORS.highlight(q.difficulty?.toUpperCase() || 'EASY')}`);
       
       const options = shuffle([...q.options]);
 
       try {
-        const answer = await inquirer.prompt([
+        const { selected } = await inquirer.prompt([
           {
             type: 'list',
             name: 'selected',
-            message: q.question,
+            message: COLORS.highlight(q.question),
             choices: options
           }
         ]);
 
-        if (answer.selected === q.answer) {
-          console.log(chalk.green.bold('✔ Correct!'));
+        if (selected === q.answer) {
+          console.log(COLORS.accent.bold(' ✔ Correct!'));
           score++;
           
-          if (isXPMode || isLifeMode) { // XP also earned in Life mode? Usually yes in games.
+          if (isXPMode || isLifeMode) {
             const xp = XP_VALUES[q.difficulty?.toLowerCase()] || XP_VALUES.easy;
             totalGainedXP += xp;
-            console.log(chalk.yellow(`+${xp} XP`));
+            console.log(COLORS.warning(` +${xp} XP`));
           }
         } else {
-          console.log(chalk.red.bold('✘ Wrong. The correct answer was: ' + q.answer));
+          console.log(COLORS.error.bold(' ✘ Incorrect.'));
+          console.log(COLORS.muted('   Correct Answer: ') + COLORS.highlight(q.answer));
           
           if (isLifeMode) {
             lives--;
             console.log(getLifeDisplay(lives));
             if (lives <= 0) {
-              console.log(chalk.red.bold('\n💀 Session failed. You ran out of Shell Life.'));
+              console.log(COLORS.error.bold('\n💀 Session failed. You ran out of Shell Life.'));
               isGameOver = true;
             }
           }
         }
         
         if (q.explanation) {
-          console.log(chalk.italic.gray('  💡 ' + q.explanation));
+          console.log(COLORS.muted('   💡 ' + q.explanation));
         }
       } catch (promptError) {
-        console.log(chalk.gray('\nQuiz session ended. Bye! 👋'));
+        console.log(COLORS.muted('\nQuiz session ended. Bye! 👋'));
         return;
       }
     }
 
     if (!isGameOver || score > 0) {
-      console.log(chalk.gray('\n' + '━'.repeat(50)));
-      console.log(chalk.cyan.bold(`🎉 Module complete! Your score: ${score}/${questions.length}`));
+      displayDivider();
+      console.log(COLORS.primary.bold(`\n🎉 Module complete! Your score: ${score}/${questions.length}`));
 
       if (totalGainedXP > 0 && (isXPMode || isLifeMode)) {
         const result = addXP(totalGainedXP);
-        console.log(chalk.yellow(`Total XP Gained: ${totalGainedXP}`));
+        console.log(COLORS.warning(` Total XP Gained: ${totalGainedXP}`));
         if (result.rankUp) {
-          console.log(chalk.bold.green('\n🌟 RANK UP!'));
-          console.log(chalk.white(`New Rank: ${chalk.bold.magenta(result.newRank)}`));
-          console.log(chalk.italic.cyan('🔥 You are getting dangerous with the terminal...'));
+          console.log(COLORS.accent.bold('\n🌟 RANK UP!'));
+          console.log(`${COLORS.highlight(' New Rank: ')}${COLORS.secondary.bold(result.newRank)}`);
+          console.log(COLORS.muted(' 🔥 You are getting dangerous with the terminal...'));
         }
       }
     }

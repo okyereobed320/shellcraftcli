@@ -1,0 +1,72 @@
+[
+  {
+    "id": "cmd_1",
+    "title": "Advanced Navigation: pushd and popd",
+    "content": "In addition to 'cd,' Linux provides a 'Directory Stack.' When you use 'pushd,' you move to a new directory and push your previous location onto a stack. Later, you can use 'popd' to return to exactly where you were. This is incredibly useful for deep directory jumping where you know you need to return soon. It eliminates the need to remember long, complex paths during a quick task.",
+    "insight": "Think of pushd as a 'Directory Bookmark' system for your active session.",
+    "next": "Finding Files: find"
+  },
+  {
+    "id": "cmd_2",
+    "title": "Finding Files: The find Command",
+    "content": "The 'find' command is one of the most powerful tools in the Linux arsenal. It doesn't just look for filenames; it can find files based on size, owner, modification date, and even permissions. For example, you can find every file larger than 100MB that hasn't been touched in a year. Its true power, however, comes from its ability to execute commands on the results it finds, allowing for massive batch operations with a single line.",
+    "insight": "Mastering 'find' means you never have to manually search for a misplaced file again.",
+    "next": "Batch Processing: xargs"
+  },
+  {
+    "id": "cmd_3",
+    "title": "Batch Processing with xargs",
+    "content": "When 'find' generates a list of files, 'xargs' is the tool that processes them. It takes the output of one command and turns it into arguments for another. This is essential when dealing with thousands of files where a standard 'for loop' might be too slow or hit system limits. xargs can even run commands in parallel, making it a vital tool for high-performance automation and data cleanup.",
+    "insight": "xargs is the 'Industrial Conveyor Belt' for your data pipelines.",
+    "next": "Archive Mastery: tar"
+  },
+  {
+    "id": "cmd_4",
+    "title": "Archive Mastery: The tar Utility",
+    "content": "The 'tar' (Tape Archive) command is the standard for grouping files together. In the modern era, we almost always combine it with compression like 'gzip' (.tar.gz) or 'xz' (.tar.xz). tar is unique because it preserves Linux-specific metadata like ownership and permissions, which a standard 'zip' file might lose. Understanding its 'create', 'extract', and 'list' functions is essential for managing software distributions and backups.",
+    "insight": "tar is the 'Container' of the Linux world—preserving structure and identity across systems.",
+    "next": "Compression: gzip and xz"
+  },
+  {
+    "id": "cmd_5",
+    "title": "Compression Ratios: gzip vs xz",
+    "content": "Linux offers several compression algorithms, each with a trade-off between speed and size. 'gzip' is the fast, ubiquitous standard. 'bzip2' is slower but smaller. 'xz' is the modern heavyweight, providing the highest compression ratios at the cost of more CPU and time. When distributing large software packages, 'xz' is often preferred to save bandwidth, while 'gzip' is better for quick, local backups where speed is more important than every last megabyte.",
+    "insight": "Choose your compression based on the balance of 'Time' vs 'Space'.",
+    "next": "Stream Editing: sed"
+  },
+  {
+    "id": "cmd_6",
+    "title": "The Stream Editor: sed",
+    "content": "sed (Stream Editor) is a 'non-interactive' text editor. It reads a stream of text, applies a series of transformations, and outputs the result. Its most common use is 'find and replace' using regular expressions. Because it is non-interactive, sed is perfect for scripts where you need to change a configuration value in hundreds of files automatically. It is a tool of 'surgical precision' for text manipulation.",
+    "insight": "sed allows you to 'edit' files without ever opening them in a traditional editor.",
+    "next": "Data Extraction: awk"
+  },
+  {
+    "id": "cmd_7",
+    "title": "The Power of awk",
+    "content": "While sed is for editing, awk is for processing. It is a complete programming language designed for scanning and processing patterned text. awk sees every line as a set of 'fields' (columns), making it the perfect tool for processing logs, CSVs, and system reports. You can use awk to perform calculations, filter data based on complex logic, and generate formatted reports directly from the command line.",
+    "insight": "If your text has columns, awk is the tool you should reach for first.",
+    "next": "Sorting & Uniqueness"
+  },
+  {
+    "id": "cmd_8",
+    "title": "Sorting and Uniqueness: sort and uniq",
+    "content": "Raw data is often messy. The 'sort' command organizes your text alphabetically or numerically, while 'uniq' removes duplicates. Together, they allow you to perform 'frequency analysis'—for example, finding the top 10 IP addresses that are hitting your web server. Most 'uniq' operations require the input to be sorted first, making these two commands a classic 'power couple' in shell pipelines.",
+    "insight": "Sorting is the first step in turning 'Noise' into 'Information'.",
+    "next": "Disk Usage: du and df"
+  },
+  {
+    "id": "cmd_9",
+    "title": "Monitoring Space: du and df",
+    "content": "In Linux, managing storage requires two perspectives. 'df' (disk free) shows you the status of your filesystems and partitions—how much total space is available. 'du' (disk usage) allows you to look inside a directory to see which files are consuming the most space. A common professional workflow is using 'df' to find a full partition, then 'du' with sorting to find the specific 'space-hogging' directory.",
+    "insight": "df tells you if the 'tank' is full; du tells you 'what' is filling it.",
+    "next": "Process Priority: nice and renice"
+  },
+  {
+    "id": "cmd_10",
+    "title": "Process Priority: nice and renice",
+    "content": "Not all processes are created equal. The Linux Kernel uses a 'Nice' value (from -20 to 19) to determine how much CPU time a process should get. A lower number means higher priority. If you are running a long-running backup that you don't want to slow down your web server, you can 'nice' it to a higher value. 'renice' allows you to change the priority of a process that is already running. This 'politeness' system ensures critical tasks always have the resources they need.",
+    "insight": "Use 'nice' to be a 'good neighbor' in a shared resource environment.",
+    "next": "End of Command Mastery"
+  }
+]

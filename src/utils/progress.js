@@ -18,10 +18,43 @@ export const XP_VALUES = {
 
 export function getProgress() {
   return {
+    name: config.get('name', 'Operator'),
     xp: config.get('xp', 0),
     rank: config.get('rank', 'Shell Apprentice'),
-    completedMissions: config.get('completedMissions', [])
+    completedMissions: config.get('completedMissions', []),
+    handbookProgress: config.get('handbookProgress', {}), // { volumeId: lastLessonIndex }
+    badges: config.get('badges', []),
+    isFirstRun: config.get('firstRun', true)
   };
+}
+
+export function setName(name) {
+  config.set('name', name);
+}
+
+export function updateHandbookProgress(volumeId, lessonIndex) {
+  const progress = config.get('handbookProgress', {});
+  // Update progress, but if they finished (index >= length), we keep it there 
+  // or allow resetting. For now, just record the furthest reached.
+  if (!progress[volumeId] || lessonIndex > progress[volumeId]) {
+    progress[volumeId] = lessonIndex;
+    config.set('handbookProgress', progress);
+  }
+}
+
+export function earnBadge(chapterId) {
+  const badges = config.get('badges', []);
+  if (!badges.includes(chapterId)) {
+    badges.push(chapterId);
+    config.set('badges', badges);
+    addXP(100); // Mastery bonus
+    return true;
+  }
+  return false;
+}
+
+export function setFirstRunComplete() {
+  config.set('firstRun', false);
 }
 
 export function completeMission(missionId) {

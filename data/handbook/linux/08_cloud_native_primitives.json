@@ -1,0 +1,177 @@
+[
+  {
+    "id": "cn_1",
+    "title": "What is Cloud Native?",
+    "content": "Cloud Native is an approach to building and running applications that exploits the advantages of the cloud computing model. It's about 'How' applications are created and deployed, not 'Where.' In the Linux context, this means leveraging microservices, managed services, and dynamic orchestration. Linux is the bedrock upon which all these technologies are built.",
+    "insight": "Cloud Native is the evolution of Linux from a 'Server OS' to a 'Distributed OS.'",
+    "next": "Container Architecture"
+  },
+  {
+    "id": "cn_2",
+    "title": "The Container Illusion",
+    "content": "A container is not a 'thing' in the Linux Kernel. Instead, it is a collection of standard Linux processes that have been isolated using two main features: Namespaces (isolation) and Cgroups (limits). To the process inside, it feels like it's running on its own dedicated server. To the host, it's just another process in the list.",
+    "insight": "Containers are just 'Processes with a private view of the world.'",
+    "next": "Namespaces: The Virtual Walls"
+  },
+  {
+    "id": "cn_3",
+    "title": "Namespaces Deep Dive",
+    "content": "There are seven primary namespaces in Linux. 'Mount' isolates the filesystem. 'UTS' isolates the hostname. 'IPC' isolates inter-process communication. 'PID' makes the process think it's PID 1. 'Network' gives it a private network stack. 'User' allows it to be root inside the container but a nobody on the host. 'Cgroup' isolates the view of resource limits.",
+    "insight": "Namespaces are the 'Virtual Reality Headset' for a process.",
+    "next": "Chroot vs Namespaces"
+  },
+  {
+    "id": "cn_4",
+    "title": "Chroot vs. Namespaces",
+    "content": "For decades, 'chroot' was the only way to isolate a filesystem. While powerful, it didn't isolate the network, the process list, or the users. Namespaces take this to the next level by virtualizing almost every aspect of the Operating System, providing true isolation that 'chroot' could never achieve.",
+    "insight": "Namespaces are 'Chroot on Steroids.'",
+    "next": "Cgroups: The Resource Meter"
+  },
+  {
+    "id": "cn_5",
+    "title": "Control Groups (cgroups)",
+    "content": "While Namespaces provide isolation, Cgroups provide resource management. They allow you to say: 'This group of processes can never use more than 1GB of RAM or 50% of one CPU core.' This is essential for running multiple applications on the same server without them fighting over resources.",
+    "insight": "Cgroups are the 'Electricity Meter' for your process's house.",
+    "next": "The OCI Standard"
+  },
+  {
+    "id": "cn_6",
+    "title": "The OCI Standard",
+    "content": "The Open Container Initiative (OCI) defines standard formats for container images and runtimes. This ensures that an image built with Docker can be run by Podman, containerd, or any other OCI-compliant engine. It prevented a 'format war' and allowed the container ecosystem to explode.",
+    "insight": "OCI is the 'Universal Language' of containers.",
+    "next": "runc: The Low-level Runtime"
+  },
+  {
+    "id": "cn_7",
+    "title": "runc: The Engine Room",
+    "content": "runc is the low-level tool that actually creates and runs containers according to the OCI specification. It is the tool that talks to the Linux Kernel to set up the Namespaces and Cgroups. Most users never interact with runc directly, but it is the foundation of almost every container engine on earth.",
+    "insight": "runc is the 'Worker' that actually builds the container walls.",
+    "next": "containerd: The Lifecycle Manager"
+  },
+  {
+    "id": "cn_8",
+    "title": "containerd: Industry Standard",
+    "content": "containerd sits above runc. It manages the entire container lifecycle: pulling the image from a registry, managing storage (snapshots), monitoring the container status, and handling networking. It is the core of Docker and the most common runtime used in Kubernetes today.",
+    "insight": "containerd is the 'Manager' that oversees the workers.",
+    "next": "Docker: The Developer Tool"
+  },
+  {
+    "id": "cn_9",
+    "title": "Docker: The Complete Platform",
+    "content": "Docker took the complex Linux primitives (Namespaces, Cgroups, Copy-on-Write) and wrapped them in a simple, human-friendly CLI. It made it easy for developers to 'package' their apps and all their dependencies into a single image. While the industry has moved toward specialized tools, Docker remains the ultimate developer experience.",
+    "insight": "Docker made 'Linux Primitives' accessible to every developer.",
+    "next": "Podman: Daemonless Containers"
+  },
+  {
+    "id": "cn_10",
+    "title": "Podman: No Daemon Required",
+    "content": "Podman is a modern alternative to Docker that doesn't require a 'Daemon' (a background process running as root). It runs containers as child processes of your shell. This is significantly more secure and allows users to run containers without needing administrative privileges on the server.",
+    "insight": "Podman is 'Docker without the security risk of a root daemon.'",
+    "next": "Container Images: Layers"
+  },
+  {
+    "id": "cn_11",
+    "title": "Container Images and Layers",
+    "content": "A container image is not a single file; it is a stack of read-only layers. Each line in a Dockerfile creates a new layer. This 'Layered' approach is extremely efficient: if ten images use the same 'Ubuntu' base layer, that layer is only stored on disk once. This is powered by Copy-on-Write (CoW) filesystems.",
+    "insight": "Image layers are the 'Delta' of your application's changes.",
+    "next": "The OverlayFS"
+  },
+  {
+    "id": "cn_12",
+    "title": "OverlayFS: Stitching Layers",
+    "content": "OverlayFS is the special Linux filesystem that 'stitches' the read-only layers of an image together into a single, unified view for the container. When you write a file inside a container, OverlayFS performs a 'Copy-on-Write' operation, placing the new version in a temporary 'Upper' layer while leaving the original image untouched.",
+    "insight": "OverlayFS is the 'Optical Illusion' that makes multiple folders look like one.",
+    "next": "Container Networking: CNI"
+  },
+  {
+    "id": "cn_13",
+    "title": "CNI: Container Network Interface",
+    "content": "Networking in a cluster is complex. CNI is a standard that allows different networking providers (like Flannel, Calico, or Cilium) to plug into container orchestrators like Kubernetes. It handles the 'Plumbing'—creating the VETH pairs and assigning IP addresses so containers can talk across servers.",
+    "insight": "CNI is the 'Standardized Plumber' for your container city.",
+    "next": "Kubernetes: The Orchestrator"
+  },
+  {
+    "id": "cn_14",
+    "title": "Kubernetes: The Linux of the Cloud",
+    "content": "If a container is a single building, Kubernetes is the entire city. It manages thousands of containers across hundreds of servers. It handles scaling, self-healing (restarting crashed containers), and load balancing. At its core, Kubernetes is just a giant control loop that ensures the 'Actual State' of your cluster matches your 'Desired State.'",
+    "insight": "Kubernetes is the 'Global Scheduler' for Linux processes.",
+    "next": "Pods: The Atomic Unit"
+  },
+  {
+    "id": "cn_15",
+    "title": "Pods: Closer than Neighbors",
+    "content": "In Kubernetes, you don't run containers; you run 'Pods.' A Pod is a group of one or more containers that share the same Network Namespace and IPC. They feel like they are running on the same machine. This allows a sidecar container (like a logger) to work perfectly alongside your main application.",
+    "insight": "A Pod is the 'Smallest Deployable Unit' in the cloud-native world.",
+    "next": "Sidecars and Init Containers"
+  },
+  {
+    "id": "cn_16",
+    "title": "Sidecars and Init Containers",
+    "content": "Cloud-native patterns often use 'Helper' containers. 'Init Containers' run to completion before the main app starts (e.g., to set up a database). 'Sidecars' run alongside the app to handle tasks like log shipping or security proxies. This separation of concerns is a core tenet of modern architecture.",
+    "insight": "Sidecars allow you to 'Extend' an application without changing its code.",
+    "next": "Service Mesh: Istio and Linkerd"
+  },
+  {
+    "id": "cn_17",
+    "title": "Service Mesh: Traffic Control",
+    "content": "As you have hundreds of microservices, managing the 'Traffic' between them becomes impossible. A Service Mesh (like Istio) adds a tiny proxy container to every Pod. These proxies handle encryption, authentication, and sophisticated routing (like 'send 10% of traffic to the new version') automatically.",
+    "insight": "A Service Mesh is the 'Air Traffic Control' for your microservices.",
+    "next": "Immutable Infrastructure"
+  },
+  {
+    "id": "cn_18",
+    "title": "Immutable Infrastructure",
+    "content": "In the old days, we 'fixed' servers. In the cloud-native era, we 'replace' them. If a server is broken or needs an update, we destroy it and start a new one from a clean image. This 'Immutable' approach ensures that your servers never 'drift' into a messy, unknown state over time.",
+    "insight": "Servers are 'Cattle,' not 'Pets.' Don't name them; replace them.",
+    "next": "Declarative vs Imperative"
+  },
+  {
+    "id": "cn_19",
+    "title": "Declarative vs. Imperative",
+    "content": "Imperative is 'How': 'Install Nginx, then copy the config, then start the service.' Declarative is 'What': 'I want three instances of Nginx running.' Cloud-native tools (like K8s and Terraform) are declarative. You describe the end result, and the tool does the work to make it happen.",
+    "insight": "Declarative is 'Goal-Oriented' management.",
+    "next": "The Control Plane"
+  },
+  {
+    "id": "cn_20",
+    "title": "The Control Plane",
+    "content": "Every cloud system has a 'Control Plane' (the Brain) and a 'Data Plane' (the Muscle). The Control Plane makes decisions (like 'which server has space for this pod?'), while the Data Plane actually runs the workloads. In Kubernetes, the API Server, Scheduler, and Controller Manager form the Control Plane.",
+    "insight": "The Control Plane is the 'Management Office' of the cluster.",
+    "next": "etcd: The Source of Truth"
+  },
+  {
+    "id": "cn_21",
+    "title": "etcd: The Cluster's Memory",
+    "content": "etcd is a distributed key-value store that serves as the 'Source of Truth' for Kubernetes. Every piece of configuration and every status update is stored in etcd. It is designed to be extremely reliable—even if half the control plane servers die, etcd ensures the cluster's memory remains intact.",
+    "insight": "If you lose etcd, you lose the entire identity of your cluster.",
+    "next": "GitOps: Git as the Source of Truth"
+  },
+  {
+    "id": "cn_22",
+    "title": "GitOps: The Modern Workflow",
+    "content": "GitOps takes declarative management to its logical conclusion. Your entire infrastructure is described in text files stored in Git. When you 'push' a change to Git, an automated agent sees the change and updates the cluster to match. Git becomes the only way to change the 'Desired State' of your system.",
+    "insight": "GitOps is 'Infrastructure as Code' with a fully automated feedback loop.",
+    "next": "Serverless: Functions as a Service"
+  },
+  {
+    "id": "cn_23",
+    "title": "Serverless: Beyond Servers",
+    "content": "Serverless (like AWS Lambda or Knative) abstracts the server away entirely. You provide the code (a function), and the platform handles the scaling and execution. You only pay for the milliseconds the code is actually running. Under the hood, these functions are still running on Linux containers, but you never have to see them.",
+    "insight": "Serverless is the 'Peak Abstraction' of the Linux compute model.",
+    "next": "Microservices vs Monoliths"
+  },
+  {
+    "id": "cn_24",
+    "title": "Microservices: Distributed Logic",
+    "content": "Breaking a large, complex application (a Monolith) into many small, independent services (Microservices) allows different teams to work faster. Each service can be written in a different language and scaled independently. Linux's lightweight processes and network namespaces make this architectural style viable at scale.",
+    "insight": "Microservices are the 'Unix Philosophy' applied to web applications.",
+    "next": "The Future of Cloud Native"
+  },
+  {
+    "id": "cn_25",
+    "title": "The Infinite Horizon",
+    "content": "Cloud Native is not the end of the journey; it's the beginning of a new way of thinking about computation. As edge computing and WASM (WebAssembly) grow, Linux continues to adapt, providing the same stable foundations for the next generation of global infrastructure. Stay curious, stay building.",
+    "insight": "The only constant in technology is change—Linux is the foundation that makes change safe.",
+    "next": "End of Cloud Native Foundations"
+  }
+]

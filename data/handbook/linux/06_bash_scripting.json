@@ -1,0 +1,177 @@
+[
+  {
+    "id": "script_1",
+    "title": "The Power of Automation",
+    "content": "A true Linux practitioner never does the same task twice. Bash scripting is the language of automation. It allows you to combine simple commands into complex programs that can manage thousands of servers. This volume explores how to move from a 'Command Runner' to a 'Systems Architect' through scripting.",
+    "insight": "If you find yourself typing it three times, write a script.",
+    "next": "The Shebang"
+  },
+  {
+    "id": "script_2",
+    "title": "The Shebang: #!/bin/bash",
+    "content": "The first line of any script is the 'Shebang.' It tells the Kernel which interpreter to use to run the file. While '/bin/bash' is common, '/usr/bin/env bash' is more portable across different distributions. This small line is what turns a text file into an executable program.",
+    "insight": "The Shebang is the 'Launch Instruction' for your script.",
+    "next": "Variables and Assignment"
+  },
+  {
+    "id": "script_3",
+    "title": "Variables: Storing Data",
+    "content": "Variables allow you to store and reuse data in your scripts. In Bash, you assign a variable with '=' (no spaces!) and access it with '$'. You can store strings, numbers, or even the output of other commands. Variables make your scripts dynamic and reusable.",
+    "insight": "Variables are the 'Memory' of your automation.",
+    "next": "User Input: read"
+  },
+  {
+    "id": "script_4",
+    "title": "Interactive Scripts: read",
+    "content": "While many scripts run silently, sometimes you need to ask the user for information. The 'read' command pauses the script and waits for keyboard input. You can use it to ask for usernames, confirmation before deletion, or a server IP address.",
+    "insight": "Use 'read' to build a dialogue between your script and the operator.",
+    "next": "Conditional Logic: if/else"
+  },
+  {
+    "id": "script_5",
+    "title": "Decision Making: if/else",
+    "content": "The 'if' statement allows your script to make decisions. It checks the 'exit status' of a command or compares two values. If the condition is true, it runs one block of code; otherwise, it can run an 'else' block. This is how scripts handle errors and different scenarios.",
+    "insight": "Logic is the 'Brain' that decides which path the script should take.",
+    "next": "Comparison Operators"
+  },
+  {
+    "id": "script_6",
+    "title": "Comparing Values: [[ vs [",
+    "content": "Bash uses special syntax for comparisons. The modern '[[' is preferred over the older '['. It supports string matching, numerical comparison (like -gt for greater than), and even regular expressions. Knowing how to compare strings and numbers accurately is vital for reliable scripts.",
+    "insight": "Always use [[ ]] for safer, more powerful comparisons.",
+    "next": "Loops: for and while"
+  },
+  {
+    "id": "script_7",
+    "title": "Repetition: The for Loop",
+    "content": "The 'for' loop allows you to repeat an action for every item in a list. This is perfect for processing a folder of files or a list of server IPs. Bash can loop over strings, numbers, or the output of a command like 'ls' or 'cat'.",
+    "insight": "Loops are the 'Industrial Robots' of your script.",
+    "next": "While Loops: Condition-Based"
+  },
+  {
+    "id": "script_8",
+    "title": "While Loops: Running Until Done",
+    "content": "A 'while' loop continues to run as long as a specific condition is true. It's often used for 'infinite loops' (like a monitoring script) or for reading a file line-by-line. It ensures that the script keeps working until its task is truly finished.",
+    "insight": "While loops are the 'Constant Watchers' of automation.",
+    "next": "Case Statements"
+  },
+  {
+    "id": "script_9",
+    "title": "Pattern Matching: case",
+    "content": "When you have many possible conditions (like a menu or handling command-line flags), a 'case' statement is much cleaner than multiple if/else blocks. It matches a variable against several patterns and runs the code for the first match it finds.",
+    "insight": "Case statements are the 'Organized Switchboard' for complex logic.",
+    "next": "Positional Parameters"
+  },
+  {
+    "id": "script_10",
+    "title": "Arguments: $1, $2, and $@",
+    "content": "You can pass information to a script when you run it (e.g., './script.sh user1'). These are called 'Positional Parameters.' $1 is the first argument, $2 the second, and so on. $@ represents all arguments. They allow you to build tools that act on different data each time they are called.",
+    "insight": "Arguments turn 'Static Scripts' into 'Reusable Tools'.",
+    "next": "Exit Codes: Success or Failure"
+  },
+  {
+    "id": "script_11",
+    "title": "The Exit Status: $?",
+    "content": "Every command in Linux returns an 'exit code' between 0 and 255. 0 always means 'Success.' Any other number means an error occurred. In Bash, you can check the last command's status with '$?'. Good scripts always check exit codes to ensure the previous step worked before moving on.",
+    "insight": "Zero is the 'Green Light' of the Linux world.",
+    "next": "Command Substitution"
+  },
+  {
+    "id": "script_12",
+    "title": "Capturing Output: $(command)",
+    "content": "Command substitution allows you to take the output of a command and save it to a variable or use it inside another command. The syntax '$(command)' is modern and preferred over the older backticks. It is essential for making dynamic scripts that react to system state.",
+    "insight": "Substitution allows your script to 'Listen' to the output of other tools.",
+    "next": "Functions: Reusable Code"
+  },
+  {
+    "id": "script_13",
+    "title": "Functions: Modular Scripts",
+    "content": "Functions allow you to group code into reusable blocks. Instead of repeating the same 10 lines, you put them in a function and call it by name. This makes your scripts easier to read, debug, and maintain. A well-written script is usually just a series of small, focused functions.",
+    "insight": "Functions are the 'Building Blocks' of complex automation.",
+    "next": "Local vs Global Variables"
+  },
+  {
+    "id": "script_14",
+    "title": "Scope: local Variables",
+    "content": "By default, every variable in Bash is 'Global' (visible everywhere). This can cause bugs if two functions accidentally use the same variable name. Using the 'local' keyword inside a function ensures that the variable only exists inside that function, protecting the rest of your script.",
+    "insight": "Use 'local' to prevent 'Variable Collisions' in your code.",
+    "next": "Arithmetic in Bash"
+  },
+  {
+    "id": "script_15",
+    "title": "Math: $(( expression ))",
+    "content": "Bash can perform basic integer arithmetic using the '$(( ))' syntax. For more complex math (like decimals), we usually pipe the expression into 'bc' (Basic Calculator). Automation often involves calculating disk percentages, wait times, or retry counts.",
+    "insight": "Bash is not a math language, but it knows enough to manage systems.",
+    "next": "String Manipulation"
+  },
+  {
+    "id": "script_16",
+    "title": "String Slicing & Dicing",
+    "content": "Bash has powerful built-in features for manipulating strings without needing external tools like 'sed.' You can extract substrings, find lengths, and even perform find-and-replace directly on a variable. This is significantly faster than starting a new process for every small string change.",
+    "insight": "Native string manipulation is the 'Secret Speed Boost' of Bash.",
+    "next": "Arrays: Managing Lists"
+  },
+  {
+    "id": "script_17",
+    "title": "Arrays: Collections of Data",
+    "content": "An array allows you to store a list of items in a single variable. You can loop over an array, add items, or remove them. It's perfect for managing lists of filenames, server IPs, or process IDs. Bash supports both indexed and 'associative' (key-value) arrays.",
+    "insight": "Arrays are the 'Lists' that power complex data management.",
+    "next": "Input/Output Redirection"
+  },
+  {
+    "id": "script_18",
+    "title": "Advanced Redirection: 2>&1",
+    "content": "You already know how to redirect output (>) and error (2>). '2>&1' is a common trick to merge both streams into one. This is vital when you want to log everything a script does to a single file. Understanding 'File Descriptors' is the key to professional-grade logging.",
+    "insight": "Control your streams to ensure no error goes unlogged.",
+    "next": "Temporary Files: mktemp"
+  },
+  {
+    "id": "script_19",
+    "title": "Safety: Creating mktemp",
+    "content": "Scripts often need to store data temporarily. Instead of hardcoding '/tmp/data.txt' (which is insecure), use 'mktemp.' It creates a file with a unique, random name that only the script can access. This prevents 'Race Condition' attacks and ensures no two scripts overwrite each other's data.",
+    "insight": "Never hardcode temporary paths; always use mktemp.",
+    "next": "Trap: Cleaning Up on Exit"
+  },
+  {
+    "id": "script_20",
+    "title": "The trap Command: Final Cleanup",
+    "content": "What happens if your script is killed in the middle of a task? It might leave behind messy temporary files. The 'trap' command allows you to specify code that must run when the script exits (even if it crashes). Use it to delete temp files or close network connections every time.",
+    "insight": "Trap is the 'Garbage Collector' that keeps your system clean.",
+    "next": "Debugging: set -x and set -e"
+  },
+  {
+    "id": "script_21",
+    "title": "Debugging: set -x and set -e",
+    "content": "Scripts fail, and debugging them can be hard. 'set -x' tells Bash to print every command before it runs, showing you exactly what the variables are. 'set -e' (the 'Fail Fast' flag) tells the script to exit immediately if any command fails. This prevents a small error from cascading into a disaster.",
+    "insight": "Use 'set -e' to ensure your script never continues after an error.",
+    "next": "Parsing Options: getopts"
+  },
+  {
+    "id": "script_22",
+    "title": "Building Tools: getopts",
+    "content": "Professional CLI tools use flags like '-v' or '-f file.txt.' Bash provides 'getopts' to easily parse these flags. It handles the complexity of checking which flags were provided and what their values are, allowing you to build scripts that feel like native Linux commands.",
+    "insight": "getopts is the 'Interface Designer' for your CLI tools.",
+    "next": "Script Portability"
+  },
+  {
+    "id": "script_23",
+    "title": "Portability: The /usr/bin/env Trick",
+    "content": "Not all Linux systems store Bash in '/bin/bash.' Using '#!/usr/bin/env bash' tells the system to look for bash in the user's PATH. This makes your script much more likely to work on different distributions (like Alpine, CentOS, or macOS) without modification.",
+    "insight": "Write once, run everywhere (on Linux).",
+    "next": "Scheduling: cron vs systemd-timer"
+  },
+  {
+    "id": "script_24",
+    "title": "systemd-timer: The Modern cron",
+    "content": "While 'cron' is a legend, modern Linux prefers 'systemd timers.' They are more powerful, providing better logging through journald and the ability to define complex dependencies. If your script needs to run '10 minutes after boot' or 'only if the network is up,' a systemd timer is the way to go.",
+    "insight": "Systemd timers are the 'Smart Alarms' of the modern era.",
+    "next": "Best Practices for 200 Lessons"
+  },
+  {
+    "id": "script_25",
+    "title": "ShellCheck: The Linter",
+    "content": "Even pros make mistakes in Bash. 'ShellCheck' is a static analysis tool that scans your script for bugs, security holes, and bad practices. It's like having a senior engineer review your code in real-time. Integrating ShellCheck into your workflow is the fastest way to master Bash.",
+    "insight": "Never ship a script without running it through ShellCheck first.",
+    "next": "End of Scripting & Automation"
+  }
+]

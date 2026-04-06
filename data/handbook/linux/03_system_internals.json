@@ -1,0 +1,58 @@
+[
+  {
+    "id": "sys_1",
+    "title": "Bootloader: The Role of GRUB",
+    "content": "When you turn on your machine, the hardware hands control over to a 'Bootloader.' The standard in Linux is GRUB (Grand Unified Bootloader). Its job is to load the Linux Kernel and the 'initramfs' (a temporary filesystem) into memory. GRUB allows you to choose between different Kernels or operating systems at boot time. It is the first software layer to run, setting the stage for the Kernel to take over.",
+    "insight": "GRUB is the 'Gatekeeper' that decides which engine (Kernel) to start.",
+    "next": "dmesg: Kernel Logs"
+  },
+  {
+    "id": "sys_2",
+    "title": "Kernel Ring Buffer: dmesg",
+    "content": "As the Kernel boots, it generates thousands of messages about hardware detection and driver initialization. These are stored in a 'Ring Buffer' in memory. The 'dmesg' command allows you to read this buffer. It is the primary tool for debugging hardware issues—if a USB drive isn't mounting or a network card is failing, dmesg will tell you why. Because it's a ring buffer, once it's full, new messages overwrite the oldest ones.",
+    "insight": "dmesg is the Kernel's 'First Diary'—it records everything from the moment of birth.",
+    "next": "Log Rotation"
+  },
+  {
+    "id": "sys_3",
+    "title": "Log Management: logrotate",
+    "content": "Linux systems generate massive amounts of log data in '/var/log.' Without management, these files would eventually fill the entire disk. 'logrotate' is a background service that automatically rotates, compresses, and deletes old logs. It ensures that you always have the last few weeks of history without consuming unlimited space. Understanding log rotation is vital for maintaining long-running servers.",
+    "insight": "logrotate is the 'Janitor' of the system, keeping the logs tidy and safe.",
+    "next": "Crontab: Scheduled Tasks"
+  },
+  {
+    "id": "sys_4",
+    "title": "Task Scheduling: Crontab",
+    "content": "Automation in Linux relies on 'cron,' a time-based job scheduler. The 'crontab' (cron table) allows you to schedule commands to run at specific times, dates, or intervals. Whether it's a nightly backup at 2 AM or a script that checks system health every 5 minutes, cron ensures these tasks happen without human intervention. The syntax uses five fields to define the exact minute, hour, day, month, and day of the week.",
+    "insight": "Cron is the 'Alarm Clock' of Linux automation.",
+    "next": "udev: Device Management"
+  },
+  {
+    "id": "sys_5",
+    "title": "Dynamic Devices: udev",
+    "content": "In Modern Linux, hardware can be plugged in or removed at any time. 'udev' is the device manager for the Linux Kernel. It dynamically creates or removes device files in the '/dev' directory. When you plug in a web camera, udev detects it, loads the correct driver, and creates the file '/dev/video0'. You can write 'udev rules' to perform specific actions—like running a script whenever a specific encrypted drive is plugged in.",
+    "insight": "udev is the 'Receptionist' of the Kernel, welcoming and directing new hardware.",
+    "next": "sysctl: Tuning the Kernel"
+  },
+  {
+    "id": "sys_6",
+    "title": "Kernel Tuning: sysctl",
+    "content": "The 'sysctl' command allows you to view and modify Kernel parameters at runtime. These parameters control everything from network buffer sizes to how the Kernel handles 'swapping' memory. It interacts with the '/proc/sys' directory. While many changes are temporary, adding them to '/etc/sysctl.conf' makes them permanent. Tuning these values is how you optimize a Linux server for high-performance web traffic or specialized database workloads.",
+    "insight": "sysctl is the 'Control Panel' for fine-tuning the Kernel's performance.",
+    "next": "Kernel Modules: modprobe"
+  },
+  {
+    "id": "sys_7",
+    "title": "Modular Kernel: lsmod and modprobe",
+    "content": "The Linux Kernel is modular, meaning it can load and unload pieces of code (drivers) as needed. 'lsmod' lists the modules currently running. 'modprobe' is the intelligent tool for loading new modules or removing old ones. It automatically handles dependencies—if a driver needs another piece of code to work, modprobe will load both. This modularity keeps the core Kernel small and efficient while still supporting a vast range of hardware.",
+    "insight": "Kernel modules are 'Plug-ins' for the operating system.",
+    "next": "Polkit: Policy Management"
+  },
+  {
+    "id": "sys_8",
+    "title": "Authorization: polkit",
+    "content": "Polkit (PolicyKit) is an application-level framework for defining and handling authorizations. It is what allows a normal user to perform an administrative action (like changing time or mounting a drive) without needing the full power of sudo. It uses 'Policy files' to decide exactly which users are allowed to perform specific tasks, providing a more modern and granular alternative to the traditional sudo model.",
+    "insight": "Polkit is the 'VIP Security' that allows specific actions based on fine-grained rules.",
+    "next": "End of System Internals"
+  }
+]

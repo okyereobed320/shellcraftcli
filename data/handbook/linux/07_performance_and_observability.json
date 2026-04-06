@@ -1,0 +1,177 @@
+[
+  {
+    "id": "perf_1",
+    "title": "The Pillars of Observability",
+    "content": "In a modern, distributed environment, 'monitoring' (knowing if a system is up) is not enough. We need 'Observability'—the ability to understand the internal state of a system by looking at its external outputs. This volume explores the 'Three Pillars': Metrics, Logs, and Traces, and the Linux tools that provide them.",
+    "insight": "Observability is the 'X-Ray Machine' for your infrastructure.",
+    "next": "Load Averages"
+  },
+  {
+    "id": "perf_2",
+    "title": "Load Averages: The 1-5-15 Rule",
+    "content": "When you run 'uptime' or 'top,' you see three numbers for load average. These represent the average number of processes waiting for CPU or Disk over the last 1, 5, and 15 minutes. A load of '1.0' on a single-core machine means the CPU is perfectly utilized; higher means processes are queuing.",
+    "insight": "Load is a 'Pressure Gauge'—watch the 15-minute trend for long-term health.",
+    "next": "Memory: RSS vs VSS"
+  },
+  {
+    "id": "perf_3",
+    "title": "Memory: RSS vs VSS",
+    "content": "Linux processes use memory in two ways. VSS (Virtual Set Size) is all the memory a process *thinks* it has, including shared libraries. RSS (Resident Set Size) is the physical RAM the process is *actually* using. When debugging memory leaks, RSS is the number that truly matters for system stability.",
+    "insight": "VSS is the 'Budget'; RSS is the 'Cash in Hand.'",
+    "next": "The OOM Killer"
+  },
+  {
+    "id": "perf_4",
+    "title": "The OOM Killer: System Survival",
+    "content": "When a Linux system completely runs out of memory, the Kernel must make a choice: crash entirely or kill a process. The 'Out of Memory' (OOM) Killer calculates a score for every process and terminates the one that's using the most memory but is least critical. You can adjust this score for important services like databases.",
+    "insight": "The OOM Killer is the 'Emergency Surgeon' that cuts off a limb to save the patient.",
+    "next": "I/O Wait: The Hidden Bottleneck"
+  },
+  {
+    "id": "perf_5",
+    "title": "I/O Wait: The Silent Performance Killer",
+    "content": "Sometimes your CPU usage is low, but the system feels slow. This is often 'I/O Wait'—the CPU is sitting idle because it's waiting for the hard drive or network to provide data. You can see this in 'top' as '%wa.' It usually indicates a slow disk, a failing drive, or a massive amount of logging.",
+    "insight": "I/O Wait is the 'Waiting Room' of computer performance.",
+    "next": "htop: Interactive Monitoring"
+  },
+  {
+    "id": "perf_6",
+    "title": "htop: Visualizing Performance",
+    "content": "While 'top' is the standard, 'htop' is the professional's choice. It provides a color-coded, interactive view of processes, CPU cores, and memory usage. You can search, filter, and even kill processes directly from the interface. It's the first tool most engineers open when a server feels slow.",
+    "insight": "htop is the 'Dashboard' of the active sysadmin.",
+    "next": "vmstat: System Health"
+  },
+  {
+    "id": "perf_7",
+    "title": "vmstat: The Virtual Memory Sentry",
+    "content": "The 'vmstat' (Virtual Memory Statistics) command provides a high-level summary of processes, memory, paging, block I/O, traps, and CPU activity. It's particularly good at showing 'Swapping'—when the system is so low on RAM that it's using the slow hard drive as temporary memory.",
+    "insight": "If 'si' (swap in) and 'so' (swap out) are high, you need more RAM.",
+    "next": "iostat: Disk Performance"
+  },
+  {
+    "id": "perf_8",
+    "title": "iostat: Measuring Disk Throughput",
+    "content": "The 'iostat' command tells you exactly how hard your disks are working. It shows 'Read/Write' speeds and 'Latency' (how long it takes for the disk to respond). High latency on a database server is a common cause of application slowdowns, even if the CPU is mostly idle.",
+    "insight": "iostat is the 'Speedometer' for your storage hardware.",
+    "next": "netstat and ss: Network Stats"
+  },
+  {
+    "id": "perf_9",
+    "title": "ss: Socket Statistics",
+    "content": "The 'ss' command (Socket Statistics) is the modern replacement for 'netstat.' It shows every open network connection, which ports are listening, and how much data is flowing. It's essential for seeing if a server is being hit by a DDoS attack or if a service has crashed but is still holding a port open.",
+    "insight": "Use 'ss -tulpn' to see exactly which apps are listening on which ports.",
+    "next": "strace: Tracing Syscalls"
+  },
+  {
+    "id": "perf_10",
+    "title": "strace: Peering into the Process",
+    "content": "When an application is failing but giving no errors, 'strace' is your best friend. It intercepts and records every system call a process makes. You can see exactly which file it tried to open that didn't exist, or which network connection timed out. It's like having a 'Spy Camera' inside the program.",
+    "insight": "If you don't know what a program is doing, strace it.",
+    "next": "lsof: List Open Files"
+  },
+  {
+    "id": "perf_11",
+    "title": "lsof: Everything is an Open File",
+    "content": "Because Linux treats everything as a file, the 'lsof' (List Open Files) command can tell you almost anything. It shows which process is using a specific file, which files a specific process has open, and even which network sockets are active. It's the ultimate tool for resolving 'File in use' errors.",
+    "insight": "lsof is the 'Internal Ledger' of every active resource.",
+    "next": "The /proc/interrupts file"
+  },
+  {
+    "id": "perf_12",
+    "title": "Interrupts: Hardware to Software",
+    "content": "Every time you move your mouse or a packet arrives, the hardware sends an 'Interrupt' to the CPU. You can see these in '/proc/interrupts.' If one CPU core is overloaded with interrupts, it can slow down the entire system. Modern Kernels use 'SMP IRQ Affinity' to spread this load across multiple cores.",
+    "insight": "Interrupts are the 'Hardware Doorbell' of the Kernel.",
+    "next": "Context Switching"
+  },
+  {
+    "id": "perf_13",
+    "title": "Context Switching: The Overhead of Multitasking",
+    "content": "Linux can run thousands of processes on a few CPU cores by switching between them very quickly. Each switch is a 'Context Switch.' While efficient, too many switches (caused by too many active threads) creates 'Overhead'—the CPU spends more time switching than actually doing work.",
+    "insight": "High context switching is the 'Paperwork' that slows down the system.",
+    "next": "Zombie Processes"
+  },
+  {
+    "id": "perf_14",
+    "title": "Zombies: The Undead Processes",
+    "content": "A 'Zombie' process is one that has finished execution but still has an entry in the process table. This happens because its parent process hasn't 'reaped' its exit status yet. While zombies don't use RAM or CPU, they consume a 'PID,' and a system with too many zombies will eventually be unable to start new programs.",
+    "insight": "Zombies are 'Ghosts' waiting for their parents to acknowledge their death.",
+    "next": "Orphan Processes"
+  },
+  {
+    "id": "perf_15",
+    "title": "Orphans: When the Parent Dies",
+    "content": "An 'Orphan' process is one whose parent died while it was still running. In Linux, these processes are immediately 'adopted' by PID 1 (systemd). This ensures that no process is ever truly 'parentless' and that their resources will always be cleaned up when they eventually exit.",
+    "insight": "PID 1 is the 'Guardian' of all orphaned processes.",
+    "next": "Nice and Priority Revisited"
+  },
+  {
+    "id": "perf_16",
+    "title": "The Scheduler: Completely Fair Scheduler (CFS)",
+    "content": "The Linux Kernel uses the 'Completely Fair Scheduler' (CFS) to decide which process runs next. It tries to give every process a 'fair' share of the CPU based on its priority. It uses a 'Red-Black Tree' to manage processes efficiently, ensuring that even with thousands of tasks, the overhead remains tiny.",
+    "insight": "The Scheduler is the 'Traffic Cop' of the CPU.",
+    "next": "Control Groups (cgroups) Deep Dive"
+  },
+  {
+    "id": "perf_17",
+    "title": "cgroups v2: Unified Hierarchy",
+    "content": "We've discussed cgroups as resource limits, but cgroups v2 introduced a 'Unified Hierarchy.' This makes it much easier to manage resources like CPU, memory, and I/O together for a group of processes. It is the architectural foundation that allows Kubernetes to manage resources so effectively across a cluster.",
+    "insight": "Cgroups v2 is the 'Modern Governance' for process resources.",
+    "next": "Pressure Stall Information (PSI)"
+  },
+  {
+    "id": "perf_18",
+    "title": "PSI: Measuring Resource Pressure",
+    "content": "Pressure Stall Information (PSI) is a modern Linux feature that tells you exactly how much 'time' was lost because a process was waiting for CPU, memory, or I/O. Unlike load average, which is just a count, PSI gives you a 'percentage of time lost,' providing a much more accurate picture of system bottlenecks.",
+    "insight": "PSI is the 'Wasted Time Tracker' for your hardware.",
+    "next": "eBPF for Observability"
+  },
+  {
+    "id": "perf_19",
+    "title": "bpftrace: The Surgeon's Knife",
+    "content": "bpftrace is a high-level tracing language for Linux eBPF. It allows you to write one-line scripts to trace almost anything—every time a specific file is opened, every time a network packet is dropped, or every time a function in the Kernel is called. It provides 'Deep Visibility' with almost zero performance impact.",
+    "insight": "bpftrace is like having a 'Live Debugger' for the entire Operating System.",
+    "next": "Performance Profiling: perf"
+  },
+  {
+    "id": "perf_20",
+    "title": "perf: The Performance Swiss Army Knife",
+    "content": "The 'perf' tool is the official Linux profiler. It can sample CPU activity to show you exactly which lines of code are using the most time. It can also generate 'Flame Graphs'—visual representations of where your system is spending its energy. It's the ultimate tool for optimizing high-performance applications.",
+    "insight": "Use 'perf' to find the 'Hot Spots' in your code.",
+    "next": "Centralized Logging with Journald"
+  },
+  {
+    "id": "perf_21",
+    "title": "Journald: Binary Logging",
+    "content": "Modern Linux systems use 'systemd-journald' for logging. Unlike old text logs, the journal is binary and indexed, making it incredibly fast to search. You use 'journalctl' to read it. It can filter logs by service, by time, or even by 'priority' (e.g., 'show me only errors from the last 10 minutes').",
+    "insight": "Journalctl is the 'Search Engine' for your system logs.",
+    "next": "Remote Logging: rsyslog"
+  },
+  {
+    "id": "perf_22",
+    "title": "Log Shipping: rsyslog",
+    "content": "In a cluster, you don't want to log in to 100 servers to check logs. 'rsyslog' allows you to 'ship' your logs to a central server. This provides a 'Unified View' of your entire infrastructure and ensures that even if a server is destroyed, its logs are safely stored elsewhere for auditing.",
+    "insight": "Centralized logging is your 'Security Camera' system for the whole data center.",
+    "next": "Profiling Disk Latency: biosnoop"
+  },
+  {
+    "id": "perf_23",
+    "title": "biosnoop: Tracing Disk Latency",
+    "content": "biosnoop is a tool (using eBPF) that shows every individual disk I/O request and how long it took to complete. This is the 'Gold Standard' for finding a slow disk. It can show you if a specific process is causing 'Latency Spikes' that are slowing down your entire database.",
+    "insight": "biosnoop finds the 'Hidden Slowdown' in your storage stack.",
+    "next": "Analyzing Network Latency: tcptop"
+  },
+  {
+    "id": "perf_24",
+    "title": "tcptop: Real-time Network Throughput",
+    "content": "tcptop (another eBPF tool) shows you exactly which processes are sending and receiving the most network data in real-time. It's like 'top' but for your network bandwidth. It's invaluable for finding a 'bandwidth-hungry' process that is saturating your network connection.",
+    "insight": "tcptop finds the 'Bandwidth Hog' in seconds.",
+    "next": "The Future of Observability"
+  },
+  {
+    "id": "perf_25",
+    "title": "Continuous Profiling",
+    "content": "The future of observability is 'Continuous Profiling'—running tools like 'perf' or 'ebpf' 24/7 in production to collect data over long periods. This allows you to find intermittent bugs and performance regressions that only happen once a week or under specific load conditions.",
+    "insight": "Observability is moving from 'Reactive Debugging' to 'Proactive Optimization.'",
+    "next": "End of Performance & Observability"
+  }
+]

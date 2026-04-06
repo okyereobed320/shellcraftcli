@@ -4,7 +4,10 @@ import inquirer from 'inquirer';
 import { startQuiz } from './modules/quiz.js';
 import { startMissions } from './modules/missions.js';
 import { startShift } from './modules/shift.js';
-import { getProgress } from './utils/progress.js';
+import { startHandbook } from './modules/handbook.js';
+import { searchHandbook } from './modules/search.js';
+import { getProgress, setFirstRunComplete, setName } from './utils/progress.js';
+import { COLORS, displayWelcome, displayDivider, displayLogo } from './utils/ui.js';
 
 const program = new Command();
 
@@ -13,110 +16,222 @@ program
   .description('The open-source terminal-based training platform.')
   .version('0.1.0')
   .action(async () => {
-    // Default action: Start interactive menu
+    const progress = getProgress();
+    
+    if (progress.isFirstRun) {
+      await displayFirstRun();
+      setFirstRunComplete();
+    }
+    
     await interactiveMenu();
   });
 
-async function interactiveMenu() {
-  console.log(chalk.cyan.bold('\nWelcome to Shellcraft!'));
-  console.log(chalk.gray('Your terminal-based path to mastery...\n'));
+async function displayFirstRun() {
+  displayLogo();
+  console.log(COLORS.highlight(' Hello! I\'m Shellcraft, your personal Cloud Engineering mentor.'));
+  console.log(COLORS.muted(' I\'m here to help you master the Linux terminal, Docker, and beyond.\n'));
+  
+  console.log(COLORS.primary.bold(' What I can do for you:'));
+  console.log(`${COLORS.accent(' •')} ${COLORS.highlight('Interactive Quizzes:')} Test your terminal knowledge in real-time.`);
+  console.log(`${COLORS.accent(' •')} ${COLORS.highlight('Mission Paths:')} Follow structured learning paths to mastery.`);
+  console.log(`${COLORS.accent(' •')} ${COLORS.highlight('On-Duty Simulations:')} Experience real-world scenarios.`);
+  console.log(`${COLORS.accent(' •')} ${COLORS.highlight('XP & Ranks:')} Earn points and level up as you learn.\n`);
 
+  const { name } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'name',
+      message: 'What should I call you?',
+      default: 'Operator',
+      validate: (input) => {
+        if (input.trim().length === 0) return 'Please enter a name.';
+        return true;
+      }
+    }
+  ]);
+  
+  setName(name);
+  console.log(`\n${COLORS.highlight(`Great to meet you, ${name}! Let's get started.`)}\n`);
+
+  await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'ready',
+      message: 'Ready to start your journey?',
+      default: true
+    }
+  ]);
+  console.clear();
+}
+
+async function interactiveMenu() {
   while (true) {
+    const progress = getProgress();
+    displayWelcome(progress);
+
     const { mainAction } = await inquirer.prompt([
       {
         type: 'list',
         name: 'mainAction',
-        message: 'What would you like to do?',
+        message: 'Where would you like to focus today?',
+        pageSize: 10,
         choices: [
-          { name: '🚀 Start Learning Session', value: 'start' },
-          { name: '🏆 View My Progress', value: 'score' },
-          { name: '📜 List Available Modules', value: 'list' },
-          { name: '👋 Exit Shellcraft', value: 'exit' }
+          { name: `🚀 ${COLORS.highlight('Start Training Session')}`, value: 'start' },
+          { name: `📊 ${COLORS.highlight('View My Progress')}`, value: 'score' },
+          { name: `📜 ${COLORS.highlight('Browse Learning Paths')}`, value: 'list' },
+          new inquirer.Separator(),
+          { name: `👋 ${COLORS.muted('Exit Shellcraft')}`, value: 'exit' }
         ]
       }
     ]);
 
     if (mainAction === 'exit') {
-      console.log(chalk.gray('\nThanks for training with Shellcraft! See you soon. 👋\n'));
+      console.log(`\n${COLORS.muted('Thanks for training with')} ${COLORS.primary.bold('Shellcraft')}${COLORS.muted('! See you soon. 👋\n')}`);
       process.exit(0);
     }
 
     if (mainAction === 'list') {
-      console.log(chalk.green('\nAvailable Modules:'));
-      console.log(chalk.yellow(' - linux   (Basic Linux Mastery)'));
-      console.log(chalk.gray(' - docker  (Coming Soon)'));
-      console.log(chalk.gray(' - git     (Coming Soon)\n'));
+      console.clear();
+      displayLogo();
+      console.log(COLORS.highlight('Available Learning Modules:\n'));
+      console.log(`${COLORS.warning(' • linux  ')} ${COLORS.highlight('(Basic Linux Mastery)')}`);
+      console.log(`${COLORS.muted(' • docker ')} ${COLORS.muted('(Coming Soon)')}`);
+      console.log(`${COLORS.muted(' • git    ')} ${COLORS.muted('(Coming Soon)')}\n`);
+      
+      await inquirer.prompt([{ type: 'input', name: 'continue', message: 'Press Enter to return...' }]);
+      console.clear();
       continue;
     }
 
     if (mainAction === 'score') {
-      const { xp, rank, completedMissions } = getProgress();
-      console.log(chalk.cyan('\n🏆 Your Progress:'));
-      console.log(chalk.white(' - XP:        ' + chalk.yellow(xp)));
-      console.log(chalk.white(' - Rank:      ' + chalk.magenta(rank)));
-      console.log(chalk.white(' - Missions:  ' + chalk.green(completedMissions.length + ' completed')) + '\n');
+      console.clear();
+      displayLogo();
+      const { xp, rank, completedMissions, badges, name } = getProgress();
+      console.log(COLORS.highlight(`🏆 ${name}'s Professional Standing:\n`));
+      console.log(`${COLORS.muted('XP Total:      ')} ${COLORS.warning(xp)}`);
+      console.log(`${COLORS.muted('Current Rank:  ')} ${COLORS.secondary.bold(rank)}`);
+      console.log(`${COLORS.muted('Missions:      ')} ${COLORS.accent(completedMissions.length + ' completed')}`);
+      console.log(`${COLORS.muted('Badges Earned: ')} ${COLORS.primary(badges.length)}\n`);
+      
+      if (badges.length > 0) {
+        console.log(COLORS.muted('Badges: ') + badges.map(b => COLORS.accent(`🛡️  ${b.toUpperCase()}`)).join(' '));
+      }
+
+      displayDivider();
+      console.log(COLORS.muted('\n Keep training to reach the next rank!\n'));
+      
+      await inquirer.prompt([{ type: 'input', name: 'continue', message: 'Press Enter to return...' }]);
+      console.clear();
       continue;
     }
 
     if (mainAction === 'start') {
+      console.clear();
       await runLearningSession();
     }
   }
 }
 
 async function runLearningSession() {
+  displayLogo();
   const { module } = await inquirer.prompt([
     {
       type: 'list',
       name: 'module',
       message: 'Select a Module:',
       choices: [
-        { name: 'Linux (Basic Mastery)', value: 'linux' },
-        { name: 'Docker (Coming Soon)', value: 'docker', disabled: true }
+        { name: COLORS.highlight('Linux (Basic Mastery)'), value: 'linux' },
+        { name: COLORS.muted('Docker (Coming Soon)'), value: 'docker', disabled: true }
       ]
     }
   ]);
 
-  const { mode } = await inquirer.prompt([
+  const { category } = await inquirer.prompt([
     {
       type: 'list',
-      name: 'mode',
-      message: 'Select Game Mode:',
+      name: 'category',
+      message: 'Select Training Category:',
       choices: [
-        { name: 'Normal Mode           (Standard Quiz)', value: 'normal' },
-        { name: 'Shellcraft XP Rank    (Earn XP & Rank Up)', value: 'xp_rank' },
-        { name: 'Shellcraft Life       (3 Lives Survival)', value: 'life' },
-        { name: 'Shellcraft Missions   (Mission Path)', value: 'missions' },
-        { name: 'Shellcraft Shift      (On Duty Simulation)', value: 'shift' }
+        { name: `📖 ${COLORS.highlight('Learn')}           (Step-by-Step Handbook)`, value: 'learn' },
+        { name: `🎯 ${COLORS.highlight('Quiz')}            (Challenges & Missions)`, value: 'quiz' },
+        { name: `💼 ${COLORS.highlight('Simulation')}      (Real-world Scenarios)`, value: 'simulation' },
+        new inquirer.Separator(),
+        { name: `↩️  ${COLORS.muted('Back to Module')}`, value: 'back' }
       ]
     }
   ]);
 
-  while (true) {
-    if (mode === 'shift') {
-      await startShift(module);
-    } else if (mode === 'missions') {
-      await startMissions(module);
-    } else {
-      await startQuiz(module, mode);
-    }
+  if (category === 'back') return runLearningSession();
 
-    const { postAction } = await inquirer.prompt([
+  if (category === 'learn') {
+    const { learnAction } = await inquirer.prompt([
       {
         type: 'list',
-        name: 'postAction',
-        message: 'Session Complete! What now?',
+        name: 'learnAction',
+        message: 'Learn Mode:',
         choices: [
-          { name: 'Try this session again', value: 'again' },
-          { name: 'Change Module or Mode', value: 'change' },
-          { name: 'Back to Main Menu', value: 'menu' }
+          { name: `📖 ${COLORS.highlight('Browse Chapters')}`, value: 'browse' },
+          { name: `🔍 ${COLORS.highlight('Search Concepts')}`, value: 'search' },
+          { name: `↩️  ${COLORS.muted('Back')}`, value: 'back' }
         ]
       }
     ]);
 
-    if (postAction === 'again') continue;
-    if (postAction === 'change') return runLearningSession();
-    if (postAction === 'menu') return;
+    if (learnAction === 'back') return runLearningSession();
+    if (learnAction === 'search') {
+      const { query } = await inquirer.prompt([{ type: 'input', name: 'query', message: 'Enter search term:' }]);
+      await searchHandbook(query, module);
+      return runLearningSession();
+    }
+    
+    await startHandbook(module);
+    return runLearningSession();
+  }
+
+  if (category === 'quiz') {
+    const { quizMode } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'quizMode',
+        message: 'Select Quiz Mode:',
+        choices: [
+          { name: `🎯 ${COLORS.highlight('Normal Mode')}           (Standard Quiz)`, value: 'normal' },
+          { name: `⭐ ${COLORS.highlight('Shellcraft XP Rank')}    (Earn XP & Rank Up)`, value: 'xp_rank' },
+          { name: `❤️  ${COLORS.highlight('Shellcraft Life')}       (3 Lives Survival)`, value: 'life' },
+          { name: `🗺️  ${COLORS.highlight('Shellcraft Missions')}   (Mission Path)`, value: 'missions' },
+          new inquirer.Separator(),
+          { name: `↩️  ${COLORS.muted('Back')}`, value: 'back' }
+        ]
+      }
+    ]);
+
+    if (quizMode === 'back') return runLearningSession();
+    
+    if (quizMode === 'missions') {
+      await startMissions(module);
+    } else {
+      await startQuiz(module, quizMode);
+    }
+    return runLearningSession();
+  }
+
+  if (category === 'simulation') {
+    const { simMode } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'simMode',
+        message: 'Select Simulation:',
+        choices: [
+          { name: `💼 ${COLORS.highlight('Shellcraft Shift')}      (On Duty Simulation)`, value: 'shift' },
+          new inquirer.Separator(),
+          { name: `↩️  ${COLORS.muted('Back')}`, value: 'back' }
+        ]
+      }
+    ]);
+
+    if (simMode === 'back') return runLearningSession();
+    if (simMode === 'shift') await startShift(module);
+    return runLearningSession();
   }
 }
 
@@ -125,23 +240,58 @@ program
   .description('Start a learning session directly')
   .argument('[module]', 'Module to start (e.g., linux, docker)', 'linux')
   .action(async (module) => {
-    // If user explicitly runs 'start', we can still offer the loop
     const normalizedModule = module.toLowerCase();
+    displayLogo();
     
-    const { mode } = await inquirer.prompt([
+    const { category } = await inquirer.prompt([
       {
         type: 'list',
-        name: 'mode',
-        message: 'Select Game Mode:',
+        name: 'category',
+        message: 'Select Training Category:',
         choices: [
-          { name: 'Normal Mode           (Standard Quiz)', value: 'normal' },
-          { name: 'Shellcraft XP Rank    (Earn XP & Rank Up)', value: 'xp_rank' },
-          { name: 'Shellcraft Life       (3 Lives Survival)', value: 'life' },
-          { name: 'Shellcraft Missions   (Mission Path)', value: 'missions' },
-          { name: 'Shellcraft Shift      (On Duty Simulation)', value: 'shift' }
+          { name: `📖 ${COLORS.highlight('Learn')}           (Step-by-Step Handbook)`, value: 'learn' },
+          { name: `🎯 ${COLORS.highlight('Quiz')}            (Challenges & Missions)`, value: 'quiz' },
+          { name: `💼 ${COLORS.highlight('Simulation')}      (Real-world Scenarios)`, value: 'simulation' }
         ]
       }
     ]);
+
+    if (category === 'learn') {
+      await startHandbook(normalizedModule);
+      return interactiveMenu();
+    }
+
+    let mode = null;
+    if (category === 'quiz') {
+      const { quizMode } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'quizMode',
+          message: 'Select Quiz Mode:',
+          choices: [
+            { name: `🎯 ${COLORS.highlight('Normal Mode')}           (Standard Quiz)`, value: 'normal' },
+            { name: `⭐ ${COLORS.highlight('Shellcraft XP Rank')}    (Earn XP & Rank Up)`, value: 'xp_rank' },
+            { name: `❤️  ${COLORS.highlight('Shellcraft Life')}       (3 Lives Survival)`, value: 'life' },
+            { name: `🗺️  ${COLORS.highlight('Shellcraft Missions')}   (Mission Path)`, value: 'missions' }
+          ]
+        }
+      ]);
+      mode = quizMode;
+    }
+
+    if (category === 'simulation') {
+      const { simMode } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'simMode',
+          message: 'Select Simulation:',
+          choices: [
+            { name: `💼 ${COLORS.highlight('Shellcraft Shift')}      (On Duty Simulation)`, value: 'shift' }
+          ]
+        }
+      ]);
+      mode = simMode;
+    }
 
     if (mode === 'shift') {
       await startShift(normalizedModule);
@@ -151,29 +301,38 @@ program
       await startQuiz(normalizedModule, mode);
     }
     
-    // After direct start, we could also go to the interactive menu
     await interactiveMenu();
   });
 
 program
   .command('list')
   .description('List available learning modules')
-  .action(() => {
-    console.log(chalk.green('\nAvailable Modules:'));
-    console.log(chalk.yellow(' - linux   (Basic Linux Mastery)'));
-    console.log(chalk.gray(' - docker  (Coming Soon)'));
-    console.log(chalk.gray(' - git     (Coming Soon)\n'));
+  .action(async () => {
+    displayLogo();
+    console.log(COLORS.highlight('Available Learning Modules:\n'));
+    console.log(`${COLORS.warning(' • linux  ')} ${COLORS.highlight('(Basic Linux Mastery)')}`);
+    console.log(`${COLORS.muted(' • docker ')} ${COLORS.muted('(Coming Soon)')}`);
+    console.log(`${COLORS.muted(' • git    ')} ${COLORS.muted('(Coming Soon)')}\n`);
   });
 
 program
   .command('score')
   .description('View your current progress and scores')
   .action(() => {
-    const { xp, rank, completedMissions } = getProgress();
-    console.log(chalk.cyan('\n🏆 Your Progress:'));
-    console.log(chalk.white(' - XP:        ' + chalk.yellow(xp)));
-    console.log(chalk.white(' - Rank:      ' + chalk.magenta(rank)));
-    console.log(chalk.white(' - Missions:  ' + chalk.green(completedMissions.length + ' completed')) + '\n');
+    displayLogo();
+    const { xp, rank, completedMissions, badges, name } = getProgress();
+    console.log(COLORS.highlight(`🏆 ${name}'s Professional Standing:\n`));
+    console.log(`${COLORS.muted('XP Total:      ')} ${COLORS.warning(xp)}`);
+    console.log(`${COLORS.muted('Current Rank:  ')} ${COLORS.secondary.bold(rank)}`);
+    console.log(`${COLORS.muted('Missions:      ')} ${COLORS.accent(completedMissions.length + ' completed')}`);
+    console.log(`${COLORS.muted('Badges Earned: ')} ${COLORS.primary(badges.length)}\n`);
+    
+    if (badges.length > 0) {
+      console.log(COLORS.muted('Badges: ') + badges.map(b => COLORS.accent(`🛡️  ${b.toUpperCase()}`)).join(' '));
+    }
+
+    displayDivider();
+    console.log(COLORS.muted('\n Keep training to reach the next rank!\n'));
   });
 
 program.parse();
