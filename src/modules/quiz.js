@@ -18,6 +18,7 @@ const shuffle = (array) => {
 
 import { addXP, XP_VALUES } from '../utils/progress.js';
 import { COLORS, displayDivider } from '../utils/ui.js';
+import { askAI, isAIConfigured } from './ai.js';
 
 const getLifeDisplay = (lives) => {
   if (lives <= 0) return COLORS.error('Shell Life: 0');
@@ -90,6 +91,29 @@ export async function startQuiz(moduleName, mode = 'normal', preFilteredQuestion
             if (lives <= 0) {
               console.log(COLORS.error.bold('\n💀 Session failed. You ran out of Shell Life.'));
               isGameOver = true;
+            }
+          }
+
+          if (isAIConfigured() && !isGameOver) {
+            const { explain } = await inquirer.prompt([
+              {
+                type: 'confirm',
+                name: 'explain',
+                message: COLORS.primary('Would you like an AI explanation?'),
+                default: false
+              }
+            ]);
+
+            if (explain) {
+              console.log(COLORS.muted('   Consulting the Shellcraft Mentor...'));
+              try {
+                const prompt = `Question: ${q.question}\nOptions: ${q.options.join(', ')}\nCorrect Answer: ${q.answer}\nUser chose an incorrect answer. Explain why the correct answer is right and why it matters in Linux/Cloud Engineering. Keep it concise (2-3 sentences).`;
+                const explanation = await askAI(prompt);
+                console.log(`\n${COLORS.secondary.bold(' 🤖 AI MENTOR:')}`);
+                console.log(COLORS.highlight(`   ${explanation}\n`));
+              } catch (aiError) {
+                console.log(COLORS.error(`   Failed to get AI explanation: ${aiError.message}`));
+              }
             }
           }
         }

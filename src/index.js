@@ -6,6 +6,8 @@ import { startMissions } from './modules/missions.js';
 import { startShift } from './modules/shift.js';
 import { startHandbook } from './modules/handbook.js';
 import { searchHandbook } from './modules/search.js';
+import { setupAI } from './modules/setup_ai.js';
+import { startTutor } from './modules/tutor.js';
 import { getProgress, setFirstRunComplete, setName } from './utils/progress.js';
 import { COLORS, displayWelcome, displayDivider, displayLogo } from './utils/ui.js';
 
@@ -77,8 +79,10 @@ async function interactiveMenu() {
         pageSize: 10,
         choices: [
           { name: `🚀 ${COLORS.highlight('Start Training Session')}`, value: 'start' },
+          { name: `🤖 ${COLORS.highlight('Chat with AI Tutor')}`, value: 'tutor' },
           { name: `📊 ${COLORS.highlight('View My Progress')}`, value: 'score' },
           { name: `📜 ${COLORS.highlight('Browse Learning Paths')}`, value: 'list' },
+          { name: `⚙️  ${COLORS.highlight('AI Settings')}`, value: 'ai' },
           new inquirer.Separator(),
           { name: `👋 ${COLORS.muted('Exit Shellcraft')}`, value: 'exit' }
         ]
@@ -88,6 +92,16 @@ async function interactiveMenu() {
     if (mainAction === 'exit') {
       console.log(`\n${COLORS.muted('Thanks for training with')} ${COLORS.primary.bold('Shellcraft')}${COLORS.muted('! See you soon. 👋\n')}`);
       process.exit(0);
+    }
+
+    if (mainAction === 'ai') {
+      await setupAI();
+      continue;
+    }
+
+    if (mainAction === 'tutor') {
+      await startTutor();
+      continue;
     }
 
     if (mainAction === 'list') {
@@ -333,6 +347,13 @@ program
 
     displayDivider();
     console.log(COLORS.muted('\n Keep training to reach the next rank!\n'));
+  });
+
+program
+  .command('ai-setup')
+  .description('Configure AI provider (Gemini, Groq, etc.)')
+  .action(async () => {
+    await setupAI();
   });
 
 program.parse();
