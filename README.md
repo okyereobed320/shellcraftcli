@@ -104,4 +104,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Built with ❤️ by **Obed (oftechgh)** and the open-source community.
+Built with ❤️ by **Oobed gyamena okyere  (ghana)** and the open-source community.
