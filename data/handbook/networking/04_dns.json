@@ -1,0 +1,492 @@
+[
+  {
+    "id": "net_4_1",
+    "title": "The DNS Lifecycle",
+    "content": "A DNS query starts when a user types a URL. It travels through the browser cache, OS cache, local resolver, and finally hits authoritative servers. In the cloud, the goal is to resolve this query as close to the user as possible to minimize latency.",
+    "insight": "DNS resolution is the very first step of every internet connection.",
+    "next": "Authoritative vs Recursive"
+  },
+  {
+    "id": "net_4_2",
+    "title": "Authoritative vs Recursive",
+    "content": "Recursive resolvers (like 8.8.8.8) find answers for users by querying other servers. Authoritative servers (like AWS Route 53) hold the actual records for a domain. Cloud DNS services act as authoritative servers for your domains.",
+    "insight": "You own the Authoritative data; your users use Recursive resolvers.",
+    "next": "DNS Record: The A Record"
+  },
+  {
+    "id": "net_4_3",
+    "title": "DNS Record: The A Record",
+    "content": "The 'A' (Address) record maps a domain name to an IPv4 address. For example, pointing 'api.example.com' to '1.2.3.4'. It is the most basic and frequently used record type in cloud networking.",
+    "insight": "A records are the 'Hard Links' of the DNS world.",
+    "next": "DNS Record: The AAAA Record"
+  },
+  {
+    "id": "net_4_4",
+    "title": "DNS Record: The AAAA Record",
+    "content": "The 'AAAA' (Quad-A) record maps a domain name to an IPv6 address. As cloud providers move toward dual-stack or IPv6-only architectures, AAAA records are becoming essential for modern reachability.",
+    "insight": "AAAA records are the future-proofing your domain needs.",
+    "next": "DNS Record: The CNAME"
+  },
+  {
+    "id": "net_4_5",
+    "title": "DNS Record: The CNAME",
+    "content": "The 'CNAME' (Canonical Name) record maps one domain name to another (an alias). For example, mapping 'www.example.com' to 'lb-123.aws.com'. Note that a CNAME cannot exist at the zone apex (the root domain).",
+    "insight": "CNAMEs allow you to point to dynamic cloud resources like Load Balancers.",
+    "next": "The Zone Apex Problem"
+  },
+  {
+    "id": "net_4_6",
+    "title": "The Zone Apex Problem",
+    "content": "The 'Zone Apex' is the root of your domain (e.g., example.com). Standard DNS rules prevent CNAME records at the apex. This is a problem when you want your root domain to point to a cloud load balancer which has a dynamic IP.",
+    "insight": "DNS RFCs strictly forbid CNAMEs at the root level.",
+    "next": "Alias Records (AWS/Azure)"
+  },
+  {
+    "id": "net_4_7",
+    "title": "Alias Records",
+    "content": "Alias records are a cloud-specific extension to DNS (like Route 53 Alias). They allow you to point your zone apex (example.com) to a cloud resource (like an ALB or S3 bucket) without the performance hit of a CNAME or the restrictions of the apex.",
+    "insight": "Alias records are the 'Magic Fix' for pointing root domains to cloud services.",
+    "next": "MX Records: Mail Exchange"
+  },
+  {
+    "id": "net_4_8",
+    "title": "MX Records: Mail Exchange",
+    "content": "MX records specify the mail servers responsible for receiving email on behalf of a domain. They include a priority value; lower numbers have higher priority. Cloud-native mail services like AWS SES require specific MX configurations.",
+    "insight": "MX records ensure your cloud-hosted domain can receive mail.",
+    "next": "TXT Records and Verification"
+  },
+  {
+    "id": "net_4_9",
+    "title": "TXT Records and Verification",
+    "content": "TXT (Text) records hold arbitrary text. They are commonly used for domain ownership verification (e.g., for Google Workspace or SSL certificates) and for security frameworks like SPF and DKIM.",
+    "insight": "TXT records are the 'ID Verification' for your domain.",
+    "next": "TTL: Time To Live"
+  },
+  {
+    "id": "net_4_10",
+    "title": "TTL: Time To Live",
+    "content": "TTL is the number of seconds a DNS record is cached by resolvers. A low TTL (60s) allows for fast changes during migrations, while a high TTL (86400s) reduces DNS query costs and improves performance for stable sites.",
+    "insight": "Always lower your TTL *before* a major infrastructure migration.",
+    "next": "Private Hosted Zones"
+  },
+  {
+    "id": "net_4_11",
+    "title": "Private Hosted Zones",
+    "content": "A Private Hosted Zone is a DNS zone that is only visible within your VPC. This allows you to use custom domain names (like 'db.internal') for your resources without exposing your internal network structure to the public internet.",
+    "insight": "Private DNS is the key to clean service discovery in the VPC.",
+    "next": "Split-Horizon DNS"
+  },
+  {
+    "id": "net_4_12",
+    "title": "Split-Horizon DNS",
+    "content": "Split-horizon DNS allows you to provide different answers for the same domain based on the source of the query. Public users get the public IP of your load balancer, while VPC users get the private IP of the same resources.",
+    "insight": "Split-horizon optimizes traffic by keeping internal users on the internal network.",
+    "next": "Weighted Routing"
+  },
+  {
+    "id": "net_4_13",
+    "title": "Weighted Routing",
+    "content": "Weighted routing allows you to associate multiple resources with a single domain name and choose how much traffic is directed to each. This is essential for 'Blue/Green' deployments and 'Canary' testing.",
+    "insight": "Weighting is the 'Volume Knob' for your application traffic.",
+    "next": "Latency-Based Routing"
+  },
+  {
+    "id": "net_4_14",
+    "title": "Latency-Based Routing",
+    "content": "Latency routing directs users to the cloud region that provides the lowest network latency for them. The cloud provider constantly measures latency from all over the world to find the fastest path for every user.",
+    "insight": "Latency routing makes your global infrastructure feel 'Local' to everyone.",
+    "next": "Geolocation Routing"
+  },
+  {
+    "id": "net_4_15",
+    "title": "Geolocation Routing",
+    "content": "Geolocation routing serves different content or directs users to specific regions based on their actual geographic location (Country, State, or Continent). This is often used for content licensing and regional compliance.",
+    "insight": "Geo-routing ensures your data stays within the required legal boundaries.",
+    "next": "Geoproximity Routing"
+  },
+  {
+    "id": "net_4_16",
+    "title": "Geoproximity Routing",
+    "content": "Geoproximity routing lets you route traffic based on the geographic distance between your users and your resources. You can also apply a 'Bias' to expand or shrink the geographic reach of a specific region.",
+    "insight": "Proximity routing gives you granular control over regional 'Catchment Areas'.",
+    "next": "DNS Failover"
+  },
+  {
+    "id": "net_4_17",
+    "title": "DNS Failover",
+    "content": "In DNS failover, the cloud provider monitors the health of your primary resource. If it fails, the DNS record is automatically updated to point to a standby secondary resource, ensuring minimal downtime for users.",
+    "insight": "Automated failover is your 'Disaster Recovery' plan at the DNS layer.",
+    "next": "Multivalue Answer Routing"
+  },
+  {
+    "id": "net_4_18",
+    "title": "Multivalue Answer Routing",
+    "content": "Multivalue answer routing returns multiple healthy IPs for a single query. It is similar to round-robin but includes health checks, so the resolver only receives IPs for resources that are actually up.",
+    "insight": "Multivalue routing provides basic 'Load Balancing' without a dedicated device.",
+    "next": "DNSSEC: Security Extensions"
+  },
+  {
+    "id": "net_4_19",
+    "title": "DNSSEC: Security Extensions",
+    "content": "DNSSEC adds digital signatures to DNS records to protect against 'DNS Spoofing' and 'Man-in-the-Middle' attacks. It ensures that the answer your browser receives is exactly what the domain owner intended.",
+    "insight": "DNSSEC is the 'Security Seal' for your domain's answers.",
+    "next": "Route 53 Resolver (Endpoints)"
+  },
+  {
+    "id": "net_4_20",
+    "title": "Route 53 Resolver",
+    "content": "The Route 53 Resolver (formerly .2 resolver) handles DNS queries within the VPC. Inbound endpoints allow on-prem networks to resolve VPC names, while Outbound endpoints allow VPC resources to resolve on-prem domain names.",
+    "insight": "Resolver endpoints are the 'Bilingual Interpreters' for hybrid cloud DNS.",
+    "next": "Cloud DNS (GCP Perspective)"
+  },
+  {
+    "id": "net_4_21",
+    "title": "Cloud DNS (GCP Perspective)",
+    "content": "Google Cloud DNS is a global, resilient DNS service. It provides low-latency, high-availability authoritative DNS. Like Route 53, it supports private zones, peering, and integration with GCP Service Directory.",
+    "insight": "GCP DNS leverages Google's massive global fiber network for resolution.",
+    "next": "Azure DNS"
+  },
+  {
+    "id": "net_4_22",
+    "title": "Azure DNS",
+    "content": "Azure DNS allows you to host your DNS zones and manage your DNS records using the same credentials and billing as your other Azure services. It supports public and private zones and integrates natively with Azure VNets.",
+    "insight": "Azure DNS keeps your domain management inside the Azure ecosystem.",
+    "next": "Anycast DNS Performance"
+  },
+  {
+    "id": "net_4_23",
+    "title": "Anycast DNS Performance",
+    "content": "Most cloud DNS providers use 'Anycast' networking. This means that many DNS servers around the world share the same IP. A user's query is automatically routed to the nearest physical server, ensuring sub-millisecond response times.",
+    "insight": "Anycast is why cloud DNS feels so much faster than traditional hosting.",
+    "next": "SOA Record: Start of Authority"
+  },
+  {
+    "id": "net_4_24",
+    "title": "SOA Record",
+    "content": "The SOA record contains essential information about a DNS zone, including the primary name server, the email of the administrator, and various timers for zone transfers and caching.",
+    "insight": "The SOA record is the 'Metadata Header' of your DNS zone file.",
+    "next": "NS Records: Name Servers"
+  },
+  {
+    "id": "net_4_25",
+    "title": "NS Records: Name Servers",
+    "content": "NS records delegate a DNS zone to use a specific set of name servers. When you register a domain, you point your registrar's NS records to the name servers provided by your cloud DNS service.",
+    "insight": "NS records are the 'Handover' from your registrar to your cloud provider.",
+    "next": "DNS Query Logging"
+  },
+  {
+    "id": "net_4_26",
+    "title": "DNS Query Logging",
+    "content": "DNS logging captures every query made to your DNS service. This is vital for security analysis (finding malware communicating with C&C servers) and for troubleshooting misconfigured applications that are making excessive queries.",
+    "insight": "Query logs are the 'Audit Trail' of every attempt to find your servers.",
+    "next": "PTR Records: Reverse DNS"
+  },
+  {
+    "id": "net_4_27",
+    "title": "PTR Records: Reverse DNS",
+    "content": "A PTR (Pointer) record maps an IP address back to a domain name. This is the opposite of an A record. It is primarily used for security (verifying mail servers) and for logging human-readable names instead of IPs.",
+    "insight": "Reverse DNS is the 'Caller ID' of the internet.",
+    "next": "SRV Records: Service Discovery"
+  },
+  {
+    "id": "net_4_28",
+    "title": "SRV Records",
+    "content": "SRV (Service) records define the location (hostname and port number) of specific services like SIP or LDAP. They allow clients to find the correct port for a service dynamically, rather than assuming a default.",
+    "insight": "SRV records are the 'Directory Service' for complex cloud applications.",
+    "next": "Wildcard DNS Records"
+  },
+  {
+    "id": "net_4_29",
+    "title": "Wildcard DNS Records",
+    "content": "A wildcard record (e.g., *.example.com) matches any subdomain that doesn't have its own specific record. This is useful for SaaS applications where every customer gets their own subdomain (customer1.example.com).",
+    "insight": "Wildcards are the 'Catch-All' for massive subdomain architectures.",
+    "next": "Internal DNS Conflict"
+  },
+  {
+    "id": "net_4_30",
+    "title": "Internal DNS Conflict",
+    "content": "Be careful when using the same domain name for both public and private zones. If your VPC is associated with a private zone 'example.com', your resources will not be able to see the public 'example.com' records unless they are mirrored in the private zone.",
+    "insight": "Private zones 'Shadow' public zones; manage them carefully.",
+    "next": "Recursive DNS Caching"
+  },
+  {
+    "id": "net_4_31",
+    "title": "Recursive DNS Caching",
+    "content": "Resolvers cache DNS answers for the duration of the TTL. If you change an IP but the TTL is 24 hours, some users will still be directed to the old, potentially dead IP for an entire day.",
+    "insight": "Caching is a performance 'Blessing' and a migration 'Curse'.",
+    "next": "Negative Caching"
+  },
+  {
+    "id": "net_4_32",
+    "title": "Negative Caching",
+    "content": "If a DNS query results in an error (NXDOMAIN), resolvers will cache that failure. This 'Negative Cache' prevents the server from being overwhelmed by constant queries for non-existent domains.",
+    "insight": "Even 'Failure' is cached in the world of DNS.",
+    "next": "DNS Query Costs"
+  },
+  {
+    "id": "net_4_33",
+    "title": "DNS Query Costs",
+    "content": "Most cloud providers charge a small fee per million DNS queries. For high-traffic sites, inefficient DNS patterns or very low TTLs can lead to significant monthly costs.",
+    "insight": "Monitor your DNS query volume to avoid 'Bill Shock'.",
+    "next": "Round-Robin DNS"
+  },
+  {
+    "id": "net_4_34",
+    "title": "Round-Robin DNS",
+    "content": "Standard DNS can return multiple A records. The resolver typically rotates these (round-robin) to distribute load. However, this is 'dumb' load balancing as it does not account for the health or load of the servers.",
+    "insight": "Round-robin is the simplest, but least reliable, way to distribute traffic.",
+    "next": "Latency Routing: How it works"
+  },
+  {
+    "id": "net_4_35",
+    "title": "Latency Routing Secrets",
+    "content": "Cloud providers maintain a global latency map by measuring the time it takes for packets to travel from internet user segments to their regions. When a query arrives, the DNS server looks up the user's IP in this map to decide the best regional answer.",
+    "insight": "Latency routing is based on 'Real-World' measurements, not just distance.",
+    "next": "Geo-IP Databases"
+  },
+  {
+    "id": "net_4_36",
+    "title": "Geo-IP Databases",
+    "content": "Geolocation routing relies on vast databases that map IP address ranges to physical locations. While highly accurate, these databases are not perfect and can sometimes misidentify a user's location, especially with VPNs or proxies.",
+    "insight": "Geo-routing is only as good as the 'Map' it uses.",
+    "next": "Dynamic DNS (DDNS)"
+  },
+  {
+    "id": "net_4_37",
+    "title": "Dynamic DNS (DDNS)",
+    "content": "DDNS allows a client to automatically update a DNS record when its IP address changes. This is common for on-premises devices with dynamic IPs that need to be reachable from the cloud.",
+    "insight": "DDNS is the 'Mobile Tracking' for your dynamic IP devices.",
+    "next": "Global Server Load Balancing (GSLB)"
+  },
+  {
+    "id": "net_4_38",
+    "title": "GSLB via DNS",
+    "content": "GSLB is the practice of using DNS to distribute traffic across geographically dispersed data centers. By combining health checks with latency or geolocation routing, you ensure users are always sent to the best available site.",
+    "insight": "GSLB is the 'Ultimate Traffic Controller' for global enterprises.",
+    "next": "DNS Propagation Myth"
+  },
+  {
+    "id": "net_4_39",
+    "title": "DNS Propagation Myth",
+    "content": "The idea that DNS takes 48 hours to 'Propagate' is a myth. What's actually happening is that various recursive resolvers around the world are waiting for their cached records (based on the old TTL) to expire.",
+    "insight": "It's not 'Propagation'; it's 'Cache Expiration'.",
+    "next": "Zone Transfers (AXFR)"
+  },
+  {
+    "id": "net_4_40",
+    "title": "Zone Transfers",
+    "content": "AXFR is a protocol used to replicate DNS zones between servers. In the cloud, this is handled automatically behind the scenes, but you can sometimes enable it to sync your cloud DNS with a secondary provider for extreme redundancy.",
+    "insight": "Zone transfers keep your secondary DNS servers 'In the Loop'.",
+    "next": "CAA Records: Certificate Security"
+  },
+  {
+    "id": "net_4_41",
+    "title": "CAA Records",
+    "content": "Certificate Authority Authorization (CAA) records allow a domain owner to specify which Certificate Authorities (like Let's Encrypt or DigiCert) are allowed to issue certificates for that domain.",
+    "insight": "CAA records prevent 'Fraudulent' SSL certificates from being issued for your domain.",
+    "next": "Route 53 Traffic Flow"
+  },
+  {
+    "id": "net_4_42",
+    "title": "Route 53 Traffic Flow",
+    "content": "Traffic Flow is a visual policy editor in Route 53 that allows you to create complex routing logic (e.g., Latency + Failover + Geolocation) using a simple drag-and-drop interface.",
+    "insight": "Traffic Flow turns 'Complex' routing code into a 'Simple' map.",
+    "next": "DNS Rebinding Attacks"
+  },
+  {
+    "id": "net_4_43",
+    "title": "DNS Rebinding",
+    "content": "In a rebinding attack, a malicious site uses a very low TTL to change its IP from its own server to a private internal IP (like 192.168.1.1) mid-session. This can trick a browser into sending requests to internal resources.",
+    "insight": "Rebinding attacks exploit the browser's 'Trust' in DNS consistency.",
+    "next": "DNS Firewall (Route 53)"
+  },
+  {
+    "id": "net_4_44",
+    "title": "DNS Firewall",
+    "content": "A DNS Firewall allows you to filter DNS queries made by resources in your VPC. You can block access to known malicious domains or 'Phishing' sites, providing a layer of protection before a connection is even attempted.",
+    "insight": "DNS Firewalls stop the attack *before* it can even find its target.",
+    "next": "Primary vs Secondary DNS"
+  },
+  {
+    "id": "net_4_45",
+    "title": "Primary vs Secondary DNS",
+    "content": "To achieve 100% DNS availability, many large companies use two different DNS providers simultaneously. Each provider hosts an authoritative copy of the zone, ensuring that if one cloud provider's DNS goes down, the other continues to work.",
+    "insight": "Multi-cloud DNS is the 'Ultimate Redundancy' for your web presence.",
+    "next": "The Glue Record"
+  },
+  {
+    "id": "net_4_46",
+    "title": "The Glue Record",
+    "content": "If your domain's name servers are subdomains of the domain itself (e.g., ns1.example.com for example.com), you need a 'Glue Record'. This is an A record at the registrar level that provides the IP of the name server to break the circular dependency.",
+    "insight": "Glue records prevent the 'Chicken and Egg' problem of DNS resolution.",
+    "next": "CNAME Flattening"
+  },
+  {
+    "id": "net_4_47",
+    "title": "CNAME Flattening",
+    "content": "CNAME Flattening is a feature where the DNS server follows the CNAME chain itself and returns the final A record to the user. This improves performance and is often how cloud providers allow 'Alias' records at the zone apex.",
+    "insight": "Flattening hides the 'Complexity' of your CNAME chains from the user.",
+    "next": "DNS over HTTPS (DoH)"
+  },
+  {
+    "id": "net_4_48",
+    "title": "DNS over HTTPS (DoH)",
+    "content": "DoH sends DNS queries over an encrypted HTTPS connection instead of plain text UDP. This protects user privacy and prevents ISPs or hackers from seeing what domains a user is visiting.",
+    "insight": "DoH turns your DNS queries into 'Invisible' web traffic.",
+    "next": "DNS over TLS (DoT)"
+  },
+  {
+    "id": "net_4_49",
+    "title": "DNS over TLS (DoT)",
+    "content": "Similar to DoH, DoT encrypts DNS queries, but it uses a dedicated port (853) and a raw TLS tunnel. While DoH is better for bypassing firewalls, DoT is often preferred by network administrators for its clarity and efficiency.",
+    "insight": "DoT is the 'Professional' standard for encrypted DNS.",
+    "next": "DNS Query Refusal (RCODE)"
+  },
+  {
+    "id": "net_4_50",
+    "title": "DNS RCODEs",
+    "content": "RCODEs are response codes in DNS. NOERROR means success, NXDOMAIN means the domain doesn't exist, and SERVFAIL means the DNS server had an internal error. Understanding these is essential for debugging DNS resolution failures.",
+    "insight": "RCODEs are the 'Status Codes' of the DNS world.",
+    "next": "Route 53 Health Check Types"
+  },
+  {
+    "id": "net_4_51",
+    "title": "Health Check Types",
+    "content": "Cloud DNS can perform health checks via HTTP, HTTPS, or TCP. You can check for a specific string in an HTTP response, or monitor the status of other health checks (Calculated Health Checks).",
+    "insight": "Diverse health checks ensure you don't failover for the 'Wrong Reason'.",
+    "next": "Inbound DNS Forwarding"
+  },
+  {
+    "id": "net_4_52",
+    "title": "Inbound DNS Forwarding",
+    "content": "When you have an Inbound Endpoint, your on-premises DNS server can be configured to forward queries for your cloud domains (e.g., *.aws.internal) to the cloud resolver's IP address.",
+    "insight": "Forwarding is how your office 'Learns' to find your cloud servers.",
+    "next": "Outbound DNS Forwarding"
+  },
+  {
+    "id": "net_4_53",
+    "title": "Outbound DNS Forwarding",
+    "content": "Outbound endpoints allow you to create 'Forwarding Rules'. For example, any query for 'onprem.local' can be sent to your physical data center's DNS servers, allowing cloud instances to find internal on-prem resources.",
+    "insight": "Forwarding rules are the 'DNS Bridge' for your hybrid applications.",
+    "next": "DNS Anycast vs Geolocation"
+  },
+  {
+    "id": "net_4_54",
+    "title": "Anycast vs Geolocation",
+    "content": "Anycast finds the physically nearest server to handle the DNS query. Geolocation routing uses the result of that query to send the user to the nearest application region. They work together to provide a fast end-to-end experience.",
+    "insight": "Anycast speeds up the 'Query'; Geolocation speeds up the 'Traffic'.",
+    "next": "Public vs Private Resolver"
+  },
+  {
+    "id": "net_4_55",
+    "title": "Public vs Private Resolvers",
+    "content": "Public resolvers (1.1.1.1) are used for internet browsing. Private resolvers (provided by the VPC) are used for internal resource discovery. Most cloud VMs use the private resolver by default to ensure they can find both internal and external domains.",
+    "insight": "The private resolver is the 'Gateway' to both your VPC and the web.",
+    "next": "EDNS0: Extension Mechanisms"
+  },
+  {
+    "id": "net_4_56",
+    "title": "EDNS0 and Client Subnet",
+    "content": "EDNS0 Client Subnet (ECS) allows a recursive resolver to pass a portion of the user's IP address to the authoritative server. This allows the cloud DNS provider to make much more accurate geolocation routing decisions.",
+    "insight": "ECS gives the cloud provider a 'Hint' of where the user actually is.",
+    "next": "DNS Amplification Attacks"
+  },
+  {
+    "id": "net_4_57",
+    "title": "DNS Amplification",
+    "content": "In an amplification attack, a hacker sends a small query with a spoofed source IP to a DNS server. The server sends a much larger response to the victim's IP. This 'amplifies' the traffic and can result in a massive DDoS attack.",
+    "insight": "DNS servers can be 'Weaponized' by hackers to flood targets with traffic.",
+    "next": "Root Hints File"
+  },
+  {
+    "id": "net_4_58",
+    "title": "Root Hints File",
+    "content": "The root hints file contains the names and IP addresses of the 13 authoritative root name servers. Every recursive resolver starts with this file to find its way around the global DNS hierarchy.",
+    "insight": "Root hints are the 'Starting Map' for the entire internet.",
+    "next": "Recursive DNS Timeouts"
+  },
+  {
+    "id": "net_4_59",
+    "title": "DNS Timeouts",
+    "content": "If a DNS query doesn't receive an answer within a second or two, it will timeout and retry. In high-latency cloud environments, tuning your resolver's timeout and retry settings can prevent cascading application failures.",
+    "insight": "Patient resolvers are necessary for 'Cloudy' network conditions.",
+    "next": "Private Zone Association"
+  },
+  {
+    "id": "net_4_60",
+    "title": "Private Zone Association",
+    "content": "A private hosted zone must be explicitly 'Associated' with one or more VPCs. Until this association is made, resources in the VPC will not be able to resolve any records in that private zone.",
+    "insight": "Association is the 'Subscription' that enables private DNS for your VPC.",
+    "next": "Weighted Round-Robin (WRR)"
+  },
+  {
+    "id": "net_4_61",
+    "title": "Weighted Round-Robin",
+    "content": "WRR is a DNS technique where you return a set of IPs, but some appear more frequently in the rotation based on their weight. This allows you to send 90% of traffic to a powerful server and 10% to a smaller one.",
+    "insight": "WRR is 'Proportional' traffic distribution for your fleet.",
+    "next": "DNS Cache Poisoning"
+  },
+  {
+    "id": "net_4_62",
+    "title": "DNS Cache Poisoning",
+    "content": "Cache poisoning occurs when a hacker successfully inserts a fake DNS record into a resolver's cache. All users using that resolver will then be directed to the hacker's site instead of the real one.",
+    "insight": "Poisoning turns a trusted resolver into a 'Liar'.",
+    "next": "The 'Hosts' File Override"
+  },
+  {
+    "id": "net_4_63",
+    "title": "The Hosts File",
+    "content": "The '/etc/hosts' file on Linux (or 'C:\\Windows\\System32\\drivers\\etc\\hosts' on Windows) is checked before any DNS query. You can use this to manually override DNS for testing or to block certain sites.",
+    "insight": "The hosts file is the 'Local Override' that bypasses all network DNS.",
+    "next": "CNAME Chain Limits"
+  },
+  {
+    "id": "net_4_64",
+    "title": "CNAME Chain Limits",
+    "content": "Most resolvers will only follow a CNAME chain up to a certain depth (often 8-10 hops). If you have too many CNAMEs pointing to each other, resolution will eventually fail with a 'Too Many Redirects' error.",
+    "insight": "Keep your CNAME chains 'Short and Sweet' for reliability.",
+    "next": "Service Discovery: DNS vs APIs"
+  },
+  {
+    "id": "net_4_65",
+    "title": "Service Discovery via DNS",
+    "content": "DNS is the most common way to do service discovery because it works with every language and platform. However, modern container systems often use service meshes (like Istio) or specialized APIs for faster and more granular discovery.",
+    "insight": "DNS is the 'Universal' discovery tool; Service Mesh is the 'Specialized' one.",
+    "next": "DNS Query Performance Monitoring"
+  },
+  {
+    "id": "net_4_66",
+    "title": "DNS Latency Monitoring",
+    "content": "Monitoring DNS latency is critical for application performance. If your DNS lookups take 200ms, your entire user experience will feel sluggish, even if your server response is fast.",
+    "insight": "Slow DNS is the 'Silent Performance Killer' of the cloud.",
+    "next": "Dynamic DNS Security"
+  },
+  {
+    "id": "net_4_67",
+    "title": "Dynamic DNS Security",
+    "content": "Updating DNS dynamically requires strong authentication (often TSIG keys). Without security, anyone could update your domain records and hijack your traffic.",
+    "insight": "Always use 'Keys' to lock your dynamic DNS updates.",
+    "next": "DNS Round-Trip Time (RTT)"
+  },
+  {
+    "id": "net_4_68",
+    "title": "DNS RTT",
+    "content": "RTT is the time it takes for a DNS packet to travel to the server and back. Using a DNS provider with a global anycast network minimizes RTT by ensuring there is always a server nearby.",
+    "insight": "Short RTT is the 'Secret Sauce' of a snappy website.",
+    "next": "Conclusion: Global Traffic"
+  },
+  {
+    "id": "net_4_69",
+    "title": "Mastering the Flow",
+    "content": "Global traffic management via DNS is about more than just finding an IP. It's about intelligently directing users to the best possible experience based on their location, server health, and your business logic.",
+    "insight": "DNS is the 'Steering Wheel' for your global cloud traffic.",
+    "next": "Final Thoughts"
+  },
+  {
+    "id": "net_4_70",
+    "title": "Final Thoughts",
+    "content": "By mastering DNS and global routing, you can build applications that are truly global and resilient. Whether it's failing over during a regional outage or optimizing speed for users in Tokyo, DNS is your most powerful tool.",
+    "insight": "A cloud engineer who masters DNS can rule the global network.",
+    "next": "Chapter Complete"
+  }
+]

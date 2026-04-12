@@ -12,7 +12,13 @@ export async function startShift(moduleName) {
   try {
     const scenariosPath = path.join(__dirname, '../../data/shift_scenarios.json');
     const content = await fs.readFile(scenariosPath, 'utf-8');
-    const scenarios = JSON.parse(content);
+    const allScenarios = JSON.parse(content);
+    const scenarios = allScenarios.filter(s => s.module === moduleName);
+
+    if (scenarios.length === 0) {
+      console.log(COLORS.error(`\n❌ No simulation scenarios found for module: ${moduleName.toUpperCase()}\n`));
+      return;
+    }
 
     let resolvedCount = 0;
     let currentTicket = null;

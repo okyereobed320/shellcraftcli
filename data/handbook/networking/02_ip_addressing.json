@@ -1,0 +1,492 @@
+[
+  {
+    "id": "net_2_1",
+    "title": "IPv4 Address Basics",
+    "content": "An IPv4 address is a 32-bit numerical label assigned to each device connected to a computer network. It is typically expressed in dotted-decimal notation, such as 192.168.1.1. In the cloud, these addresses are the primary way resources identify and communicate with each other.",
+    "insight": "IPv4 is still the dominant protocol in cloud networking despite the rise of IPv6.",
+    "next": "Binary Representation"
+  },
+  {
+    "id": "net_2_2",
+    "title": "Binary Representation",
+    "content": "Computers process IP addresses in binary format (0s and 1s). Each of the four octets in an IPv4 address represents 8 bits. Understanding binary is crucial for mastering subnet masks and calculating network ranges accurately.",
+    "insight": "Subnetting is fundamentally a binary calculation.",
+    "next": "The Subnet Mask"
+  },
+  {
+    "id": "net_2_3",
+    "title": "The Subnet Mask",
+    "content": "A subnet mask is used to divide an IP address into two parts: the network address and the host address. It uses a sequence of 1s followed by 0s. For example, 255.255.255.0 (or /24) indicates that the first 24 bits belong to the network.",
+    "insight": "The mask defines the boundaries of your local network segment.",
+    "next": "CIDR Notation"
+  },
+  {
+    "id": "net_2_4",
+    "title": "CIDR Notation",
+    "content": "Classless Inter-Domain Routing (CIDR) is a compact way to represent an IP address and its associated routing prefix. It appends a slash and the number of network bits to the IP, such as 10.0.0.0/16. This replaced the older, rigid Class A, B, and C system.",
+    "insight": "CIDR provides the flexibility needed for modern cloud IP allocation.",
+    "next": "Calculating Subnet Size"
+  },
+  {
+    "id": "net_2_5",
+    "title": "Calculating Subnet Size",
+    "content": "The number of bits in the host portion determines the number of available IP addresses. The formula is 2^(32 - prefix). For a /24 subnet, there are 2^(32-24) = 2^8 = 256 total addresses.",
+    "insight": "Every bit added to the prefix cuts the number of available IPs in half.",
+    "next": "Cloud Reserved IPs"
+  },
+  {
+    "id": "net_2_6",
+    "title": "Cloud Reserved IPs",
+    "content": "In most cloud environments (like AWS), the first four and the last IP address of every subnet are reserved and cannot be assigned to instances. For a /24 subnet (256 IPs), only 251 are actually usable by your resources.",
+    "insight": "Always account for reserved IPs when planning your subnet capacity.",
+    "next": "The Network Address (.0)"
+  },
+  {
+    "id": "net_2_7",
+    "title": "The Network Address (.0)",
+    "content": "The first address in a CIDR block (e.g., 10.0.0.0 in a /24) is the network address. It is used to identify the network itself and is one of the reserved addresses in a cloud subnet.",
+    "insight": "The .0 address is the 'ID Card' for your entire subnet.",
+    "next": "The VPC Router (.1)"
+  },
+  {
+    "id": "net_2_8",
+    "title": "The VPC Router (.1)",
+    "content": "In AWS, the second address in a subnet (e.g., 10.0.0.1) is reserved for the VPC router. This virtual device handles routing within the VPC and provides the gateway to other subnets and the internet.",
+    "insight": "The .1 address is the 'Traffic Controller' for your subnet.",
+    "next": "The DNS Server (.2)"
+  },
+  {
+    "id": "net_2_9",
+    "title": "The DNS Server (.2)",
+    "content": "The third address in an AWS subnet (e.g., 10.0.0.2) is reserved for the Amazon-provided DNS server (Route 53 Resolver). This allows instances to resolve both local and public domain names without manual configuration.",
+    "insight": "Cloud-native DNS is always available at the .2 address of your subnet.",
+    "next": "Future Usage Reservation (.3)"
+  },
+  {
+    "id": "net_2_10",
+    "title": "Future Usage Reservation (.3)",
+    "content": "The fourth address in a subnet (e.g., 10.0.0.3) is reserved by AWS for future use. While currently unused in many regions, it remains unavailable for assignment to your instances to maintain architectural consistency.",
+    "insight": "Reserved IPs ensure the cloud provider has space for management overhead.",
+    "next": "The Broadcast Address (.255)"
+  },
+  {
+    "id": "net_2_11",
+    "title": "The Broadcast Address (.255)",
+    "content": "The last address in a subnet (e.g., 10.0.0.255 in a /24) is the broadcast address. In traditional networking, it's used to send data to all hosts on the subnet. However, most cloud VPCs do not support true broadcast or multicast traffic.",
+    "insight": "The .255 address is reserved even though cloud networks are point-to-point.",
+    "next": "RFC 1918 Private Ranges"
+  },
+  {
+    "id": "net_2_12",
+    "title": "RFC 1918 Private Ranges",
+    "content": "RFC 1918 defines three blocks of IP addresses reserved for private networks: 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16. These addresses are not routable on the public internet, making them ideal for secure cloud VPCs.",
+    "insight": "Private ranges allow you to build massive internal networks without needing public IPs.",
+    "next": "Public IP Addresses"
+  },
+  {
+    "id": "net_2_13",
+    "title": "Public IP Addresses",
+    "content": "Public IP addresses are globally unique and routable on the internet. In the cloud, instances in a public subnet can be assigned a public IP to communicate with the world. These IPs can be dynamic (lost on stop) or static (Elastic IPs).",
+    "insight": "Only assign public IPs to resources that absolutely need direct internet access.",
+    "next": "Elastic IP (EIP) Benefits"
+  },
+  {
+    "id": "net_2_14",
+    "title": "Elastic IP (EIP) Benefits",
+    "content": "An Elastic IP is a static public IPv4 address associated with your cloud account. It allows you to mask instance failures by rapidly remapping the address to another instance. This provides a consistent entry point for your applications.",
+    "insight": "EIPs are critical for maintaining endpoint stability in dynamic cloud environments.",
+    "next": "IPv6 in the Cloud"
+  },
+  {
+    "id": "net_2_15",
+    "title": "IPv6 in the Cloud",
+    "content": "IPv6 uses a 128-bit address space, providing an astronomical number of unique IPs. Cloud providers are increasingly supporting IPv6 to overcome IPv4 exhaustion. IPv6 addresses in the cloud are typically globally unique by default.",
+    "insight": "IPv6 simplifies networking by removing the need for NAT.",
+    "next": "Dual-Stack Networking"
+  },
+  {
+    "id": "net_2_16",
+    "title": "Dual-Stack Networking",
+    "content": "Dual-stack allows a VPC or resource to communicate over both IPv4 and IPv6 simultaneously. This is the standard transition strategy, ensuring compatibility with legacy IPv4 systems while enabling modern IPv6 capabilities.",
+    "insight": "Dual-stack is the 'Safety First' approach to adopting IPv6.",
+    "next": "The /16 VPC Limit"
+  },
+  {
+    "id": "net_2_17",
+    "title": "The /16 VPC Limit",
+    "content": "Most cloud providers recommend a maximum VPC size of /16 (65,536 addresses). While it is possible to create larger networks, a /16 provides a good balance between scalability and manageability for a single virtual network.",
+    "insight": "Starting with a /16 gives you plenty of 'Room to Grow'.",
+    "next": "The /28 Subnet Minimum"
+  },
+  {
+    "id": "net_2_18",
+    "title": "The /28 Subnet Minimum",
+    "content": "The smallest subnet you can create in many cloud VPCs is a /28 (16 IP addresses). After subtracting the 5 reserved IPs, you are left with only 11 usable addresses for your resources.",
+    "insight": "/28 subnets are useful for small, specialized tasks like management gateways.",
+    "next": "Secondary CIDR Blocks"
+  },
+  {
+    "id": "net_2_19",
+    "title": "Secondary CIDR Blocks",
+    "content": "If you run out of IP addresses in your primary VPC range, you can associate secondary CIDR blocks with your VPC. This allows you to expand your network's capacity without creating a new VPC and managing complex peering.",
+    "insight": "Secondary CIDRs are the 'Emergency Expansion' for your cloud network.",
+    "next": "Subnetting Strategy"
+  },
+  {
+    "id": "net_2_20",
+    "title": "Subnetting Strategy",
+    "content": "A good subnetting strategy involves grouping similar resources. For example, use separate subnets for Web, App, and Database tiers. This allows you to apply distinct security groups and NACL rules to each layer of your infrastructure.",
+    "insight": "Logical segmentation is the foundation of network security.",
+    "next": "Multi-AZ Subnetting"
+  },
+  {
+    "id": "net_2_21",
+    "title": "Multi-AZ Subnetting",
+    "content": "To ensure high availability, you should create a set of subnets in each Availability Zone within a region. If one AZ goes offline, your application can continue to function in the others. Traffic can be balanced across these subnets automatically.",
+    "insight": "Redundancy across AZs is mandatory for production workloads.",
+    "next": "VPC CIDR Overlap Issues"
+  },
+  {
+    "id": "net_2_22",
+    "title": "VPC CIDR Overlap Issues",
+    "content": "When connecting two networks (via Peering or VPN), their CIDR blocks must not overlap. If they do, the routers won't know which network a packet belongs to, leading to connectivity failure. This is a common issue during company mergers.",
+    "insight": "Unique IP spacing is the 'Number One Rule' of inter-networking.",
+    "next": "IP Address Management (IPAM)"
+  },
+  {
+    "id": "net_2_23",
+    "title": "IP Address Management (IPAM)",
+    "content": "Cloud IPAM is a managed service that helps you plan, track, and monitor IP addresses for your cloud network. It automates the allocation of CIDR blocks to VPCs, ensuring no overlaps and providing a centralized view of your global IP usage.",
+    "insight": "IPAM replaces messy spreadsheets for tracking your cloud IPs.",
+    "next": "Public vs Private Subnet Routing"
+  },
+  {
+    "id": "net_2_24",
+    "title": "Public vs Private Subnet Routing",
+    "content": "A public subnet is defined by having a route to an Internet Gateway (IGW) in its route table. A private subnet does not have this route. This simple routing difference is what defines the 'Public' or 'Private' status of a subnet.",
+    "insight": "Routing tables, not IP ranges, determine if a subnet is public.",
+    "next": "The NAT Gateway IP"
+  },
+  {
+    "id": "net_2_25",
+    "title": "The NAT Gateway IP",
+    "content": "A NAT Gateway must be created in a public subnet and assigned an Elastic IP. It then provides a target for the default route (0.0.0.0/0) in private subnet route tables, allowing them to reach the internet via the NAT's public IP.",
+    "insight": "NAT Gateways bridge the gap between private isolation and internet access.",
+    "next": "Subnet-Level Firewalls (NACLs)"
+  },
+  {
+    "id": "net_2_26",
+    "title": "Subnet-Level Firewalls (NACLs)",
+    "content": "Network ACLs operate at the subnet boundary. They filter traffic entering or leaving the subnet. Since they are stateless, you must configure rules for both the request and the response. They are ideal for blocking specific IP ranges at the network level.",
+    "insight": "NACLs are the 'Border Patrol' for your subnets.",
+    "next": "Intra-VPC Routing"
+  },
+  {
+    "id": "net_2_27",
+    "title": "Intra-VPC Routing",
+    "content": "Every VPC has a default 'local' route that allows all subnets within that VPC to communicate with each other. This route cannot be modified or deleted, ensuring that internal connectivity is always maintained by default.",
+    "insight": "The 'local' route is the backbone of your internal VPC communication.",
+    "next": "VPC Peering Routing"
+  },
+  {
+    "id": "net_2_28",
+    "title": "VPC Peering Routing",
+    "content": "When you peer two VPCs, you must manually add routes to the route tables in both VPCs. Each route should point the CIDR of the other VPC to the Peering Connection ID (pcx-xxxx). Peering is established, but data won't flow without these routes.",
+    "insight": "Peering is a two-step process: establish the link, then update the routes.",
+    "next": "Gateway Endpoints: S3 and DynamoDB"
+  },
+  {
+    "id": "net_2_29",
+    "title": "Gateway Endpoints: S3 and DynamoDB",
+    "content": "Gateway Endpoints are a special type of VPC endpoint that use route tables to direct traffic. When you create one, it adds a prefix list route to your route table, pointing traffic destined for S3 or DynamoDB to the endpoint instead of the internet.",
+    "insight": "Gateway endpoints are the most efficient way to access S3 from private subnets.",
+    "next": "Prefix Lists"
+  },
+  {
+    "id": "net_2_30",
+    "title": "Prefix Lists",
+    "content": "A Prefix List is a collection of CIDR blocks that you can use to simplify management of security groups and route tables. Cloud providers provide managed prefix lists for their own services (like S3), which update automatically when IPs change.",
+    "insight": "Use Prefix Lists to avoid manually updating dozens of security rules.",
+    "next": "Secondary IP Addresses on ENIs"
+  },
+  {
+    "id": "net_2_31",
+    "title": "Secondary IP Addresses on ENIs",
+    "content": "An Elastic Network Interface (ENI) can have multiple private IP addresses assigned to it. This is useful for hosting multiple websites on a single server (virtual hosting) or for failover scenarios where an IP can move between servers.",
+    "insight": "Secondary IPs provide flexibility for multi-tenant applications.",
+    "next": "IP Aliasing (GCP Perspective)"
+  },
+  {
+    "id": "net_2_32",
+    "title": "IP Aliasing (GCP Perspective)",
+    "content": "In Google Cloud, Alias IP ranges allow you to assign multiple internal IP addresses from a subnet to a single VM. This is particularly useful for containers running on VMs, as each container can have its own unique IP from the VPC's range.",
+    "insight": "Alias IPs are the 'Native Language' for container networking in GCP.",
+    "next": "Reserved IP Ranges (GCP)"
+  },
+  {
+    "id": "net_2_33",
+    "title": "Reserved IP Ranges (GCP)",
+    "content": "GCP reserves only the first and last IP of a subnet. Unlike AWS, the .1 address is the gateway and the .2 and .3 addresses are often available for use. This provides slightly more usable IPs per subnet compared to AWS.",
+    "insight": "Always check your provider's specific reservation policy.",
+    "next": "Azure VNet Address Space"
+  },
+  {
+    "id": "net_2_34",
+    "title": "Azure VNet Address Space",
+    "content": "An Azure Virtual Network (VNet) can have one or more address spaces defined in CIDR notation. You then create subnets within these address spaces. Azure reserves 5 IP addresses in every subnet: .0, .1 (Gateway), .2 and .3 (DNS), and the last address.",
+    "insight": "Azure's IP reservation closely mirrors the AWS model.",
+    "next": "Subnet Delegation (Azure)"
+  },
+  {
+    "id": "net_2_35",
+    "title": "Subnet Delegation (Azure)",
+    "content": "Subnet delegation allows you to designate a specific subnet for an Azure PaaS service, such as Azure SQL Managed Instance or App Service Environment. This gives the service the ability to inject its own networking resources into your VNet.",
+    "insight": "Delegation is how Azure services become 'VNet-Native'.",
+    "next": "Static Private IPs"
+  },
+  {
+    "id": "net_2_36",
+    "title": "Static Private IPs",
+    "content": "By default, private IPs are dynamic and assigned by the DHCP service. However, you can change the assignment to 'Static' for critical resources like domain controllers or database servers, ensuring their IP never changes even after a reboot.",
+    "insight": "Use static private IPs for any resource that other servers depend on.",
+    "next": "IP Address Harvesting"
+  },
+  {
+    "id": "net_2_37",
+    "title": "IP Address Harvesting",
+    "content": "IP harvesting is the process of scanning ranges to find active IPs. Cloud providers block most types of network scanning to prevent this behavior. Security Groups and NACLs should be configured to only allow necessary traffic to prevent unauthorized discovery.",
+    "insight": "Cloud networks are 'Silent' by default for security.",
+    "next": "IP-Based Access Control"
+  },
+  {
+    "id": "net_2_38",
+    "title": "IP-Based Access Control",
+    "content": "Many services use IP whitelisting to restrict access. In the cloud, this is handled by Security Groups. Instead of whitelisting individual IPs, you should whitelist 'Security Group IDs' whenever possible to allow dynamic scaling without updating rules.",
+    "insight": "Whitelisting by Group ID is the 'Cloud-Way' of doing access control.",
+    "next": "BYOIP and Route Propagation"
+  },
+  {
+    "id": "net_2_39",
+    "title": "BYOIP and Route Propagation",
+    "content": "When you Bring Your Own IP (BYOIP) to the cloud, the provider will advertise your IP range to the internet using BGP from their edge locations. This ensures that traffic destined for your IPs is routed to the cloud provider's backbone.",
+    "insight": "BYOIP turns the cloud provider into your internet service provider.",
+    "next": "IP Exhaustion Recovery"
+  },
+  {
+    "id": "net_2_40",
+    "title": "IP Exhaustion Recovery",
+    "content": "If you run out of IPs in a subnet, you cannot resize it. You must create a new, larger subnet and migrate your resources to it, or add a secondary CIDR block to the VPC and create new subnets in that range.",
+    "insight": "Migration is painful; over-provision your subnets slightly at the start.",
+    "next": "VPC Endpoint Private DNS"
+  },
+  {
+    "id": "net_2_41",
+    "title": "VPC Endpoint Private DNS",
+    "content": "When you enable Private DNS for an Interface Endpoint, the cloud provider creates a private hosted zone that overrides the public DNS resolution for the service. This ensures that your instances automatically use the private endpoint without code changes.",
+    "insight": "Private DNS makes VPC Endpoints 'Invisible' and easy to use.",
+    "next": "DNS64 and NAT64"
+  },
+  {
+    "id": "net_2_42",
+    "title": "DNS64 and NAT64",
+    "content": "DNS64 and NAT64 are transition technologies that allow IPv6-only resources to communicate with IPv4-only services. DNS64 synthesizes IPv6 addresses from IPv4 records, and NAT64 translates the packets between the two protocols.",
+    "insight": "These tools are the 'Translators' for your IPv6-first cloud network.",
+    "next": "Link-Local Addresses"
+  },
+  {
+    "id": "net_2_43",
+    "title": "Link-Local Addresses",
+    "content": "Link-local addresses (169.254.0.0/16) are used for communication within a single network segment. Cloud providers use these for internal services like the Instance Metadata Service (169.254.169.254) which provides info about the running VM.",
+    "insight": "169.254.169.254 is the 'Self-Discovery' endpoint for every cloud VM.",
+    "next": "Subnet Masking Tricks"
+  },
+  {
+    "id": "net_2_44",
+    "title": "Subnet Masking Tricks",
+    "content": "A /32 mask represents a single IP address. A /0 mask represents the entire internet (0.0.0.0/0). Using a /32 in a security group is the most specific rule possible, allowing access only to one specific machine.",
+    "insight": "Precision with masks leads to the most secure network rules.",
+    "next": "CIDR Block Splitting"
+  },
+  {
+    "id": "net_2_45",
+    "title": "CIDR Block Splitting",
+    "content": "You can split a /16 VPC into 256 /24 subnets. You could also split it into 128 /24s and one /17. Understanding how to divide your address space effectively is a key skill for a lead network architect.",
+    "insight": "Divide your CIDR blocks logically to balance scale and organization.",
+    "next": "Public IPv4 Scarcity"
+  },
+  {
+    "id": "net_2_46",
+    "title": "Public IPv4 Scarcity",
+    "content": "There are only about 4 billion IPv4 addresses, and they are all allocated. Cloud providers now charge a small hourly fee for every public IPv4 address you use, even if it's attached to a running instance, to encourage the move to IPv6.",
+    "insight": "Public IPs are no longer 'Free'; they are a scarce resource.",
+    "next": "Subnet Route Table Association"
+  },
+  {
+    "id": "net_2_47",
+    "title": "Subnet Route Table Association",
+    "content": "Every subnet must be associated with exactly one route table. If you don't explicitly associate a subnet with a table, it is automatically associated with the VPC's 'Main' route table. It is best practice to create custom tables for every subnet.",
+    "insight": "Explicit associations prevent accidental routing changes via the Main table.",
+    "next": "VPN Static Routes"
+  },
+  {
+    "id": "net_2_48",
+    "title": "VPN Static Routes",
+    "content": "If you aren't using BGP for your VPN, you must manually add 'Static Routes' to your Virtual Private Gateway. These routes tell the cloud side which IP ranges live on your on-premises network so it knows to send that traffic down the tunnel.",
+    "insight": "Static routes are simple but don't scale well in large hybrid networks.",
+    "next": "The 'Local' Route Priority"
+  },
+  {
+    "id": "net_2_49",
+    "title": "The 'Local' Route Priority",
+    "content": "The 'local' route in a VPC route table always has the highest priority. It cannot be overridden by more specific routes. This ensures that internal VPC traffic always stays within the VPC and cannot be accidentally hijacked by a malicious route.",
+    "insight": "The local route is the 'Unalterable Law' of your VPC.",
+    "next": "Overlapping Subnets"
+  },
+  {
+    "id": "net_2_50",
+    "title": "Overlapping Subnets",
+    "content": "You cannot create two subnets in the same VPC with overlapping CIDR blocks. The cloud platform will reject the creation request. This prevents ambiguity in routing within the virtual network.",
+    "insight": "The cloud platform enforces network integrity through strict CIDR checks.",
+    "next": "Public IP for NAT Gateway"
+  },
+  {
+    "id": "net_2_51",
+    "title": "Public IP for NAT Gateway",
+    "content": "When you create a NAT Gateway, you assign it an Elastic IP. This public IP is what the rest of the internet sees when your private instances make outgoing connections. You can use this IP to allow your VPC traffic through partner firewalls.",
+    "insight": "A NAT Gateway's EIP is the 'Public Face' of your private subnets.",
+    "next": "Private Subnets and VPNs"
+  },
+  {
+    "id": "net_2_52",
+    "title": "Private Subnets and VPNs",
+    "content": "A private subnet can still communicate with your office over a VPN. You simply add a route to the subnet's table pointing the office CIDR to the Virtual Private Gateway. No NAT or Internet Gateway is required for this path.",
+    "insight": "Private subnets are only 'Private' from the internet, not from your secure office.",
+    "next": "Subnet Grouping for RDS"
+  },
+  {
+    "id": "net_2_53",
+    "title": "Subnet Grouping for RDS",
+    "content": "For managed database services like RDS, you create a 'DB Subnet Group' that contains subnets from multiple AZs. This allows the database to failover to a standby instance in a different subnet/AZ automatically if the primary fails.",
+    "insight": "Subnet groups are the 'Availability Insurance' for your databases.",
+    "next": "Egress-Only Gateway Routing"
+  },
+  {
+    "id": "net_2_54",
+    "title": "Egress-Only Gateway Routing",
+    "content": "To enable IPv6 internet access, you create an Egress-Only Internet Gateway and add a route for ::/0 (the IPv6 equivalent of 0.0.0.0/0) pointing to it. This allows your instances to reach the IPv6 web while remaining hidden from inbound probes.",
+    "insight": "Egress-only gateways bring NAT-like privacy to the IPv6 world.",
+    "next": "Secondary CIDR Constraints"
+  },
+  {
+    "id": "net_2_55",
+    "title": "Secondary CIDR Constraints",
+    "content": "Secondary CIDR blocks must come from the same RFC 1918 range as the primary or from specific public ranges. You cannot add a secondary CIDR that overlaps with any existing CIDR associated with the VPC.",
+    "insight": "Expansion must still follow the rules of non-overlapping address space.",
+    "next": "VPC Peering Non-Transitivity"
+  },
+  {
+    "id": "net_2_56",
+    "title": "VPC Peering Non-Transitivity",
+    "content": "In a peering relationship between VPC A and VPC B, traffic from A can reach B, and B can reach A. However, if B is also peered with VPC C, traffic from A cannot reach C through B. This is the 'Non-Transitive' rule of peering.",
+    "insight": "To connect A to C, you need a direct peer or a Transit Gateway.",
+    "next": "IP Address Failover"
+  },
+  {
+    "id": "net_2_57",
+    "title": "IP Address Failover",
+    "content": "By moving an ENI or an Elastic IP from a failed instance to a standby instance, you can achieve basic high availability. The application's IP remains the same, so clients don't need to update their configuration or perform a DNS lookup.",
+    "insight": "IP remapping is the fastest way to recover from a single server failure.",
+    "next": "Subnet CIDR Reservation in Azure"
+  },
+  {
+    "id": "net_2_58",
+    "title": "Subnet CIDR Reservation in Azure",
+    "content": "Azure reserves the first and last IP of the subnet, and the first three usable IPs for internal services. For example, in a 10.0.0.0/24 subnet, Azure reserves 10.0.0.0, .1, .2, .3, and .255.",
+    "insight": "Azure's reservation is slightly more aggressive than standard on-prem networking.",
+    "next": "CIDR Block Aggregation"
+  },
+  {
+    "id": "net_2_59",
+    "title": "CIDR Block Aggregation",
+    "content": "Aggregation (or Supernetting) is the process of combining multiple smaller CIDR blocks into a single larger one. This is used in routing tables to reduce the number of entries, making the routing process faster and more efficient.",
+    "insight": "Aggregated routes are the 'Summary' of your network map.",
+    "next": "IPv6 Address Format"
+  },
+  {
+    "id": "net_2_60",
+    "title": "IPv6 Address Format",
+    "content": "An IPv6 address is 128 bits long and written as eight groups of four hexadecimal digits. Double colons (::) can be used to compress consecutive groups of zeros, but only once per address. Example: 2001:db8::1.",
+    "insight": "The hex format of IPv6 allows for much larger network density.",
+    "next": "IP Address Planning"
+  },
+  {
+    "id": "net_2_61",
+    "title": "IP Address Planning",
+    "content": "Before creating your first VPC, plan your IP space for the next 5 years. Consider VPCs in other regions, company acquisitions, and on-premises expansion. Re-IPing a production network is one of the most difficult tasks in IT.",
+    "insight": "Good IP planning today prevents massive headaches tomorrow.",
+    "next": "VPC Peering DNS Support"
+  },
+  {
+    "id": "net_2_62",
+    "title": "VPC Peering DNS Support",
+    "content": "You can enable a setting in a VPC peering connection that allows the VPCs to resolve each other's public DNS hostnames to their private IP addresses. This ensures that communication stays on the private backbone even when using public names.",
+    "insight": "DNS support makes peering feel like a single unified network.",
+    "next": "Reserved CIDR Blocks"
+  },
+  {
+    "id": "net_2_63",
+    "title": "Reserved CIDR Blocks",
+    "content": "Some CIDR blocks are reserved for specific uses. 169.254.0.0/16 is link-local. 127.0.0.0/8 is loopback. 224.0.0.0/4 is for multicast. You should avoid using these ranges for your primary VPC address space.",
+    "insight": "Stay away from reserved ranges to avoid system conflicts.",
+    "next": "Subnet Masking and Security"
+  },
+  {
+    "id": "net_2_64",
+    "title": "Subnet Masking and Security",
+    "content": "By using a very specific subnet mask in a firewall rule (like a /32 for a specific admin laptop), you significantly reduce the risk of unauthorized access. Always be as specific as possible with your IP ranges in security rules.",
+    "insight": "Specificity is the best friend of a security engineer.",
+    "next": "Public IP Cost Optimization"
+  },
+  {
+    "id": "net_2_65",
+    "title": "Public IP Cost Optimization",
+    "content": "To save costs on public IPs, use a NAT Gateway for outbound traffic from many instances instead of assigning each one a public IP. Additionally, use VPC Endpoints for cloud services to avoid needing public IPs or NAT Gateways entirely.",
+    "insight": "Architecture changes can lead to massive savings on 'Scarcity Fees'.",
+    "next": "Route Table Limits"
+  },
+  {
+    "id": "net_2_66",
+    "title": "Route Table Limits",
+    "content": "Cloud providers limit the number of routes you can have in a single route table (often around 50-100). If you have a complex hybrid network, you may need to use route aggregation to stay within these limits.",
+    "insight": "Keep your routing tables 'Lean' to ensure performance and stay within limits.",
+    "next": "IP-Based Troubleshooting"
+  },
+  {
+    "id": "net_2_67",
+    "title": "IP-Based Troubleshooting",
+    "content": "The first step in troubleshooting is verifying IPs. Can you ping the private IP from within the VPC? Does the instance have a public IP? Is the IP in the expected subnet? Many 'Network' issues are actually simple IP misconfigurations.",
+    "insight": "Always verify the 'Basics' of your IP config before digging into complex logs.",
+    "next": "Subnetting for Compliance"
+  },
+  {
+    "id": "net_2_68",
+    "title": "Subnetting for Compliance",
+    "content": "Certain compliance standards (like PCI-DSS) require that systems handling sensitive data are isolated on their own subnets. Subnetting is the primary way you prove network isolation during a compliance audit.",
+    "insight": "Subnets are the 'Evidence' of network isolation.",
+    "next": "The 'Secondary' CIDR Advantage"
+  },
+  {
+    "id": "net_2_69",
+    "title": "The 'Secondary' CIDR Advantage",
+    "content": "Secondary CIDRs are excellent for large Kubernetes clusters. You can assign a massive /16 secondary CIDR specifically for pod IPs, keeping your primary VPC range clean for management and load balancer IPs.",
+    "insight": "Secondary CIDRs solve the 'IP Hunger' of modern container platforms.",
+    "next": "Conclusion: IP Mastery"
+  },
+  {
+    "id": "net_2_70",
+    "title": "Conclusion: IP Mastery",
+    "content": "Mastering IP addressing and subnetting is the key to building scalable and secure cloud networks. By understanding CIDR, routing, and address allocation, you can design infrastructure that is both resilient and easy to manage.",
+    "insight": "The IP address is the fundamental 'Unit of Communication' in the cloud.",
+    "next": "Chapter Complete"
+  }
+]

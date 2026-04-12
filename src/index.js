@@ -108,8 +108,9 @@ async function interactiveMenu() {
       console.clear();
       displayLogo();
       console.log(COLORS.highlight('Available Learning Modules:\n'));
-      console.log(`${COLORS.warning(' • linux  ')} ${COLORS.highlight('(Basic Linux Mastery)')}`);
-      console.log(`${COLORS.muted(' • docker ')} ${COLORS.muted('(Coming Soon)')}`);
+      console.log(`${COLORS.warning(' • linux      ')} ${COLORS.highlight('(Basic Linux Mastery)')}`);
+      console.log(`${COLORS.warning(' • networking ')} ${COLORS.highlight('(Modern Connectivity)')}`);
+      console.log(`${COLORS.muted(' • docker     ')} ${COLORS.muted('(Coming Soon)')}`);
       console.log(`${COLORS.muted(' • git    ')} ${COLORS.muted('(Coming Soon)')}\n`);
       
       await inquirer.prompt([{ type: 'input', name: 'continue', message: 'Press Enter to return...' }]);
@@ -155,6 +156,7 @@ async function runLearningSession() {
       message: 'Select a Module:',
       choices: [
         { name: COLORS.highlight('Linux (Basic Mastery)'), value: 'linux' },
+        { name: COLORS.highlight('Networking (Connectivity)'), value: 'networking' },
         { name: COLORS.muted('Docker (Coming Soon)'), value: 'docker', disabled: true }
       ]
     }
@@ -324,8 +326,9 @@ program
   .action(async () => {
     displayLogo();
     console.log(COLORS.highlight('Available Learning Modules:\n'));
-    console.log(`${COLORS.warning(' • linux  ')} ${COLORS.highlight('(Basic Linux Mastery)')}`);
-    console.log(`${COLORS.muted(' • docker ')} ${COLORS.muted('(Coming Soon)')}`);
+    console.log(`${COLORS.warning(' • linux      ')} ${COLORS.highlight('(Basic Linux Mastery)')}`);
+    console.log(`${COLORS.warning(' • networking ')} ${COLORS.highlight('(Modern Connectivity)')}`);
+    console.log(`${COLORS.muted(' • docker     ')} ${COLORS.muted('(Coming Soon)')}`);
     console.log(`${COLORS.muted(' • git    ')} ${COLORS.muted('(Coming Soon)')}\n`);
   });
 

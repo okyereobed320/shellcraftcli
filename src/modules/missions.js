@@ -13,12 +13,18 @@ export async function startMissions(moduleName) {
   try {
     const missionsPath = path.join(__dirname, '../../data/missions.json');
     const missionsContent = await fs.readFile(missionsPath, 'utf-8');
-    const worlds = JSON.parse(missionsContent);
+    const allWorlds = JSON.parse(missionsContent);
+    const worlds = allWorlds.filter(w => w.module === moduleName);
+
+    if (worlds.length === 0) {
+      console.log(COLORS.error(`\n❌ No missions found for module: ${moduleName.toUpperCase()}\n`));
+      return;
+    }
 
     const progress = getProgress();
 
-    displayHeader('🗺️  SHELLCRAFT MISSION MAP', COLORS.primary);
-    console.log(COLORS.muted(' Complete missions to conquer the Linux World!\n'));
+    displayHeader(`🗺️  SHELLCRAFT MISSION MAP: ${moduleName.toUpperCase()}`, COLORS.primary);
+    console.log(COLORS.muted(` Complete missions to conquer the ${moduleName.toUpperCase()} World!\n`));
 
     const { worldId } = await inquirer.prompt([
       {

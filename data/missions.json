@@ -1,6 +1,7 @@
 [
   {
     "id": "world_1",
+    "module": "linux",
     "name": "WORLD 1: Shell Initiation",
     "description": "Learn the fundamentals of the Linux terminal",
     "missions": [
@@ -12,6 +13,7 @@
   },
   {
     "id": "world_2",
+    "module": "linux",
     "name": "WORLD 2: File Mastery",
     "description": "Gain control over files and data",
     "missions": [
@@ -23,6 +25,7 @@
   },
   {
     "id": "world_3",
+    "module": "linux",
     "name": "WORLD 3: System Control",
     "description": "Understand and control system processes",
     "missions": [
@@ -34,6 +37,7 @@
   },
   {
     "id": "world_4",
+    "module": "networking",
     "name": "WORLD 4: Networking Ops",
     "description": "Understand and troubleshoot network systems",
     "missions": [
@@ -45,6 +49,7 @@
   },
   {
     "id": "world_5",
+    "module": "linux",
     "name": "WORLD 5: Package Management",
     "description": "Install and manage software",
     "missions": [
@@ -55,6 +60,7 @@
   },
   {
     "id": "world_6",
+    "module": "linux",
     "name": "WORLD 6: Users & Access Control",
     "description": "Manage users and permissions",
     "missions": [
@@ -65,6 +71,7 @@
   },
   {
     "id": "world_7",
+    "module": "linux",
     "name": "WORLD 7: Automation & Efficiency",
     "description": "Improve productivity and automation",
     "missions": [
@@ -76,6 +83,7 @@
   },
   {
     "id": "world_8",
+    "module": "linux",
     "name": "WORLD 8: Server & Cloud Operations",
     "description": "Apply Linux in real-world environments",
     "missions": [
@@ -87,6 +95,7 @@
   },
   {
     "id": "world_9",
+    "module": "linux",
     "name": "WORLD 9: Advanced Operations",
     "description": "Master advanced system tasks",
     "missions": [

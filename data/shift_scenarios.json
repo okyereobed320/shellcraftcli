@@ -1,6 +1,7 @@
 [
   {
     "id": "101",
+    "module": "linux",
     "type": "incident",
     "title": "The Silent Web Server",
     "severity": "CRITICAL",
@@ -17,6 +18,7 @@
   },
   {
     "id": "102",
+    "module": "linux",
     "type": "incident",
     "title": "Permission Denied Crisis",
     "severity": "MEDIUM",
@@ -37,6 +39,7 @@
   },
   {
     "id": "103",
+    "module": "linux",
     "type": "incident",
     "title": "Disk Full Disaster",
     "severity": "HIGH",
@@ -53,6 +56,7 @@
   },
   {
     "id": "201",
+    "module": "linux",
     "type": "routine",
     "title": "Provision New Developer",
     "severity": "LOW",
@@ -72,6 +76,7 @@
   },
   {
     "id": "202",
+    "module": "linux",
     "type": "routine",
     "title": "Configure Log Archival",
     "severity": "LOW",
@@ -91,6 +96,7 @@
   },
   {
     "id": "203",
+    "module": "linux",
     "type": "routine",
     "title": "Patch System Security",
     "severity": "LOW",
@@ -108,44 +114,8 @@
     "suggested_tools": ["apt", "apt-get", "apt list"]
   },
   {
-    "id": "204",
-    "type": "routine",
-    "title": "Schedule Backup Job",
-    "severity": "LOW",
-    "problem": "Management wants /etc/nginx backed up to /backup/nginx.tar.gz every day at midnight.",
-    "investigations": {
-      "crontab -l": "[no crontab for sysadmin]",
-      "ls /etc/nginx": "nginx.conf  sites-available ..."
-    },
-    "fix_commands": [
-      "echo '0 0 * * * tar -czf /backup/nginx.tar.gz /etc/nginx' | crontab -",
-      "crontab -e",
-      "sudo crontab -e"
-    ],
-    "resolution": "Cron job successfully scheduled for daily midnight backups.",
-    "hints": ["Use 'crontab -e' or pipe a string into 'crontab -'.", "The format is 'min hour day month dow command'."],
-    "suggested_tools": ["crontab", "tar", "echo"]
-  },
-  {
-    "id": "205",
-    "type": "routine",
-    "title": "Network Audit",
-    "severity": "LOW",
-    "problem": "Security needs a list of all currently listening TCP ports on this server.",
-    "investigations": {
-      "ss -tulnp": "Netid State Recv-Q Send-Q Local Address:Port ...\ntcp LISTEN 0 128 0.0.0.0:80 ...\ntcp LISTEN 0 128 0.0.0.0:22 ..."
-    },
-    "fix_commands": [
-      "ss -tulnp > /tmp/audit.txt",
-      "netstat -tulnp > /tmp/audit.txt",
-      "sudo ss -tulnp > /tmp/audit.txt"
-    ],
-    "resolution": "Network audit report generated in /tmp/audit.txt.",
-    "hints": ["Use 'ss' or 'netstat' with -tulnp.", "Redirect the output to the specified file."],
-    "suggested_tools": ["ss", "netstat", "cat"]
-  },
-  {
     "id": "111",
+    "module": "networking",
     "type": "incident",
     "title": "Website Down: Multi-Stage Recovery",
     "severity": "CRITICAL",
@@ -160,5 +130,225 @@
     "resolution": "Nginx was OK, but the Backend Database was down. MySQL started.",
     "hints": ["Check Nginx error logs for clues.", "If it's a 500 error, check backend services like database or app server."],
     "suggested_tools": ["systemctl", "curl", "tail", "mysql"]
+  },
+  {
+    "id": "112",
+    "module": "networking",
+    "type": "incident",
+    "title": "Website Not Loading (Firewall Issue)",
+    "severity": "CRITICAL",
+    "problem": "A user reports that your website is not loading in the browser. Nginx is running, but the site is unreachable from outside.",
+    "investigations": {
+      "systemctl status nginx": "● nginx.service - Active: active (running)",
+      "curl localhost": "HTTP/1.1 200 OK ... (Site works locally)",
+      "ufw status": "Status: active\nTo Action From\n-- ------ ----\n22 ALLOW Anywhere"
+    },
+    "fix_commands": ["ufw allow 80", "sudo ufw allow 80", "ufw allow http", "ufw allow 443"],
+    "resolution": "Port 80 (HTTP) was blocked by the firewall. Access restored!",
+    "hints": ["If it works on localhost but not from outside, check the firewall.", "Use 'ufw status' to see active rules."],
+    "suggested_tools": ["ufw", "curl", "systemctl"]
+  },
+  {
+    "id": "113",
+    "module": "networking",
+    "type": "incident",
+    "title": "Domain Name Resolution Failure",
+    "severity": "HIGH",
+    "problem": "You cannot reach external websites by name (e.g., google.com), but you can reach them by IP address (e.g., 8.8.8.8).",
+    "investigations": {
+      "ping 8.8.8.8": "64 bytes from 8.8.8.8: icmp_seq=1 ttl=117 time=12.4 ms",
+      "ping google.com": "ping: google.com: Name or service not known",
+      "cat /etc/resolv.conf": "nameserver 127.0.0.53\n# No other nameservers found"
+    },
+    "fix_commands": [
+      "echo 'nameserver 8.8.8.8' | sudo tee /etc/resolv.conf",
+      "sudo systemctl restart systemd-resolved"
+    ],
+    "resolution": "DNS configuration corrected. Name resolution restored.",
+    "hints": ["Check your DNS settings in /etc/resolv.conf.", "Try adding a reliable nameserver like 8.8.8.8."],
+    "suggested_tools": ["ping", "cat", "echo", "systemctl"]
+  },
+  {
+    "id": "114",
+    "module": "networking",
+    "type": "incident",
+    "title": "Cloud Load Balancer: Health Check Failing",
+    "severity": "CRITICAL",
+    "problem": "The cloud load balancer is reporting 'Unhealthy' for all backend nodes. The app is running, but no traffic is reaching it.",
+    "investigations": {
+      "systemctl status node-app": "● node-app.service - Active: active (running)",
+      "curl localhost:3000/health": "HTTP/1.1 200 OK ... (App is healthy)",
+      "ufw status": "Status: active\nTo Action From\n-- ------ ----\n3000 DENY Anywhere"
+    },
+    "fix_commands": ["ufw allow 3000", "sudo ufw allow 3000", "ufw allow 3000/tcp"],
+    "resolution": "The firewall was blocking the Load Balancer's health check port (3000). Rule added.",
+    "hints": ["If the app is running but the LB says it's down, check the port used for health checks.", "Ensure the firewall allows traffic from the LB's range (or just the port)."],
+    "suggested_tools": ["ufw", "curl", "systemctl"]
+  },
+  {
+    "id": "115",
+    "module": "networking",
+    "type": "incident",
+    "title": "VPC Peering: Connectivity Lost",
+    "severity": "HIGH",
+    "problem": "Server A in VPC-1 cannot reach Database B in VPC-2. They were working yesterday. Peering is active.",
+    "investigations": {
+      "ip route": "default via 10.0.1.1 dev eth0\n10.0.1.0/24 dev eth0 proto kernel ...",
+      "ping 10.0.2.55": "PING 10.0.2.55 (10.0.2.55): 56 data bytes\nFrom 10.0.1.1: icmp_seq=1 Destination Net Unreachable"
+    },
+    "fix_commands": [
+      "ip route add 10.0.2.0/24 via 10.0.1.1",
+      "sudo ip route add 10.0.2.0/24 via 10.0.1.1"
+    ],
+    "resolution": "Static route to the peered VPC was missing from the local routing table.",
+    "hints": ["Check the routing table with 'ip route'.", "Ensure there is a route for the 10.0.2.0/24 subnet."],
+    "suggested_tools": ["ip route", "ping"]
+  },
+  {
+    "id": "116",
+    "module": "networking",
+    "type": "incident",
+    "title": "Slow Downloads: MTU Mismatch",
+    "severity": "MEDIUM",
+    "problem": "Large file transfers are extremely slow and frequently time out, but small pings work fine. This started after moving to a new cloud provider.",
+    "investigations": {
+      "ip link show eth0": "eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc ...",
+      "ping -s 1472 -M do 8.8.8.8": "PING 8.8.8.8 (8.8.8.8) 1472(1500) bytes of data.\nFrom 10.0.1.1 icmp_seq=1 Frag needed and DF set (mtu = 1500)"
+    },
+    "fix_commands": ["ip link set eth0 mtu 1500", "sudo ip link set eth0 mtu 1500"],
+    "resolution": "MTU was set to 9000 (Jumbo Frames), which the external network didn't support. Reset to 1500.",
+    "hints": ["Large packets failing while small ones pass often points to MTU issues.", "Check MTU with 'ip link show'."],
+    "suggested_tools": ["ip link", "ping"]
+  },
+  {
+    "id": "117",
+    "module": "networking",
+    "type": "incident",
+    "title": "DNS CNAME Loop Detected",
+    "severity": "HIGH",
+    "problem": "The domain 'api.shellcraft.io' is failing to resolve. Browsers show 'Too many redirects' or resolution timeout.",
+    "investigations": {
+      "dig api.shellcraft.io": ";; ANSWER SECTION:\napi.shellcraft.io. 60 IN CNAME web.shellcraft.io.\nweb.shellcraft.io. 60 IN CNAME api.shellcraft.io."
+    },
+    "fix_commands": [
+      "echo 'api.shellcraft.io. 60 IN A 1.2.3.4' > /tmp/dns_fix.txt",
+      "dig api.shellcraft.io +trace"
+    ],
+    "resolution": "Identified a CNAME loop where A pointed to B and B pointed back to A. Fixed record to point to an A record.",
+    "hints": ["Use 'dig' to inspect the CNAME chain.", "Look for records that point to each other."],
+    "suggested_tools": ["dig", "nslookup"]
+  },
+  {
+    "id": "118",
+    "module": "networking",
+    "type": "incident",
+    "title": "SSL/TLS Port 443 Timeout",
+    "severity": "CRITICAL",
+    "problem": "The site works via HTTP (80) but fails completely on HTTPS (443). Nginx says it's listening on both.",
+    "investigations": {
+      "ss -tulnp | grep :443": "tcp LISTEN 0 128 0.0.0.0:443 ... (nginx)",
+      "ufw status": "Status: active\nTo Action From\n-- ------ ----\n80 ALLOW Anywhere\n22 ALLOW Anywhere"
+    },
+    "fix_commands": ["ufw allow 443", "sudo ufw allow 443", "ufw allow https"],
+    "resolution": "Port 443 was not allowed in the firewall. HTTPS traffic restored.",
+    "hints": ["Check if the port is open in the firewall with 'ufw status'.", "Confirm the service is actually listening on 443."],
+    "suggested_tools": ["ufw", "ss", "curl"]
+  },
+  {
+    "id": "119",
+    "module": "networking",
+    "type": "incident",
+    "title": "VPC Peering: Overlapping CIDR",
+    "severity": "HIGH",
+    "problem": "You are trying to peer VPC-A (10.0.0.0/16) with VPC-B (10.0.0.0/24), but the request is failing immediately.",
+    "investigations": {
+      "ip addr": "eth0: 10.0.1.5/16",
+      "aws ec2 describe-vpcs": "VPC-A: 10.0.0.0/16, VPC-B: 10.0.0.0/24"
+    },
+    "fix_commands": [
+      "echo 'Change CIDR of VPC-B' > /tmp/solution.txt",
+      "aws ec2 create-vpc --cidr-block 172.16.0.0/16"
+    ],
+    "resolution": "VPC Peering cannot be established between VPCs with overlapping CIDR blocks.",
+    "hints": ["VPC peering requires non-overlapping IP ranges.", "Check the CIDR blocks of both VPCs."],
+    "suggested_tools": ["aws", "ip", "cat"]
+  },
+  {
+    "id": "120",
+    "module": "networking",
+    "type": "incident",
+    "title": "Transit Gateway: Missing Propagation",
+    "severity": "HIGH",
+    "problem": "VPC-C is attached to the Transit Gateway (TGW), but it cannot reach VPC-D which is also attached. Routing looks correct on the VPC side.",
+    "investigations": {
+      "aws ec2 describe-transit-gateway-route-tables": "Table-1: No routes for VPC-C range 10.3.0.0/16",
+      "ping 10.4.0.10": "PING 10.4.0.10: Destination Host Unreachable"
+    },
+    "fix_commands": [
+      "aws ec2 enable-transit-gateway-route-table-propagation --transit-gateway-attachment-id tgw-attach-123",
+      "sudo aws ec2 enable-transit-gateway-route-table-propagation"
+    ],
+    "resolution": "The TGW attachment was not propagating routes to the Transit Gateway route table.",
+    "hints": ["Check Transit Gateway route table propagations.", "Ensure the attachment is associated and propagating."],
+    "suggested_tools": ["aws", "ping"]
+  },
+  {
+    "id": "121",
+    "module": "networking",
+    "type": "incident",
+    "title": "Security Group vs NACL Conflict",
+    "severity": "HIGH",
+    "problem": "SSH is allowed in the Security Group, but you still can't connect. You checked the firewall on the OS, and it's disabled.",
+    "investigations": {
+      "ufw status": "Status: inactive",
+      "aws ec2 describe-network-acls": "Inbound Rule 100: DENY TCP 22 0.0.0.0/0",
+      "aws ec2 describe-security-groups": "Inbound: ALLOW TCP 22 0.0.0.0/0"
+    },
+    "fix_commands": [
+      "aws ec2 replace-network-acl-entry --network-acl-id acl-123 --rule-number 100 --protocol tcp --port-range From=22,To=22 --cidr-block 0.0.0.0/0 --rule-action allow",
+      "sudo aws ec2 modify-network-acl"
+    ],
+    "resolution": "The Network ACL (NACL) was explicitly denying port 22, overriding the Security Group allow rule.",
+    "hints": ["NACLs are evaluated before Security Groups for inbound traffic.", "Check if a 'Deny' rule exists in your Subnet's NACL."],
+    "suggested_tools": ["aws", "ufw"]
+  },
+  {
+    "id": "122",
+    "module": "networking",
+    "type": "incident",
+    "title": "S3 Endpoint: DNS Resolution Issue",
+    "severity": "MEDIUM",
+    "problem": "An EC2 instance in a private subnet cannot reach S3, even though an S3 VPC Endpoint is created. You want to avoid using the public internet.",
+    "investigations": {
+      "nslookup s3.amazonaws.com": "Address: 52.216.x.x (Public IP resolved)",
+      "route -n": "0.0.0.0 10.0.1.1 (Default Gateway points to NAT)"
+    },
+    "fix_commands": [
+      "aws ec2 modify-vpc-endpoint --vpc-endpoint-id vpce-123 --private-dns-enabled",
+      "sudo aws ec2 modify-vpc-endpoint"
+    ],
+    "resolution": "Private DNS was not enabled on the VPC Endpoint, causing the instance to still try and reach S3 via its public IP.",
+    "hints": ["VPC Endpoints often require 'Private DNS' to be enabled to override public resolution.", "Check your VPC Endpoint configuration."],
+    "suggested_tools": ["nslookup", "aws", "route"]
+  },
+  {
+    "id": "123",
+    "module": "networking",
+    "type": "incident",
+    "title": "Global Accelerator: High Latency",
+    "severity": "MEDIUM",
+    "problem": "Users in Asia are reporting high latency to your US-based application, even though you enabled AWS Global Accelerator.",
+    "investigations": {
+      "dig +short api.example.com": "75.2.x.x (Anycast IP)",
+      "curl -w \"%{time_total}\" api.example.com": "0.850s (Slow)",
+      "aws globalaccelerator describe-accelerator": "Status: IN_PROGRESS (Deployment pending)"
+    },
+    "fix_commands": [
+      "echo 'Wait for Global Accelerator deployment to complete' > /tmp/wait.txt",
+      "aws globalaccelerator list-accelerators"
+    ],
+    "resolution": "Global Accelerator was still in the 'IN_PROGRESS' state, meaning the global Anycast nodes were not yet fully optimized.",
+    "hints": ["Global Accelerator takes time to propagate across all edge locations.", "Check the deployment status of your accelerator."],
+    "suggested_tools": ["dig", "curl", "aws"]
   }
 ]

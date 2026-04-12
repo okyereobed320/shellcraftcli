@@ -1,0 +1,352 @@
+[
+  {
+    "question": "What is an IP address?",
+    "options": ["A password", "A unique identifier for a device", "A firewall rule", "A domain name"],
+    "answer": "A unique identifier for a device",
+    "explanation": "IP addresses identify devices on a network.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which is a private IP?",
+    "options": ["8.8.8.8", "192.168.1.10", "1.1.1.1", "142.250.10.1"],
+    "answer": "192.168.1.10",
+    "explanation": "Private IPs are used within local networks.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which port is used for HTTPS?",
+    "options": ["21", "22", "80", "443"],
+    "answer": "443",
+    "explanation": "HTTPS uses port 443.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What does DNS do?",
+    "options": ["Encrypt data", "Convert domain names to IP addresses", "Block hackers", "Store files"],
+    "answer": "Convert domain names to IP addresses",
+    "explanation": "DNS maps names to IP addresses.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Your website is not loading. What is the most likely issue?",
+    "options": ["Low RAM", "Firewall blocking port 80", "CPU overheating", "Disk failure"],
+    "answer": "Firewall blocking port 80",
+    "explanation": "If port 80 is blocked, HTTP traffic cannot reach the server.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the primary function of a Subnet?",
+    "options": ["Speed up the internet", "Organize and group IP addresses", "Encrypt local traffic", "Store website data"],
+    "answer": "Organize and group IP addresses",
+    "explanation": "Subnets are used to logically divide a network into smaller, manageable sections.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which command is used to check IP addresses in Linux?",
+    "options": ["ls", "ip a", "cat /etc/net", "ping"],
+    "answer": "ip a",
+    "explanation": "The 'ip a' (or 'ip addr') command shows all network interfaces and their IPs.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What happens if Port 22 is closed on a server?",
+    "options": ["Websites will stop working", "You cannot connect via SSH", "The server will shut down", "Internet speed will decrease"],
+    "answer": "You cannot connect via SSH",
+    "explanation": "Port 22 is the default port for SSH remote access.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which protocol is 'connection-oriented' and ensures reliability?",
+    "options": ["UDP", "ICMP", "TCP", "ARP"],
+    "answer": "TCP",
+    "explanation": "TCP ensures that all packets are delivered in order and without errors.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does '127.0.0.1' refer to?",
+    "options": ["The main Google server", "The local loopback address", "A common public DNS", "A hacker's IP"],
+    "answer": "The local loopback address",
+    "explanation": "127.0.0.1 (localhost) refers to the computer itself.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which tool is used to test if a host is reachable?",
+    "options": ["grep", "ping", "cd", "mkdir"],
+    "answer": "ping",
+    "explanation": "Ping sends ICMP Echo Requests to verify connectivity.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the default port for HTTP?",
+    "options": ["443", "80", "21", "25"],
+    "answer": "80",
+    "explanation": "Port 80 is the standard port for unencrypted web traffic.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which command shows listening ports and active connections?",
+    "options": ["ls", "ps", "ss", "df"],
+    "answer": "ss",
+    "explanation": "'ss' (socket statistics) is the modern replacement for 'netstat'.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does ICMP stand for?",
+    "options": ["Internet Control Message Protocol", "Internal Core Management Process", "Inter-Connected Media Provider", "Internet Connection Mastery Path"],
+    "answer": "Internet Control Message Protocol",
+    "explanation": "ICMP is used for diagnostic and error messages like Ping.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which file contains static IP-to-hostname mappings on Linux?",
+    "options": ["/etc/resolv.conf", "/etc/hosts", "/etc/hostname", "/etc/network"],
+    "answer": "/etc/hosts",
+    "explanation": "/etc/hosts is checked before DNS for name resolution.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does the 'dig' command do?",
+    "options": ["Delete files", "Query DNS servers", "Check disk space", "Inspect CPU"],
+    "answer": "Query DNS servers",
+    "explanation": "'dig' (domain information groper) is a tool for querying DNS records.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which protocol is used to automatically assign IP addresses?",
+    "options": ["DNS", "DHCP", "FTP", "SMTP"],
+    "answer": "DHCP",
+    "explanation": "Dynamic Host Configuration Protocol (DHCP) automates IP assignment.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the purpose of a Default Gateway?",
+    "options": ["To store passwords", "To route traffic to other networks", "To speed up local file transfer", "To act as a web server"],
+    "answer": "To route traffic to other networks",
+    "explanation": "The Default Gateway is the 'exit door' for traffic leaving the local network.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which port is commonly used for FTP (Data Transfer)?",
+    "options": ["20", "22", "25", "53"],
+    "answer": "20",
+    "explanation": "FTP uses port 21 for control and port 20 for data transfer.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is CIDR used for?",
+    "options": ["Encrypting emails", "IP addressing and subnetting", "Naming servers", "Measuring network speed"],
+    "answer": "IP addressing and subnetting",
+    "explanation": "Classless Inter-Domain Routing (CIDR) is a method for allocating IP addresses.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which layer of the OSI model does a Router operate on?",
+    "options": ["Layer 1 (Physical)", "Layer 2 (Data Link)", "Layer 3 (Network)", "Layer 4 (Transport)"],
+    "answer": "Layer 3 (Network)",
+    "explanation": "Routers use IP addresses at the Network Layer to move data.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What does NAT stand for?",
+    "options": ["Network Access Terminal", "Network Address Translation", "New Active Technology", "Node Authentication Tool"],
+    "answer": "Network Address Translation",
+    "explanation": "NAT allows multiple private IPs to share one public IP.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which command is used to trace the path packets take to a host?",
+    "options": ["ping", "traceroute", "route", "ip"],
+    "answer": "traceroute",
+    "explanation": "Traceroute shows every 'hop' between your computer and the destination.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the default port for DNS?",
+    "options": ["53", "67", "68", "80"],
+    "answer": "53",
+    "explanation": "DNS queries usually run over port 53 (UDP).",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which protocol is used for sending emails?",
+    "options": ["POP3", "IMAP", "SMTP", "HTTP"],
+    "answer": "SMTP",
+    "explanation": "Simple Mail Transfer Protocol (SMTP) is used to send or relay emails.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is a 'MAC address'?",
+    "options": ["An Apple server address", "A physical hardware identifier", "A temporary IP", "A software license"],
+    "answer": "A physical hardware identifier",
+    "explanation": "A Media Access Control (MAC) address is unique to every Network Interface Card.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which tool is the modern replacement for 'ifconfig'?",
+    "options": ["ip", "ss", "nmcli", "route"],
+    "answer": "ip",
+    "explanation": "The 'ip' command from the iproute2 suite is the current standard.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What does a 404 HTTP status code mean?",
+    "options": ["Forbidden", "Internal Server Error", "Not Found", "Unauthorized"],
+    "answer": "Not Found",
+    "explanation": "A 404 error means the server could not find the requested resource.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which port is used for SMTP?",
+    "options": ["21", "22", "25", "110"],
+    "answer": "25",
+    "explanation": "SMTP traditionally uses port 25 for mail transfer.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the subnet mask for a /24 network?",
+    "options": ["255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.255"],
+    "answer": "255.255.255.0",
+    "explanation": "/24 means the first 24 bits are for the network, which equals 255.255.255.0.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which protocol does 'ping' use?",
+    "options": ["TCP", "UDP", "ICMP", "ARP"],
+    "answer": "ICMP",
+    "explanation": "Ping uses ICMP Echo Request and Reply messages.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Promiscuous Mode' used for in networking?",
+    "options": ["Speeding up traffic", "Packet sniffing and analysis", "Blocking unauthorized users", "Encrypting passwords"],
+    "answer": "Packet sniffing and analysis",
+    "explanation": "It allows a network card to pass all traffic it receives to the CPU, not just traffic for its MAC.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which command displays the Kernel's routing table?",
+    "options": ["ip route", "ls route", "cat /proc/net", "df -r"],
+    "answer": "ip route",
+    "explanation": "'ip route' shows how the kernel will direct outgoing packets.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of 'SSH Forwarding'?",
+    "options": ["To speed up SSH", "To access a remote service through a secure tunnel", "To delete remote files", "To change passwords"],
+    "answer": "To access a remote service through a secure tunnel",
+    "explanation": "SSH tunneling (port forwarding) allows secure transport of other protocols.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which flag for 'ss' shows only listening sockets?",
+    "options": ["-a", "-l", "-t", "-u"],
+    "answer": "-l",
+    "explanation": "-l or --listening filters the output to show only listening sockets.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does MTU stand for?",
+    "options": ["Maximum Transmission Unit", "Main Transfer Utility", "Multi-Threaded Unit", "Memory Transit Usage"],
+    "answer": "Maximum Transmission Unit",
+    "explanation": "MTU defines the largest packet size that can be sent over a network.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which protocol resolves IP addresses to MAC addresses?",
+    "options": ["DNS", "DHCP", "ARP", "RARP"],
+    "answer": "ARP",
+    "explanation": "Address Resolution Protocol (ARP) finds the MAC address for a given IP.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is a 'Broadcast Address'?",
+    "options": ["A private IP", "An IP used to send data to all devices on a subnet", "The main router's IP", "The DNS server's IP"],
+    "answer": "An IP used to send data to all devices on a subnet",
+    "explanation": "Traffic sent to a broadcast address is received by every host on the network segment.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which tool allows you to perform a network audit of ports?",
+    "options": ["nmap", "cat", "chmod", "ps"],
+    "answer": "nmap",
+    "explanation": "Nmap is a powerful network scanner used for security auditing.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the standard port for MySQL/MariaDB?",
+    "options": ["80", "443", "3306", "5432"],
+    "answer": "3306",
+    "explanation": "MySQL and MariaDB typically listen on port 3306.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which command would you use to change the hostname temporarily?",
+    "options": ["set-hostname", "hostname", "namechange", "ip host"],
+    "answer": "hostname",
+    "explanation": "The 'hostname <newname>' command changes the name until the next reboot.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of 'Keepalive' in TCP?",
+    "options": ["To speed up downloads", "To check if a connection is still active", "To encrypt data", "To block hackers"],
+    "answer": "To check if a connection is still active",
+    "explanation": "Keepalive packets prevent a connection from being closed due to inactivity.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which directory contains network configuration in Debian/Ubuntu?",
+    "options": ["/etc/network/", "/etc/sysconfig/", "/etc/conf.d/", "/etc/networking/"],
+    "answer": "/etc/network/",
+    "explanation": "Debian-based systems use /etc/network/interfaces or Netplan.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does a 503 HTTP status code mean?",
+    "options": ["Forbidden", "Service Unavailable", "OK", "Moved Permanently"],
+    "answer": "Service Unavailable",
+    "explanation": "A 503 error usually means the server is overloaded or down for maintenance.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which protocol is used for real-time video streaming where speed is prioritized over accuracy?",
+    "options": ["TCP", "UDP", "FTP", "SSH"],
+    "answer": "UDP",
+    "explanation": "UDP doesn't wait for retransmissions, making it faster for streaming.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'IP Masquerading'?",
+    "options": ["A type of hacking", "A form of NAT for outgoing traffic", "Hiding your MAC address", "Blocking all incoming pings"],
+    "answer": "A form of NAT for outgoing traffic",
+    "explanation": "It allows a whole network to 'hide' behind a single public IP.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which command lists all network interfaces?",
+    "options": ["ip link show", "ls net", "cat /proc/net/dev", "route -n"],
+    "answer": "ip link show",
+    "explanation": "'ip link' focuses on the Layer 2 (Link) interfaces.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the standard port for PostgreSQL?",
+    "options": ["3306", "5432", "6379", "27017"],
+    "answer": "5432",
+    "explanation": "PostgreSQL default port is 5432.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which file specifies the DNS resolvers in Linux?",
+    "options": ["/etc/hosts", "/etc/resolv.conf", "/etc/dns.conf", "/etc/resolv.init"],
+    "answer": "/etc/resolv.conf",
+    "explanation": "/etc/resolv.conf lists the nameservers the system should use.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the main goal of a Load Balancer?",
+    "options": ["Encrypt traffic", "Distribute traffic across multiple servers", "Store database backups", "Speed up local disk access"],
+    "answer": "Distribute traffic across multiple servers",
+    "explanation": "Load balancers ensure high availability by spreading load.",
+    "difficulty": "medium"
+  }
+]
