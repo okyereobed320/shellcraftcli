@@ -1,0 +1,79 @@
+[
+  {
+    "id": "docker_net_1",
+    "title": "Bridge Networking (Default)",
+    "content": "The default network driver for containers is 'bridge'. When you start a container without specifying a network, it joins the default bridge network. Containers on the same bridge network can communicate using IP addresses, but not by container name (unless you use custom bridge networks).",
+    "insight": "The default bridge is fine for simple setups, but custom networks are better for production.",
+    "next": "Custom Bridge Networks"
+  },
+  {
+    "id": "docker_net_2",
+    "title": "Custom Bridge Networks",
+    "content": "Creating a custom bridge network with 'docker network create' allows for automatic service discovery. Containers on a custom network can reach each other by name, which is much more reliable than using ephemeral IP addresses.",
+    "insight": "Always use custom networks for multi-container apps to get built-in DNS resolution.",
+    "next": "Host and None Networking"
+  },
+  {
+    "id": "docker_net_3",
+    "title": "Host and None Networking",
+    "content": "The 'host' driver removes network isolation between the container and the host, sharing the host's networking namespace. This can improve performance but reduces security. The 'none' driver provides a container with no network interface at all, useful for high-security, isolated tasks.",
+    "insight": "Use 'host' for extreme performance, 'none' for maximum isolation.",
+    "next": "Overlay Networking"
+  },
+  {
+    "id": "docker_net_4",
+    "title": "Overlay Networking",
+    "content": "Overlay networks are used for communication between containers running on different Docker hosts (e.g., in a Swarm cluster). They create a virtual network that spans multiple physical machines, allowing containers to communicate as if they were on the same host.",
+    "insight": "Overlay networks are the backbone of Docker Swarm communication.",
+    "next": "Exposing and Publishing Ports"
+  },
+  {
+    "id": "docker_net_5",
+    "title": "Exposing vs Publishing Ports",
+    "content": "EXPOSE is a Dockerfile instruction that acts as documentation, indicating which ports are intended to be open. Publishing (using -p or --publish at runtime) actually maps a host port to a container port, making the service accessible from outside the host.",
+    "insight": "EXPOSE is for the developer; -p is for the operator.",
+    "next": "Volume Types: Bind Mounts"
+  },
+  {
+    "id": "docker_vol_1",
+    "title": "Bind Mounts",
+    "content": "Bind mounts map a specific path on the host file system directly into a container. This is useful for development (mounting source code) or when a container needs access to specific host files like configuration or logs.",
+    "insight": "Bind mounts are great for dev environments, but volumes are better for production data.",
+    "next": "Named Volumes"
+  },
+  {
+    "id": "docker_vol_2",
+    "title": "Named Volumes",
+    "content": "Named volumes are managed entirely by Docker. They are stored in a part of the host filesystem that is managed by Docker (/var/lib/docker/volumes/ on Linux). They are easier to back up and migrate than bind mounts and are the recommended way to persist data.",
+    "insight": "Volumes are the gold standard for database persistence in Docker.",
+    "next": "Tmpfs Mounts"
+  },
+  {
+    "id": "docker_vol_3",
+    "title": "Tmpfs Mounts",
+    "content": "Tmpfs mounts are stored in the host's memory (RAM) and are never written to disk. They are extremely fast but ephemeral; data is lost when the container stops. Use them for sensitive information you don't want on disk or for high-speed temporary files.",
+    "insight": "Use tmpfs for secrets or cache directories that don't need to survive a restart.",
+    "next": "Volume Drivers"
+  },
+  {
+    "id": "docker_vol_4",
+    "title": "Volume Drivers",
+    "content": "Docker supports volume drivers that allow you to store data on external storage systems, such as AWS EBS, Azure File Storage, or NFS. This is crucial for stateful applications running in the cloud or across multiple hosts.",
+    "insight": "Volume drivers allow Docker to integrate with enterprise-grade storage.",
+    "next": "Inspecting Networks and Volumes"
+  },
+  {
+    "id": "docker_net_6",
+    "title": "Inspecting Networks and Volumes",
+    "content": "The 'docker network inspect' and 'docker volume inspect' commands provide detailed JSON information about these resources. You can see which containers are connected to a network or where a volume is physically stored on the host.",
+    "insight": "Inspection is the first step in troubleshooting connectivity or storage issues.",
+    "next": "Chapter Summary"
+  },
+  {
+    "id": "docker_net_7",
+    "title": "Networking and Volumes Summary",
+    "content": "You now understand how containers communicate via bridge, host, and overlay networks. You also know the difference between bind mounts, named volumes, and tmpfs mounts for data persistence. This knowledge is essential for building robust, stateful applications.",
+    "insight": "Networking and storage are the 'pipes and basements' of your containerized architecture.",
+    "next": "Orchestration and Compose"
+  }
+]

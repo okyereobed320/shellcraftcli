@@ -1,0 +1,51 @@
+[
+  {
+    "id": "docker_intro_1",
+    "title": "What is Docker?",
+    "content": "Docker is a tool designed to make it easier to create, deploy, and run applications by using containers. Containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package. By doing so, thanks to the container, the developer can rest assured that the application will run on any other Linux machine regardless of any customized settings that machine might have that could differ from the machine used for writing and testing the code.",
+    "insight": "Docker's mantra is 'Build once, run anywhere.'",
+    "next": "Containers vs Virtual Machines"
+  },
+  {
+    "id": "docker_intro_2",
+    "title": "Containers vs Virtual Machines",
+    "content": "Unlike Virtual Machines (VMs), which include an entire operating system, containers share the host's OS kernel and isolate the application processes from the rest of the system. This makes containers much more lightweight and faster to start than VMs. While a VM might take minutes to boot and consume gigabytes of RAM, a container starts in seconds and uses only the resources needed by the application.",
+    "insight": "Containers are processes, while VMs are entire virtualized hardware systems.",
+    "next": "Images and Containers"
+  },
+  {
+    "id": "docker_intro_3",
+    "title": "Images and Containers",
+    "content": "A Docker Image is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization. For example, you may build an image which is based on the ubuntu image, but installs the Apache web server and your application, as well as the configuration details needed to make your application run. A Container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI.",
+    "insight": "If an image is a 'class' in OOP, a container is an 'instance' of that class.",
+    "next": "The Dockerfile"
+  },
+  {
+    "id": "docker_fs_1",
+    "title": "The Dockerfile",
+    "content": "A Dockerfile is a simple text file that contains a list of commands that the Docker client calls while creating an image. It's an automated way to create images. Essential instructions include: FROM (base image), RUN (execute commands), COPY/ADD (add files), CMD (default command to run), and EXPOSE (ports to open). By using a Dockerfile, you ensure your environment is reproducible and version-controlled.",
+    "insight": "Your Dockerfile is the 'Source Code' of your infrastructure.",
+    "next": "Common Docker Commands"
+  },
+  {
+    "id": "docker_fs_2",
+    "title": "Common Docker Commands",
+    "content": "Mastering the Docker CLI starts with these commands: 'docker pull' to download images, 'docker build' to create images from a Dockerfile, 'docker run' to start a container, 'docker ps' to list running containers, and 'docker stop' to shut them down. You can also use 'docker logs' to see what's happening inside a container and 'docker exec' to run commands inside a live container.",
+    "insight": "Most of your time in Docker will be spent with these 6-7 core commands.",
+    "next": "Volumes and Persistence"
+  },
+  {
+    "id": "docker_fs_3",
+    "title": "Volumes: Persisting Data",
+    "content": "Containers are ephemeral—when they are deleted, any data created inside them is lost. To persist data, Docker uses 'Volumes.' A volume is a directory or file on the host machine that is mounted into the container. This allows database files, logs, or user uploads to survive even if the container is destroyed and recreated.",
+    "insight": "Keep your code in the container, but keep your data in a volume.",
+    "next": "Docker Networking"
+  },
+  {
+    "id": "docker_fs_4",
+    "title": "Docker Networking",
+    "content": "Docker allows you to create isolated networks for your containers. By default, containers can talk to each other if they are on the same network. You can use 'docker network create' to build custom networks and 'docker run --network' to join them. This is how you connect a web server container to a database container securely.",
+    "insight": "Docker Networking makes multi-container applications behave like a single system.",
+    "next": "Docker Hub and Registries"
+  }
+]

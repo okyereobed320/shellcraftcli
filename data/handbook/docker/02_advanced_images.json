@@ -1,0 +1,79 @@
+[
+  {
+    "id": "docker_img_1",
+    "title": "Image Layers and Cache",
+    "content": "A Docker image consists of a series of read-only layers. Each instruction in your Dockerfile (like RUN, COPY, ADD) creates a new layer. Docker caches these layers to speed up subsequent builds. If a layer hasn't changed, Docker reuses it. Understanding this is key to optimizing build times.",
+    "insight": "Order your Dockerfile instructions from least frequently changed to most frequently changed to maximize cache hits.",
+    "next": "Multi-stage Builds"
+  },
+  {
+    "id": "docker_img_2",
+    "title": "Multi-stage Builds",
+    "content": "Multi-stage builds allow you to use multiple FROM statements in a single Dockerfile. You can use a heavy image with all build tools for the compilation stage, and then copy only the resulting binary into a much smaller, production-ready image. This significantly reduces the final image size.",
+    "insight": "Multi-stage builds are the gold standard for creating lean production images.",
+    "next": "Distroless and Alpine Images"
+  },
+  {
+    "id": "docker_img_3",
+    "title": "Distroless and Alpine Images",
+    "content": "To reduce the attack surface and image size, developers often use Alpine Linux (which is only ~5MB) or 'distroless' images. Distroless images contain only your application and its runtime dependencies, omitting package managers, shells, and other programs found in a standard Linux distribution.",
+    "insight": "Smaller images aren't just faster to pull; they are inherently more secure.",
+    "next": "The .dockerignore File"
+  },
+  {
+    "id": "docker_img_4",
+    "title": "The .dockerignore File",
+    "content": "Similar to .gitignore, the .dockerignore file tells Docker which files and directories to exclude from the build context. Excluding unnecessary files like .git, node_modules, or local build artifacts prevents them from being sent to the Docker daemon and keeps your images clean.",
+    "insight": "A well-configured .dockerignore can drastically reduce build times by minimizing context size.",
+    "next": "Instruction Best Practices"
+  },
+  {
+    "id": "docker_img_5",
+    "title": "RUN vs CMD vs ENTRYPOINT",
+    "content": "RUN executes commands during the build process to create layers. CMD provides default arguments for the container and can be overridden at runtime. ENTRYPOINT sets the main command for the container, making it behave like an executable. Combining ENTRYPOINT and CMD is a common pattern for flexible CLI tools.",
+    "insight": "Use ENTRYPOINT for the executable and CMD for its default parameters.",
+    "next": "Environment Variables (ENV vs ARG)"
+  },
+  {
+    "id": "docker_img_6",
+    "title": "ENV vs ARG",
+    "content": "ARG is used only during the build process and is not available in the running container. ENV defines environment variables that persist both during build time and when the container is running. Use ARG for build-time secrets or versions, and ENV for application configuration.",
+    "insight": "Never put sensitive secrets in ARG or ENV if they shouldn't be visible in the image history.",
+    "next": "COPY vs ADD"
+  },
+  {
+    "id": "docker_img_7",
+    "title": "COPY vs ADD",
+    "content": "While both instructions copy files into the image, COPY is preferred for its simplicity. ADD has extra features like auto-extracting compressed archives and fetching files from remote URLs. Best practice is to use COPY unless you specifically need the extra functionality of ADD.",
+    "insight": "Stick to COPY for local files; it's more transparent and predictable.",
+    "next": "Labeling Images"
+  },
+  {
+    "id": "docker_img_8",
+    "title": "Labeling Images",
+    "content": "The LABEL instruction allows you to add metadata to your images, such as maintainer information, versioning, or licensing. This metadata is useful for organization and for tools that automate image management or security scanning.",
+    "insight": "Labels are the 'ID cards' for your Docker images.",
+    "next": "Image Security Scanning"
+  },
+  {
+    "id": "docker_img_9",
+    "title": "Image Security Scanning",
+    "content": "Docker provides built-in tools (like 'docker scan') and integrates with third-party scanners (like Trivy or Snyk) to check your images for known vulnerabilities (CVEs). Regularly scanning your images is a critical part of a secure CI/CD pipeline.",
+    "insight": "Don't trust, verify. Scan every image before it hits production.",
+    "next": "Flattening Images"
+  },
+  {
+    "id": "docker_img_10",
+    "title": "Flattening Images",
+    "content": "Sometimes images accumulate too many layers. While not as common today thanks to multi-stage builds, 'flattening' an image (e.g., via docker export/import) combines all layers into one. This can save space but loses build history and cacheability.",
+    "insight": "Flattening is a desperate measure; use multi-stage builds instead.",
+    "next": "Chapter Summary"
+  },
+  {
+    "id": "docker_img_11",
+    "title": "Advanced Images Summary",
+    "content": "You've learned how to build efficient, small, and secure Docker images using multi-stage builds, layer caching, and minimal base images. You also understand the nuances between various Dockerfile instructions and the importance of image metadata and security scanning.",
+    "insight": "An optimized image is the foundation of a high-performance containerized system.",
+    "next": "Networking and Volumes"
+  }
+]

@@ -199,6 +199,7 @@ function displayLiveDashboard(scenarios) {
   console.log(`  🌐 WEB LAYER     : ${getS('101') || getS('111') ? COLORS.error('🔥 ERROR') : COLORS.accent('✅ OK')}`);
   console.log(`  💾 STORAGE       : ${getS('103') || getS('202') ? COLORS.warning('⚠️  FULL') : COLORS.accent('✅ OK')}`);
   console.log(`  🔐 SECURITY      : ${getS('203') ? COLORS.warning('⚠️  PATCHING') : COLORS.accent('✅ OK')}`);
+  console.log(`  🐳 DOCKER HUB    : ${getS('301') || getS('302') ? COLORS.error('🔥 DOWN') : COLORS.accent('✅ OK')}`);
   console.log(`  ⚙️  SERVICES      : ${scenarios.length > 5 ? COLORS.warning('⚠️  LOAD') : COLORS.accent('✅ OK')}`);
   displayDivider(COLORS.primary);
   console.log('');
@@ -233,7 +234,14 @@ function displaySuggestedTools(ticket) {
     'tail': 'Output last part of logs',
     'id': 'Print user and group IDs',
     'cp': 'Copy files and directories',
-    'mv': 'Move/Rename files'
+    'mv': 'Move/Rename files',
+    'docker': 'Manage containers, images, and volumes',
+    'docker ps': 'List containers',
+    'docker images': 'List images',
+    'docker run': 'Run a container',
+    'docker stop': 'Stop a container',
+    'docker rm': 'Remove a container',
+    'docker rmi': 'Remove an image'
   };
 
   const ticketTools = ticket.suggested_tools || ['systemctl', 'ls', 'ps'];
@@ -246,7 +254,7 @@ function displaySuggestedTools(ticket) {
 }
 
 function simulateLinuxOutput(cmd) {
-  const knownCommands = ['ls', 'ps', 'systemctl', 'cat', 'df', 'du', 'ip', 'ss', 'curl', 'chmod', 'chown', 'kill', 'ufw', 'crontab', 'nslookup', 'modprobe', 'lsmod', 'visudo', 'lsof', 'swapon', 'free', 'mysql', 'logrotate', 'date', 'truncate', 'ln', 'export', 'openssl', 'mount', 'showmount', 'git', 'redis-cli', 'add-apt-repository', 'aa-complain', 'apparmor_status', 'kubectl', 'tmux', 'screen', 'sestatus', 'getenforce', 'chcon', 'useradd', 'usermod', 'id', 'groups', 'apt', 'cp', 'mv', 'tar', 'echo'];
+  const knownCommands = ['ls', 'ps', 'systemctl', 'cat', 'df', 'du', 'ip', 'ss', 'curl', 'chmod', 'chown', 'kill', 'ufw', 'crontab', 'nslookup', 'modprobe', 'lsmod', 'visudo', 'lsof', 'swapon', 'free', 'mysql', 'logrotate', 'date', 'truncate', 'ln', 'export', 'openssl', 'mount', 'showmount', 'git', 'redis-cli', 'add-apt-repository', 'aa-complain', 'apparmor_status', 'kubectl', 'tmux', 'screen', 'sestatus', 'getenforce', 'chcon', 'useradd', 'usermod', 'id', 'groups', 'apt', 'cp', 'mv', 'tar', 'echo', 'docker'];
   
   const baseCmd = cmd.split(' ')[0];
   if (knownCommands.includes(baseCmd)) {
