@@ -31,12 +31,18 @@ export async function startMissions(moduleName) {
         type: 'list',
         name: 'worldId',
         message: COLORS.highlight('Select a World:'),
-        choices: worlds.map(w => ({
-          name: `${w.name} - ${w.description}`,
-          value: w.id
-        }))
+        choices: [
+          ...worlds.map(w => ({
+            name: `${w.name} - ${w.description}`,
+            value: w.id
+          })),
+          new inquirer.Separator(),
+          { name: `↩️  ${COLORS.muted('Back to Module Menu')}`, value: 'back' }
+        ]
       }
     ]);
+
+    if (worldId === 'back') return;
 
     const selectedWorld = worlds.find(w => w.id === worldId);
     
@@ -45,15 +51,21 @@ export async function startMissions(moduleName) {
         type: 'list',
         name: 'missionId',
         message: COLORS.highlight('Select a Mission:'),
-        choices: selectedWorld.missions.map(m => {
-          const isDone = progress.completedMissions.includes(m.id);
-          return {
-            name: `${isDone ? '✅' : '⭕'} ${m.name}`,
-            value: m.id
-          };
-        })
+        choices: [
+          ...selectedWorld.missions.map(m => {
+            const isDone = progress.completedMissions.includes(m.id);
+            return {
+              name: `${isDone ? '✅' : '⭕'} ${m.name}`,
+              value: m.id
+            };
+          }),
+          new inquirer.Separator(),
+          { name: `↩️  ${COLORS.muted('Back to Worlds')}`, value: 'back' }
+        ]
       }
     ]);
+
+    if (missionId === 'back') return startMissions(moduleName);
 
     const selectedMission = selectedWorld.missions.find(m => m.id === missionId);
 

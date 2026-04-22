@@ -43,12 +43,18 @@ export async function searchHandbook(query, moduleName = 'linux') {
       type: 'list',
       name: 'selected',
       message: 'Select a lesson to read:',
-      choices: results.map((r, i) => ({
-        name: `${r.volume} > ${r.title}`,
-        value: i
-      }))
+      choices: [
+        ...results.map((r, i) => ({
+          name: `${r.volume} > ${r.title}`,
+          value: i
+        })),
+        new inquirer.Separator(),
+        { name: `↩️  ${COLORS.muted('Back')}`, value: 'back' }
+      ]
     }
   ]);
+
+  if (selected === 'back') return;
 
   // Logic to jump to this lesson would go here, 
   // but for now we'll just display it simply.

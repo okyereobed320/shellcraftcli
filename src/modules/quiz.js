@@ -145,7 +145,9 @@ export async function startQuiz(moduleName, mode = 'normal', preFilteredQuestion
     if (onComplete) {
       await onComplete(score, questions.length);
     }
+    
     console.log('');
+    await inquirer.prompt([{ type: 'input', name: 'continue', message: 'Press Enter to return to menu...' }]);
     
   } catch (error) {
     if (error.code === 'ENOENT') {

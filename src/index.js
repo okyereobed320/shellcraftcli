@@ -157,10 +157,14 @@ async function runLearningSession() {
       choices: [
         { name: COLORS.highlight('Linux (Basic Mastery)'), value: 'linux' },
         { name: COLORS.highlight('Networking (Connectivity)'), value: 'networking' },
-        { name: COLORS.highlight('Docker (Containerization)'), value: 'docker' }
+        { name: COLORS.highlight('Docker (Containerization)'), value: 'docker' },
+        new inquirer.Separator(),
+        { name: `🏠 ${COLORS.muted('Back to Main Menu')}`, value: 'back' }
       ]
     }
   ]);
+
+  if (module === 'back') return;
 
   const { category } = await inquirer.prompt([
     {

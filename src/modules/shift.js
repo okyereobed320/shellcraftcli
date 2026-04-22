@@ -49,7 +49,7 @@ export async function startShift(moduleName) {
 
       // Command Logic
       if (['exit', 'end', 'quit'].includes(cmd)) {
-        displayEndReport(resolvedCount, scenarios.length);
+        await displayEndReport(resolvedCount, scenarios.length);
         return;
       }
 
@@ -265,7 +265,7 @@ function simulateLinuxOutput(cmd) {
   }
 }
 
-function displayEndReport(resolved, total) {
+async function displayEndReport(resolved, total) {
   console.log('\n');
   displayDivider(COLORS.primary);
   console.log(COLORS.primary.bold('📈 SHIFT PERFORMANCE REPORT'));
@@ -276,4 +276,5 @@ function displayEndReport(resolved, total) {
   console.log(`${COLORS.highlight('  RATING           : ')}${(resolved === total ? COLORS.warning('⭐⭐⭐⭐⭐ (EXPERT)') : COLORS.primary('⭐⭐⭐ (SOLID)'))}`);
   displayDivider(COLORS.primary);
   console.log(COLORS.warning('\nShift ended. Handing over to next rotation. 👋\n'));
+  await inquirer.prompt([{ type: 'input', name: 'continue', message: 'Press Enter to return to menu...' }]);
 }
