@@ -29,9 +29,12 @@ export async function startHandbook(moduleName = 'linux') {
     const choices = await Promise.all(chapterFiles.map(async (f) => {
       const content = await fs.readFile(path.join(chaptersDir, f), 'utf-8');
       const lessons = JSON.parse(content);
-      const chapterId = f.replace('.json', '');
+      const chapterId = `${moduleName}:${f.replace('.json', '')}`;
       const currentIdx = progress.handbookProgress[chapterId] || 0;
-      const percent = Math.round((currentIdx / (lessons.length - 1)) * 100);
+      
+      // Fix potential division by zero and index out of bounds
+      const safeTotal = Math.max(1, lessons.length - 1);
+      const percent = Math.min(100, Math.round((currentIdx / safeTotal) * 100));
       
       const barWidth = 10;
       const filled = Math.round((percent / 100) * barWidth);
@@ -42,7 +45,7 @@ export async function startHandbook(moduleName = 'linux') {
       const status = `[${bar}] ${percent}%`;
 
       return {
-        name: `${badgeIcon} ${chapterId.replace(/^\d+_/, '').replace(/_/g, ' ').toUpperCase().padEnd(25)} ${status}`,
+        name: `${badgeIcon} ${f.replace('.json', '').replace(/^\d+_/, '').replace(/_/g, ' ').toUpperCase().padEnd(25)} ${status}`,
         value: { file: f, id: chapterId, lessons }
       };
     }));
@@ -78,7 +81,8 @@ export async function startHandbook(moduleName = 'linux') {
     await runChapter(path.join(chaptersDir, selected.file), selected.id, startIndex);
 
   } catch (error) {
-    console.error(COLORS.error(' Error loading handbook:'), error.message);
+    console.error(COLORS.error(' Error loading handbook:'), error);
+    await inquirer.prompt([{ type: 'input', name: 'continue', message: 'Press Enter to continue...' }]);
   }
 }
 
