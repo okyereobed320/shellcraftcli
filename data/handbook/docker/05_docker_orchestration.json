@@ -1,0 +1,282 @@
+[
+  {
+    "id": "docker_swarm_1",
+    "title": "What is Orchestration?",
+    "content": "Container orchestration is the process of automating the deployment, management, scaling, and networking of containers. As applications grow to hundreds or thousands of containers, manual management becomes impossible.",
+    "insight": "Orchestration is the brain that manages your container fleet.",
+    "next": "Introduction to Docker Swarm"
+  },
+  {
+    "id": "docker_swarm_2",
+    "title": "Introduction to Docker Swarm",
+    "content": "Docker Swarm is Docker's native orchestration tool. It's built into the Docker Engine, making it easy to turn a group of Docker hosts into a single virtual Docker host.",
+    "insight": "Swarm is the 'easy mode' of container orchestration.",
+    "next": "Swarm Mode Concepts"
+  },
+  {
+    "id": "docker_swarm_3",
+    "title": "Swarm Mode Concepts",
+    "content": "Swarm mode introduces 'Nodes' (managers and workers), 'Services' (the desired state), and 'Tasks' (the actual containers). It uses a declarative model to maintain the application state.",
+    "insight": "Swarm turns containers into managed services.",
+    "next": "Initializing a Swarm"
+  },
+  {
+    "id": "docker_swarm_4",
+    "title": "Initializing a Swarm",
+    "content": "You start a swarm by running 'docker swarm init' on a host. This designates the host as a Manager and provides a join token for other nodes to join as Workers.",
+    "insight": "One command is all it takes to start a cluster.",
+    "next": "Managers vs Workers"
+  },
+  {
+    "id": "docker_swarm_5",
+    "title": "Managers vs Workers",
+    "content": "Managers handle cluster management tasks and maintain the swarm state. Workers receive and execute tasks assigned by managers. Managers are also workers by default.",
+    "insight": "Managers think; Workers do.",
+    "next": "The Raft Consensus Algorithm"
+  },
+  {
+    "id": "docker_swarm_6",
+    "title": "The Raft Consensus Algorithm",
+    "content": "Swarm managers use the Raft algorithm to maintain a consistent state across the cluster. This ensures that even if some managers fail, the cluster continues to function.",
+    "insight": "Consensus is key to high availability.",
+    "next": "Creating a Swarm Service"
+  },
+  {
+    "id": "docker_swarm_7",
+    "title": "Creating a Swarm Service",
+    "content": "Instead of 'docker run', you use 'docker service create'. This tells the swarm to run a specific image and maintain a certain number of replicas across the cluster.",
+    "insight": "Services define the 'what'; Swarm handles the 'how'.",
+    "next": "Scaling Services"
+  },
+  {
+    "id": "docker_swarm_8",
+    "title": "Scaling Services",
+    "content": "Scaling is as simple as 'docker service scale myservice=5'. Swarm will automatically distribute the additional tasks across available worker nodes.",
+    "insight": "Scaling out is instantaneous in a Swarm.",
+    "next": "Replicated vs Global Services"
+  },
+  {
+    "id": "docker_swarm_9",
+    "title": "Replicated vs Global Services",
+    "content": "Replicated services run a specific number of tasks. Global services run exactly one task on every node in the swarm (useful for monitoring agents or logs).",
+    "insight": "Global services ensure total cluster coverage.",
+    "next": "Routing Mesh"
+  },
+  {
+    "id": "docker_swarm_10",
+    "title": "Routing Mesh",
+    "content": "The Swarm Routing Mesh allows every node in the swarm to accept connections on published ports for any service, even if that service isn't running on that specific node.",
+    "insight": "External traffic can hit any node and reach the service.",
+    "next": "Overlay Networks"
+  },
+  {
+    "id": "docker_swarm_11",
+    "title": "Overlay Networks",
+    "content": "Overlay networks create a distributed network across multiple Docker daemon hosts. This allows containers on different physical machines to communicate securely.",
+    "insight": "Overlay networks hide the underlying physical complexity.",
+    "next": "Service Discovery in Swarm"
+  },
+  {
+    "id": "docker_swarm_12",
+    "title": "Service Discovery in Swarm",
+    "content": "Swarm has built-in DNS that automatically assigns a DNS entry to each service. This allows services to find each other by name, regardless of where they are running.",
+    "insight": "Internal service discovery works right out of the box.",
+    "next": "Rolling Updates"
+  },
+  {
+    "id": "docker_swarm_13",
+    "title": "Rolling Updates",
+    "content": "Swarm allows you to update service images or configurations with zero downtime. It updates tasks one by one (or in batches) and monitors their health before proceeding.",
+    "insight": "Deploy updates confidently with rolling rollouts.",
+    "next": "Rollbacks"
+  },
+  {
+    "id": "docker_swarm_14",
+    "title": "Rollbacks",
+    "content": "If an update fails, Swarm can automatically roll back to the previous version of the service. You can also manually trigger a rollback with 'docker service update --rollback'.",
+    "insight": "Always have a safety net for your deployments.",
+    "next": "Swarm Healthchecks"
+  },
+  {
+    "id": "docker_swarm_15",
+    "title": "Swarm Healthchecks",
+    "content": "Swarm uses container healthchecks to decide if a task is healthy. If a container fails its healthcheck, Swarm shuts it down and starts a new one.",
+    "insight": "Self-healing is a core feature of orchestration.",
+    "next": "Node Maintenance (Drain)"
+  },
+  {
+    "id": "docker_swarm_16",
+    "title": "Node Maintenance (Drain)",
+    "content": "To perform maintenance on a node, you can set its availability to 'drain'. Swarm will move all running tasks from that node to other available nodes.",
+    "insight": "Draining nodes allows for zero-downtime hardware maintenance.",
+    "next": "Quorum and High Availability"
+  },
+  {
+    "id": "docker_swarm_17",
+    "title": "Quorum and High Availability",
+    "content": "To survive manager failures, you should have an odd number of managers (3, 5, or 7). This ensures a majority (quorum) can always be reached to make decisions.",
+    "insight": "Always use an odd number of managers for fault tolerance.",
+    "next": "Stack Deployments"
+  },
+  {
+    "id": "docker_swarm_18",
+    "title": "Stack Deployments",
+    "content": "A 'Stack' is a collection of services that make up an application. You can deploy a stack using a docker-compose.yml file with 'docker stack deploy'.",
+    "insight": "Stacks bring Compose-like simplicity to the Swarm.",
+    "next": "Secrets in Swarm"
+  },
+  {
+    "id": "docker_swarm_19",
+    "title": "Secrets in Swarm",
+    "content": "Swarm secrets are more secure than Compose secrets. They are encrypted at rest and in transit, and only shared with the specific services that need them.",
+    "insight": "Swarm secrets are the gold standard for Docker security.",
+    "next": "Configs in Swarm"
+  },
+  {
+    "id": "docker_swarm_20",
+    "title": "Configs in Swarm",
+    "content": "Like secrets, Swarm configs allow you to manage configuration files centrally and update them across the cluster without rebuilding images.",
+    "insight": "Manage your cluster-wide configuration centrally.",
+    "next": "Placement Constraints"
+  },
+  {
+    "id": "docker_swarm_21",
+    "title": "Placement Constraints",
+    "content": "You can use constraints to control which nodes a service can run on (e.g., 'node.role == worker' or 'node.labels.disk == ssd').",
+    "insight": "Placement constraints give you fine-grained control over your cluster.",
+    "next": "Placement Preferences"
+  },
+  {
+    "id": "docker_swarm_22",
+    "title": "Placement Preferences",
+    "content": "Preferences allow you to distribute tasks evenly across categories, such as 'spread across datacenter zones'.",
+    "insight": "Preferences help ensure high availability across fault domains.",
+    "next": "Introduction to Kubernetes"
+  },
+  {
+    "id": "docker_swarm_23",
+    "title": "Introduction to Kubernetes",
+    "content": "Kubernetes (K8s) is the industry standard for container orchestration. While more complex than Swarm, it offers more features, a larger ecosystem, and better scalability.",
+    "insight": "K8s is the 'operating system' of the cloud.",
+    "next": "Kubernetes vs Swarm"
+  },
+  {
+    "id": "docker_swarm_24",
+    "title": "Kubernetes vs Swarm",
+    "content": "Swarm is easier to learn and integrated into Docker. K8s is more powerful, flexible, and widely supported by cloud providers (EKS, GKE, AKS).",
+    "insight": "Choose Swarm for simplicity, K8s for scale and ecosystem.",
+    "next": "K8s Architecture: Control Plane"
+  },
+  {
+    "id": "docker_swarm_25",
+    "title": "K8s Architecture: Control Plane",
+    "content": "The Kubernetes control plane (API server, etcd, scheduler, controller manager) manages the cluster's state and responds to events.",
+    "insight": "The control plane is the brain of Kubernetes.",
+    "next": "K8s Architecture: Nodes and Pods"
+  },
+  {
+    "id": "docker_swarm_26",
+    "title": "K8s Architecture: Nodes and Pods",
+    "content": "Nodes are the worker machines. Pods are the smallest deployable units in K8s, often containing a single container (but sometimes multiple closely-coupled ones).",
+    "insight": "In K8s, we talk about Pods, not just Containers.",
+    "next": "The 'kubectl' CLI"
+  },
+  {
+    "id": "docker_swarm_27",
+    "title": "The 'kubectl' CLI",
+    "content": "'kubectl' is the command-line tool for interacting with the Kubernetes API. It's the equivalent of the 'docker' command for K8s clusters.",
+    "insight": "Mastering 'kubectl' is the first step in learning Kubernetes.",
+    "next": "Kubernetes Manifests (YAML)"
+  },
+  {
+    "id": "docker_swarm_28",
+    "title": "Kubernetes Manifests (YAML)",
+    "content": "Like Compose, K8s uses YAML files to define the desired state of the cluster. These manifests describe Pods, Deployments, Services, and more.",
+    "insight": "Everything in K8s is defined by YAML manifests.",
+    "next": "Deployments in K8s"
+  },
+  {
+    "id": "docker_swarm_29",
+    "title": "Deployments in K8s",
+    "content": "A Deployment provides declarative updates for Pods and ReplicaSets. It's the most common way to run stateless applications in Kubernetes.",
+    "insight": "Deployments manage the lifecycle of your Pods.",
+    "next": "K8s Services and Ingress"
+  },
+  {
+    "id": "docker_swarm_30",
+    "title": "K8s Services and Ingress",
+    "content": "Services provide a stable IP and DNS name for a set of Pods. Ingress manages external access to the services, typically via HTTP/HTTPS.",
+    "insight": "Services handle internal traffic; Ingress handles external traffic.",
+    "next": "Persistent Volumes in K8s"
+  },
+  {
+    "id": "docker_swarm_31",
+    "title": "Persistent Volumes in K8s",
+    "content": "Kubernetes has a complex but powerful storage system using PersistentVolumes (PV) and PersistentVolumeClaims (PVC) to decouple storage from pods.",
+    "insight": "Storage in K8s is designed for portability across clouds.",
+    "next": "K8s Namespaces"
+  },
+  {
+    "id": "docker_swarm_32",
+    "title": "K8s Namespaces",
+    "content": "Namespaces allow you to partition a single cluster into multiple virtual clusters. This is useful for multi-tenancy or separating environments (dev, staging, prod).",
+    "insight": "Namespaces provide logical isolation within a cluster.",
+    "next": "Helm: The K8s Package Manager"
+  },
+  {
+    "id": "docker_swarm_33",
+    "title": "Helm: The K8s Package Manager",
+    "content": "Helm uses 'Charts' to package Kubernetes applications. It makes it easy to find, share, and install complex applications on K8s.",
+    "insight": "Helm is like 'apt' or 'npm' for Kubernetes.",
+    "next": "Cloud Managed Orchestration"
+  },
+  {
+    "id": "docker_swarm_34",
+    "title": "Cloud Managed Orchestration",
+    "content": "Most cloud providers offer managed K8s services (like Amazon EKS). They handle the control plane management, leaving you to focus on your applications.",
+    "insight": "Managed services reduce the operational burden of K8s.",
+    "next": "Serverless Containers"
+  },
+  {
+    "id": "docker_swarm_35",
+    "title": "Serverless Containers",
+    "content": "Tools like AWS Fargate or Google Cloud Run allow you to run containers without managing any servers or clusters at all. This is often called 'Serverless Containers'.",
+    "insight": "Serverless containers are the ultimate abstraction.",
+    "next": "Observability in Clusters"
+  },
+  {
+    "id": "docker_swarm_36",
+    "title": "Observability in Clusters",
+    "content": "Monitoring and logging become harder in clusters. Tools like Prometheus (metrics) and Grafana (dashboards) are essential for seeing what's happening.",
+    "insight": "You can't manage what you can't measure.",
+    "next": "Service Meshes"
+  },
+  {
+    "id": "docker_swarm_37",
+    "title": "Service Meshes",
+    "content": "A service mesh (like Istio or Linkerd) provides advanced networking features like traffic splitting, mTLS, and observability at the infrastructure layer.",
+    "insight": "Service meshes solve complex microservice communication problems.",
+    "next": "GitOps and CD"
+  },
+  {
+    "id": "docker_swarm_38",
+    "title": "GitOps and CD",
+    "content": "GitOps (using tools like ArgoCD or Flux) ensures that the state of your cluster always matches the configuration stored in your Git repository.",
+    "insight": "Git is the single source of truth for your cluster.",
+    "next": "The Future of Orchestration"
+  },
+  {
+    "id": "docker_swarm_39",
+    "title": "The Future of Orchestration",
+    "content": "Orchestration is moving towards more automation, better security by default, and 'edge' computing where containers run closer to users.",
+    "insight": "The container ecosystem continues to evolve rapidly.",
+    "next": "Summary of Orchestration"
+  },
+  {
+    "id": "docker_swarm_40",
+    "title": "Summary of Orchestration",
+    "content": "Whether you use Swarm, K8s, or Serverless, orchestration is what makes modern, scalable cloud applications possible.",
+    "insight": "Learn the concepts, and the tools will follow.",
+    "next": null
+  }
+]

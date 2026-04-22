@@ -1,0 +1,282 @@
+[
+  {
+    "id": "docker_compose_1",
+    "title": "Introduction to Docker Compose",
+    "content": "Docker Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. Then, with a single command, you create and start all the services from your configuration.",
+    "insight": "Compose is the orchestrator for local development.",
+    "next": "Why use Docker Compose?"
+  },
+  {
+    "id": "docker_compose_2",
+    "title": "Why use Docker Compose?",
+    "content": "Managing multiple containers manually using 'docker run' is error-prone and tedious. Compose allows you to document and configure all your application's service dependencies (databases, queues, caches, web engines) in a single file.",
+    "insight": "Declarative configuration is better than imperative commands.",
+    "next": "Installing Docker Compose"
+  },
+  {
+    "id": "docker_compose_3",
+    "title": "Installing Docker Compose",
+    "content": "Docker Compose is now integrated into the Docker CLI as 'docker compose' (V2). Previously, it was a standalone Python script called 'docker-compose' (V1). V2 is written in Go and provides better performance and feature parity with the Docker engine.",
+    "insight": "Use 'docker compose' instead of 'docker-compose' for the latest features.",
+    "next": "The docker-compose.yml file"
+  },
+  {
+    "id": "docker_compose_4",
+    "title": "The docker-compose.yml file",
+    "content": "The heart of Compose is the YAML configuration file. It typically starts with a 'version' (though optional in V2), followed by 'services', 'networks', and 'volumes' sections. Each service represents a container in your application.",
+    "insight": "YAML's indentation is critical—always use spaces, never tabs.",
+    "next": "Service Definition Basics"
+  },
+  {
+    "id": "docker_compose_5",
+    "title": "Service Definition Basics",
+    "content": "A service definition at minimum requires an 'image' or a 'build' instruction. You name the service (e.g., 'web' or 'db'), and this name becomes the hostname for other services in the same network.",
+    "insight": "Service names are the DNS names within your Compose network.",
+    "next": "Image vs Build instructions"
+  },
+  {
+    "id": "docker_compose_6",
+    "title": "Image vs Build instructions",
+    "content": "Use 'image' to use an existing image from a registry. Use 'build' to build an image from a Dockerfile in a local directory. You can use both to specify a name for the built image.",
+    "insight": "Use 'build' during development and 'image' for stable releases.",
+    "next": "Running 'docker compose up'"
+  },
+  {
+    "id": "docker_compose_7",
+    "title": "Running 'docker compose up'",
+    "content": "The 'up' command aggregates the output of each container. When the command exits, all containers are stopped. It builds, (re)creates, starts, and attaches to containers for a service.",
+    "insight": "'up' is your primary command for starting everything.",
+    "next": "Detached Mode (-d)"
+  },
+  {
+    "id": "docker_compose_8",
+    "title": "Detached Mode (-d)",
+    "content": "Running 'docker compose up -d' starts the containers in the background and leaves them running. This is the standard way to run services that you don't need to interact with directly in the terminal.",
+    "insight": "Use detached mode for long-running services like databases.",
+    "next": "Stopping and Removing with 'down'"
+  },
+  {
+    "id": "docker_compose_9",
+    "title": "Stopping and Removing with 'down'",
+    "content": "The 'down' command stops containers and removes containers, networks, images, and volumes defined in the Compose file. By default, only containers and networks are removed.",
+    "insight": "'down' cleans up everything created by 'up'.",
+    "next": "Managing Lifecycle: start and stop"
+  },
+  {
+    "id": "docker_compose_10",
+    "title": "Managing Lifecycle: start and stop",
+    "content": "Unlike 'up' and 'down', 'start' and 'stop' only affect the container processes without removing them. Use 'stop' to pause work and 'start' to resume exactly where you left off.",
+    "insight": "'stop' preserves the container; 'down' destroys it.",
+    "next": "Viewing Logs"
+  },
+  {
+    "id": "docker_compose_11",
+    "title": "Viewing Logs",
+    "content": "Use 'docker compose logs' to see the output from all services. You can use the '-f' flag to follow the logs in real-time, or specify a service name to see logs only for that service.",
+    "insight": "Logs are essential for debugging multi-container interactions.",
+    "next": "Executing Commands with 'exec'"
+  },
+  {
+    "id": "docker_compose_12",
+    "title": "Executing Commands with 'exec'",
+    "content": "Similar to 'docker exec', 'docker compose exec' allows you to run commands inside a running service container. It's often used to open a shell (sh or bash) or run database migrations.",
+    "insight": "'exec' is for running commands in ALREADY running containers.",
+    "next": "Environment Variables"
+  },
+  {
+    "id": "docker_compose_13",
+    "title": "Environment Variables",
+    "content": "You can pass environment variables to your services using the 'environment' key in the YAML file. This is crucial for configuring applications without hardcoding values into images.",
+    "insight": "Keep configuration separate from code using environment variables.",
+    "next": "The .env file"
+  },
+  {
+    "id": "docker_compose_14",
+    "title": "The .env file",
+    "content": "Compose automatically looks for a '.env' file in the project directory. Variables defined here can be used for interpolation in the docker-compose.yml file, keeping secrets out of version control.",
+    "insight": "Never commit your .env file containing sensitive secrets.",
+    "next": "Default Networking"
+  },
+  {
+    "id": "docker_compose_15",
+    "title": "Default Networking",
+    "content": "By default, Compose sets up a single network for your app. Each container for a service joins the default network and is both reachable by other containers on that network, and discoverable by them at a hostname identical to the container name.",
+    "insight": "Zero-config networking is one of Compose's best features.",
+    "next": "Custom Networks"
+  },
+  {
+    "id": "docker_compose_16",
+    "title": "Custom Networks",
+    "content": "You can define custom networks in the 'networks' section to isolate services. For example, you might have a 'frontend' and a 'backend' network, with the API service belonging to both but the DB only to 'backend'.",
+    "insight": "Network isolation improves security and architecture.",
+    "next": "Connecting Services by Name"
+  },
+  {
+    "id": "docker_compose_17",
+    "title": "Connecting Services by Name",
+    "content": "Because Compose sets up DNS, a web app can connect to a database using 'db:5432' if the database service is named 'db'. No IP addresses are needed.",
+    "insight": "Always use service names for internal communication.",
+    "next": "Named Volumes"
+  },
+  {
+    "id": "docker_compose_18",
+    "title": "Named Volumes",
+    "content": "Named volumes are managed by Docker and are the preferred way to persist data. They are defined in the top-level 'volumes' section and then referenced in the service's 'volumes' list.",
+    "insight": "Volumes are for persistent data, not for code.",
+    "next": "Bind Mounts in Compose"
+  },
+  {
+    "id": "docker_compose_19",
+    "title": "Bind Mounts in Compose",
+    "content": "Bind mounts map a host directory to a container directory. In Compose, they are often used in development to sync source code from your host into the container so changes are reflected instantly.",
+    "insight": "Use bind mounts for development and named volumes for production data.",
+    "next": "The 'depends_on' instruction"
+  },
+  {
+    "id": "docker_compose_20",
+    "title": "The 'depends_on' instruction",
+    "content": "'depends_on' expresses startup and shutdown dependencies between services. It ensures that the 'db' starts before the 'web' app, although it doesn't wait for the 'db' to be 'ready'.",
+    "insight": "'depends_on' controls order, but not readiness.",
+    "next": "Healthchecks in Compose"
+  },
+  {
+    "id": "docker_compose_21",
+    "title": "Healthchecks in Compose",
+    "content": "You can define healthchecks in your Compose file to tell Docker how to check if a container is still working. 'depends_on' can also be configured to wait for a service to be 'service_healthy'.",
+    "insight": "Healthchecks make your startup sequence more robust.",
+    "next": "Working with Multiple Files"
+  },
+  {
+    "id": "docker_compose_22",
+    "title": "Working with Multiple Files",
+    "content": "Compose supports multiple configuration files. You can use 'docker compose -f docker-compose.yml -f docker-compose.prod.yml up' to merge and override configurations for different environments.",
+    "insight": "Split your config into base and environment-specific files.",
+    "next": "Extending Services"
+  },
+  {
+    "id": "docker_compose_23",
+    "title": "Extending Services",
+    "content": "The 'extends' keyword allows you to share common configurations across different services or files. This helps reduce redundancy in large, complex projects.",
+    "insight": "Keep your YAML DRY (Don't Repeat Yourself) with extends.",
+    "next": "Using Profiles"
+  },
+  {
+    "id": "docker_compose_24",
+    "title": "Using Profiles",
+    "content": "Profiles allow you to group services and only start them when requested. This is useful for optional services like debugging tools or administrative interfaces that aren't needed every time.",
+    "insight": "Profiles help manage large development environments efficiently.",
+    "next": "Scaling Services"
+  },
+  {
+    "id": "docker_compose_25",
+    "title": "Scaling Services",
+    "content": "You can scale a service using 'docker compose up --scale web=3'. This starts three instances of the 'web' service. Note that you must avoid host port collisions when scaling.",
+    "insight": "Scaling is easy as long as you don't hardcode host ports.",
+    "next": "Resource Limits"
+  },
+  {
+    "id": "docker_compose_26",
+    "title": "Resource Limits",
+    "content": "You can limit the memory and CPU usage of your services using the 'deploy.resources' section. This is important to prevent a single container from starving the host or other containers.",
+    "insight": "Always set resource limits in multi-tenant environments.",
+    "next": "Restart Policies"
+  },
+  {
+    "id": "docker_compose_27",
+    "title": "Restart Policies",
+    "content": "The 'restart' key defines whether a container should be restarted automatically if it exits. Options include 'no', 'always', 'on-failure', and 'unless-stopped'.",
+    "insight": "Use 'unless-stopped' for production services.",
+    "next": "Using Secrets"
+  },
+  {
+    "id": "docker_compose_28",
+    "title": "Using Secrets",
+    "content": "Compose can manage sensitive data like passwords using 'secrets'. These are mounted as files in '/run/secrets/' inside the container, providing a more secure alternative to environment variables.",
+    "insight": "Secrets are the secure way to handle credentials.",
+    "next": "Using Configs"
+  },
+  {
+    "id": "docker_compose_29",
+    "title": "Using Configs",
+    "content": "Similar to secrets, 'configs' allow you to manage non-sensitive configuration files (like nginx.conf) outside the image. They are mounted as files in the container.",
+    "insight": "Decouple configuration files from your application images.",
+    "next": "Compose V2 'develop' and 'watch'"
+  },
+  {
+    "id": "docker_compose_30",
+    "title": "Compose V2 'develop' and 'watch'",
+    "content": "New in Compose V2, the 'develop' section allows for 'watch' mode. It automatically syncs files or rebuilds containers when local source code changes, providing a seamless dev experience.",
+    "insight": "'watch' mode replaces the need for external file-watching tools.",
+    "next": "Development vs Production"
+  },
+  {
+    "id": "docker_compose_31",
+    "title": "Development vs Production",
+    "content": "Your development Compose file should focus on speed (bind mounts, hot-reloading). Your production file should focus on security and reliability (read-only filesystems, resource limits, secrets).",
+    "insight": "Use overrides to tailor Compose to your environment.",
+    "next": "Variable Substitution"
+  },
+  {
+    "id": "docker_compose_32",
+    "title": "Variable Substitution",
+    "content": "Compose supports shell-style variable substitution. You can use '${VARIABLE}' in your YAML file, and Compose will replace it with the value from your environment or .env file.",
+    "insight": "Dynamic YAML files make your setup more flexible.",
+    "next": "YAML Anchors and Aliases"
+  },
+  {
+    "id": "docker_compose_33",
+    "title": "YAML Anchors and Aliases",
+    "content": "You can use YAML anchors (&) and aliases (*) to reuse snippets of configuration within the same file. This is great for sharing common environment variables across many services.",
+    "insight": "Anchors reduce duplication within a single YAML file.",
+    "next": "The 'init' flag"
+  },
+  {
+    "id": "docker_compose_34",
+    "title": "The 'init' flag",
+    "content": "Setting 'init: true' in a service definition tells Docker to use an init process (like tini) as PID 1. This ensures zombie processes are reaped and signals are handled correctly.",
+    "insight": "Use 'init' for applications that don't handle signals well.",
+    "next": "Controlling Startup Order"
+  },
+  {
+    "id": "docker_compose_35",
+    "title": "Controlling Startup Order",
+    "content": "While 'depends_on' helps, it often isn't enough. Using scripts like 'wait-for-it.sh' inside your container entrypoint ensures the app only starts when the DB is actually accepting connections.",
+    "insight": "Apps should be resilient to their dependencies being unavailable.",
+    "next": "Labels in Compose"
+  },
+  {
+    "id": "docker_compose_36",
+    "title": "Labels in Compose",
+    "content": "Labels are metadata you can attach to containers, networks, and volumes. Tools like Traefik use these labels for dynamic routing and service discovery.",
+    "insight": "Labels are the key to automated infrastructure.",
+    "next": "Pulling and Pushing"
+  },
+  {
+    "id": "docker_compose_37",
+    "title": "Pulling and Pushing",
+    "content": "You can use 'docker compose pull' to fetch the latest images for your services, and 'docker compose push' if you have built images that need to be uploaded to a registry.",
+    "insight": "Compose can manage your entire image lifecycle.",
+    "next": "Service Status (ps and top)"
+  },
+  {
+    "id": "docker_compose_38",
+    "title": "Service Status (ps and top)",
+    "content": "'docker compose ps' lists the status of containers in your project. 'docker compose top' shows the running processes within those containers.",
+    "insight": "Use 'ps' to quickly check if your stack is healthy.",
+    "next": "Best Practices"
+  },
+  {
+    "id": "docker_compose_39",
+    "title": "Best Practices",
+    "content": "Keep services small, use .dockerignore to keep builds fast, name your volumes, and use profiles for optional components. Always document your setup in a README.",
+    "insight": "A clean Compose file is a happy Compose file.",
+    "next": "Summary of Docker Compose"
+  },
+  {
+    "id": "docker_compose_40",
+    "title": "Summary of Docker Compose",
+    "content": "Docker Compose bridges the gap between single-container runs and full orchestration. It's the standard tool for local development and simple production deployments.",
+    "insight": "Mastering Compose is essential for any modern developer.",
+    "next": null
+  }
+]

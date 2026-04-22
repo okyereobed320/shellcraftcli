@@ -1,0 +1,282 @@
+[
+  {
+    "id": "docker_security_1",
+    "title": "The Docker Security Model",
+    "content": "Docker security is built on four pillars: the intrinsic security of the kernel (namespaces and cgroups), the Docker Daemon attack surface, the security of the container images, and the 'hardening' of the host.",
+    "insight": "Security is a multi-layered approach.",
+    "next": "Namespaces: The Wall of Isolation"
+  },
+  {
+    "id": "docker_security_2",
+    "title": "Namespaces: The Wall of Isolation",
+    "content": "Namespaces provide the first and most important form of isolation. They ensure that a process in a container cannot see or affect processes in other containers or the host.",
+    "insight": "Namespaces provide the 'illusion' of a private OS.",
+    "next": "Control Groups (cgroups)"
+  },
+  {
+    "id": "docker_security_3",
+    "title": "Control Groups (cgroups)",
+    "content": "Cgroups manage resource accounting and limiting. They prevent a single container from crashing the host by consuming all CPU, memory, or I/O resources.",
+    "insight": "Cgroups prevent 'noisy neighbor' syndrome and DoS attacks.",
+    "next": "The Dangers of the Root User"
+  },
+  {
+    "id": "docker_security_4",
+    "title": "The Dangers of the Root User",
+    "content": "By default, Docker containers run as root. If an attacker escapes a container, they might gain root access to your host. Always use a non-root user inside your Dockerfile.",
+    "insight": "Never run your application as root if you can avoid it.",
+    "next": "The 'USER' Instruction"
+  },
+  {
+    "id": "docker_security_5",
+    "title": "The 'USER' Instruction",
+    "content": "Use the 'USER' instruction in your Dockerfile to switch to a non-privileged user after performing setup tasks that require root.",
+    "insight": "Least privilege is the golden rule of security.",
+    "next": "Privileged Containers"
+  },
+  {
+    "id": "docker_security_6",
+    "title": "Privileged Containers",
+    "content": "Running a container with '--privileged' gives it almost all the capabilities of the host machine. This bypasses most security features and should almost never be done in production.",
+    "insight": "Privileged containers are a massive security risk.",
+    "next": "Docker Daemon Security"
+  },
+  {
+    "id": "docker_security_7",
+    "title": "Docker Daemon Security",
+    "content": "The Docker Daemon requires root privileges. Protecting the Docker socket (/var/run/docker.sock) is critical, as anyone with access to it effectively has root on the host.",
+    "insight": "The Docker socket is the 'keys to the kingdom'.",
+    "next": "Securing the Docker Socket"
+  },
+  {
+    "id": "docker_security_8",
+    "title": "Securing the Docker Socket",
+    "content": "Never expose the Docker socket to a container unless absolutely necessary. If you must expose it over a network, use TLS with mutual authentication.",
+    "insight": "Treat the Docker socket with extreme caution.",
+    "next": "Content Trust (DCT)"
+  },
+  {
+    "id": "docker_security_9",
+    "title": "Content Trust (DCT)",
+    "content": "Docker Content Trust (DCT) uses digital signatures to verify the integrity and publisher of images. Setting 'DOCKER_CONTENT_TRUST=1' prevents pulling unsigned images.",
+    "insight": "Verify your images before you run them.",
+    "next": "Image Scanning"
+  },
+  {
+    "id": "docker_security_10",
+    "title": "Image Scanning",
+    "content": "Use tools like Docker Scout, Snyk, or Trivi to scan your images for known vulnerabilities (CVEs) in your dependencies and base layers.",
+    "insight": "Scan early and scan often in your CI/CD pipeline.",
+    "next": "Reducing Attack Surface"
+  },
+  {
+    "id": "docker_security_11",
+    "title": "Reducing Attack Surface",
+    "content": "Use minimal base images like Alpine Linux or Distroless images. Fewer packages in your image mean fewer potential vulnerabilities and a smaller attack surface.",
+    "insight": "Smaller images are safer images.",
+    "next": "Multi-stage Builds for Security"
+  },
+  {
+    "id": "docker_security_12",
+    "title": "Multi-stage Builds for Security",
+    "content": "Multi-stage builds allow you to leave build tools (like compilers and package managers) out of the final production image, reducing the tools available to an attacker.",
+    "insight": "Don't ship your build tools to production.",
+    "next": "Read-Only Filesystems"
+  },
+  {
+    "id": "docker_security_13",
+    "title": "Read-Only Filesystems",
+    "content": "Running containers with '--read-only' prevents attackers from modifying the application code or downloading malicious scripts into the container at runtime.",
+    "insight": "Immutability is a powerful security feature.",
+    "next": "Handling Secrets Safely"
+  },
+  {
+    "id": "docker_security_14",
+    "title": "Handling Secrets Safely",
+    "content": "Never hardcode passwords or API keys in Dockerfiles or images. Use Docker Secrets, environment variables (with caution), or external secret managers like Vault.",
+    "insight": "Secrets should never be part of your image layers.",
+    "next": "Linux Capabilities"
+  },
+  {
+    "id": "docker_security_15",
+    "title": "Linux Capabilities",
+    "content": "Docker allows you to 'drop' or 'add' specific kernel capabilities. Instead of full root, you can give a container only the specific permissions it needs (like NET_BIND_SERVICE).",
+    "insight": "Fine-grained permissions are better than 'all or nothing'.",
+    "next": "Seccomp Profiles"
+  },
+  {
+    "id": "docker_security_16",
+    "title": "Seccomp Profiles",
+    "content": "Seccomp (Secure Computing mode) restricts the system calls a container can make to the kernel. Docker has a default profile that blocks many dangerous syscalls.",
+    "insight": "Seccomp is a powerful shield for the Linux kernel.",
+    "next": "AppArmor and SELinux"
+  },
+  {
+    "id": "docker_security_17",
+    "title": "AppArmor and SELinux",
+    "content": "These are Mandatory Access Control (MAC) systems that provide an extra layer of protection by defining what files, capabilities, and network resources a container can access.",
+    "insight": "MAC systems provide defense-in-depth.",
+    "next": "Network Isolation and Firewalls"
+  },
+  {
+    "id": "docker_security_18",
+    "title": "Network Isolation and Firewalls",
+    "content": "Use Docker custom networks to isolate services. Only expose necessary ports to the outside world, and use host-level firewalls (iptables/nftables) to restrict traffic.",
+    "insight": "Isolation at the network level prevents lateral movement.",
+    "next": "The '--no-new-privileges' Flag"
+  },
+  {
+    "id": "docker_security_19",
+    "title": "The '--no-new-privileges' Flag",
+    "content": "This flag prevents a container's processes from gaining new privileges via setuid or setgid binaries. It's a simple way to block certain types of privilege escalation.",
+    "insight": "A simple flag can block complex attacks.",
+    "next": "Securing Container Registries"
+  },
+  {
+    "id": "docker_security_20",
+    "title": "Securing Container Registries",
+    "content": "Use private registries with strong authentication. Ensure your registry is scanned for vulnerabilities and that access is strictly controlled.",
+    "insight": "Your registry is a critical part of your supply chain.",
+    "next": "CI/CD Pipeline Security"
+  },
+  {
+    "id": "docker_security_21",
+    "title": "CI/CD Pipeline Security",
+    "content": "Integrate security checks into your CI/CD pipeline. Automatically fail builds that contain high-severity vulnerabilities or that don't meet security standards.",
+    "insight": "Automate security to ensure it never gets skipped.",
+    "next": "Runtime Security Monitoring"
+  },
+  {
+    "id": "docker_security_22",
+    "title": "Runtime Security Monitoring",
+    "content": "Use tools like Falco or Aqua to monitor running containers for suspicious activity, such as unexpected shell executions or file modifications.",
+    "insight": "Detecting an attack in progress is as important as preventing it.",
+    "next": "Kernel Hardening"
+  },
+  {
+    "id": "docker_security_23",
+    "title": "Kernel Hardening",
+    "content": "Hardening the host kernel (using Grsecurity or specialized patches) protects the underlying layer that all containers share.",
+    "insight": "A secure container starts with a secure host.",
+    "next": "Distroless Images"
+  },
+  {
+    "id": "docker_security_24",
+    "title": "Distroless Images",
+    "content": "Distroless images contain only your application and its runtime dependencies. They do not contain package managers, shells, or any other programs you would expect to find in a standard Linux distribution.",
+    "insight": "If there's no shell, an attacker can't run commands.",
+    "next": "Docker Bench for Security"
+  },
+  {
+    "id": "docker_security_25",
+    "title": "Docker Bench for Security",
+    "content": "The Docker Bench for Security is a script that checks for dozens of common best-practices around deploying Docker containers in production.",
+    "insight": "Use the Bench script to audit your host configuration.",
+    "next": "Log Auditing"
+  },
+  {
+    "id": "docker_security_26",
+    "title": "Log Auditing",
+    "content": "Centralize and monitor Docker daemon and container logs. Look for unusual patterns, such as repeated login failures or unexpected container restarts.",
+    "insight": "Logs are the 'black box' for post-incident analysis.",
+    "next": "Update Policy"
+  },
+  {
+    "id": "docker_security_27",
+    "title": "Update Policy",
+    "content": "Regularly update the Docker Engine, the host OS, and your base images. Security patches are released frequently to address newly discovered threats.",
+    "insight": "Staying updated is the simplest form of defense.",
+    "next": "SSH vs Docker Exec"
+  },
+  {
+    "id": "docker_security_28",
+    "title": "SSH vs Docker Exec",
+    "content": "Avoid running SSH inside containers. Use 'docker exec' for administrative tasks. This reduces the number of running processes and open ports in the container.",
+    "insight": "One container, one process (whenever possible).",
+    "next": "Sidecar Security Patterns"
+  },
+  {
+    "id": "docker_security_29",
+    "title": "Sidecar Security Patterns",
+    "content": "Use sidecar containers for security tasks like log forwarding, metric collection, or proxying traffic (mTLS), keeping these concerns separate from your app code.",
+    "insight": "Sidecars can enhance security without touching your app.",
+    "next": "Immutable Infrastructure"
+  },
+  {
+    "id": "docker_security_30",
+    "title": "Immutable Infrastructure",
+    "content": "Treat your containers and hosts as immutable. Never 'patch' a running container; instead, build a new image and replace the old container.",
+    "insight": "Replace, don't repair.",
+    "next": "Protecting Data at Rest"
+  },
+  {
+    "id": "docker_security_31",
+    "title": "Protecting Data at Rest",
+    "content": "Ensure that volumes containing sensitive data are encrypted on the host's physical storage.",
+    "insight": "Physical security still matters in a virtual world.",
+    "next": "Container Breakout Techniques"
+  },
+  {
+    "id": "docker_security_32",
+    "title": "Container Breakout Techniques",
+    "content": "Understanding how attackers attempt to 'break out' of containers (e.g., via kernel exploits or misconfigurations) helps you build better defenses.",
+    "insight": "Know your enemy to build better walls.",
+    "next": "Rootless Docker"
+  },
+  {
+    "id": "docker_security_33",
+    "title": "Rootless Docker",
+    "content": "Rootless mode allows running the Docker daemon and containers as a non-root user, significantly reducing the impact of a daemon or container exploit.",
+    "insight": "Rootless Docker is the future of secure containerization.",
+    "next": "Trusted Base Images"
+  },
+  {
+    "id": "docker_security_34",
+    "title": "Trusted Base Images",
+    "content": "Only use base images from trusted sources (like Docker Official Images or Verified Publishers). Avoid 'random' images from the community for production use.",
+    "insight": "The foundation of your image must be trustworthy.",
+    "next": "Limiting PID Usage"
+  },
+  {
+    "id": "docker_security_35",
+    "title": "Limiting PID Usage",
+    "content": "Use '--pids-limit' to prevent a container from spawning an unlimited number of processes, which can protect against 'fork bombs'.",
+    "insight": "Prevent resource exhaustion at the process level.",
+    "next": "Docker Desktop Security"
+  },
+  {
+    "id": "docker_security_36",
+    "title": "Docker Desktop Security",
+    "content": "For developers, Docker Desktop provides additional security features like simplified TLS management and integration with host-level security tools.",
+    "insight": "Security starts on the developer's machine.",
+    "next": "Kubernetes Security (Brief)"
+  },
+  {
+    "id": "docker_security_37",
+    "title": "Kubernetes Security (Brief)",
+    "content": "Security in K8s involves Network Policies, Role-Based Access Control (RBAC), and Pod Security Standards. It builds upon Docker's security primitives.",
+    "insight": "Orchestration adds new layers of security complexity.",
+    "next": "Compliance and Auditing"
+  },
+  {
+    "id": "docker_security_38",
+    "title": "Compliance and Auditing",
+    "content": "If you operate in regulated industries (HIPAA, PCI-DSS), ensure your Docker environment meets specific compliance standards and can be audited.",
+    "insight": "Security and compliance are two sides of the same coin.",
+    "next": "Developing a Security Culture"
+  },
+  {
+    "id": "docker_security_39",
+    "title": "Developing a Security Culture",
+    "content": "Security is not just about tools; it's about a mindset. Encourage developers to think about security at every stage of the development lifecycle.",
+    "insight": "The best security tool is an informed developer.",
+    "next": "Summary of Advanced Security"
+  },
+  {
+    "id": "docker_security_40",
+    "title": "Summary of Advanced Security",
+    "content": "Docker provides a wealth of security features, but they must be understood and correctly implemented to be effective. Defense-in-depth is the only reliable strategy.",
+    "insight": "Stay vigilant, stay secure.",
+    "next": null
+  }
+]

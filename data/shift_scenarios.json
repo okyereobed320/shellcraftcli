@@ -350,5 +350,432 @@
     "resolution": "Global Accelerator was still in the 'IN_PROGRESS' state, meaning the global Anycast nodes were not yet fully optimized.",
     "hints": ["Global Accelerator takes time to propagate across all edge locations.", "Check the deployment status of your accelerator."],
     "suggested_tools": ["dig", "curl", "aws"]
+  },
+  {
+    "id": "301",
+    "module": "docker",
+    "type": "incident",
+    "title": "Zombie Container",
+    "severity": "MEDIUM",
+    "problem": "A container named 'web-app' is unresponsive and blocking port 80. It needs to be forcefully removed.",
+    "investigations": {
+      "docker ps": "CONTAINER ID   IMAGE     COMMAND   CREATED         STATUS         PORTS                NAMES\n1a2b3c4d5e6f   nginx     \"...\"     5 minutes ago   Up 5 minutes   0.0.0.0:80->80/tcp   web-app",
+      "curl localhost": "(Timeout or no response)"
+    },
+    "fix_commands": [
+      "docker rm -f web-app",
+      "docker kill web-app && docker rm web-app",
+      "docker stop web-app && docker rm web-app"
+    ],
+    "resolution": "The unresponsive container was forcefully removed, freeing up the port.",
+    "hints": ["Use 'docker ps' to find the container.", "Try 'docker rm -f' to force removal if it's stuck."],
+    "suggested_tools": ["docker ps", "docker rm", "docker kill"]
+  },
+  {
+    "id": "302",
+    "module": "docker",
+    "type": "incident",
+    "title": "Image Bloat",
+    "severity": "LOW",
+    "problem": "The disk is filling up with unused Docker images. You need to clean up all dangling images.",
+    "investigations": {
+      "docker images": "REPOSITORY   TAG       IMAGE ID       CREATED       SIZE\n<none>       <none>    7f8e9d0c1b2a   2 days ago    500MB\n<none>       <none>    1a2b3c4d5e6f   5 days ago    1.2GB",
+      "df -h": "/dev/sda1  20G  18G  2G  90% /"
+    },
+    "fix_commands": [
+      "docker image prune",
+      "docker system prune",
+      "docker rmi $(docker images -f \"dangling=true\" -q)"
+    ],
+    "resolution": "Dangling images were removed, reclaiming several gigabytes of disk space.",
+    "hints": ["Look for images with <none> tags.", "The 'prune' command is very useful for cleanup."],
+    "suggested_tools": ["docker images", "docker image prune", "docker system prune"]
+  },
+  {
+    "id": "303",
+    "module": "docker",
+    "type": "routine",
+    "title": "Launch a Database",
+    "severity": "LOW",
+    "problem": "Start a MariaDB container named 'db-server' in the background, using the 'mariadb:latest' image, and set the root password to 'secret123' using environment variables.",
+    "investigations": {
+      "docker ps -a": "(Empty list)"
+    },
+    "fix_commands": [
+      "docker run -d --name db-server -e MARIADB_ROOT_PASSWORD=secret123 mariadb:latest",
+      "docker run --name db-server -e MARIADB_ROOT_PASSWORD=secret123 -d mariadb"
+    ],
+    "resolution": "MariaDB container is now running in the background with the specified configuration.",
+    "hints": ["Use '-d' for detached mode and '--name' to name it.", "Use '-e' to set environment variables."],
+    "suggested_tools": ["docker run", "docker ps"]
+  },
+  {
+    "id": "304",
+    "module": "docker",
+    "type": "incident",
+    "title": "Unhealthy Healthcheck",
+    "severity": "MEDIUM",
+    "problem": "The 'api-server' container is running but marked as 'unhealthy' in Docker, causing the load balancer to skip it.",
+    "investigations": {
+      "docker ps": "CONTAINER ID   IMAGE        STATUS                     NAMES\nabc123def456   node-api     Up 10 minutes (unhealthy)  api-server",
+      "docker inspect --format='{{json .State.Health}}' api-server": "{\"Status\":\"unhealthy\",\"FailingStreak\":5,\"Log\":[{\"Output\":\"curl: (7) Failed to connect to localhost port 8080: Connection refused\\n\"}]}"
+    },
+    "fix_commands": [
+      "docker run -d --name api-server -p 8080:8080 --health-cmd 'curl -f http://localhost:8080/health || exit 1' node-api",
+      "docker restart api-server"
+    ],
+    "resolution": "Corrected the healthcheck command port and restarted the container.",
+    "hints": [
+      "Check 'docker inspect' to see healthcheck logs.",
+      "Ensure the healthcheck command points to the correct internal port."
+    ],
+    "suggested_tools": ["docker ps", "docker inspect"]
+  },
+  {
+    "id": "305",
+    "module": "docker",
+    "type": "incident",
+    "title": "Isolate the Network",
+    "severity": "HIGH",
+    "problem": "The 'web' container cannot reach the 'database' container by its name, even though both are running.",
+    "investigations": {
+      "docker network ls": "NETWORK ID     NAME      DRIVER    SCOPE\n1234567890ab   bridge    bridge    local",
+      "docker inspect web --format='{{.NetworkSettings.Networks}}'": "map[bridge:0xc000...]",
+      "docker exec web ping database": "ping: database: Name or service not known"
+    },
+    "fix_commands": [
+      "docker network create app-net && docker network connect app-net web && docker network connect app-net database",
+      "docker run --network=app-net ..."
+    ],
+    "resolution": "Containers were on the default bridge network where DNS resolution by name is not supported. Moved them to a user-defined bridge network.",
+    "hints": [
+      "Default bridge network doesn't support service discovery via DNS.",
+      "Use user-defined networks for container-to-container communication."
+    ],
+    "suggested_tools": ["docker network", "docker exec"]
+  },
+  {
+    "id": "306",
+    "module": "docker",
+    "type": "incident",
+    "title": "The Rootless Volume Trap",
+    "severity": "MEDIUM",
+    "problem": "The 'app' container (running as user 'node') fails to write logs to a mounted host directory /opt/logs.",
+    "investigations": {
+      "docker logs app": "Error: EACCES: permission denied, open '/var/app/logs/error.log'",
+      "ls -ld /opt/logs": "drwxr-xr-x 2 root root 4096 Apr  5 10:00 /opt/logs"
+    },
+    "fix_commands": [
+      "sudo chown -R 1000:1000 /opt/logs",
+      "sudo chmod 777 /opt/logs"
+    ],
+    "resolution": "The host directory was owned by root, but the container process was running as a non-root user (UID 1000). Adjusted ownership on the host.",
+    "hints": [
+      "Check the UID of the user inside the container.",
+      "Ensure host permissions align with the container user."
+    ],
+    "suggested_tools": ["docker logs", "ls -l", "chown"]
+  },
+  {
+    "id": "307",
+    "module": "docker",
+    "type": "incident",
+    "title": "Scaling Collision",
+    "severity": "MEDIUM",
+    "problem": "Attempting to scale the 'worker' service to 3 replicas using Docker Compose fails with a port conflict.",
+    "investigations": {
+      "docker-compose up --scale worker=3": "ERROR: for worker_2  Cannot start service worker: driver failed programming external connectivity on endpoint... Bind for 0.0.0.0:8080 failed: port is already allocated"
+    },
+    "fix_commands": [
+      "sed -i 's/8080:80/80/' docker-compose.yml",
+      "Change 'ports: - \"8080:80\"' to 'ports: - \"80\"' in docker-compose.yml"
+    ],
+    "resolution": "Removed the static host port binding in docker-compose.yml to allow Docker to assign dynamic ports for multiple replicas.",
+    "hints": [
+      "You cannot bind multiple containers to the same host port.",
+      "Use dynamic port mapping when scaling."
+    ],
+    "suggested_tools": ["docker-compose", "sed"]
+  },
+  {
+    "id": "308",
+    "module": "docker",
+    "type": "routine",
+    "title": "Tame the Logs",
+    "severity": "LOW",
+    "problem": "Configure the Docker daemon to limit log file size to 10MB and keep only 3 rotations to prevent disk exhaustion.",
+    "investigations": {
+      "cat /etc/docker/daemon.json": "{}"
+    },
+    "fix_commands": [
+      "echo '{\"log-driver\": \"json-file\", \"log-opts\": {\"max-size\": \"10m\", \"max-file\": \"3\"}}' > /etc/docker/daemon.json && systemctl restart docker",
+      "sudo tee /etc/docker/daemon.json <<EOF\n{\n  \"log-driver\": \"json-file\",\n  \"log-opts\": {\n    \"max-size\": \"10m\",\n    \"max-file\": \"3\"\n  }\n}\nEOF\nsudo systemctl restart docker"
+    ],
+    "resolution": "Docker logging policy updated globally with size limits and rotation.",
+    "hints": [
+      "Modify /etc/docker/daemon.json.",
+      "Don't forget to restart the Docker service."
+    ],
+    "suggested_tools": ["cat", "systemctl", "tee"]
+  },
+  {
+    "id": "309",
+    "module": "docker",
+    "type": "incident",
+    "title": "CPU Throttling Mystery",
+    "severity": "MEDIUM",
+    "problem": "The 'processor' container is running much slower than expected. You suspect it's being throttled.",
+    "investigations": {
+      "docker stats --no-stream": "CONTAINER ID   NAME        CPU %     MEM USAGE / LIMIT\nxyz789       processor   49.98%    100MiB / 2GiB",
+      "docker inspect processor --format='{{.HostConfig.CpuQuota}}'": "50000"
+    },
+    "fix_commands": [
+      "docker update --cpus 2.0 processor",
+      "docker run --cpus=2.0 ..."
+    ],
+    "resolution": "The container had a strict CPU quota of 0.5 cores. Increased the limit to 2.0 cores.",
+    "hints": [
+      "Check 'docker stats' for current usage.",
+      "Use 'docker update' to change limits on the fly."
+    ],
+    "suggested_tools": ["docker stats", "docker inspect", "docker update"]
+  },
+  {
+    "id": "310",
+    "module": "docker",
+    "type": "incident",
+    "title": "The OOM Reaper Strikes",
+    "severity": "HIGH",
+    "problem": "A memory-intensive Java application container keeps restarting every few minutes.",
+    "investigations": {
+      "docker inspect app --format='{{.State.OOMKilled}}'": "true",
+      "dmesg | grep -i oom": "Out of memory: Kill process 12345 (java) score 950"
+    },
+    "fix_commands": [
+      "docker run -m 2g --memory-reservation 1g ...",
+      "docker update --memory 2g app"
+    ],
+    "resolution": "The container was exceeding its 512MB memory limit and getting killed by the kernel OOM killer. Increased memory limit to 2GB.",
+    "hints": [
+      "Check if OOMKilled is true in container state.",
+      "Look at system logs with dmesg."
+    ],
+    "suggested_tools": ["docker inspect", "dmesg", "docker update"]
+  },
+  {
+    "id": "311",
+    "module": "docker",
+    "type": "incident",
+    "title": "Ghost in the Multi-Stage",
+    "severity": "MEDIUM",
+    "problem": "The multi-stage build finishes successfully, but the final image fails to start because 'app.jar' is missing.",
+    "investigations": {
+      "docker run my-app": "docker: Error response from daemon: OCI runtime create failed: ... no such file or directory",
+      "cat Dockerfile": "FROM maven AS build\nRUN mvn package\nFROM openjdk:jre-slim\nCOPY --from=build /target/app.jar /app.jar"
+    },
+    "fix_commands": [
+      "sed -i 's|/target/|/app/target/|' Dockerfile",
+      "Update COPY path in Dockerfile to match the actual build artifact location."
+    ],
+    "resolution": "The COPY command in the final stage used a wrong source path from the build stage. Corrected the path.",
+    "hints": [
+      "Verify the working directory in the build stage.",
+      "Double-check the path of generated artifacts."
+    ],
+    "suggested_tools": ["cat", "docker build"]
+  },
+  {
+    "id": "312",
+    "module": "docker",
+    "type": "incident",
+    "title": "Registry Access Denied",
+    "severity": "MEDIUM",
+    "problem": "Failed to push image to a private registry. Error: 'insufficient_scope: authorization failed'.",
+    "investigations": {
+      "docker push my-registry.com/my-app": "The push refers to repository [my-registry.com/my-app]\nerror parsing HTTP 401 response body: unexpected end of JSON input"
+    },
+    "fix_commands": [
+      "docker login my-registry.com",
+      "cat ~/.docker/config.json"
+    ],
+    "resolution": "The user was not authenticated with the private registry. Logged in using 'docker login'.",
+    "hints": [
+      "Check if you are logged in to the registry.",
+      "Verify credentials in ~/.docker/config.json."
+    ],
+    "suggested_tools": ["docker login", "cat"]
+  },
+  {
+    "id": "313",
+    "module": "docker",
+    "type": "incident",
+    "title": "Swarm Service Stagnation",
+    "severity": "HIGH",
+    "problem": "Docker Swarm service 'web' shows 0/3 replicas running. Tasks are stuck in 'Pending' state.",
+    "investigations": {
+      "docker service ps web": "ID   NAME    IMAGE   NODE   DESIRED STATE   CURRENT STATE    ERROR\n123  web.1   nginx          Running         Pending          \"no suitable node (insufficient resources on 3 nodes)\"",
+      "docker node ls": "ID    HOSTNAME   STATUS    AVAILABILITY   MANAGER STATUS\nabc   node-1     Ready     Active         Leader"
+    },
+    "fix_commands": [
+      "docker service update --limit-memory 512mb web",
+      "docker node update --availability active node-1"
+    ],
+    "resolution": "The service had memory limits higher than available on any single node. Lowered memory limits to allow scheduling.",
+    "hints": [
+      "Check 'docker service ps' for error messages.",
+      "Verify node resources vs service requirements."
+    ],
+    "suggested_tools": ["docker service ps", "docker node ls", "docker service update"]
+  },
+  {
+    "id": "314",
+    "module": "docker",
+    "type": "incident",
+    "title": "Port Already in Use",
+    "severity": "LOW",
+    "problem": "Cannot start a new Nginx container on port 80 because another process is already using it.",
+    "investigations": {
+      "docker run -p 80:80 nginx": "Error response from daemon: driver failed programming external connectivity on endpoint... Bind for 0.0.0.0:80 failed: port is already allocated",
+      "ss -tulnp | grep :80": "tcp LISTEN 0 128 0.0.0.0:80 0.0.0.0:* users:((\"apache2\",pid=1234,fd=4))"
+    },
+    "fix_commands": [
+      "sudo systemctl stop apache2",
+      "docker run -p 8080:80 nginx"
+    ],
+    "resolution": "Identified that Apache was running on the host port 80. Stopped Apache or used a different host port.",
+    "hints": [
+      "Use 'ss' or 'netstat' to find what's using the port.",
+      "Change the host-side port mapping if needed."
+    ],
+    "suggested_tools": ["ss", "docker run", "systemctl"]
+  },
+  {
+    "id": "315",
+    "module": "docker",
+    "type": "incident",
+    "title": "Wrong Alias Discovery",
+    "severity": "MEDIUM",
+    "problem": "A frontend container cannot connect to the backend container using the alias 'api-service', even though it's configured in the network.",
+    "investigations": {
+      "docker inspect backend": "... \"Aliases\": [\"api-server\", \"backend\"] ...",
+      "docker exec frontend curl http://api-service": "curl: (6) Could not resolve host: api-service"
+    },
+    "fix_commands": [
+      "docker network connect --alias api-service my-net backend",
+      "Update frontend to use 'api-server' instead of 'api-service'"
+    ],
+    "resolution": "The backend container had 'api-server' as an alias, but the frontend was trying to use 'api-service'. Corrected the alias or the frontend config.",
+    "hints": [
+      "Check network aliases in 'docker inspect'.",
+      "Verify the service name used in the application config."
+    ],
+    "suggested_tools": ["docker inspect", "docker exec"]
+  },
+  {
+    "id": "316",
+    "module": "docker",
+    "type": "incident",
+    "title": "The Vanishing Data",
+    "severity": "HIGH",
+    "problem": "When the 'db' container is recreated, all data is lost. You realize it was using an anonymous volume.",
+    "investigations": {
+      "docker inspect db --format='{{json .Mounts}}'": "[{\"Type\":\"volume\",\"Name\":\"4f5e...\",\"Destination\":\"/var/lib/mysql\"}]",
+      "docker volume ls": "DRIVER    VOLUME NAME\nlocal     4f5e6d7c8b9a..."
+    },
+    "fix_commands": [
+      "docker run -v mysql-data:/var/lib/mysql ...",
+      "docker run --mount source=mysql-data,target=/var/lib/mysql ..."
+    ],
+    "resolution": "Replaced the anonymous volume with a named volume 'mysql-data' to ensure persistence across container removals.",
+    "hints": [
+      "Anonymous volumes have random hex names.",
+      "Always use named volumes for production data."
+    ],
+    "suggested_tools": ["docker inspect", "docker volume ls"]
+  },
+  {
+    "id": "317",
+    "module": "docker",
+    "type": "routine",
+    "title": "Survive the Reboot",
+    "severity": "LOW",
+    "problem": "Ensure the 'monitoring' container always starts automatically when the Docker daemon or the host machine reboots.",
+    "investigations": {
+      "docker inspect monitoring --format='{{.HostConfig.RestartPolicy.Name}}'": "no"
+    },
+    "fix_commands": [
+      "docker update --restart always monitoring",
+      "docker run --restart unless-stopped monitoring"
+    ],
+    "resolution": "Updated the container's restart policy to 'always'.",
+    "hints": [
+      "The default restart policy is 'no'.",
+      "Use 'docker update' for existing containers."
+    ],
+    "suggested_tools": ["docker update", "docker inspect"]
+  },
+  {
+    "id": "318",
+    "module": "docker",
+    "type": "incident",
+    "title": "Entrypoint Overload",
+    "severity": "MEDIUM",
+    "problem": "Running 'docker run my-app bash' doesn't open a shell but instead tries to pass 'bash' as an argument to the main application, which then crashes.",
+    "investigations": {
+      "cat Dockerfile": "ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]",
+      "docker logs my-app": "Error: Could not find or load main class bash"
+    },
+    "fix_commands": [
+      "docker run --entrypoint bash my-app",
+      "Change ENTRYPOINT to CMD in Dockerfile if you want it to be easily overridable."
+    ],
+    "resolution": "The Dockerfile used the exec form of ENTRYPOINT, which treats arguments as parameters to the command. Used '--entrypoint' to override it.",
+    "hints": [
+      "ENTRYPOINT is not easily overridden by trailing arguments.",
+      "CMD is easily overridden by trailing arguments."
+    ],
+    "suggested_tools": ["cat", "docker logs", "docker run"]
+  },
+  {
+    "id": "319",
+    "module": "docker",
+    "type": "routine",
+    "title": "Optimizing the Build Cache",
+    "severity": "LOW",
+    "problem": "The Docker build for a Node.js app takes too long because it runs 'npm install' every time a source file changes.",
+    "investigations": {
+      "cat Dockerfile": "COPY . .\nRUN npm install"
+    },
+    "fix_commands": [
+      "echo -e 'COPY package*.json ./\\nRUN npm install\\nCOPY . .' > Dockerfile",
+      "Update Dockerfile to COPY package.json first."
+    ],
+    "resolution": "Reordered Dockerfile layers to copy package files and run npm install before copying the rest of the source code, leveraging the build cache.",
+    "hints": [
+      "Only copy files needed for the current step.",
+      "Frequent changes should happen as late as possible in the Dockerfile."
+    ],
+    "suggested_tools": ["cat", "docker build"]
+  },
+  {
+    "id": "320",
+    "module": "docker",
+    "type": "routine",
+    "title": "Secret Clearance",
+    "severity": "LOW",
+    "problem": "Deploy a service that needs a database password. Use Docker Swarm secrets instead of environment variables for security.",
+    "investigations": {
+      "docker secret ls": "(Empty list)"
+    },
+    "fix_commands": [
+      "echo \"mypassword\" | docker secret create db_pass - && docker service create --name web --secret db_pass nginx",
+      "docker service update --secret-add db_pass web"
+    ],
+    "resolution": "Created a Swarm secret and attached it to the service. The secret is now available at /run/secrets/db_pass in the container.",
+    "hints": [
+      "Secrets are only available in Swarm mode.",
+      "Secrets are mounted as files by default."
+    ],
+    "suggested_tools": ["docker secret", "docker service"]
   }
 ]
