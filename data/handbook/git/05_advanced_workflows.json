@@ -1,0 +1,108 @@
+[
+  {
+    "id": "git_adv_1",
+    "title": "Stashing Your Work",
+    "content": "Often, when you’ve been working on part of your project, things are in a messy state and you want to switch branches for a bit to work on something else. The problem is, you don’t want to do a commit of half-done work just so you can get back to this point later. The answer to this is the 'git stash' command. Stashing takes the dirty state of your working directory and saves it on a stack of unfinished changes that you can reapply at any time.",
+    "insight": "Stashing is like a 'Pause' button for your current work.",
+    "lab": {
+      "command": "git stash",
+      "output": "Saved working directory and index state WIP on main: 1a2b3c4 Initial commit"
+    },
+    "next": "Applying Stashed Work"
+  },
+  {
+    "id": "git_adv_2",
+    "title": "Applying Stashed Work",
+    "content": "When you want to return to your stashed work, you can use 'git stash apply'. If you have multiple stashes, you can see them with 'git stash list' and apply a specific one with 'git stash apply stash@{n}'. By default, 'apply' keeps the stash in your stack; if you want to apply it and remove it from the stack at the same time, use 'git stash pop'.",
+    "insight": "'pop' is the most common way to resume work, as it keeps your stash list clean.",
+    "lab": {
+      "command": "git stash pop",
+      "output": "On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  modified:   README.md\nDropped refs/stash@{0} (123456789...)"
+    },
+    "next": "Rebasing"
+  },
+  {
+    "id": "git_adv_3",
+    "title": "Rebasing: A Cleaner History",
+    "content": "In Git, there are two main ways to integrate changes from one branch into another: 'merge' and 'rebase'. With rebasing, you take all the changes that were committed on one branch and 'replay' them on another. This results in a much cleaner, linear project history. To rebase, you checkout the branch you want to rebase, and run 'git rebase <basebranch>'.",
+    "insight": "Rebasing makes it look like you did your work in a straight line, even if you branched off long ago.",
+    "lab": {
+      "command": "git checkout feature && git rebase main",
+      "output": "First, rewinding head to replay your work on top of it...\nApplying: feature commit 1\nApplying: feature commit 2"
+    },
+    "next": "The Golden Rule of Rebasing"
+  },
+  {
+    "id": "git_adv_4",
+    "title": "The Golden Rule of Rebasing",
+    "content": "While rebasing is powerful, it has one major rule: **Never rebase branches that you have pushed to a shared repository.** Rebasing rewrites history by creating new commits for your old ones. If others have already pulled your original commits and started working on top of them, and then you push your rebased version, their work will be out of sync with yours, leading to a confusing mess.",
+    "insight": "Only rebase local branches that you haven't shared yet.",
+    "next": "Cherry-Picking"
+  },
+  {
+    "id": "git_adv_5",
+    "title": "Cherry-Picking Commits",
+    "content": "Sometimes you want to pull a single commit from one branch into another without merging the entire branch. This is called 'cherry-picking'. You use the 'git cherry-pick <commit-hash>' command. Git will apply the exact changes from that specific commit onto your current branch as a new commit.",
+    "insight": "Cherry-picking is useful for bringing specific bug fixes or features from one branch to another quickly.",
+    "lab": {
+      "command": "git cherry-pick 2b3c4d5",
+      "output": "[main 3c4d5e6] fix: apply important bug fix\n 1 file changed, 5 insertions(+)"
+    },
+    "next": "Resetting: Undoing Changes"
+  },
+  {
+    "id": "git_adv_6",
+    "title": "Resetting: Undoing Changes",
+    "content": "The 'git reset' command is a powerful tool for undoing changes. It has three main modes: '--soft', '--mixed', and '--hard'. '--soft' moves the branch pointer but keeps your changes staged. '--mixed' (the default) moves the pointer and unstages your changes but keeps them in your working directory. '--hard' moves the pointer and COMPLETELY WIPES all changes in your working directory and staging area.",
+    "insight": "Be extremely careful with 'git reset --hard'; it's one of the few ways to permanently lose work in Git.",
+    "lab": {
+      "command": "git reset --hard HEAD~1",
+      "output": "HEAD is now at 1a2b3c4 Initial commit"
+    },
+    "next": "Reverting Commits"
+  },
+  {
+    "id": "git_adv_7",
+    "title": "Reverting Commits: git revert",
+    "content": "Unlike 'git reset', which removes commits from history, 'git revert' creates a NEW commit that does the exact opposite of a previous commit. This is the safest way to undo changes that have already been pushed to a remote repository, because it doesn't rewrite the existing history—it just adds to it.",
+    "insight": "Use 'revert' for public history and 'reset' for private, local cleanup.",
+    "lab": {
+      "command": "git revert 2b3c4d5",
+      "output": "[main 4d5e6f7] Revert \"Add broken feature\"\n 1 file changed, 10 deletions(-)"
+    },
+    "next": "Amending Commits"
+  },
+  {
+    "id": "git_adv_8",
+    "title": "Amending Commits",
+    "content": "If you just made a commit but realized you forgot to stage a file or you made a typo in the commit message, you can use 'git commit --amend'. This command takes whatever is currently in your staging area and uses it to 'replace' the last commit. You can also use it to just change the commit message of the most recent commit.",
+    "insight": "Amending is perfect for 'oops' moments right after a commit.",
+    "lab": {
+      "command": "git commit --amend -m 'Corrected commit message'",
+      "output": "[main 5e6f7g8] Corrected commit message\n Date: ...\n 1 file changed, 1 insertion(+)"
+    },
+    "next": "Interactive Staging"
+  },
+  {
+    "id": "git_adv_9",
+    "title": "Interactive Staging: git add -p",
+    "content": "Sometimes you've made many changes in a single file but want to split them into multiple commits. Git allows you to stage parts of a file using 'git add -p' (patch mode). Git will show you 'hunks' of changes and ask you whether you want to stage each one. This allows for extremely granular and clean commit history.",
+    "insight": "Patch mode helps you keep your commits focused on one thing at a time.",
+    "lab": {
+      "command": "git add -p",
+      "output": "Stage this hunk [y,n,q,a,d,j,J,g,/,e,?]? "
+    },
+    "next": "Searching History: git grep"
+  },
+  {
+    "id": "git_adv_10",
+    "title": "Searching History: git grep",
+    "content": "Git comes with a powerful search tool called 'git grep' that allows you to search for strings or patterns in your repository's history and across different branches. It's much faster than regular 'grep' because it only looks through the files that Git is tracking. You can search in the current working directory, a specific branch, or even the entire project history.",
+    "insight": "git grep is the fastest way to find where a specific function or variable was used in your code.",
+    "lab": {
+      "command": "git grep 'TODO'",
+      "output": "README.md:10: TODO: Add more documentation\nsrc/index.js:42: // TODO: Implement error handling"
+    },
+    "next": "Git Internals"
+  }
+]

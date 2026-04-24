@@ -22,10 +22,26 @@ export function getProgress() {
     xp: config.get('xp', 0),
     rank: config.get('rank', 'Shell Apprentice'),
     completedMissions: config.get('completedMissions', []),
-    handbookProgress: config.get('handbookProgress', {}), // { volumeId: lastLessonIndex }
+    handbookProgress: config.get('handbookProgress', {}),
     badges: config.get('badges', []),
+    history: config.get('history', []),
     isFirstRun: config.get('firstRun', true)
   };
+}
+
+export function addHistory(command) {
+  const history = config.get('history', []);
+  history.push({ id: history.length + 1, command, timestamp: new Date().toISOString() });
+  if (history.length > 50) history.shift();
+  config.set('history', history);
+}
+
+export function getHistory() {
+  return config.get('history', []);
+}
+
+export function clearHistory() {
+  config.set('history', []);
 }
 
 export function setName(name) {

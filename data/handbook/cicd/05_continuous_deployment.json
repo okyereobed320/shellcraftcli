@@ -1,0 +1,58 @@
+[
+  {
+    "id": "cicd_cd_1",
+    "title": "Continuous Deployment Strategies",
+    "content": "Deploying code can be risky. To minimize downtime and impact, several strategies exist: 1. Recreate (stop old, start new). 2. Rolling Update (gradually replace old with new). 3. Blue/Green (have two full environments, switch traffic). 4. Canary (release to a small group first).",
+    "insight": "Choosing the right strategy depends on your application's tolerance for downtime and your infrastructure's complexity.",
+    "next": "Blue/Green Deployment"
+  },
+  {
+    "id": "cicd_cd_2",
+    "title": "Blue/Green Deployment",
+    "content": "In a Blue/Green setup, you have two identical environments. 'Blue' is current production, 'Green' is the new version. Once 'Green' is tested and ready, you switch your load balancer to point to 'Green'. If anything goes wrong, you can instantly switch back to 'Blue'.",
+    "insight": "Blue/Green provides near-zero downtime and a very fast rollback mechanism.",
+    "next": "Canary Releases"
+  },
+  {
+    "id": "cicd_cd_3",
+    "title": "Canary Releases",
+    "content": "A Canary release is a technique to reduce the risk of introducing a new software version in production by slowly rolling out the change to a small subset of users, before rolling it out to the entire infrastructure and making it available to everybody.",
+    "insight": "Canaries are the ultimate way to test new code in production with minimal impact.",
+    "next": "Rolling Updates"
+  },
+  {
+    "id": "cicd_cd_4",
+    "title": "Rolling Updates",
+    "content": "Rolling updates are the default in Kubernetes. They replace instances of the old version with instances of the new version one by one. This ensures that some capacity is always available to handle user requests during the deployment process.",
+    "insight": "Rolling updates are efficient but require your application to support 'backward compatibility' between different versions running at the same time.",
+    "next": "Deployment Automation"
+  },
+  {
+    "id": "cicd_cd_5",
+    "title": "Automating the Deployment",
+    "content": "To automate deployment, your pipeline needs access to your servers or cloud provider. This is done using service accounts or access tokens stored as secrets. The pipeline might use SSH to run commands on a server, or use a CLI tool (like 'kubectl' or 'aws') to trigger an update.",
+    "insight": "Automated deployment eliminates the 'fat-finger' errors of manual terminal commands.",
+    "next": "Infrastructure as Code (IaC)"
+  },
+  {
+    "id": "cicd_cd_6",
+    "title": "Infrastructure as Code (IaC)",
+    "content": "Modern CI/CD often includes Infrastructure as Code. Tools like Terraform or Pulumi allow you to define your servers, databases, and networks in code. Your pipeline can then automatically create or update this infrastructure as part of the deployment process.",
+    "insight": "IaC ensures that your environment is just as reproducible and version-controlled as your application code.",
+    "next": "Post-Deployment Testing"
+  },
+  {
+    "id": "cicd_cd_7",
+    "title": "Post-Deployment Testing (Smoke Tests)",
+    "content": "The pipeline shouldn't stop once the code is deployed. Smoke tests are a set of quick tests run against the production environment to ensure that the main features are working correctly. If a smoke test fails, the pipeline might trigger an automatic rollback.",
+    "insight": "Deployment is only 'finished' when the live application is confirmed to be healthy.",
+    "next": "Rollback Strategies"
+  },
+  {
+    "id": "cicd_cd_8",
+    "title": "Rollback Strategies",
+    "content": "A rollback is the act of returning to a previous stable version of the software. In a CI/CD system, this can be automated. For example, if monitoring tools detect a high error rate after a deployment, the pipeline can automatically re-deploy the previous successful build.",
+    "insight": "The ability to rollback quickly is what makes Continuous Deployment safe.",
+    "next": "Course Complete!"
+  }
+]

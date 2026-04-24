@@ -1,0 +1,620 @@
+[
+  {
+    "question": "What is the primary purpose of Git?",
+    "options": ["To compile source code", "To track changes in source code", "To host websites", "To manage databases"],
+    "answer": "To track changes in source code",
+    "difficulty": "easy",
+    "explanation": "Git is a distributed version control system designed to track changes in source code during software development."
+  },
+  {
+    "question": "Who created Git?",
+    "options": ["Bill Gates", "Steve Jobs", "Linus Torvalds", "James Gosling"],
+    "answer": "Linus Torvalds",
+    "difficulty": "easy",
+    "explanation": "Linus Torvalds created Git in 2005 to manage the development of the Linux kernel."
+  },
+  {
+    "question": "Which command initializes a new Git repository?",
+    "options": ["git start", "git init", "git new", "git create"],
+    "answer": "git init",
+    "difficulty": "easy",
+    "explanation": "'git init' creates a new .git directory in your project, starting a new repository."
+  },
+  {
+    "question": "How do you check the current state of your working directory and staging area?",
+    "options": ["git log", "git diff", "git status", "git check"],
+    "answer": "git status",
+    "difficulty": "easy",
+    "explanation": "'git status' shows which files are modified, staged, or untracked."
+  },
+  {
+    "question": "What command adds a file to the staging area?",
+    "options": ["git commit", "git add", "git stage", "git track"],
+    "answer": "git add",
+    "difficulty": "easy",
+    "explanation": "'git add <filename>' moves changes from the working directory to the staging area."
+  },
+  {
+    "question": "How do you record staged changes in the repository's history?",
+    "options": ["git record", "git save", "git commit", "git push"],
+    "answer": "git commit",
+    "difficulty": "easy",
+    "explanation": "'git commit' creates a new snapshot of the staged changes."
+  },
+  {
+    "question": "What does the -m flag in 'git commit -m \"message\"' stand for?",
+    "options": ["Master", "Message", "Modify", "Main"],
+    "answer": "Message",
+    "difficulty": "easy",
+    "explanation": "The -m flag allows you to provide a commit message directly on the command line."
+  },
+  {
+    "question": "Which command shows the commit history of a repository?",
+    "options": ["git history", "git show", "git log", "git list"],
+    "answer": "git log",
+    "difficulty": "easy",
+    "explanation": "'git log' lists all commits made in the current branch in reverse chronological order."
+  },
+  {
+    "question": "How do you create a new branch named 'feature'?",
+    "options": ["git branch feature", "git checkout feature", "git new-branch feature", "git create feature"],
+    "answer": "git branch feature",
+    "difficulty": "easy",
+    "explanation": "'git branch <name>' creates a new branch pointer at the current commit."
+  },
+  {
+    "question": "What command is used to switch from one branch to another?",
+    "options": ["git switch", "git checkout", "Both A and B", "git move"],
+    "answer": "Both A and B",
+    "difficulty": "easy",
+    "explanation": "Both 'git checkout <branch>' and the newer 'git switch <branch>' can be used to switch branches."
+  },
+  {
+    "question": "How do you create and switch to a new branch in a single command?",
+    "options": ["git checkout -b new-branch", "git branch -n new-branch", "git switch -new new-branch", "git checkout -c new-branch"],
+    "answer": "git checkout -b new-branch",
+    "difficulty": "medium",
+    "explanation": "'git checkout -b' is a shortcut for creating a branch and checking it out immediately."
+  },
+  {
+    "question": "What happens during a 'fast-forward' merge?",
+    "options": ["Git creates a new merge commit", "The branch pointer is simply moved forward", "Git deletes the feature branch", "Git rewrites the entire history"],
+    "answer": "The branch pointer is simply moved forward",
+    "difficulty": "medium",
+    "explanation": "If the destination branch has no new commits since the merge branch was created, Git just moves the pointer."
+  },
+  {
+    "question": "Which command combines the changes from another branch into your current branch?",
+    "options": ["git combine", "git merge", "git join", "git pull"],
+    "answer": "git merge",
+    "difficulty": "easy",
+    "explanation": "'git merge <branch>' integrates changes from the specified branch into the current one."
+  },
+  {
+    "question": "What is a 'merge conflict'?",
+    "options": ["When two developers try to push at the same time", "When Git cannot automatically reconcile differences between two branches", "When the Git server is down", "When a file is too large to commit"],
+    "answer": "When Git cannot automatically reconcile differences between two branches",
+    "difficulty": "easy",
+    "explanation": "A merge conflict occurs when the same part of a file is modified differently in two branches."
+  },
+  {
+    "question": "How do you download an existing repository from a remote server?",
+    "options": ["git download", "git pull", "git clone", "git fetch"],
+    "answer": "git clone",
+    "difficulty": "easy",
+    "explanation": "'git clone <url>' downloads the entire repository, including its history."
+  },
+  {
+    "question": "What is the default name for the primary remote repository in Git?",
+    "options": ["master", "main", "origin", "upstream"],
+    "answer": "origin",
+    "difficulty": "easy",
+    "explanation": "When you clone a repository, Git automatically names the remote source 'origin'."
+  },
+  {
+    "question": "Which command sends your local commits to a remote repository?",
+    "options": ["git upload", "git push", "git send", "git pull"],
+    "answer": "git push",
+    "difficulty": "easy",
+    "explanation": "'git push' sends your local branch commits to the corresponding remote branch."
+  },
+  {
+    "question": "What is the difference between 'git fetch' and 'git pull'?",
+    "options": ["They are identical", "fetch downloads changes; pull downloads and merges them", "pull downloads changes; fetch downloads and merges them", "fetch is for public repos; pull is for private repos"],
+    "answer": "fetch downloads changes; pull downloads and merges them",
+    "difficulty": "medium",
+    "explanation": "'git pull' is essentially a 'git fetch' followed by a 'git merge'."
+  },
+  {
+    "question": "How do you temporarily save changes that are not ready to be committed?",
+    "options": ["git save", "git stash", "git hold", "git pause"],
+    "answer": "git stash",
+    "difficulty": "medium",
+    "explanation": "'git stash' takes your uncommitted changes and saves them on a temporary stack."
+  },
+  {
+    "question": "Which command is used to 'replay' your commits on top of another branch?",
+    "options": ["git rebase", "git merge", "git replay", "git replace"],
+    "answer": "git rebase",
+    "difficulty": "medium",
+    "explanation": "Rebasing moves the entire feature branch so it begins on the tip of the main branch, creating a linear history."
+  },
+  {
+    "question": "What does 'git commit --amend' do?",
+    "options": ["Deletes the last commit", "Modifies the most recent commit", "Adds a comment to a commit", "Pushes the commit to a remote"],
+    "answer": "Modifies the most recent commit",
+    "difficulty": "medium",
+    "explanation": "'--amend' allows you to add staged changes to the last commit or change its message."
+  },
+  {
+    "question": "How can you view the changes in your working directory that are NOT yet staged?",
+    "options": ["git status", "git diff", "git show", "git log -p"],
+    "answer": "git diff",
+    "difficulty": "easy",
+    "explanation": "'git diff' shows the line-by-line differences between your working directory and the index."
+  },
+  {
+    "question": "Which command allows you to pick a single commit from one branch and apply it to another?",
+    "options": ["git merge --single", "git copy-commit", "git cherry-pick", "git select-commit"],
+    "answer": "git cherry-pick",
+    "difficulty": "medium",
+    "explanation": "Cherry-picking is useful for bringing specific changes (like bug fixes) across branches without a full merge."
+  },
+  {
+    "question": "What is the 'HEAD' in Git?",
+    "options": ["The first commit of the repository", "The main branch", "A pointer to the current local branch or commit", "The Git server's address"],
+    "answer": "A pointer to the current local branch or commit",
+    "difficulty": "medium",
+    "explanation": "HEAD tells Git where you currently are in the repository's history."
+  },
+  {
+    "question": "What is the command to remove a file from both Git and the local filesystem?",
+    "options": ["git delete", "git rm", "rm", "git remove"],
+    "answer": "git rm",
+    "difficulty": "easy",
+    "explanation": "'git rm' stages the deletion of a file and removes it from the disk."
+  },
+  {
+    "question": "How do you unstage a file that you've accidentally added?",
+    "options": ["git unadd", "git reset HEAD <file>", "git remove --cached", "git checkout <file>"],
+    "answer": "git reset HEAD <file>",
+    "difficulty": "medium",
+    "explanation": "Resetting a file to HEAD moves it from the staging area back to the modified state in the working directory."
+  },
+  {
+    "question": "What is the purpose of a .gitignore file?",
+    "options": ["To hide files from other users", "To specify which files Git should not track", "To store repository passwords", "To list the project's dependencies"],
+    "answer": "To specify which files Git should not track",
+    "difficulty": "easy",
+    "explanation": "Files matching patterns in .gitignore are ignored by 'git add' and 'git status'."
+  },
+  {
+    "question": "Which command shows who changed which line in a file and when?",
+    "options": ["git history", "git blame", "git show", "git who"],
+    "answer": "git blame",
+    "difficulty": "medium",
+    "explanation": "'git blame' displays the last commit hash and author for each line of a file."
+  },
+  {
+    "question": "What is a 'detached HEAD'?",
+    "options": ["When the .git folder is deleted", "When you check out a specific commit instead of a branch", "When you lose connection to the remote", "When a merge fails"],
+    "answer": "When you check out a specific commit instead of a branch",
+    "difficulty": "hard",
+    "explanation": "In detached HEAD state, you aren't on any branch, so new commits won't be easily reachable if you switch away."
+  },
+  {
+    "question": "How do you see a list of all local and remote branches?",
+    "options": ["git branch", "git branch -a", "git branch -r", "git list branches"],
+    "answer": "git branch -a",
+    "difficulty": "medium",
+    "explanation": "The -a (all) flag shows both local branches and the remote-tracking branches Git has cached."
+  },
+  {
+    "question": "What is the command to delete a local branch named 'feature'?",
+    "options": ["git branch -d feature", "git remove branch feature", "git delete feature", "git branch -rm feature"],
+    "answer": "git branch -d feature",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What flag is used to force delete a branch that hasn't been merged?",
+    "options": ["-f", "-D", "-force", "-X"],
+    "answer": "-D",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you rename the current branch to 'main'?",
+    "options": ["git branch -m main", "git rename main", "git branch -r main", "git move main"],
+    "answer": "git branch -m main",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which command shows the changes between two specific commits?",
+    "options": ["git diff commit1 commit2", "git log commit1..commit2", "git show commit1 commit2", "git compare commit1 commit2"],
+    "answer": "git diff commit1 commit2",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does 'git checkout -- <file>' do?",
+    "options": ["Stages the file", "Discards changes in the working directory for that file", "Deletes the file", "Shows the history of that file"],
+    "answer": "Discards changes in the working directory for that file",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you see the last 3 commits in a compact one-line format?",
+    "options": ["git log -3 --oneline", "git history --short 3", "git show 3", "git list-commits 3"],
+    "answer": "git log -3 --oneline",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the 'index' in Git?",
+    "options": ["The project's homepage", "The staging area", "The commit history", "The remote server"],
+    "answer": "The staging area",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which command is used to remove a file from the tracking area but keep it on the local disk?",
+    "options": ["git rm --cached <file>", "git forget <file>", "git untrack <file>", "git remove --local <file>"],
+    "answer": "git rm --cached <file>",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of 'git fetch'?",
+    "options": ["To update your local files with remote changes", "To download objects and refs from another repository", "To upload your changes to the remote", "To delete old branches"],
+    "answer": "To download objects and refs from another repository",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What command shows a summary of all configured remotes and their URLs?",
+    "options": ["git remote -v", "git remote show", "git remotes list", "git config --remotes"],
+    "answer": "git remote -v",
+    "difficulty": "easy"
+  },
+  {
+    "question": "How do you add a new remote called 'upstream'?",
+    "options": ["git remote add upstream <url>", "git add remote upstream <url>", "git upstream add <url>", "git remote upstream <url>"],
+    "answer": "git remote add upstream <url>",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the command to see the details of a specific commit?",
+    "options": ["git view <hash>", "git show <hash>", "git commit <hash>", "git log <hash>"],
+    "answer": "git show <hash>",
+    "difficulty": "easy"
+  },
+  {
+    "question": "How do you list all tags in a repository?",
+    "options": ["git tags", "git tag", "git show-tags", "git list --tags"],
+    "answer": "git tag",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which command creates an annotated tag named 'v1.0'?",
+    "options": ["git tag v1.0", "git tag -a v1.0 -m 'version 1.0'", "git create tag v1.0", "git tag --annotated v1.0"],
+    "answer": "git tag -a v1.0 -m 'version 1.0'",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you push tags to a remote repository?",
+    "options": ["git push --tags", "git push origin --tags", "Both A and B", "git push tags"],
+    "answer": "Both A and B",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What command allows you to see the reflog?",
+    "options": ["git log --refs", "git reflog", "git show-reflog", "git history --refs"],
+    "answer": "git reflog",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you undo the last commit but keep the changes in your working directory?",
+    "options": ["git reset --hard HEAD~1", "git reset --soft HEAD~1", "git undo commit", "git revert HEAD"],
+    "answer": "git reset --soft HEAD~1",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What command is used to clean up untracked files from the working directory?",
+    "options": ["git clean", "git remove-untracked", "git purge", "git delete-extra"],
+    "answer": "git clean",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you search for the string 'TODO' in all tracked files?",
+    "options": ["git search 'TODO'", "git grep 'TODO'", "git find 'TODO'", "grep -r 'TODO' ."],
+    "answer": "git grep 'TODO'",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the default behavior of 'git push' without arguments in modern Git?",
+    "options": ["Pushes all branches", "Pushes the current branch to its tracking branch", "Does nothing", "Pushes only the main branch"],
+    "answer": "Pushes the current branch to its tracking branch",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What command shows the differences between the staging area and the last commit?",
+    "options": ["git diff", "git diff --staged", "git diff --working", "git status --diff"],
+    "answer": "git diff --staged",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you list the contents of a stash?",
+    "options": ["git stash show", "git stash list", "git stash view", "git stash contents"],
+    "answer": "git stash list",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What command applies the most recent stash and removes it from the stash list?",
+    "options": ["git stash apply", "git stash pop", "git stash use", "git stash restore"],
+    "answer": "git stash pop",
+    "difficulty": "easy"
+  },
+  {
+    "question": "How do you start an interactive rebase for the last 5 commits?",
+    "options": ["git rebase -i HEAD~5", "git rebase --interactive 5", "git rebase -5", "git edit-history 5"],
+    "answer": "git rebase -i HEAD~5",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What does 'squashing' commits mean?",
+    "options": ["Deleting commits", "Combining multiple commits into one", "Compressing the repository", "Encrypting commit messages"],
+    "answer": "Combining multiple commits into one",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which file specifies patterns for files that should never be committed?",
+    "options": [".gitconfig", ".gitattributes", ".gitignore", ".gitexclude"],
+    "answer": ".gitignore",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What command is used to change the author of the last commit?",
+    "options": ["git commit --amend --author='New Author <email@address.com>'", "git change-author", "git config user.name", "git author --set"],
+    "answer": "git commit --amend --author='New Author <email@address.com>'",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you see which branches have been merged into the current branch?",
+    "options": ["git branch --merged", "git branch --integrated", "git branch --done", "git show-merged"],
+    "answer": "git branch --merged",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What command shows the summary of changes for each file in a commit?",
+    "options": ["git show --stat", "git log --summary", "git diff --name-only", "git status --verbose"],
+    "answer": "git show --stat",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which Git command is used to show a list of files in a commit?",
+    "options": ["git ls-tree", "git show --name-only", "Both A and B", "git list-files"],
+    "answer": "Both A and B",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the command to set a global alias 'co' for 'checkout'?",
+    "options": ["git config --global alias.co checkout", "git alias co=checkout", "git set-alias co checkout", "git config alias.co checkout"],
+    "answer": "git config --global alias.co checkout",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you check out a previous version of a single file without switching branches?",
+    "options": ["git checkout <hash> -- <file>", "git restore --source <hash> <file>", "Both A and B", "git reset <hash> <file>"],
+    "answer": "Both A and B",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the purpose of 'git add -u'?",
+    "options": ["Stages all untracked files", "Stages modified and deleted files, but not new ones", "Updates all tracked files to the latest version", "Unstages all files"],
+    "answer": "Stages modified and deleted files, but not new ones",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which command displays the current branch name only?",
+    "options": ["git branch --show-current", "git rev-parse --abbrev-ref HEAD", "Both A and B", "git name"],
+    "answer": "Both A and B",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you see the commit history for a specific range of lines in a file?",
+    "options": ["git log -L <start>,<end>:<file>", "git blame -L <start>,<end> <file>", "Both A and B", "git show <file>:<range>"],
+    "answer": "Both A and B",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the difference between a 'soft' and a 'mixed' reset?",
+    "options": ["Soft keeps changes staged; mixed unstages them", "Mixed keeps changes staged; soft unstages them", "Soft deletes changes; mixed keeps them", "There is no difference"],
+    "answer": "Soft keeps changes staged; mixed unstages them",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you abort a merge that has resulted in conflicts?",
+    "options": ["git merge --abort", "git reset --merge", "Both A and B", "git stop-merge"],
+    "answer": "Both A and B",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does 'git rev-parse HEAD' return?",
+    "options": ["The current branch name", "The full SHA-1 hash of the current commit", "The parent commit hash", "The project root path"],
+    "answer": "The full SHA-1 hash of the current commit",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which command is used to move or rename a file in Git?",
+    "options": ["git mv", "git rename", "git move", "mv"],
+    "answer": "git mv",
+    "difficulty": "easy"
+  },
+  {
+    "question": "How do you show the logs of a specific author?",
+    "options": ["git log --author='Name'", "git show --user='Name'", "git history --by='Name'", "git find-author 'Name'"],
+    "answer": "git log --author='Name'",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is a 'bare' repository?",
+    "options": ["A repository with no files", "A repository without a working directory (usually for servers)", "A repository with only one branch", "A repository that hasn't been initialized"],
+    "answer": "A repository without a working directory (usually for servers)",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you clone a repository with only the last 1 commit (shallow clone)?",
+    "options": ["git clone --depth 1 <url>", "git clone --short <url>", "git clone --last <url>", "git clone --no-history <url>"],
+    "answer": "git clone --depth 1 <url>",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What command allows you to view the configuration for a single key, like 'user.name'?",
+    "options": ["git config user.name", "git show config user.name", "git get-config user.name", "git user.name"],
+    "answer": "git config user.name",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which Git object type stores the directory structure and filenames?",
+    "options": ["blob", "tree", "commit", "tag"],
+    "answer": "tree",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the command to remove all stashes?",
+    "options": ["git stash clear", "git stash drop all", "git stash remove-all", "git stash delete"],
+    "answer": "git stash clear",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you push a local branch to a remote with a different name?",
+    "options": ["git push origin local:remote", "git push origin local->remote", "git push origin --rename local:remote", "git push origin set local:remote"],
+    "answer": "git push origin local:remote",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What does 'git diff --check' do?",
+    "options": ["Checks for merge conflicts", "Identifies possible whitespace errors", "Verifies the integrity of the repo", "Checks if the remote is up to date"],
+    "answer": "Identifies possible whitespace errors",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which command shows the branches that have NOT been merged into the current branch?",
+    "options": ["git branch --no-merged", "git branch --unmerged", "git branch --pending", "git list-open-branches"],
+    "answer": "git branch --no-merged",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you apply a stash without removing it from the stack?",
+    "options": ["git stash apply", "git stash pop", "git stash use", "git stash keep"],
+    "answer": "git stash apply",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the command to see the total number of commits in a branch?",
+    "options": ["git rev-list --count HEAD", "git log --count", "git shortlog -s", "git commit-count"],
+    "answer": "git rev-list --count HEAD",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which Git command is used to find which commit introduced a bug via binary search?",
+    "options": ["git bisect", "git search-bug", "git find-error", "git debug"],
+    "answer": "git bisect",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the 'reflog' short for?",
+    "options": ["Reference Log", "Refresh Log", "Refined Log", "Referral Log"],
+    "answer": "Reference Log",
+    "difficulty": "easy"
+  },
+  {
+    "question": "How do you stage only the modified files, ignoring deleted ones?",
+    "options": ["git add . --ignore-removal", "git add -u", "git add -A", "git add ."],
+    "answer": "git add . --ignore-removal",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What does the 'S' in VCS stand for?",
+    "options": ["System", "Software", "Source", "Server"],
+    "answer": "System",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which file allows you to define per-project settings in Git?",
+    "options": [".git/config", ".gitconfig", ".git/settings", "git.json"],
+    "answer": ".git/config",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you view the logs of the last 24 hours?",
+    "options": ["git log --since='24 hours ago'", "git log --day", "git log -n 24", "git history --recent"],
+    "answer": "git log --since='24 hours ago'",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the command to see a summary of the number of commits per author?",
+    "options": ["git shortlog -s -n", "git authors --count", "git log --by-author", "git stats"],
+    "answer": "git shortlog -s -n",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which command displays the SHA-1 of the current commit in short form?",
+    "options": ["git rev-parse --short HEAD", "git hash --short", "git id", "git log --id"],
+    "answer": "git rev-parse --short HEAD",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you remove a remote-tracking branch that no longer exists on the remote?",
+    "options": ["git remote prune origin", "git fetch --prune", "Both A and B", "git branch -rd origin/branch"],
+    "answer": "Both A and B",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What does 'git pull --rebase' do?",
+    "options": ["Fetches and then rebases your local changes on top of the remote changes", "Fetches and then merges the remote changes", "Rebases the remote branch onto your local", "Deletes local changes and pulls from remote"],
+    "answer": "Fetches and then rebases your local changes on top of the remote changes",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the command to create an empty commit?",
+    "options": ["git commit --allow-empty -m 'empty'", "git commit -m ''", "git create empty commit", "git commit --blank"],
+    "answer": "git commit --allow-empty -m 'empty'",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which command is used to record the current state of the working directory as a new commit without changing HEAD?",
+    "options": ["git commit", "git write-tree", "git commit-tree", "None of these (commits always move HEAD)"],
+    "answer": "None of these (commits always move HEAD)",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you see all files ignored by Git?",
+    "options": ["git clean -ndX", "git ls-files --ignored --exclude-standard", "Both A and B", "git check-ignore *"],
+    "answer": "Both A and B",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What command shows the content of the stash at index 0?",
+    "options": ["git stash show -p stash@{0}", "git stash view 0", "git stash cat 0", "git show stash@{0}"],
+    "answer": "git stash show -p stash@{0}",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you rename a remote?",
+    "options": ["git remote rename <old> <new>", "git remote set-name <old> <new>", "git remote move <old> <new>", "git remote update <old> --name=<new>"],
+    "answer": "git remote rename <old> <new>",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which Git command is used to apply changes from a patch file?",
+    "options": ["git apply", "git patch", "git am", "Both A and C"],
+    "answer": "Both A and C",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the command to list all configuration keys and their values?",
+    "options": ["git config --list", "git show-config", "git config -l", "Both A and C"],
+    "answer": "Both A and C",
+    "difficulty": "easy"
+  },
+  {
+    "question": "How do you check out a branch from a remote that you don't have locally yet?",
+    "options": ["git checkout <branchname>", "git fetch && git checkout <branchname>", "Both A and B (if it matches exactly one remote branch)", "git checkout -b <branchname> origin/<branchname>"],
+    "answer": "Both A and B (if it matches exactly one remote branch)",
+    "difficulty": "medium"
+  }
+]

@@ -1,0 +1,76 @@
+[
+  {
+    "id": "git_best_1",
+    "title": "Atomic Commits",
+    "content": "An atomic commit is a commit that contains only one logical change. This makes it much easier to understand the history, to revert specific changes if they cause bugs, and to merge branches without massive conflicts. If you've worked on three different features, you should make three separate commits.",
+    "insight": "Small, focused commits are the hallmark of a professional developer.",
+    "next": "Writing Great Commit Messages"
+  },
+  {
+    "id": "git_best_2",
+    "title": "Writing Great Commit Messages",
+    "content": "A good commit message should explain *why* a change was made, not just *what* was changed (the code shows what). The standard format is a short summary (50 chars or less) in the imperative mood (e.g., 'Fix bug' instead of 'Fixed bug'), followed by a blank line and a more detailed description if necessary.",
+    "insight": "Write every commit message like the person who has to maintain your code is a violent psychopath who knows where you live.",
+    "next": "The Power of .gitignore"
+  },
+  {
+    "id": "git_best_3",
+    "title": "The Power of .gitignore",
+    "content": "You don't want to track every file in your project. Temporary files, build artifacts, and sensitive secrets (like .env files) should be excluded from Git. You do this by creating a '.gitignore' file in your project root and listing the files or patterns you want Git to ignore. This keeps your repository clean and secure.",
+    "insight": "Never commit your node_modules, logs, or API keys!",
+    "lab": {
+      "command": "echo 'node_modules/' >> .gitignore && echo '*.log' >> .gitignore",
+      "output": ""
+    },
+    "next": "Branching Strategies: Gitflow"
+  },
+  {
+    "id": "git_best_4",
+    "title": "Branching Strategies: Gitflow",
+    "content": "Gitflow is a popular branching model that uses multiple long-lived branches (like 'main' and 'develop') and several types of short-lived branches (like 'feature/*', 'hotfix/*', and 'release/*'). It provides a very structured workflow but can be overly complex for smaller teams or fast-moving projects.",
+    "insight": "Gitflow is great for projects with scheduled release cycles.",
+    "next": "Trunk-Based Development"
+  },
+  {
+    "id": "git_best_5",
+    "title": "Trunk-Based Development",
+    "content": "Trunk-Based Development is a simpler alternative where all developers work on a single branch (the 'trunk' or 'main') and push small, frequent updates. This encourages continuous integration and reduces the pain of long-lived feature branch merges, but it requires high discipline and comprehensive automated testing.",
+    "insight": "Trunk-based development is often the choice for high-performing DevOps teams.",
+    "next": "Pull Request Culture"
+  },
+  {
+    "id": "git_best_6",
+    "title": "Pull Request Culture",
+    "content": "In a team, you rarely push directly to the main branch. Instead, you push to a feature branch and open a Pull Request (PR) or Merge Request (MR). This allows other team members to review your code, run automated tests, and discuss the changes before they are integrated into the main project.",
+    "insight": "Code reviews are for learning and quality control, not for criticism.",
+    "next": "Squashing Commits"
+  },
+  {
+    "id": "git_best_7",
+    "title": "Squashing Commits",
+    "content": "If you have many small 'work in progress' commits on your feature branch, you might want to 'squash' them into a single, clean commit before merging. This keeps the project's main history easy to read. You can do this using an interactive rebase: 'git rebase -i HEAD~n'.",
+    "insight": "Squashing turns your 'messy' process into a 'clean' result.",
+    "next": "The Importance of README"
+  },
+  {
+    "id": "git_best_8",
+    "title": "The Importance of README",
+    "content": "Every Git repository should have a README.md file. This is the first thing people see when they visit your project on GitHub or GitLab. It should explain what the project is, how to install it, how to run it, and how to contribute. Good documentation is just as important as good code.",
+    "insight": "A project without a README is a project that nobody knows how to use.",
+    "next": "Signing Your Commits"
+  },
+  {
+    "id": "git_best_9",
+    "title": "Signing Your Commits",
+    "content": "For high-security projects, you should sign your commits using GPG or SSH keys. This proves that the commit actually came from you and hasn't been tampered with. Platforms like GitHub show a 'Verified' badge next to signed commits, providing extra trust in the project's history.",
+    "insight": "Signing ensures your identity in a world of digital collaboration.",
+    "next": "Continuous Integration"
+  },
+  {
+    "id": "git_best_10",
+    "title": "Continuous Integration (CI)",
+    "content": "Git is the trigger for modern CI/CD pipelines. When you push your code, services like GitHub Actions, GitLab CI, or Jenkins automatically build your project, run tests, and even deploy it to production. Understanding how Git integrates with these tools is essential for a modern Cloud Engineer.",
+    "insight": "Git is the 'source of truth' that drives the entire automation pipeline.",
+    "next": "Course Complete!"
+  }
+]

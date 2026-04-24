@@ -1,0 +1,104 @@
+[
+  {
+    "id": "git_remote_1",
+    "title": "Remote Repositories",
+    "content": "Remote repositories are versions of your project that are hosted on the Internet or network somewhere. Collaborating with others involves managing these remote repositories and pushing and pulling data to and from them when you need to share work. You can have multiple remotes, some of which you might have read-only access to, and others that you can both read from and write to.",
+    "insight": "Remotes allow Git to function as a collaborative tool, not just a local backup system.",
+    "next": "Cloning a Repository"
+  },
+  {
+    "id": "git_remote_2",
+    "title": "Cloning a Repository",
+    "content": "To get a copy of an existing Git repository, you use 'git clone <url>'. This command downloads the entire history of the project, not just the latest version. Every file of every version of the project's history is pulled down by default. When you clone a repository, Git automatically names the remote connection 'origin' and sets up your local 'main' branch to track the remote 'main' branch.",
+    "insight": "Cloning is the most common way to start working on an existing project.",
+    "lab": {
+      "command": "git clone https://github.com/example/repo.git",
+      "output": "Cloning into 'repo'...\nremote: Enumerating objects: 100, done.\nremote: Total 100 (delta 0), reused 0 (delta 0), pack-reused 100\nReceiving objects: 100% (100/100), done."
+    },
+    "next": "Adding a Remote"
+  },
+  {
+    "id": "git_remote_3",
+    "title": "Adding a Remote",
+    "content": "If you started a local repository and now want to share it, or if you want to track a colleague's repository, you can add a new remote using 'git remote add <name> <url>'. The standard name for the primary remote repository is 'origin'. Once added, you can use this name in other commands instead of typing the full URL every time.",
+    "insight": "You can add as many remotes as you need, which is useful for 'fork and pull' workflows.",
+    "lab": {
+      "command": "git remote add origin https://github.com/user/project.git",
+      "output": ""
+    },
+    "next": "Showing Remotes"
+  },
+  {
+    "id": "git_remote_4",
+    "title": "Showing Your Remotes",
+    "content": "To see which remote servers you have configured, you can run the 'git remote' command. It will list the short names of every remote handle you've specified. Adding the '-v' flag (for verbose) shows you the URLs that Git has stored for those short names to be used when reading and writing to that remote.",
+    "insight": "Checking your remotes with '-v' confirms exactly where your code will be pushed.",
+    "lab": {
+      "command": "git remote -v",
+      "output": "origin  https://github.com/user/project.git (fetch)\norigin  https://github.com/user/project.git (push)"
+    },
+    "next": "Pushing to Remotes"
+  },
+  {
+    "id": "git_remote_5",
+    "title": "Pushing to Remotes: git push",
+    "content": "When you have project data you want to share, you have to push it upstream. The command for this is 'git push <remote> <branch>'. For example, 'git push origin main'. This command only works if you have write access to the server and if nobody has pushed in the meantime. If someone else has pushed changes, you must pull and merge their work before you are allowed to push.",
+    "insight": "Pushing is how you 'publish' your local commits to the shared repository.",
+    "lab": {
+      "command": "git push origin main",
+      "output": "Enumerating objects: 5, done.\nWriting objects: 100% (3/3), 300 bytes | 300.00 KiB/s, done.\nTo https://github.com/user/project.git\n   1a2b3c4..2b3c4d5  main -> main"
+    },
+    "next": "Fetching from Remotes"
+  },
+  {
+    "id": "git_remote_6",
+    "title": "Fetching from Remotes: git fetch",
+    "content": "To get data from your remote projects, you can run 'git fetch <remote>'. This command goes out to that remote project and pulls down all the data from that remote project that you don’t have yet. After you do this, you have references to all the branches from that remote, which you can merge in or inspect at any time. Crucially, 'git fetch' DOES NOT automatically merge the changes into your work.",
+    "insight": "Fetch is 'safe'—it downloads the data but doesn't change your local working files.",
+    "lab": {
+      "command": "git fetch origin",
+      "output": "remote: Enumerating objects: 5, done.\nUnpacking objects: 100% (3/3), done.\nFrom https://github.com/user/project\n   2b3c4d5..3c4d5e6  main       -> origin/main"
+    },
+    "next": "Pulling Changes"
+  },
+  {
+    "id": "git_remote_7",
+    "title": "Pulling Changes: git pull",
+    "content": "'git pull' is essentially a combination of two commands: 'git fetch' followed immediately by 'git merge'. It fetches the changes from the remote server and then tries to merge them into the branch you are currently working on. This is the most common way to stay up to date with a project, but it can lead to merge conflicts if you have local changes that overlap with the incoming ones.",
+    "insight": "git pull = git fetch + git merge.",
+    "lab": {
+      "command": "git pull origin main",
+      "output": "Updating 2b3c4d5..3c4d5e6\nFast-forward\n README.md | 1 +\n 1 file changed, 1 insertion(+)"
+    },
+    "next": "Inspecting a Remote"
+  },
+  {
+    "id": "git_remote_8",
+    "title": "Inspecting a Remote",
+    "content": "If you want to see more information about a particular remote, you can use the 'git remote show <name>' command. This gives you a detailed list of the remote's URL, the tracking branch information, and which local branches will push to which remote branches when you run 'git push'. It also tells you if any local branches are out of date compared to the remote.",
+    "insight": "Use this command to debug complex remote configurations and tracking relationships.",
+    "lab": {
+      "command": "git remote show origin",
+      "output": "* remote origin\n  Fetch URL: https://github.com/user/project.git\n  Push  URL: https://github.com/user/project.git\n  HEAD branch: main\n  Remote branches:\n    main tracked\n  Local branch configured for 'git pull':\n    main merges with remote main\n  Local ref configured for 'git push':\n    main pushes to main (up to date)"
+    },
+    "next": "Renaming & Removing Remotes"
+  },
+  {
+    "id": "git_remote_9",
+    "title": "Renaming and Removing Remotes",
+    "content": "You can rename a remote's shortname with 'git remote rename'. For example, to change 'pb' to 'paul', you'd run 'git remote rename pb paul'. This also changes all your remote-tracking branch names. If you want to remove a remote—perhaps because you've moved the server or no longer need a particular mirror—you can use 'git remote remove' or 'git remote rm'.",
+    "insight": "Cleaning up old remotes keeps your repository configuration focused and manageable.",
+    "lab": {
+      "command": "git remote rename origin upstream",
+      "output": ""
+    },
+    "next": "Remote Tracking Branches"
+  },
+  {
+    "id": "git_remote_10",
+    "title": "Remote Tracking Branches",
+    "content": "Remote-tracking branches are references to the state of remote branches. They are local branches that you can’t move; they move automatically whenever you do any network communication. They take the form '(remote)/(branch)'. For example, 'origin/main' is your local pointer to where the 'main' branch was on the 'origin' server the last time you communicated with it.",
+    "insight": "They act as bookmarks to remind you where the branches on your remote servers were the last time you connected to them.",
+    "next": "Stashing Your Work"
+  }
+]

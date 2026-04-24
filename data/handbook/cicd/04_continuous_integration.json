@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cicd_ci_1",
+    "title": "Building Your Application",
+    "content": "The first step in CI is building your application. This involves compiling source code, installing dependencies, and bundling assets. In a pipeline, this is done by running commands like 'npm install', 'mvn clean install', or 'go build'. The goal is to ensure the code can actually be transformed into a working artifact.",
+    "insight": "If the build fails, it's the highest priority fix for the team—nobody can merge until it's green.",
+    "lab": {
+      "command": "run: npm install && npm run build",
+      "output": "Project built successfully."
+    },
+    "next": "Running Unit Tests"
+  },
+  {
+    "id": "cicd_ci_2",
+    "title": "Running Unit Tests",
+    "content": "Automated testing is the heart of CI. Unit tests check individual parts of your code for correctness. By running these in every pipeline, you catch regressions immediately. If a test fails, the pipeline stops, and the developer is notified.",
+    "insight": "High test coverage in your CI pipeline provides the confidence to move fast without breaking things.",
+    "next": "Linting and Static Analysis"
+  },
+  {
+    "id": "cicd_ci_3",
+    "title": "Linting and Static Analysis",
+    "content": "Linting checks your code for stylistic errors and potential bugs without actually running it. Tools like ESLint (JavaScript) or RuboCop (Ruby) ensure that the entire team follows the same coding standards. Static analysis tools (like SonarQube) can find more complex issues like security vulnerabilities or high cyclomatic complexity.",
+    "insight": "Consistency in code style makes the codebase much easier to maintain and review.",
+    "next": "Caching Dependencies"
+  },
+  {
+    "id": "cicd_ci_4",
+    "title": "Caching Dependencies",
+    "content": "Installing dependencies (like node_modules) can take a long time and waste bandwidth. CI/CD platforms provide caching features that store these files between runs. If your 'package-lock.json' hasn't changed, the runner can simply pull the files from the cache instead of downloading them again.",
+    "insight": "Caching can often reduce your pipeline runtime by 50% or more.",
+    "next": "Building Docker Images"
+  },
+  {
+    "id": "cicd_ci_5",
+    "title": "Building Docker Images in CI",
+    "content": "In modern cloud-native development, the ultimate build artifact is often a Docker image. Your pipeline can use 'docker build' to create an image containing your application and all its dependencies. This image is then pushed to a registry for deployment.",
+    "insight": "Building a Docker image in CI ensures that the exact environment the app needs is captured and tested.",
+    "lab": {
+      "command": "run: docker build -t my-app:${{ github.sha }} .",
+      "output": "Docker image built with commit SHA as tag."
+    },
+    "next": "Container Scanning"
+  },
+  {
+    "id": "cicd_ci_6",
+    "title": "Container Scanning",
+    "content": "Once a Docker image is built, it's good practice to scan it for vulnerabilities. Tools like Trivy or Snyk can be integrated into your pipeline to check the image's base OS and libraries for known security issues. You can even configure the pipeline to fail if a 'CRITICAL' vulnerability is found.",
+    "insight": "Security scanning in the pipeline is called 'DevSecOps'—shifting security to the left.",
+    "next": "Pushing to a Registry"
+  },
+  {
+    "id": "cicd_ci_7",
+    "title": "Pushing to a Registry",
+    "content": "After building and testing your image, the next step is pushing it to a container registry like Docker Hub, AWS ECR, or GitHub Packages. This makes the image available for deployment to your staging or production servers. You'll need to use 'docker login' with secrets in your pipeline to do this.",
+    "insight": "The registry is the bridge between the 'Integration' and 'Deployment' parts of CI/CD.",
+    "next": "Build Matrix"
+  },
+  {
+    "id": "cicd_ci_8",
+    "title": "The Build Matrix",
+    "content": "A build matrix allows you to test your code against multiple versions of an environment (e.g., Node.js 18, 20, and 22) or different operating systems simultaneously. You define the versions in the YAML, and GitHub Actions automatically spawns a separate job for each combination.",
+    "insight": "Matrices are essential for libraries or tools that need to support many environments.",
+    "next": "Continuous Deployment"
+  }
+]

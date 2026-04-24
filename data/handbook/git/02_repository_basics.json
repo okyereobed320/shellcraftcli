@@ -1,0 +1,218 @@
+[
+  {
+    "id": "git_basics_1",
+    "title": "Initializing a Repository",
+    "content": "To start tracking a project with Git, you need to initialize a repository. You do this by navigating to your project's root directory in the terminal and running 'git init'. This command creates a new '.git' subdirectory in your current directory. This subdirectory contains all of your necessary repository files—a Git repository skeleton. At this point, nothing in your project is tracked yet.",
+    "insight": "git init is the 'Genesis' command for any Git project.",
+    "lab": {
+      "command": "mkdir my-project && cd my-project && git init",
+      "output": "Initialized empty Git repository in /home/user/my-project/.git/"
+    },
+    "next": "Checking Repository Status"
+  },
+  {
+    "id": "git_basics_2",
+    "title": "Checking Repository Status",
+    "content": "The 'git status' command is your most-used tool in Git. It tells you exactly what is going on in your repository at any moment. It shows which files are modified but not yet staged, which files are staged and ready for the next commit, and which files are not being tracked by Git at all. If everything is up to date and there are no changes, it will tell you that the 'working tree is clean'.",
+    "insight": "Run 'git status' early and often; it's the best way to avoid accidental commits or losing track of your work.",
+    "lab": {
+      "command": "git status",
+      "output": "On branch main\nNo commits yet\nnothing to commit (create/copy files and use \"git add\" to track)"
+    },
+    "next": "Tracking New Files"
+  },
+  {
+    "id": "git_basics_3",
+    "title": "Tracking New Files: git add",
+    "content": "To begin tracking a new file or to stage changes to an existing one, you use the 'git add' command. This command takes a path to a file or directory as an argument. If it's a directory, Git adds everything inside it recursively. 'git add' doesn't just 'add' the file to the project; it adds the current version of the file to the Staging Area (the Index).",
+    "insight": "git add is how you tell Git: 'Hey, I want this specific version of this file to be in my next snapshot.'",
+    "lab": {
+      "command": "echo 'Hello Git' > README.md && git add README.md",
+      "output": ""
+    },
+    "next": "Staging All Changes"
+  },
+  {
+    "id": "git_basics_4",
+    "title": "Staging All Changes",
+    "content": "When you have many modified or new files, adding them one by one can be tedious. You can use 'git add .' to stage all changes in the current directory and its subdirectories. Alternatively, 'git add -A' or 'git add --all' will stage all changes in the entire repository, including file deletions. Be careful with this, as you might accidentally stage files you didn't mean to, like temporary logs or build artifacts.",
+    "insight": "Use 'git add .' with caution; always run 'git status' afterwards to verify what was staged.",
+    "lab": {
+      "command": "git add .",
+      "output": ""
+    },
+    "next": "Committing Changes"
+  },
+  {
+    "id": "git_basics_5",
+    "title": "Committing Changes: git commit",
+    "content": "Once your changes are staged, you can commit them to the repository's history using 'git commit'. A commit is a snapshot of your project at that point in time. Every commit requires a message that describes what changes were made. You can provide this message directly on the command line using the '-m' flag. If you don't use '-m', Git will open your default text editor for you to type a longer message.",
+    "insight": "A commit is like a 'Save' point in a video game; you can always return to this exact state later.",
+    "lab": {
+      "command": "git commit -m 'Initial commit'",
+      "output": "[main (root-commit) 1a2b3c4] Initial commit\n 1 file changed, 1 insertion(+)\n create mode 100644 README.md"
+    },
+    "next": "The Commit Message"
+  },
+  {
+    "id": "git_basics_6",
+    "title": "Viewing History: git log",
+    "content": "After you've created several commits, you can look back to see what has happened using the 'git log' command. By default, 'git log' lists the commits made in that repository in reverse chronological order—that is, the most recent commits show up first. For each commit, it shows the SHA-1 checksum, the author's name and email, the date, and the commit message.",
+    "insight": "git log is the 'Journal' of your project's life.",
+    "lab": {
+      "command": "git log",
+      "output": "commit 1a2b3c4d5e6f7g8h9i0j...\nAuthor: Your Name <you@example.com>\nDate:   Fri Apr 24 10:00:00 2026 +0000\n\n    Initial commit"
+    },
+    "next": "Customizing Log Output"
+  },
+  {
+    "id": "git_basics_7",
+    "title": "Customizing Log Output",
+    "content": "The 'git log' command has many options to help you find exactly what you're looking for. '--oneline' prints each commit on a single line, which is great for a high-level view. '--graph' adds an ASCII graph of your branch and merge history. '-p' shows the 'patch' (the actual code changes) for each commit. You can also limit the number of commits shown using '-n <number>', like 'git log -n 3'.",
+    "insight": "git log --oneline --graph --all is a favorite for many developers to see the 'Big Picture' of their repo.",
+    "lab": {
+      "command": "git log --oneline",
+      "output": "1a2b3c4 Initial commit"
+    },
+    "next": "Seeing What Changed: git diff"
+  },
+  {
+    "id": "git_basics_8",
+    "title": "Seeing What Changed: git diff",
+    "content": "While 'git status' tells you *which* files have changed, 'git diff' tells you *exactly what* changed inside those files. By default, 'git diff' shows the changes in your working directory that are NOT yet staged. It compares what is in your working directory with what is in your staging area. This is extremely useful for reviewing your work before you stage it.",
+    "insight": "Always 'diff' before you 'add' to ensure you aren't committing debug code or typos.",
+    "lab": {
+      "command": "echo 'New line' >> README.md && git diff",
+      "output": "diff --git a/README.md b/README.md\nindex e69de29..d00491f 100644\n--- a/README.md\n+++ b/README.md\n@@ -1 +1,2 @@\n Hello Git\n+New line"
+    },
+    "next": "Diffing Staged Changes"
+  },
+  {
+    "id": "git_basics_9",
+    "title": "Diffing Staged Changes",
+    "content": "If you want to see what you've staged that will go into your next commit, you can use 'git diff --staged' (or 'git diff --cached'). This compares your staged changes with your last commit. This is your final chance to review exactly what will be recorded in the project's history before you run 'git commit'.",
+    "insight": "Reviewing staged diffs is the hallmark of a disciplined developer.",
+    "lab": {
+      "command": "git add README.md && git diff --staged",
+      "output": "diff --git a/README.md b/README.md\n..."
+    },
+    "next": "Skipping the Staging Area"
+  },
+  {
+    "id": "git_basics_10",
+    "title": "Skipping the Staging Area",
+    "content": "Although the staging area is powerful, sometimes it's a bit more workflow than you need. Git provides a shortcut to skip it. Adding the '-a' flag to the 'git commit' command makes Git automatically stage every file that is already tracked before doing the commit, letting you skip the 'git add' part. Note that this DOES NOT stage new (untracked) files.",
+    "insight": "Use 'git commit -am' for quick updates to existing files, but remember it won't catch new files you've created.",
+    "lab": {
+      "command": "echo 'Shortcut' >> README.md && git commit -am 'Quick update'",
+      "output": "[main 2b3c4d5] Quick update\n 1 file changed, 1 insertion(+)"
+    },
+    "next": "Removing Files"
+  },
+  {
+    "id": "git_basics_11",
+    "title": "Removing Files: git rm",
+    "content": "To remove a file from Git, you have to remove it from your tracked files (more specifically, remove it from your staging area) and then commit. The 'git rm' command does that and also removes the file from your working directory so you don’t see it as an untracked file the next time around. If you modified the file and already added it to the index, you must force the removal with the '-f' option.",
+    "insight": "git rm is the clean way to tell Git 'Stop tracking this file and delete it'.",
+    "lab": {
+      "command": "git rm old_file.txt",
+      "output": "rm 'old_file.txt'"
+    },
+    "next": "Moving Files"
+  },
+  {
+    "id": "git_basics_12",
+    "title": "Moving Files: git mv",
+    "content": "Unlike many other VCSs, Git doesn’t explicitly track file movement. If you rename a file in Git, no metadata is stored in Git that says you renamed the file. However, Git is pretty smart about figuring that out after the fact. The 'git mv' command is a shortcut that renames the file on disk, stages the deletion of the old name, and stages the addition of the new name.",
+    "insight": "git mv is just a convenience; it's exactly the same as doing a manual 'mv', 'git rm', and 'git add'.",
+    "lab": {
+      "command": "git mv README.md README.txt",
+      "output": ""
+    },
+    "next": "Unstaging a File"
+  },
+  {
+    "id": "git_basics_13",
+    "title": "Unstaging a File: git reset",
+    "content": "If you accidentally stage a file that you don't want to commit yet, you can 'unstage' it using 'git reset HEAD <file>'. This removes the file from the staging area but leaves your changes in the working directory intact. It's like saying 'oops, I'm not ready to save this part yet'.",
+    "insight": "Resetting the head is the standard way to fix staging mistakes.",
+    "lab": {
+      "command": "git reset HEAD README.txt",
+      "output": "Unstaged changes after reset:\nM\tREADME.txt"
+    },
+    "next": "Undoing Changes to a File"
+  },
+  {
+    "id": "git_basics_14",
+    "title": "Undoing Changes: git checkout --",
+    "content": "If you've made changes to a file but realize you want to discard them and go back to the version in your last commit, you can use 'git checkout -- <file>'. Be careful: this command is dangerous because it overwrites your local changes with the version from the last commit. Once you run this, your local changes are gone forever.",
+    "insight": "This is the 'Abort' button for changes in a specific file.",
+    "lab": {
+      "command": "git checkout -- README.txt",
+      "output": ""
+    },
+    "next": "Ignoring Files: .gitignore"
+  },
+  {
+    "id": "git_basics_15",
+    "title": "Ignoring Files: The .gitignore File",
+    "content": "Often, you’ll have a class of files that you don’t want Git to automatically add or even show you as being untracked. These are usually automatically generated files like log files or files produced by your build system. You can create a file named '.gitignore' and list patterns matching those files to have Git ignore them.",
+    "insight": "A clean repository starts with a well-configured .gitignore.",
+    "lab": {
+      "command": "echo '*.log' > .gitignore",
+      "output": ""
+    },
+    "next": "Globbing Patterns in .gitignore"
+  },
+  {
+    "id": "git_basics_16",
+    "title": "Globbing Patterns in .gitignore",
+    "content": ".gitignore files use standard 'globbing' patterns. For example, 'build/' ignores all files in the build directory, and 'doc/*.txt' ignores all text files in the doc folder but not in subfolders. You can also use '!' to negate a pattern, meaning 'ignore everything except this one specific file'.",
+    "insight": "Globbing allows you to ignore entire categories of files with single lines of configuration.",
+    "next": "Viewing Commit Details"
+  },
+  {
+    "id": "git_basics_17",
+    "title": "Viewing Commit Details: git show",
+    "content": "While 'git log' shows you the history of commits, 'git show' allows you to see the exact details of a specific commit. By default, 'git show' shows the last commit. You can also provide a SHA-1 hash to see any commit in history. It displays the author, date, message, and the 'diff' of what changed.",
+    "insight": "Use 'git show' when you want to see the 'meat' of a specific change.",
+    "lab": {
+      "command": "git show",
+      "output": "commit 2b3c4d5...\nAuthor: ...\nDate: ...\n\n    Quick update\n\ndiff --git a/README.md b/README.md\n..."
+    },
+    "next": "Compact History: --oneline"
+  },
+  {
+    "id": "git_basics_18",
+    "title": "Compact History: git log --oneline",
+    "content": "If you have a long history, 'git log' can be overwhelming. The '--oneline' flag provides a much more compact view, showing only the first 7 characters of the SHA-1 hash and the commit message. This is perfect for getting a quick overview of the recent project history.",
+    "insight": "A cleaner log makes it easier to spot patterns in development.",
+    "lab": {
+      "command": "git log --oneline",
+      "output": "2b3c4d5 Quick update\n1a2b3c4 Initial commit"
+    },
+    "next": "Filtering Log by Number"
+  },
+  {
+    "id": "git_basics_19",
+    "title": "Filtering History: git log -n",
+    "content": "Sometimes you only want to see the most recent commits. You can limit the output of 'git log' by using '-n' followed by a number. For example, 'git log -n 3' will only show the last three commits. This is useful for large projects where the full history could be thousands of lines long.",
+    "insight": "Limiting output saves time and cognitive load.",
+    "lab": {
+      "command": "git log -n 1 --oneline",
+      "output": "2b3c4d5 Quick update"
+    },
+    "next": "Summary of Changes"
+  },
+  {
+    "id": "git_basics_20",
+    "title": "Summary of Changes: git log --stat",
+    "content": "If you want to see which files were changed in each commit and how many lines were added or removed, but don't want to see the full diff, use 'git log --stat'. It provides a high-level summary of the impact of each commit on the codebase.",
+    "insight": "Stat provides a great 'middle ground' between a one-line log and a full diff log.",
+    "lab": {
+      "command": "git log -n 1 --stat",
+      "output": "commit 2b3c4d5...\nAuthor: ...\n\n    Quick update\n\n README.md | 1 +\n 1 file changed, 1 insertion(+)"
+    },
+    "next": "Branching and Merging"
+  }
+]

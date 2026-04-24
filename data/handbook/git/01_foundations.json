@@ -1,0 +1,178 @@
+[
+  {
+    "id": "git_intro_1",
+    "title": "What is Version Control?",
+    "content": "Version Control Systems (VCS) are tools used to track changes to source code over time. They allow multiple developers to collaborate on the same project without overwriting each other's work. By keeping a history of every change, you can easily revert to previous versions if something goes wrong. Think of it as a 'time machine' for your code. There are two main types: Centralized (like SVN) and Distributed (like Git). In a distributed system, every developer has a full copy of the project history on their own machine, which makes it faster and more resilient.",
+    "insight": "Version control is the foundation of modern software engineering; without it, collaboration would be a nightmare of manual backups and 'final_v2_really_final.zip' files.",
+    "next": "The Birth of Git"
+  },
+  {
+    "id": "git_intro_2",
+    "title": "The Birth of Git",
+    "content": "Git was created in 2005 by Linus Torvalds, the creator of Linux. At the time, the Linux kernel team was using a proprietary VCS called BitKeeper, but after a dispute, they lost the right to use it for free. Frustrated with existing open-source alternatives like CVS and SVN, Linus set out to build a new system from scratch. His goals were speed, data integrity, and support for distributed, non-linear workflows. The result was Git—a tool that was initially considered difficult to learn but has since become the industry standard.",
+    "insight": "Git was designed by a developer for developers, specifically to handle the massive complexity of the Linux kernel.",
+    "next": "Snapshots, Not Differences"
+  },
+  {
+    "id": "git_intro_3",
+    "title": "Snapshots, Not Differences",
+    "content": "The major difference between Git and other VCSs (like SVN) is how Git thinks about its data. Most other systems store information as a list of file-based changes (deltas). Git, however, thinks of its data more like a series of snapshots of a miniature filesystem. Every time you commit, Git takes a picture of what all your files look like at that moment and stores a reference to that snapshot. If files haven't changed, Git doesn't store the file again, just a link to the previous identical file it has already stored.",
+    "insight": "This snapshot model is why Git is so fast at operations like branching and merging—it's just moving pointers around.",
+    "next": "The Three States"
+  },
+  {
+    "id": "git_intro_4",
+    "title": "The Three States",
+    "content": "Git has three main states that your files can reside in: Modified, Staged, and Committed. 'Modified' means you have changed the file but have not committed it to your database yet. 'Staged' means you have marked a modified file in its current version to go into your next commit snapshot. 'Committed' means the data is safely stored in your local database. This leads to the three main sections of a Git project: the Working Directory, the Staging Area (also known as the Index), and the Git Directory (Repository).",
+    "insight": "The Staging Area is a unique Git feature that allows you to carefully craft your commits instead of just dumping everything at once.",
+    "next": "The Git Directory (.git)"
+  },
+  {
+    "id": "git_intro_5",
+    "title": "The Git Directory (.git)",
+    "content": "The Git directory is where Git stores the metadata and object database for your project. This is the most important part of Git, and it is what is copied when you clone a repository from another computer. This directory is usually hidden (starting with a dot) to prevent accidental modification. Inside, you'll find the configuration, history, and all the objects that represent your project's files and commits. As long as this folder exists, your history is safe.",
+    "insight": "If you delete the .git folder, you lose your entire version history, and the folder just becomes a regular directory of files.",
+    "next": "Git Configuration"
+  },
+  {
+    "id": "git_intro_6",
+    "title": "Git Configuration: Identity",
+    "content": "Before you start using Git, you should set your identity. Git uses this information to 'sign' the commits you make, so everyone knows who made which changes. You can set this globally for all projects on your machine using the 'git config' command. The two most important settings are 'user.name' and 'user.email'. These should match your real name and the email address associated with your Git hosting provider (like GitHub or GitLab).",
+    "insight": "Your commit identity is permanent once recorded in history; changing it later requires rewriting history, which is generally discouraged.",
+    "lab": {
+      "command": "git config --global user.name 'Your Name' && git config --global user.email 'you@example.com'",
+      "output": "Configuration updated successfully."
+    },
+    "next": "Checking Your Settings"
+  },
+  {
+    "id": "git_intro_7",
+    "title": "Checking Your Settings",
+    "content": "You can check your current Git settings at any time using the 'git config --list' command. This will show you all the configuration Git can find, including global settings and project-specific ones. If you see the same setting twice (e.g., user.name), Git uses the last value it finds, which usually means the project-specific setting overrides the global one. You can also check a specific setting by typing 'git config <key>', such as 'git config user.name'.",
+    "insight": "Knowing how to inspect your configuration is vital for troubleshooting why your commits might have the wrong author info.",
+    "lab": {
+      "command": "git config --list",
+      "output": "user.name=Your Name\nuser.email=you@example.com\ncore.repositoryformatversion=0\ncore.filemode=true\n..."
+    },
+    "next": "The Help System"
+  },
+  {
+    "id": "git_intro_8",
+    "title": "The Help System",
+    "content": "Git comes with built-in documentation for every command. You can access it by typing 'git help <command>', 'git <command> --help', or 'man git-<command>'. This will open the manual page for that specific command in your terminal. These manuals are very detailed and include descriptions of every flag and option. If you just need a quick summary of the most common flags, many commands also support a '-h' flag for a shorter output.",
+    "insight": "Mastering the 'git help' command is the best way to become self-sufficient with Git.",
+    "lab": {
+      "command": "git help config",
+      "output": "GIT-CONFIG(1) Git Manual\n\nNAME\n       git-config - Get and set repository or global options..."
+    },
+    "next": "Initializing a Repository"
+  },
+  {
+    "id": "git_intro_9",
+    "title": "Why Git is Distributed",
+    "content": "In a Centralized VCS, you need a network connection to a central server to do almost anything—commit, browse history, or merge. In Git, you have the entire history of the project on your local disk. This means most operations are nearly instantaneous because they don't need to talk to a server. You can commit while on an airplane, browse history while in a basement with no Wi-Fi, and merge branches without waiting for a server to process the request.",
+    "insight": "Distributed means resilience; if the central server dies, any collaborator's local repository can be used to restore it.",
+    "next": "Git's Integrity"
+  },
+  {
+    "id": "git_intro_10",
+    "title": "Git's Integrity: The SHA-1",
+    "content": "Everything in Git is checksummed before it is stored and is then referred to by that checksum. This means it’s impossible to change the contents of any file or directory without Git knowing about it. The mechanism Git uses for this checksumming is called a SHA-1 hash. This is a 40-character string made of hexadecimal characters (0–9 and a–f). You will see these hashes everywhere in Git, as they are the 'ID' for every commit, file, and tree object in the database.",
+    "insight": "The SHA-1 hash ensures that what you put into Git is exactly what you get out, protecting your project from data corruption.",
+    "next": "Command Line vs. GUI"
+  },
+  {
+    "id": "git_intro_11",
+    "title": "Command Line vs. GUI",
+    "content": "While there are many excellent graphical user interfaces (GUIs) for Git (like GitKraken, Sourcetree, or GitHub Desktop), the command line remains the most powerful and flexible way to use it. Many advanced Git operations are only available via the CLI. Furthermore, knowing the CLI commands helps you understand what the GUI is doing under the hood, making you a more effective troubleshooter.",
+    "insight": "Master the CLI first; the GUI is a convenience, the CLI is a power tool.",
+    "next": "Git and the Terminal"
+  },
+  {
+    "id": "git_intro_12",
+    "title": "Git and the Terminal",
+    "content": "Git is designed to be used in a terminal. It follows the Unix philosophy of providing small, composable tools. You can pipe Git output to other commands like 'grep' or 'awk' to filter and process information. This scriptability is what makes Git so powerful in automated environments and CI/CD pipelines.",
+    "insight": "The terminal is Git's natural habitat.",
+    "next": "Installing Git"
+  },
+  {
+    "id": "git_intro_13",
+    "title": "Installing Git on Linux",
+    "content": "On most Linux distributions, you can install Git using your package manager. For Debian/Ubuntu, it's 'sudo apt install git'. For Fedora, 'sudo dnf install git'. Once installed, you can verify the version with 'git --version'. Keeping Git updated ensures you have the latest features and security fixes.",
+    "insight": "Linux and Git share the same creator; they are built for each other.",
+    "lab": {
+      "command": "git --version",
+      "output": "git version 2.43.0"
+    },
+    "next": "The global .gitconfig"
+  },
+  {
+    "id": "git_intro_14",
+    "title": "The Global .gitconfig File",
+    "content": "Your global Git configuration is stored in a file named '.gitconfig' in your home directory. This file is a simple text file that you can edit directly or modify using 'git config --global' commands. It contains your identity, aliases, and preferences for things like default branch names and text editors.",
+    "insight": "Your .gitconfig is your personal Git signature; many developers share theirs in 'dotfiles' repositories.",
+    "lab": {
+      "command": "cat ~/.gitconfig",
+      "output": "[user]\n\tname = Your Name\n\temail = you@example.com"
+    },
+    "next": "Setting Your Default Editor"
+  },
+  {
+    "id": "git_intro_15",
+    "title": "Setting Your Default Editor",
+    "content": "When Git needs you to type a message (like for a commit or a merge), it opens a text editor. By default, this is often 'vi' or 'vim', which can be intimidating for beginners. You can change this to any editor you prefer, such as Nano or VS Code, using the 'core.editor' configuration setting.",
+    "insight": "Choosing an editor you're comfortable with prevents frustration during commits.",
+    "lab": {
+      "command": "git config --global core.editor 'nano'",
+      "output": ""
+    },
+    "next": "Default Branch Name"
+  },
+  {
+    "id": "git_intro_16",
+    "title": "Changing the Default Branch Name",
+    "content": "Historically, the default branch in Git was 'master'. Recently, the industry has shifted towards 'main'. You can configure Git to use 'main' as the default for all new repositories you initialize using 'init.defaultBranch'. This ensures consistency with modern platforms like GitHub and GitLab.",
+    "insight": "Consistency in naming makes collaboration smoother across different tools.",
+    "lab": {
+      "command": "git config --global init.defaultBranch main",
+      "output": ""
+    },
+    "next": "Help with Flags"
+  },
+  {
+    "id": "git_intro_17",
+    "title": "Help with Flags: -h vs --help",
+    "content": "Most Git commands support two types of help. The '-h' flag provides a brief summary of the command's usage and common flags right in your terminal. The '--help' flag (or 'git help <cmd>') opens the full, detailed manual page. Use '-h' for a quick reminder and '--help' for deep learning.",
+    "insight": "Quick help keeps you in the flow; full help builds your expertise.",
+    "lab": {
+      "command": "git add -h",
+      "output": "usage: git add [<options>] [--] <pathspec>...\n\n    -n, --dry-run         dry run\n    -v, --verbose         be verbose\n..."
+    },
+    "next": "Verifying Installation"
+  },
+  {
+    "id": "git_intro_18",
+    "title": "Verifying Your Identity",
+    "content": "After setting your name and email, it's good practice to verify they are recorded correctly. You can do this by running 'git config user.name' and 'git config user.email'. Git will output the value currently stored for those keys. If it outputs nothing, the configuration was not set correctly.",
+    "insight": "Verification is the first step of troubleshooting.",
+    "lab": {
+      "command": "git config user.name",
+      "output": "Your Name"
+    },
+    "next": "Git's Data Integrity"
+  },
+  {
+    "id": "git_intro_19",
+    "title": "Git's Data Integrity: No Deletions",
+    "content": "One of Git's core principles is that it's very hard to actually delete data. Most operations only *add* data to the Git database. This means you can experiment with confidence, knowing that as long as you've committed your work, you can almost always find it again, even if you've messed up your current branch.",
+    "insight": "Git is designed to be a safe haven for your code.",
+    "next": "Ready to Start?"
+  },
+  {
+    "id": "git_intro_20",
+    "title": "Ready to Start?",
+    "content": "Now that you understand the philosophy of Git, have it installed, and have configured your identity, you are ready to start your first project. In the next chapter, we will dive into the core workflow: initializing, staging, and committing. This is where the magic happens and where you begin your journey as a version control expert.",
+    "insight": "The best way to learn Git is by using it.",
+    "next": "Repository Basics"
+  }
+]

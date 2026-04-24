@@ -1,0 +1,92 @@
+[
+  {
+    "id": "git_int_1",
+    "title": "Git Objects: The Content Addressable FS",
+    "content": "At its core, Git is a simple content-addressable filesystem. This means that you can insert any kind of content into it, and it will return a unique key that you can use to retrieve that content again later. These keys are the 40-character SHA-1 hashes you see everywhere. There are four types of objects in Git: blobs, trees, commits, and tags.",
+    "insight": "Git doesn't store files by name; it stores them by their content's hash.",
+    "next": "Blobs: Storing File Content"
+  },
+  {
+    "id": "git_int_2",
+    "title": "Blobs: Storing File Content",
+    "content": "A 'blob' (binary large object) is the simplest type of Git object. It stores the actual content of a file, but none of its metadata—no filename, no permissions, and no directory structure. If two files in your project have the exact same content, Git will only store one blob to represent both of them, saving space.",
+    "insight": "Blobs are just chunks of data; they don't know what file they belong to.",
+    "lab": {
+      "command": "echo 'test content' | git hash-object -w --stdin",
+      "output": "d670460b4b4aece5915caf5c68d12f560a9fe3e4"
+    },
+    "next": "Trees: Storing Directory Structure"
+  },
+  {
+    "id": "git_int_3",
+    "title": "Trees: Storing Directory Structure",
+    "content": "If blobs store content, 'trees' store the structure. A tree object maps filenames to blobs or other trees. It’s similar to a UNIX directory entry. Each entry in a tree object contains the mode (permissions), the type (blob or tree), the SHA-1 hash of the object, and the filename. This is how Git reconstructs your project's folders and files.",
+    "insight": "Trees are the 'folders' of the Git object database.",
+    "next": "Commits: Storing History"
+  },
+  {
+    "id": "git_int_4",
+    "title": "Commits: Storing History",
+    "content": "A commit object ties everything together. It contains a pointer to the root tree object (the state of the project at that time), the author and committer information, a timestamp, and a pointer to any parent commits. By following the parent pointers, Git can reconstruct the entire history of the project.",
+    "insight": "A commit is a snapshot plus context (who, when, and what came before).",
+    "next": "The Ref System"
+  },
+  {
+    "id": "git_int_5",
+    "title": "The Ref System: Git's Pointers",
+    "content": "Typing a 40-character SHA-1 hash every time you want to refer to a commit is impractical. 'Refs' (references) are simple files that store these hashes under human-readable names. Your branches are just refs stored in the '.git/refs/heads' directory. When you run 'git branch feature', Git just creates a new file named 'feature' containing the current commit's hash.",
+    "insight": "Refs are the 'labels' that make Git usable for humans.",
+    "next": "The HEAD Ref"
+  },
+  {
+    "id": "git_int_6",
+    "title": "The HEAD Ref",
+    "content": "The 'HEAD' file is a special ref that points to the branch you are currently working on. It's usually a symbolic ref, meaning it points to another ref rather than a commit hash. If you look at '.git/HEAD', you'll likely see something like 'ref: refs/heads/main'. This is how Git knows which branch to update when you make a new commit.",
+    "insight": "HEAD is your 'You Are Here' marker in the repository.",
+    "lab": {
+      "command": "cat .git/HEAD",
+      "output": "ref: refs/heads/main"
+    },
+    "next": "Tags: Permanent Markers"
+  },
+  {
+    "id": "git_int_7",
+    "title": "Tags: Permanent Markers",
+    "content": "While branches move as you add commits, 'tags' are intended to be permanent pointers to specific commits, usually used for version releases (like v1.0). There are two types: lightweight tags (just a ref) and annotated tags (stored as full objects in the database with their own author, date, and message).",
+    "insight": "Use annotated tags for releases and lightweight tags for temporary markers.",
+    "lab": {
+      "command": "git tag -a v1.0 -m 'Release version 1.0'",
+      "output": ""
+    },
+    "next": "The Reflog"
+  },
+  {
+    "id": "git_int_8",
+    "title": "The Reflog: Git's Safety Net",
+    "content": "If you accidentally delete a branch or perform a hard reset that loses some commits, the 'reflog' is your best friend. Git keeps a log of every time your HEAD or branch pointers move. You can use 'git reflog' to see this history and find the hash of a commit that is no longer part of any branch, allowing you to recover it.",
+    "insight": "Nothing is truly lost in Git as long as it was committed at some point—the reflog will help you find it.",
+    "lab": {
+      "command": "git reflog",
+      "output": "1a2b3c4 HEAD@{0}: commit: Add new feature\n2b3c4d5 HEAD@{1}: checkout: moving from feature to main"
+    },
+    "next": "Packfiles and Compression"
+  },
+  {
+    "id": "git_int_9",
+    "title": "Packfiles and Compression",
+    "content": "Storing every version of every file as a separate blob would eventually use a lot of space. To optimize this, Git occasionally packs these objects into 'packfiles'. It uses 'delta compression,' where it stores one version of a file and then just the differences for other versions. This makes Git repositories surprisingly small even for very large projects with long histories.",
+    "insight": "Git is highly optimized for storage; often the .git folder is smaller than the working directory.",
+    "next": "Garbage Collection"
+  },
+  {
+    "id": "git_int_10",
+    "title": "Garbage Collection: git gc",
+    "content": "Over time, your repository can accumulate 'orphan' objects that are no longer reachable from any branch or tag. Git occasionally runs a garbage collection process ('git gc') to clean up these objects and further compress your packfiles. This keeps your repository healthy and fast.",
+    "insight": "Git manages its own health, but you can manually trigger 'git gc' if your repo feels sluggish.",
+    "lab": {
+      "command": "git gc",
+      "output": "Counting objects: 100, done.\nDelta compression using up to 8 threads.\nCompressing objects: 100% (80/80), done.\nWriting objects: 100% (100/100), done."
+    },
+    "next": "Best Practices"
+  }
+]

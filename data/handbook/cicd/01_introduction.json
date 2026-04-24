@@ -1,0 +1,58 @@
+[
+  {
+    "id": "cicd_intro_1",
+    "title": "What is CI/CD?",
+    "content": "CI/CD stands for Continuous Integration and Continuous Deployment (or Delivery). It is a method to frequently deliver apps to customers by introducing automation into the stages of app development. The main concepts attributed to CI/CD are continuous integration, continuous delivery, and continuous deployment. CI/CD bridges the gaps between development and operation teams by automating building, testing, and deployment of applications.",
+    "insight": "CI/CD is the backbone of DevOps, enabling teams to move faster with higher quality.",
+    "next": "Continuous Integration (CI)"
+  },
+  {
+    "id": "cicd_intro_2",
+    "title": "Continuous Integration (CI)",
+    "content": "Continuous Integration (CI) is a software development practice where developers regularly merge their code changes into a central repository, after which automated builds and tests are run. The primary goals of CI are to find and address bugs quicker, improve software quality, and reduce the time it takes to validate and release new software updates.",
+    "insight": "CI ensures that new code doesn't break existing functionality by testing every change immediately.",
+    "next": "Continuous Delivery (CD)"
+  },
+  {
+    "id": "cicd_intro_3",
+    "title": "Continuous Delivery vs. Deployment",
+    "content": "Continuous Delivery means every change is proven to be deployable at any time, but the actual deployment to production might be a manual step. Continuous Deployment takes this a step further: every change that passes the automated tests is deployed to production automatically without human intervention.",
+    "insight": "Continuous Deployment is the ultimate goal for speed, while Continuous Delivery provides a safety buffer for manual approval.",
+    "next": "The Pipeline Concept"
+  },
+  {
+    "id": "cicd_intro_4",
+    "title": "The Pipeline Concept",
+    "content": "A CI/CD pipeline is a series of steps that must be performed in order to deliver a new version of software. It typically includes stages like Build, Test, Release, and Deploy. Think of it as an assembly line in a factory: raw code goes in one end, and a tested, running application comes out the other.",
+    "insight": "Visualizing your software delivery as a pipeline helps identify bottlenecks and points of failure.",
+    "next": "Benefits of CI/CD"
+  },
+  {
+    "id": "cicd_intro_5",
+    "title": "Benefits of CI/CD",
+    "content": "Automating your delivery process provides numerous benefits: faster time to market, smaller and more frequent releases, improved fault isolation, and higher team productivity. It also reduces the risk of human error during complex deployment processes.",
+    "insight": "Automation isn't just about speed; it's about consistency and reliability.",
+    "next": "Pipeline Stages"
+  },
+  {
+    "id": "cicd_intro_6",
+    "title": "Standard Pipeline Stages",
+    "content": "Most pipelines share common stages: 1. Source (triggering on code push). 2. Build (compiling code, building images). 3. Test (running unit and integration tests). 4. Deploy (moving the artifact to an environment). Each stage must succeed for the next one to begin.",
+    "insight": "Failing fast in the early stages (like linting or testing) saves time and compute resources.",
+    "next": "Artifacts"
+  },
+  {
+    "id": "cicd_intro_7",
+    "title": "Artifacts in CI/CD",
+    "content": "An artifact is a file or set of files produced by a build process. This could be a compiled binary, a JAR file, or a Docker image. Pipelines pass these artifacts from one stage to another. For example, the Build stage creates a Docker image, and the Deploy stage uses that same image to update a server.",
+    "insight": "Artifacts should be immutable—once a build produces a version, it should never be changed, only replaced by a new build.",
+    "next": "Environment Promotion"
+  },
+  {
+    "id": "cicd_intro_8",
+    "title": "Environment Promotion",
+    "content": "In a professional setup, code doesn't go straight to production. It moves through stages like Development, Staging (or QA), and finally Production. The CI/CD pipeline 'promotes' the same build artifact through these environments, ensuring that what was tested in Staging is exactly what runs in Production.",
+    "insight": "Testing the exact same artifact across environments is key to eliminating 'it worked on my machine' errors.",
+    "next": "Feedback Loops"
+  }
+]

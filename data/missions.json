@@ -104,5 +104,71 @@
       { "id": "m33", "name": "Mission 33: Log Analysis Challenge", "commands": ["grep", "awk", "sed"] },
       { "id": "m34", "name": "Mission 34: Build Mini Infrastructure", "commands": ["setup", "config", "deploy"] }
     ]
+  },
+  {
+    "id": "world_docker_1",
+    "module": "docker",
+    "name": "DOCKER WORLD 1: Container Core",
+    "description": "Master the basics of containerization",
+    "missions": [
+      { "id": "md1", "name": "Mission 1: Running the First Container", "commands": ["docker run", "docker ps", "docker images"] },
+      { "id": "md2", "name": "Mission 2: Container Lifecycle", "commands": ["docker stop", "docker start", "docker rm", "docker rmi"] },
+      { "id": "md3", "name": "Mission 3: Inside the Container", "commands": ["docker exec", "docker logs", "docker inspect"] }
+    ]
+  },
+  {
+    "id": "world_docker_2",
+    "module": "docker",
+    "name": "DOCKER WORLD 2: Storage & Networking",
+    "description": "Connect and persist container data",
+    "missions": [
+      { "id": "md4", "name": "Mission 4: Volume Mastery", "commands": ["docker volume", "mount", "-v"] },
+      { "id": "md5", "name": "Mission 5: Network Architect", "commands": ["docker network", "bridge", "expose"] },
+      { "id": "md6", "name": "Mission 6: Orchestration Prep", "commands": ["docker-compose", "yaml", "services"] }
+    ]
+  },
+  {
+    "id": "world_git_1",
+    "module": "git",
+    "name": "GIT WORLD 1: Version Control Basics",
+    "description": "Start your journey with Git history",
+    "missions": [
+      { "id": "mg1", "name": "Mission 1: The Repository Genesis", "commands": ["git init", "git status", "git config"] },
+      { "id": "mg2", "name": "Mission 2: Recording Changes", "commands": ["git add", "git commit", "git log"] },
+      { "id": "mg3", "name": "Mission 3: Time Travel & Diffs", "commands": ["git diff", "git checkout", "git reset"] }
+    ]
+  },
+  {
+    "id": "world_git_2",
+    "module": "git",
+    "name": "GIT WORLD 2: Collaboration & Branches",
+    "description": "Work with branches and remote servers",
+    "missions": [
+      { "id": "mg4", "name": "Mission 4: Branching Out", "commands": ["git branch", "git merge", "git switch"] },
+      { "id": "mg5", "name": "Mission 5: Remote Realms", "commands": ["git clone", "git push", "git pull", "git fetch"] },
+      { "id": "mg6", "name": "Mission 6: Pro Workflows", "commands": ["git stash", "git rebase", "git cherry-pick"] }
+    ]
+  },
+  {
+    "id": "world_cicd_1",
+    "module": "cicd",
+    "name": "CI/CD WORLD 1: Pipeline Automation",
+    "description": "Automate your software delivery",
+    "missions": [
+      { "id": "mc1", "name": "Mission 1: Pipeline Foundations", "commands": ["yaml", "pipeline", "trigger"] },
+      { "id": "mc2", "name": "Mission 2: GitHub Actions Hero", "commands": ["on:", "jobs:", "steps:", "uses:"] },
+      { "id": "mc3", "name": "Mission 3: Build & Test", "commands": ["run:", "test", "build", "artifact"] }
+    ]
+  },
+  {
+    "id": "world_cicd_2",
+    "module": "cicd",
+    "name": "CI/CD WORLD 2: Advanced Deployment",
+    "description": "Deploy with confidence and security",
+    "missions": [
+      { "id": "mc4", "name": "Mission 4: Secrets Guardian", "commands": ["secrets", "env", "security"] },
+      { "id": "mc5", "name": "Mission 5: Deployment Strategies", "commands": ["blue/green", "canary", "rolling"] },
+      { "id": "mc6", "name": "Mission 6: Observability Hero", "commands": ["logs", "monitor", "rollback"] }
+    ]
   }
 ]

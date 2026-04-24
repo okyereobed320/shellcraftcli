@@ -1,0 +1,58 @@
+[
+  {
+    "id": "cicd_auto_1",
+    "title": "Pipeline Triggers",
+    "content": "A trigger is an event that tells the pipeline to start running. The most common trigger is a 'push' to a specific branch (like 'main'). Other triggers include opening a 'Pull Request', a manual trigger (button click), or a scheduled trigger (like a nightly build).",
+    "insight": "Properly configured triggers prevent unnecessary builds and ensure that only relevant code is tested.",
+    "next": "YAML: The Language of Pipelines"
+  },
+  {
+    "id": "cicd_auto_2",
+    "title": "YAML: The Language of Pipelines",
+    "content": "YAML (YAML Ain't Markup Language) is the standard format for defining CI/CD pipelines. It is a human-readable data-serialization language that is commonly used for configuration files. It relies on indentation to define structure, which makes it clean but also sensitive to formatting errors.",
+    "insight": "Learning YAML is essential for DevOps; one misplaced space can break your entire pipeline.",
+    "next": "YAML Syntax Basics"
+  },
+  {
+    "id": "cicd_auto_3",
+    "title": "YAML Syntax Basics",
+    "content": "Key YAML concepts include: 1. Key-value pairs (key: value). 2. Lists (indicated by a dash '-'). 3. Nested objects (indicated by indentation). For example: \n\njobs:\n  build:\n    steps:\n      - name: Hello\n        run: echo \"Hi\"",
+    "insight": "YAML is much more concise than JSON or XML for configuration, which is why it's so popular in the cloud-native ecosystem.",
+    "next": "Jobs vs. Steps"
+  },
+  {
+    "id": "cicd_auto_4",
+    "title": "Jobs vs. Steps",
+    "content": "In most CI/CD systems, a 'Step' is an individual task, like running a command. A 'Job' is a collection of steps that run in sequence on the same runner (machine). Multiple jobs in a pipeline can often run in parallel unless they are configured to depend on each other.",
+    "insight": "Steps share the same filesystem, while Jobs are usually isolated from each other.",
+    "next": "Runners and Agents"
+  },
+  {
+    "id": "cicd_auto_5",
+    "title": "Runners and Agents",
+    "content": "A Runner (or Agent) is the machine where the pipeline commands actually execute. These can be 'hosted' (provided by a service like GitHub) or 'self-hosted' (managed by you on your own servers). Runners usually start with a clean environment for every job.",
+    "insight": "Hosted runners save time on maintenance, but self-hosted runners provide more control over the environment and hardware.",
+    "next": "Environment Variables"
+  },
+  {
+    "id": "cicd_auto_6",
+    "title": "Environment Variables",
+    "content": "Environment variables are used to pass information to your pipeline steps without hardcoding them in the YAML. This includes things like API URLs, build numbers, or the name of the current branch. CI/CD platforms provide many 'built-in' variables automatically.",
+    "insight": "Using variables makes your pipeline configuration portable and reusable across different projects.",
+    "next": "Secrets Management"
+  },
+  {
+    "id": "cicd_auto_7",
+    "title": "Secrets Management",
+    "content": "Never put passwords, API keys, or certificates directly in your YAML file. CI/CD platforms have a 'Secrets' feature that allows you to store sensitive data securely. These secrets are injected into the pipeline at runtime and are masked in the logs to prevent exposure.",
+    "insight": "Security is a first-class citizen in CI/CD; a leaked secret in a public repo can be a disaster.",
+    "next": "Conditional Execution"
+  },
+  {
+    "id": "cicd_auto_8",
+    "title": "Conditional Execution",
+    "content": "You can configure steps or jobs to run only when certain conditions are met. For example, you might only want to run the 'Deploy' job if the 'Build' job was successful AND the current branch is 'main'. This is often done using 'if' statements in the YAML.",
+    "insight": "Conditions allow you to build complex logic into your automation, like skipping tests for documentation-only changes.",
+    "next": "Introduction to GitHub Actions"
+  }
+]

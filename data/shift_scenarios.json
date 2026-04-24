@@ -777,5 +777,611 @@
       "Secrets are mounted as files by default."
     ],
     "suggested_tools": ["docker secret", "docker service"]
+  },
+  {
+    "id": "g101",
+    "module": "git",
+    "type": "incident",
+    "title": "Uninitialized Project",
+    "severity": "LOW",
+    "problem": "You have a new project directory 'website' but it's not a Git repository. Initialize it.",
+    "investigations": {
+      "ls -a": "README.md  index.html",
+      "git status": "fatal: not a git repository (or any of the parent directories): .git"
+    },
+    "fix_commands": ["git init"],
+    "resolution": "Repository initialized. You can now start tracking changes.",
+    "hints": ["Use the command to start a new Git repository.", "Check 'git help init' if unsure."],
+    "suggested_tools": ["git", "ls"]
+  },
+  {
+    "id": "g102",
+    "module": "git",
+    "type": "routine",
+    "title": "First Commit Flow",
+    "severity": "MEDIUM",
+    "problem": "You've initialized the repo. Now track README.md and make your first commit.",
+    "investigations": {
+      "git status": "On branch main\nUntracked files:\n  README.md",
+      "cat README.md": "# My Project"
+    },
+    "fix_commands": ["git add README.md && git commit -m 'Initial commit'", "git add . && git commit -m 'Initial commit'"],
+    "resolution": "Files staged and committed successfully.",
+    "hints": ["You need to 'add' before you 'commit'.", "Don't forget the commit message with -m."],
+    "suggested_tools": ["git status", "git add", "git commit"]
+  },
+  {
+    "id": "g103",
+    "module": "git",
+    "type": "routine",
+    "title": "Branching Out",
+    "severity": "LOW",
+    "problem": "Create a new branch named 'develop' and switch to it.",
+    "investigations": {
+      "git branch": "* main"
+    },
+    "fix_commands": ["git branch develop && git checkout develop", "git checkout -b develop", "git switch -c develop"],
+    "resolution": "New branch created and active.",
+    "hints": ["You can do this in two steps or one with a shortcut flag.", "Check 'git branch' to see your branches."],
+    "suggested_tools": ["git branch", "git checkout"]
+  },
+  {
+    "id": "g104",
+    "module": "git",
+    "type": "incident",
+    "title": "The Ghost Push",
+    "severity": "HIGH",
+    "problem": "You're trying to push to 'origin' but Git says the remote doesn't exist.",
+    "investigations": {
+      "git remote -v": "",
+      "git push origin main": "fatal: 'origin' does not appear to be a git repository"
+    },
+    "fix_commands": ["git remote add origin https://github.com/user/repo.git"],
+    "resolution": "Remote 'origin' added. You can now push your code.",
+    "hints": ["Check your configured remotes with 'git remote -v'.", "Use 'git remote add' to connect to a server."],
+    "suggested_tools": ["git remote", "git push"]
+  },
+  {
+    "id": "g105",
+    "module": "git",
+    "type": "incident",
+    "title": "Diverged History",
+    "severity": "MEDIUM",
+    "problem": "Your push was rejected because the remote contains work that you do not have locally.",
+    "investigations": {
+      "git push origin main": "error: failed to push some refs to ...\nhint: Updates were rejected because the remote contains work that you do not have locally."
+    },
+    "fix_commands": ["git pull origin main", "git fetch origin && git merge origin/main"],
+    "resolution": "Remote changes integrated. You can now push your work.",
+    "hints": ["You need to bring the remote changes into your local branch first.", "Use 'git pull'."],
+    "suggested_tools": ["git pull", "git fetch"]
+  },
+  {
+    "id": "g106",
+    "module": "git",
+    "type": "routine",
+    "title": "Emergency Stash",
+    "severity": "LOW",
+    "problem": "You're in the middle of a feature but need to switch to 'main' to fix a bug. Stash your changes.",
+    "investigations": {
+      "git status": "On branch feature\nChanges not staged for commit:\n  modified:   app.js"
+    },
+    "fix_commands": ["git stash"],
+    "resolution": "Work-in-progress stashed safely. Working directory is clean.",
+    "hints": ["Use the command to save temporary changes without committing.", "Check 'git stash --help'."],
+    "suggested_tools": ["git stash", "git status"]
+  },
+  {
+    "id": "g107",
+    "module": "git",
+    "type": "routine",
+    "title": "Recovering Stashed Work",
+    "severity": "LOW",
+    "problem": "You've finished the bug fix on 'main'. Switch back to 'feature' and restore your stashed work.",
+    "investigations": {
+      "git branch": "* main\n  feature",
+      "git stash list": "stash@{0}: WIP on feature: 1a2b3c4..."
+    },
+    "fix_commands": ["git checkout feature && git stash pop"],
+    "resolution": "Returned to feature branch and popped stash. Ready to resume work.",
+    "hints": ["Switch branches first.", "Use 'pop' to apply and remove from stash list."],
+    "suggested_tools": ["git checkout", "git stash pop"]
+  },
+  {
+    "id": "g108",
+    "module": "git",
+    "type": "incident",
+    "title": "Accidental Stage",
+    "severity": "LOW",
+    "problem": "You accidentally staged 'secrets.env'. Unstage it but keep the file.",
+    "investigations": {
+      "git status": "Changes to be committed:\n  new file:   secrets.env"
+    },
+    "fix_commands": ["git reset HEAD secrets.env", "git rm --cached secrets.env"],
+    "resolution": "File unstaged. It is now untracked.",
+    "hints": ["Use 'reset' or 'rm --cached' to remove from index.", "Don't use -f as it might delete the file."],
+    "suggested_tools": ["git reset", "git status"]
+  },
+  {
+    "id": "g109",
+    "module": "git",
+    "type": "routine",
+    "title": "Oops, Wrong Message",
+    "severity": "LOW",
+    "problem": "You just committed with the message 'stuff'. Change it to 'feat: add user authentication'.",
+    "investigations": {
+      "git log -n 1": "commit 1234567...\nAuthor: ...\n\n    stuff"
+    },
+    "fix_commands": ["git commit --amend -m 'feat: add user authentication'"],
+    "resolution": "Commit message updated successfully.",
+    "hints": ["Use the 'amend' flag.", "This only works for the most recent commit."],
+    "suggested_tools": ["git commit --amend", "git log"]
+  },
+  {
+    "id": "g110",
+    "module": "git",
+    "type": "routine",
+    "title": "Cleaning Up Branches",
+    "severity": "LOW",
+    "problem": "The branch 'legacy-v1' is no longer needed. Delete it.",
+    "investigations": {
+      "git branch": "* main\n  legacy-v1"
+    },
+    "fix_commands": ["git branch -d legacy-v1"],
+    "resolution": "Branch 'legacy-v1' deleted.",
+    "hints": ["Use the branch command with the delete flag.", "Standard delete is -d."],
+    "suggested_tools": ["git branch -d"]
+  },
+  {
+    "id": "g111",
+    "module": "git",
+    "type": "routine",
+    "title": "Release Tagging",
+    "severity": "LOW",
+    "problem": "The current state is ready for release. Create an annotated tag 'v1.0.0'.",
+    "investigations": {
+      "git status": "nothing to commit, working tree clean"
+    },
+    "fix_commands": ["git tag -a v1.0.0 -m 'Release version 1.0.0'"],
+    "resolution": "Tag 'v1.0.0' created.",
+    "hints": ["Use 'git tag -a' for an annotated tag.", "Include a message with -m."],
+    "suggested_tools": ["git tag"]
+  },
+  {
+    "id": "g112",
+    "module": "git",
+    "type": "routine",
+    "title": "Cherry-Pick a Fix",
+    "severity": "MEDIUM",
+    "problem": "An important fix was committed to 'develop' (hash: a1b2c3d). Apply it to your current 'hotfix' branch.",
+    "investigations": {
+      "git log develop -n 1": "commit a1b2c3d...\nAuthor: ...\n\n    fix: patch security hole"
+    },
+    "fix_commands": ["git cherry-pick a1b2c3d"],
+    "resolution": "Commit a1b2c3d applied to hotfix branch.",
+    "hints": ["Use the command to pick a specific commit by hash.", "Check 'git help cherry-pick'."],
+    "suggested_tools": ["git cherry-pick"]
+  },
+  {
+    "id": "g113",
+    "module": "git",
+    "type": "incident",
+    "title": "Untracked Clutter",
+    "severity": "LOW",
+    "problem": "Your workspace is full of temporary .tmp files. Remove all untracked files.",
+    "investigations": {
+      "ls": "README.md  app.js  test.tmp  debug.tmp",
+      "git status": "Untracked files:\n  test.tmp\n  debug.tmp"
+    },
+    "fix_commands": ["git clean -f"],
+    "resolution": "Untracked files removed.",
+    "hints": ["Use the 'clean' command.", "Use -f to force the removal."],
+    "suggested_tools": ["git clean"]
+  },
+  {
+    "id": "g114",
+    "module": "git",
+    "type": "routine",
+    "title": "Renaming for Clarity",
+    "severity": "LOW",
+    "problem": "The current branch 'fix1' is too vague. Rename it to 'fix/login-loop'.",
+    "investigations": {
+      "git branch": "* fix1"
+    },
+    "fix_commands": ["git branch -m fix/login-loop"],
+    "resolution": "Branch renamed to 'fix/login-loop'.",
+    "hints": ["The -m flag stands for 'move' or rename.", "No need to specify the old name if you're on it."],
+    "suggested_tools": ["git branch -m"]
+  },
+  {
+    "id": "g115",
+    "module": "git",
+    "type": "incident",
+    "title": "Bad Commit in History",
+    "severity": "HIGH",
+    "problem": "Commit '5e6f7g8' introduced a bug that broke production. Revert it safely.",
+    "investigations": {
+      "git log": "commit 5e6f7g8...\nAuthor: ...\n\n    feat: experimental feature"
+    },
+    "fix_commands": ["git revert 5e6f7g8"],
+    "resolution": "Revert commit created. Production fix in progress.",
+    "hints": ["'revert' creates a new commit that undoes the changes.", "Don't use 'reset' as it rewrites history."],
+    "suggested_tools": ["git revert"]
+  },
+  {
+    "id": "g116",
+    "module": "git",
+    "type": "routine",
+    "title": "Searching the Code",
+    "severity": "LOW",
+    "problem": "Find every occurrence of 'TODO' in the tracked files of your repository.",
+    "investigations": {},
+    "fix_commands": ["git grep 'TODO'"],
+    "resolution": "Search results displayed.",
+    "hints": ["Git has its own version of 'grep'.", "It only searches tracked files."],
+    "suggested_tools": ["git grep"]
+  },
+  {
+    "id": "g117",
+    "module": "git",
+    "type": "incident",
+    "title": "The Nuclear Option",
+    "severity": "CRITICAL",
+    "problem": "Everything is a mess. Discard ALL local changes (tracked and untracked) to match the last commit.",
+    "investigations": {
+      "git status": "On branch main\nChanges not staged for commit:\n  modified:   app.js\nUntracked files:\n  trash.txt"
+    },
+    "fix_commands": ["git reset --hard HEAD && git clean -fd"],
+    "resolution": "Working directory reset to HEAD. Clutter removed.",
+    "hints": ["Use 'reset --hard' for tracked files.", "Use 'clean -fd' for untracked files and directories."],
+    "suggested_tools": ["git reset --hard", "git clean"]
+  },
+  {
+    "id": "g118",
+    "module": "git",
+    "type": "routine",
+    "title": "Pushing Tags",
+    "severity": "LOW",
+    "problem": "You've created tag 'v2.0'. Push it to 'origin'.",
+    "investigations": {
+      "git tag": "v1.0\nv2.0"
+    },
+    "fix_commands": ["git push origin v2.0"],
+    "resolution": "Tag 'v2.0' pushed to remote.",
+    "hints": ["Specify the remote and the tag name.", "Normal 'git push' doesn't send tags."],
+    "suggested_tools": ["git push"]
+  },
+  {
+    "id": "g119",
+    "module": "git",
+    "type": "routine",
+    "title": "Checking Out a Commit",
+    "severity": "MEDIUM",
+    "problem": "You need to see the state of the project at commit '1a2b3c4'. Go there in a detached HEAD state.",
+    "investigations": {},
+    "fix_commands": ["git checkout 1a2b3c4"],
+    "resolution": "Switched to commit 1a2b3c4. HEAD is now detached.",
+    "hints": ["You can checkout hashes just like branches.", "Check 'git status' to see your state."],
+    "suggested_tools": ["git checkout"]
+  },
+  {
+    "id": "g120",
+    "module": "git",
+    "type": "routine",
+    "title": "Connecting Upstream",
+    "severity": "LOW",
+    "problem": "You've forked a project. Add the original repo 'https://github.com/original/repo.git' as a remote named 'upstream'.",
+    "investigations": {
+      "git remote -v": "origin  https://github.com/user/repo.git (fetch)"
+    },
+    "fix_commands": ["git remote add upstream https://github.com/original/repo.git"],
+    "resolution": "Remote 'upstream' added successfully.",
+    "hints": ["Use 'git remote add'.", "Specify the name 'upstream' and the URL."],
+    "suggested_tools": ["git remote add"]
+  },
+  {
+    "id": "c101",
+    "module": "cicd",
+    "type": "incident",
+    "title": "The Silent Pipeline",
+    "severity": "LOW",
+    "problem": "You pushed code to the 'feat/login' branch, but the GitHub Actions workflow didn't trigger.",
+    "investigations": {
+      "cat .github/workflows/main.yml": "on:\n  push:\n    branches: [ main ]",
+      "git branch": "* feat/login\n  main"
+    },
+    "fix_commands": ["sed -i 's/\\[ main \\]/\\[ main, feat\\/login \\]/' .github/workflows/main.yml"],
+    "resolution": "Workflow trigger updated to include the feature branch.",
+    "hints": ["Check the 'on' section of your workflow file.", "Is the current branch listed in the trigger branches?"],
+    "suggested_tools": ["cat", "git branch", "sed"]
+  },
+  {
+    "id": "c102",
+    "module": "cicd",
+    "type": "incident",
+    "title": "YAML Indentation Error",
+    "severity": "MEDIUM",
+    "problem": "The pipeline failed immediately with a YAML syntax error. Fix the indentation in the 'steps' section.",
+    "investigations": {
+      "cat .github/workflows/build.yml": "jobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n    - name: Checkout\n    uses: actions/checkout@v4"
+    },
+    "fix_commands": ["sed -i 's/    uses/      uses/' .github/workflows/build.yml"],
+    "resolution": "YAML indentation fixed. The 'uses' keyword is now properly nested under the step.",
+    "hints": ["YAML uses indentation to define structure.", "The 'uses' keyword should be at the same level as 'name'."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c103",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Missing Checkout Step",
+    "severity": "MEDIUM",
+    "problem": "The 'npm install' step failed because 'package.json' was not found in the workspace.",
+    "investigations": {
+      "cat .github/workflows/ci.yml": "jobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Install\n        run: npm install",
+      "ls -R": "."
+    },
+    "fix_commands": ["sed -i '/steps:/a \\      - uses: actions/checkout@v4' .github/workflows/ci.yml"],
+    "resolution": "Added 'actions/checkout@v4' step. The code is now available for the runner.",
+    "hints": ["The runner starts with an empty directory.", "How do you get your code onto the runner machine?"],
+    "suggested_tools": ["cat", "ls", "sed"]
+  },
+  {
+    "id": "c104",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Docker Build Failure",
+    "severity": "HIGH",
+    "problem": "The Docker build step failed. The Dockerfile is missing the 'FROM' instruction.",
+    "investigations": {
+      "cat Dockerfile": "WORKDIR /app\nCOPY . .\nCMD [\"node\", \"index.js\"]",
+      "git log -n 1": "commit abc123...\nAuthor: ...\n\n    chore: clean up Dockerfile"
+    },
+    "fix_commands": ["sed -i '1i FROM node:20-alpine' Dockerfile"],
+    "resolution": "Added base image to Dockerfile. Build successful.",
+    "hints": ["Every Dockerfile must start with a base image.", "What is the keyword for specifying a base image?"],
+    "suggested_tools": ["cat", "docker build", "sed"]
+  },
+  {
+    "id": "c105",
+    "module": "cicd",
+    "type": "routine",
+    "title": "Deploy to Staging",
+    "severity": "LOW",
+    "problem": "Trigger the staging deployment manually using workflow_dispatch.",
+    "investigations": {
+      "cat .github/workflows/deploy.yml": "on:\n  push:\n    branches: [ main ]"
+    },
+    "fix_commands": ["sed -i '/on:/a \\  workflow_dispatch:' .github/workflows/deploy.yml"],
+    "resolution": "Manual trigger (workflow_dispatch) added to the deployment workflow.",
+    "hints": ["Which keyword allows for manual triggers in GitHub Actions?", "Add it under the 'on' section."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c106",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Exposed API Key",
+    "severity": "CRITICAL",
+    "problem": "A security scan found an API key hardcoded in the pipeline YAML. Move it to a secret.",
+    "investigations": {
+      "cat .github/workflows/main.yml": "      - name: Deploy\n        run: ./deploy.sh --key=AIzaSyA1b2c3d4e5f"
+    },
+    "fix_commands": ["sed -i 's/--key=AIzaSyA1b2c3d4e5f/--key=${{ secrets.API_KEY }}/' .github/workflows/main.yml"],
+    "resolution": "API key moved to repository secrets. Security risk mitigated.",
+    "hints": ["Never hardcode secrets in YAML.", "Use the secrets context syntax: ${{ secrets.NAME }}"],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c107",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Broken Dependencies",
+    "severity": "MEDIUM",
+    "problem": "The build is failing because it's using an old Node.js version (v12) which is not compatible with the project.",
+    "investigations": {
+      "cat .github/workflows/ci.yml": "    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: node -v"
+    },
+    "fix_commands": ["sed -i '/checkout@v4/a \\      - uses: actions/setup-node@v4\\n        with:\\n          node-version: 20' .github/workflows/ci.yml"],
+    "resolution": "Added 'setup-node' action with version 20. Build dependencies are now compatible.",
+    "hints": ["You can specify the runtime version using a setup action.", "Check the marketplace for 'setup-node'."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c108",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Stale Cache",
+    "severity": "LOW",
+    "problem": "The build is using a corrupted cache. Clear the cache by changing the cache key.",
+    "investigations": {
+      "cat .github/workflows/ci.yml": "      - name: Cache dependencies\n        uses: actions/cache@v4\n        with:\n          path: ~/.npm\n          key: npm-cache-v1"
+    },
+    "fix_commands": ["sed -i 's/npm-cache-v1/npm-cache-v2/' .github/workflows/ci.yml"],
+    "resolution": "Cache key updated to v2. This will force a fresh download of dependencies.",
+    "hints": ["GitHub Actions uses the 'key' to find a cache.", "Changing the key forces a cache bust."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c109",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Permission Denied on Script",
+    "severity": "MEDIUM",
+    "problem": "The 'deploy.sh' step failed with 'Permission denied'.",
+    "investigations": {
+      "cat .github/workflows/deploy.yml": "      - name: Run Deploy\n        run: ./deploy.sh"
+    },
+    "fix_commands": ["sed -i 's/run: .\\/deploy.sh/run: chmod +x deploy.sh \\&\\& .\\/deploy.sh/' .github/workflows/deploy.yml"],
+    "resolution": "Added executable permission to the script before running it.",
+    "hints": ["Scripts must have the 'x' bit set to run in a Linux environment.", "Use 'chmod +x'."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c110",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Wrong Registry Tag",
+    "severity": "MEDIUM",
+    "problem": "The deployment is pulling the 'latest' image, but the pipeline is pushing with a specific version tag. Fix the deployment command.",
+    "investigations": {
+      "cat .github/workflows/deploy.yml": "      - name: Deploy\n        run: kubectl set image deployment/web web=my-app:latest",
+      "git log -n 1": "commit d4e5f6...\n(Pipeline pushes as my-app:d4e5f6)"
+    },
+    "fix_commands": ["sed -i 's/my-app:latest/my-app:${{ github.sha }}/' .github/workflows/deploy.yml"],
+    "resolution": "Deployment command updated to use the commit SHA tag instead of 'latest'.",
+    "hints": ["Using 'latest' is often unreliable in production.", "Use the current commit SHA for a unique, immutable tag."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c111",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Pipeline Secret Leak",
+    "severity": "CRITICAL",
+    "problem": "The pipeline logs are showing a raw password because it wasn't masked. Fix the secret reference.",
+    "investigations": {
+      "cat .github/workflows/main.yml": "      - name: DB Migrate\n        run: ./migrate.sh --pass=${{ env.DB_PASSWORD }}"
+    },
+    "fix_commands": ["sed -i 's/env.DB_PASSWORD/secrets.DB_PASSWORD/' .github/workflows/main.yml"],
+    "resolution": "Changed environment variable reference to a secret reference. GitHub Actions will now automatically mask the output.",
+    "hints": ["Variables in 'env' are not masked by default.", "Use the 'secrets' context for sensitive data."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c112",
+    "module": "cicd",
+    "type": "routine",
+    "title": "Conditional Job",
+    "severity": "LOW",
+    "problem": "Configure the 'deploy' job to only run if the 'test' job completes successfully.",
+    "investigations": {
+      "cat .github/workflows/main.yml": "jobs:\n  test:\n    runs-on: ubuntu-latest\n  deploy:\n    runs-on: ubuntu-latest"
+    },
+    "fix_commands": ["sed -i '/deploy:/a \\    needs: test' .github/workflows/main.yml"],
+    "resolution": "Added 'needs: test' to the deploy job. It now waits for the test job to succeed.",
+    "hints": ["Which keyword defines dependencies between jobs?", "It should be placed under the job ID."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c113",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Build Matrix Failure",
+    "severity": "MEDIUM",
+    "problem": "The build is failing on Node 14 because it's end-of-life. Remove '14' from the build matrix.",
+    "investigations": {
+      "cat .github/workflows/ci.yml": "    strategy:\n      matrix:\n        node: [14, 16, 18, 20]"
+    },
+    "fix_commands": ["sed -i 's/14, //' .github/workflows/ci.yml"],
+    "resolution": "Removed Node 14 from the build matrix. Pipeline is now green on supported versions.",
+    "hints": ["Look for the 'matrix' section under 'strategy'.", "Remove the unsupported version from the list."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c114",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Artifact Path Mismatch",
+    "severity": "MEDIUM",
+    "problem": "The 'upload-artifact' action is failing because it can't find the 'dist' folder. The build actually produces a 'build' folder.",
+    "investigations": {
+      "cat .github/workflows/ci.yml": "      - name: Upload\n        uses: actions/upload-artifact@v4\n        with:\n          path: dist",
+      "ls -F": "src/  public/  build/  package.json"
+    },
+    "fix_commands": ["sed -i 's/path: dist/path: build/' .github/workflows/ci.yml"],
+    "resolution": "Updated artifact path to 'build'. Artifacts are now correctly captured.",
+    "hints": ["Compare the 'path' in the YAML with the actual folder name on disk.", "Use 'ls' to see the current directory structure."],
+    "suggested_tools": ["cat", "ls", "sed"]
+  },
+  {
+    "id": "c115",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Missing Environment Variable",
+    "severity": "MEDIUM",
+    "problem": "The integration tests are failing because the 'DATABASE_URL' environment variable is missing.",
+    "investigations": {
+      "cat .github/workflows/test.yml": "      - name: Run Tests\n        run: npm test"
+    },
+    "fix_commands": ["sed -i '/run: npm test/i \\        env:\\n          DATABASE_URL: mongodb://localhost:27017' .github/workflows/test.yml"],
+    "resolution": "Added 'DATABASE_URL' environment variable to the test step.",
+    "hints": ["Steps can have their own 'env' section.", "Add the required variable before the 'run' command."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c116",
+    "module": "cicd",
+    "type": "routine",
+    "title": "Auto-Assign Reviewers",
+    "severity": "LOW",
+    "problem": "Add a step to the 'pull_request' workflow that uses the 'actions/github-script' to log the PR number.",
+    "investigations": {
+      "cat .github/workflows/pr.yml": "on: pull_request\njobs:\n  info:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4"
+    },
+    "fix_commands": ["sed -i '/checkout@v4/a \\      - name: Log PR\\n        uses: actions/github-script@v7\\n        with:\\n          script: console.log(context.issue.number)' .github/workflows/pr.yml"],
+    "resolution": "Added github-script step to log PR metadata.",
+    "hints": ["Check the marketplace for 'github-script'.", "Use it to interact with the GitHub context."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c117",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Slow Build Cleanup",
+    "severity": "LOW",
+    "problem": "The runner is running out of disk space. Add a step to prune Docker system after the build.",
+    "investigations": {
+      "cat .github/workflows/docker.yml": "      - name: Build\n        run: docker build -t app ."
+    },
+    "fix_commands": ["sed -i '/docker build/a \\      - name: Cleanup\\n        run: docker system prune -f' .github/workflows/docker.yml"],
+    "resolution": "Added Docker cleanup step to reclaim disk space on the runner.",
+    "hints": ["Runners have limited disk space.", "How do you remove unused Docker data?"],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c118",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Tag Trigger Loop",
+    "severity": "HIGH",
+    "problem": "The pipeline is triggering itself in an infinite loop because it creates a Git tag which then triggers another run. Fix the trigger to ignore tags.",
+    "investigations": {
+      "cat .github/workflows/main.yml": "on:\n  push:\n    branches: [ main ]\n    tags: [ '*' ]"
+    },
+    "fix_commands": ["sed -i '/tags:/d' .github/workflows/main.yml"],
+    "resolution": "Removed tag trigger. The pipeline will now only run on branch pushes.",
+    "hints": ["The 'tags' filter in the 'on' section controls tag-based triggers.", "Delete the tags filter to break the loop."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c119",
+    "module": "cicd",
+    "type": "routine",
+    "title": "Concurrency Control",
+    "severity": "LOW",
+    "problem": "Prevent multiple deployments from running at the same time by adding a concurrency group named 'deploy'.",
+    "investigations": {
+      "cat .github/workflows/deploy.yml": "name: Deploy\non: push"
+    },
+    "fix_commands": ["sed -i '/on: push/a concurrency: deploy' .github/workflows/deploy.yml"],
+    "resolution": "Concurrency group added. Subsequent deployments will now cancel previous ones.",
+    "hints": ["Use the 'concurrency' keyword at the top level of the YAML.", "It takes a group name as a value."],
+    "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "c120",
+    "module": "cicd",
+    "type": "incident",
+    "title": "Unsupported Runner",
+    "severity": "MEDIUM",
+    "problem": "The job is failing because it's trying to run on 'macos-latest' which is not available for this organization. Switch to 'ubuntu-latest'.",
+    "investigations": {
+      "cat .github/workflows/ci.yml": "jobs:\n  build:\n    runs-on: macos-latest"
+    },
+    "fix_commands": ["sed -i 's/macos-latest/ubuntu-latest/' .github/workflows/ci.yml"],
+    "resolution": "Switched to ubuntu-latest runner. Build now executes on supported infrastructure.",
+    "hints": ["Check the 'runs-on' value.", "What is the most common Linux runner in GitHub Actions?"],
+    "suggested_tools": ["cat", "sed"]
   }
 ]

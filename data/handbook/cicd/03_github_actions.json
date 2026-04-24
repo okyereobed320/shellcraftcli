@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cicd_gh_1",
+    "title": "Introduction to GitHub Actions",
+    "content": "GitHub Actions is a CI/CD platform that allows you to automate your build, test, and deployment pipeline. You can create workflows that build and test every pull request to your repository, or deploy merged pull requests to production. It's integrated directly into GitHub, making it a very popular choice for open-source and private projects alike.",
+    "insight": "The proximity of Actions to your code makes for a very tight and efficient feedback loop.",
+    "next": "Workflow Files"
+  },
+  {
+    "id": "cicd_gh_2",
+    "title": "Workflow Files (.github/workflows)",
+    "content": "Workflows in GitHub Actions are defined by YAML files located in the '.github/workflows' directory of your repository. You can have multiple workflow files for different purposes—one for running tests, one for publishing documentation, and one for deploying to servers. Each file represents a separate 'workflow'.",
+    "insight": "Separating your automation into multiple workflow files keeps your CI/CD configuration organized and easy to maintain.",
+    "next": "The 'on' Keyword"
+  },
+  {
+    "id": "cicd_gh_3",
+    "title": "Triggers: The 'on' Keyword",
+    "content": "Every GitHub Action workflow starts with an 'on' keyword, which defines the events that trigger the workflow. Common triggers include 'push:', 'pull_request:', and 'workflow_dispatch:' (for manual runs). You can further refine triggers by branch name or file path.",
+    "insight": "Careful trigger configuration prevents unnecessary 'wasted' minutes on your GitHub Actions bill.",
+    "lab": {
+      "command": "on:\n  push:\n    branches: [ main ]",
+      "output": "Workflow will run on every push to the main branch."
+    },
+    "next": "The 'jobs' Keyword"
+  },
+  {
+    "id": "cicd_gh_4",
+    "title": "Defining Jobs",
+    "content": "The 'jobs' section is where the real work happens. Each job must have an ID (like 'build') and a 'runs-on' property specifying the runner environment (like 'ubuntu-latest'). Inside the job, you define a sequence of 'steps'.",
+    "insight": "Most workflows use 'ubuntu-latest' for the fastest and most compatible environment.",
+    "next": "Uses vs. Run"
+  },
+  {
+    "id": "cicd_gh_5",
+    "title": "Steps: 'uses' vs. 'run'",
+    "content": "In a step, 'run' allows you to execute shell commands. 'uses' allows you to run a pre-built Action shared by the community or GitHub. For example, 'actions/checkout@v4' is a very common action used to pull your code into the runner's workspace.",
+    "insight": "'uses' is like importing a library; it saves you from reinventing the wheel for common tasks like checking out code or setting up Node.js.",
+    "lab": {
+      "command": "steps:\n  - uses: actions/checkout@v4\n  - run: npm install",
+      "output": "Code is checked out and dependencies are installed."
+    },
+    "next": "Checkout Action"
+  },
+  {
+    "id": "cicd_gh_6",
+    "title": "The Checkout Action",
+    "content": "Almost every workflow starts with the 'actions/checkout@v4' step. Without this, the runner environment starts empty, and none of your project files are available. This action clones your repository into the runner's working directory so that subsequent steps can act on your code.",
+    "insight": "Remember: the runner is a fresh machine; it doesn't know about your code until you 'checkout'.",
+    "next": "Marketplace Actions"
+  },
+  {
+    "id": "cicd_gh_7",
+    "title": "Using Marketplace Actions",
+    "content": "The GitHub Actions Marketplace is full of community-created actions for everything from sending Slack notifications to deploying to AWS. You use them in your workflow with the 'uses:' keyword. Always check the version (like @v1) to ensure your pipeline is stable and won't break when the action is updated.",
+    "insight": "Leveraging the marketplace can cut your pipeline setup time in half.",
+    "next": "Workflow Syntax Check"
+  },
+  {
+    "id": "cicd_gh_8",
+    "title": "Workflow Syntax Check",
+    "content": "Before pushing your workflow, you can use tools like 'action-validator' or simply look at the 'Actions' tab in GitHub after pushing. GitHub will show an error if your YAML syntax is invalid or if you've used an incorrect keyword. Indentation is the most common cause of errors in GitHub Actions.",
+    "insight": "Validation early saves you from the frustration of seeing your entire pipeline fail because of a missing colon.",
+    "next": "Building and Testing"
+  }
+]

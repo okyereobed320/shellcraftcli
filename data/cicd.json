@@ -1,0 +1,776 @@
+[
+  {
+    "question": "What does CI stand for in CI/CD?",
+    "options": ["Continuous Improvement", "Continuous Integration", "Complete Integration", "Centralized Integration"],
+    "answer": "Continuous Integration",
+    "difficulty": "easy",
+    "explanation": "CI stands for Continuous Integration, the practice of merging all developer working copies to a shared mainline several times a day."
+  },
+  {
+    "question": "What does CD commonly stand for in the context of automatic deployment?",
+    "options": ["Continuous Deployment", "Continuous Delivery", "Both A and B", "Complete Delivery"],
+    "answer": "Both A and B",
+    "difficulty": "easy",
+    "explanation": "CD can stand for Continuous Delivery or Continuous Deployment, depending on whether the final release step is manual or automated."
+  },
+  {
+    "question": "Which file format is most commonly used for CI/CD pipeline configurations?",
+    "options": ["JSON", "XML", "YAML", "HTML"],
+    "answer": "YAML",
+    "difficulty": "easy",
+    "explanation": "YAML is the industry standard for configuration files in DevOps tools like GitHub Actions, GitLab CI, and Kubernetes."
+  },
+  {
+    "question": "What is a 'trigger' in a CI/CD pipeline?",
+    "options": ["A bug in the code", "An event that starts the pipeline", "A manual approval step", "A type of database"],
+    "answer": "An event that starts the pipeline",
+    "difficulty": "easy",
+    "explanation": "A trigger is an event (like a code push or a pull request) that initiates the execution of a workflow."
+  },
+  {
+    "question": "In GitHub Actions, where are workflow files stored?",
+    "options": ["/workflows", "/.github/workflows", "/.actions", "/config/ci"],
+    "answer": "/.github/workflows",
+    "difficulty": "easy",
+    "explanation": "GitHub Actions looks for YAML files in the .github/workflows directory of your repository."
+  },
+  {
+    "question": "What is the primary purpose of a 'Build' stage in a pipeline?",
+    "options": ["To find security bugs", "To compile code and create artifacts", "To deploy to production", "To write documentation"],
+    "answer": "To compile code and create artifacts",
+    "difficulty": "easy",
+    "explanation": "The build stage transforms source code into a runnable artifact, like a binary or a Docker image."
+  },
+  {
+    "question": "What is an 'Artifact' in CI/CD?",
+    "options": ["Old code no longer in use", "A file produced by the build process", "A historical version of the repo", "A type of server"],
+    "answer": "A file produced by the build process",
+    "difficulty": "easy",
+    "explanation": "Artifacts are the files created by your build process, such as JARs, binaries, or container images."
+  },
+  {
+    "question": "Which keyword is used in GitHub Actions to run a pre-built community action?",
+    "options": ["run", "uses", "import", "call"],
+    "answer": "uses",
+    "difficulty": "easy",
+    "explanation": "The 'uses' keyword tells GitHub Actions to run a specific action, often from the GitHub Marketplace."
+  },
+  {
+    "question": "What happens if a test step fails in a standard CI pipeline?",
+    "options": ["The pipeline continues to deployment", "The pipeline stops and reports an error", "The test is automatically skipped", "The code is automatically fixed"],
+    "answer": "The pipeline stops and reports an error",
+    "difficulty": "easy",
+    "explanation": "A key principle of CI is to 'fail fast'—if any step fails, the entire pipeline stops to prevent broken code from moving forward."
+  },
+  {
+    "question": "What is 'Linting'?",
+    "options": ["Removing old files", "Checking code for stylistic and syntax errors", "Compiling code for production", "Testing database connections"],
+    "answer": "Checking code for stylistic and syntax errors",
+    "difficulty": "easy",
+    "explanation": "Linters analyze source code to flag programming errors, bugs, stylistic errors, and suspicious constructs."
+  },
+  {
+    "question": "Which of these is a common trigger for a CI pipeline?",
+    "options": ["git init", "git push", "git clone", "git status"],
+    "answer": "git push",
+    "difficulty": "easy",
+    "explanation": "Pushing code to a repository is the most common event used to trigger an automated build and test sequence."
+  },
+  {
+    "question": "What is a 'Runner' in GitHub Actions?",
+    "options": ["The developer who wrote the code", "The machine that executes the workflow steps", "A fast branch in Git", "The script that starts the server"],
+    "answer": "The machine that executes the workflow steps",
+    "difficulty": "easy",
+    "explanation": "A runner is a server that runs your GitHub Actions workflows when they're triggered."
+  },
+  {
+    "question": "Which YAML keyword defines the operating system for a job in GitHub Actions?",
+    "options": ["os", "runs-on", "machine", "env"],
+    "answer": "runs-on",
+    "difficulty": "medium",
+    "explanation": "The 'runs-on' keyword specifies the type of machine to run the job on (e.g., ubuntu-latest)."
+  },
+  {
+    "question": "What is the benefit of caching dependencies in a pipeline?",
+    "options": ["It makes the code more secure", "It reduces build time by reusing previously downloaded files", "It ensures the code is always up to date", "It automatically fixes bugs"],
+    "answer": "It reduces build time by reusing previously downloaded files",
+    "difficulty": "medium",
+    "explanation": "Caching avoids re-downloading thousands of dependency files on every run, significantly speeding up the pipeline."
+  },
+  {
+    "question": "How should sensitive information like API keys be stored for use in a pipeline?",
+    "options": ["In the YAML file directly", "In a public text file", "As 'Secrets' in the CI/CD platform's settings", "In the commit message"],
+    "answer": "As 'Secrets' in the CI/CD platform's settings",
+    "difficulty": "easy",
+    "explanation": "Secrets management features allow you to store sensitive data encrypted and inject it into the pipeline securely."
+  },
+  {
+    "question": "What is a 'Deployment Strategy'?",
+    "options": ["A way to write better code", "A method for rolling out new versions of software", "A plan for hiring more engineers", "A type of unit test"],
+    "answer": "A method for rolling out new versions of software",
+    "difficulty": "medium",
+    "explanation": "Deployment strategies (like Blue/Green or Canary) define how new code is introduced to the production environment."
+  },
+  {
+    "question": "What is 'Canary Deployment'?",
+    "options": ["Deploying code to a small percentage of users first", "Deploying code to all users at once", "Deploying code only on weekends", "Deploying code to a backup server"],
+    "answer": "Deploying code to a small percentage of users first",
+    "difficulty": "medium",
+    "explanation": "Canary deployments allow you to test new features on a small subset of traffic to detect issues early with minimal impact."
+  },
+  {
+    "question": "What is 'Blue/Green Deployment'?",
+    "options": ["Testing two different colors of the UI", "Using two identical environments to minimize downtime during updates", "A type of manual testing", "Deploying code to two different cloud providers"],
+    "answer": "Using two identical environments to minimize downtime during updates",
+    "difficulty": "medium",
+    "explanation": "Blue/Green deployment uses two environments to allow instant switching and easy rollbacks."
+  },
+  {
+    "question": "Which command is commonly used to build a container image in a pipeline?",
+    "options": ["docker build", "docker run", "docker pull", "docker push"],
+    "answer": "docker build",
+    "difficulty": "easy",
+    "explanation": "'docker build' creates an image from a Dockerfile, which is a common artifact in modern pipelines."
+  },
+  {
+    "question": "What is 'Infrastructure as Code' (IaC)?",
+    "options": ["Writing documentation for servers", "Managing infrastructure using configuration files instead of manual steps", "A type of programming language for databases", "Building physical servers by hand"],
+    "answer": "Managing infrastructure using configuration files instead of manual steps",
+    "difficulty": "medium",
+    "explanation": "IaC allows you to automate the provisioning and management of infrastructure through code (e.g., Terraform)."
+  },
+  {
+    "question": "What is the purpose of 'Environment Promotion'?",
+    "options": ["Giving developers a raise", "Moving the same artifact through different testing environments", "Advertising the software to more users", "Cleaning up old log files"],
+    "answer": "Moving the same artifact through different testing environments",
+    "difficulty": "medium",
+    "explanation": "Promotion ensures that the exact same code that passed QA is the one that goes to production."
+  },
+  {
+    "question": "In GitHub Actions, what does 'workflow_dispatch' allow you to do?",
+    "options": ["Automatically delete branches", "Manually trigger a workflow from the GitHub UI", "Schedule a nightly build", "Send an email on failure"],
+    "answer": "Manually trigger a workflow from the GitHub UI",
+    "difficulty": "medium",
+    "explanation": "'workflow_dispatch' adds a 'Run workflow' button to the Actions tab in GitHub."
+  },
+  {
+    "question": "Which of these is a 'Static Analysis' tool?",
+    "options": ["ESLint", "SonarQube", "Both A and B", "Jest"],
+    "answer": "Both A and B",
+    "difficulty": "medium",
+    "explanation": "Static analysis tools examine code without executing it to find bugs, style issues, or security flaws."
+  },
+  {
+    "question": "What is a 'Self-Hosted Runner'?",
+    "options": ["A runner that runs on your local laptop only", "A machine you manage yourself that runs CI/CD jobs", "A runner provided for free by GitHub", "A type of serverless function"],
+    "answer": "A machine you manage yourself that runs CI/CD jobs",
+    "difficulty": "medium",
+    "explanation": "Self-hosted runners give you more control over the hardware, operating system, and software tools available in your CI environment."
+  },
+  {
+    "question": "What does 'Immutable Infrastructure' mean?",
+    "options": ["Servers that are never updated", "Servers that are replaced rather than modified when code changes", "Infrastructure that is impossible to hack", "A database that only allows reads"],
+    "answer": "Servers that are replaced rather than modified when code changes",
+    "difficulty": "hard",
+    "explanation": "Instead of patching live servers, you build a new image and replace the old one, ensuring consistency and preventing 'configuration drift'."
+  },
+  {
+    "question": "What is the 'Build Matrix' used for in CI?",
+    "options": ["Managing project budgets", "Running tests across multiple versions of languages or OSs simultaneously", "Visualizing the pipeline steps", "Generating a list of all contributors"],
+    "answer": "Running tests across multiple versions of languages or OSs simultaneously",
+    "difficulty": "hard",
+    "explanation": "Matrices allow you to ensure your code works across a wide range of environments without writing separate jobs for each."
+  },
+  {
+    "question": "Which action is typically used first in a GitHub Actions workflow to access the code?",
+    "options": ["actions/setup-node", "actions/checkout", "actions/upload-artifact", "docker/build-push-action"],
+    "answer": "actions/checkout",
+    "difficulty": "easy",
+    "explanation": "actions/checkout is used to pull the repository's code into the runner's workspace."
+  },
+  {
+    "question": "What is 'Continuous Delivery'?",
+    "options": ["Deploying code to production automatically every time", "Ensuring code is always in a deployable state", "Sending physical hardware to customers", "Writing code faster"],
+    "answer": "Ensuring code is always in a deployable state",
+    "difficulty": "medium",
+    "explanation": "Continuous Delivery ensures that code is always ready for production, even if the final push is manual."
+  },
+  {
+    "question": "What is a 'Smoke Test' in a CI/CD pipeline?",
+    "options": ["A test to see if the server is literally on fire", "A quick set of tests to verify the basic health of a deployment", "A deep performance audit", "A manual security review"],
+    "answer": "A quick set of tests to verify the basic health of a deployment",
+    "difficulty": "medium",
+    "explanation": "Smoke tests are run immediately after deployment to ensure the application started correctly and the main features work."
+  },
+  {
+    "question": "What does the 'job' depend on in a pipeline if they need to run in sequence?",
+    "options": ["needs", "depends_on", "after", "wait"],
+    "answer": "needs",
+    "difficulty": "medium",
+    "explanation": "In GitHub Actions, the 'needs' keyword is used to define dependencies between jobs."
+  },
+  {
+    "question": "What is 'Drift' in the context of Infrastructure as Code?",
+    "options": ["The movement of data between servers", "When the real-world infrastructure no longer matches the defined code", "A slow build process", "Moving code from Git to a Runner"],
+    "answer": "When the real-world infrastructure no longer matches the defined code",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which GitHub Actions event triggers a workflow when a specific label is added to a Pull Request?",
+    "options": ["pull_request: [labeled]", "on: label", "push: labels", "workflow_dispatch"],
+    "answer": "pull_request: [labeled]",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the purpose of the 'GITHUB_TOKEN' secret?",
+    "options": ["To log in to the developer's laptop", "To provide an authentication token for interacting with the GitHub API", "To encrypt the repository history", "To pay for GitHub Actions minutes"],
+    "answer": "To provide an authentication token for interacting with the GitHub API",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does 'fail-fast' mean in a build matrix?",
+    "options": ["The pipeline runs faster if it's going to fail", "GitHub cancels all in-progress jobs if any job in the matrix fails", "The tests are skipped if the build is slow", "The runner is deleted immediately on error"],
+    "answer": "GitHub cancels all in-progress jobs if any job in the matrix fails",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which tool is commonly used to run a CI/CD pipeline locally for testing?",
+    "options": ["act", "docker-compose", "git-ci", "local-actions"],
+    "answer": "act",
+    "difficulty": "hard"
+  },
+  {
+    "question": "In YAML, what does the '|' (pipe) character indicate?",
+    "options": ["A list of items", "A literal block scalar (preserving line breaks)", "A comment", "A placeholder"],
+    "answer": "A literal block scalar (preserving line breaks)",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is a 'Deployment Gate'?",
+    "options": ["A firewall for the production server", "A manual or automated check that must pass before deployment", "A physical security door at the data center", "The final step in a YAML file"],
+    "answer": "A manual or automated check that must pass before deployment",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the role of a 'WebHook' in CI/CD?",
+    "options": ["To catch bugs in the UI", "To notify the CI/CD system of events in the Git repository", "To encrypt web traffic", "To store build artifacts"],
+    "answer": "To notify the CI/CD system of events in the Git repository",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'GitOps'?",
+    "options": ["Using Git to manage developer salaries", "A paradigm where Git is the single source of truth for infrastructure and applications", "Running Git commands inside a container", "An alternative to GitHub"],
+    "answer": "A paradigm where Git is the single source of truth for infrastructure and applications",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which keyword defines the environment variables for a job or step?",
+    "options": ["vars", "env", "secrets", "config"],
+    "answer": "env",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Shift Left Testing'?",
+    "options": ["Moving tests to the end of the pipeline", "Moving testing earlier in the development lifecycle", "Running tests on the left-hand side of the screen", "Using only open-source testing tools"],
+    "answer": "Moving testing earlier in the development lifecycle",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Semantic Versioning' (SemVer)?",
+    "options": ["A way to name files in Git", "A versioning scheme using Major.Minor.Patch", "A tool for translating code", "A method for commenting code"],
+    "answer": "A versioning scheme using Major.Minor.Patch",
+    "difficulty": "medium"
+  },
+  {
+    "question": "In SemVer, which number do you increment for a backwards-compatible bug fix?",
+    "options": ["Major", "Minor", "Patch", "Build"],
+    "answer": "Patch",
+    "difficulty": "medium"
+  },
+  {
+    "question": "In SemVer, which number do you increment for a backwards-compatible feature?",
+    "options": ["Major", "Minor", "Patch", "Build"],
+    "answer": "Minor",
+    "difficulty": "medium"
+  },
+  {
+    "question": "In SemVer, which number do you increment for a breaking change?",
+    "options": ["Major", "Minor", "Patch", "Build"],
+    "answer": "Major",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of a 'Lock File' (like package-lock.json) in CI?",
+    "options": ["To prevent others from editing the code", "To ensure deterministic builds by locking dependency versions", "To encrypt the project settings", "To hide the source code"],
+    "answer": "To ensure deterministic builds by locking dependency versions",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Pipeline as Code'?",
+    "options": ["Writing the application in YAML", "Defining the CI/CD pipeline in a version-controlled file", "Using AI to write pipelines", "Compiling the pipeline into a binary"],
+    "answer": "Defining the CI/CD pipeline in a version-controlled file",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Dark Launching'?",
+    "options": ["Deploying code at night", "Releasing a feature to production but keeping it hidden from users", "Deploying code without a pipeline", "A failed deployment"],
+    "answer": "Releasing a feature to production but keeping it hidden from users",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is a 'Feature Flag'?",
+    "options": ["A flag in a capture-the-flag game", "A toggle that allows you to enable/disable features without redeploying", "A special comment in the code", "A type of Git branch"],
+    "answer": "A toggle that allows you to enable/disable features without redeploying",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which of these is a benefit of Feature Flags in CI/CD?",
+    "options": ["Faster deployments", "Decoupling deployment from release", "Easier rollbacks", "All of the above"],
+    "answer": "All of the above",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Microservices Architecture'?",
+    "options": ["Writing very small functions", "An architectural style that structures an application as a collection of services", "A type of cloud hosting", "A way to compress code"],
+    "answer": "An architectural style that structures an application as a collection of services",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How does CI/CD help with Microservices?",
+    "options": ["It allows each service to be deployed independently", "It makes the code smaller", "It replaces the need for a database", "It combines all services into one"],
+    "answer": "It allows each service to be deployed independently",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'MTTR' in DevOps metrics?",
+    "options": ["Maximum Time To Release", "Mean Time To Recovery", "Most Talented Team Rank", "Main Task Total Run"],
+    "answer": "Mean Time To Recovery",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What does a high 'Deployment Frequency' indicate?",
+    "options": ["A slow team", "A highly automated and efficient CI/CD process", "Too many bugs in the code", "A small codebase"],
+    "answer": "A highly automated and efficient CI/CD process",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Change Failure Rate'?",
+    "options": ["The percentage of deployments that cause an issue in production", "The number of times a developer changes their mind", "The speed at which code is written", "The size of a Git diff"],
+    "answer": "The percentage of deployments that cause an issue in production",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'CircleCI'?",
+    "options": ["A type of round server", "A popular cloud-based CI/CD platform", "A mathematical formula for pipelines", "A recursive Git command"],
+    "answer": "A popular cloud-based CI/CD platform",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Jenkins'?",
+    "options": ["A famous computer scientist", "An open-source automation server for CI/CD", "A type of testing framework", "A cloud provider"],
+    "answer": "An open-source automation server for CI/CD",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Travis CI'?",
+    "options": ["A CI/CD service primarily used for open-source projects", "A competitor to Git", "A type of database", "A JavaScript library"],
+    "answer": "A CI/CD service primarily used for open-source projects",
+    "difficulty": "easy"
+  },
+  {
+    "question": "In GitHub Actions, what is the 'default' working directory for steps?",
+    "options": ["/root", "$GITHUB_WORKSPACE", "/home/runner", "/tmp"],
+    "answer": "$GITHUB_WORKSPACE",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which keyword allows you to ignore errors in a specific step so the pipeline continues?",
+    "options": ["ignore-error: true", "continue-on-error: true", "force: true", "allow-failure: true"],
+    "answer": "continue-on-error: true",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of 'outputs' in a GitHub Actions job?",
+    "options": ["To print messages to the screen", "To pass data from one job to another", "To save the logs to a file", "To export the code to another repo"],
+    "answer": "To pass data from one job to another",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you specify that a job should only run on a specific runner label?",
+    "options": ["runs-on: [label]", "machine: label", "using: label", "on: label"],
+    "answer": "runs-on: [label]",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Container Orchestration'?",
+    "options": ["Playing music for containers", "Automating the deployment, scaling, and management of containers", "Writing Dockerfiles", "Building a private registry"],
+    "answer": "Automating the deployment, scaling, and management of containers",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which tool is the industry standard for Container Orchestration?",
+    "options": ["Docker Compose", "Kubernetes", "Terraform", "Jenkins"],
+    "answer": "Kubernetes",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Helm'?",
+    "options": ["A type of security software", "A package manager for Kubernetes", "A cloud provider", "A Git extension"],
+    "answer": "A package manager for Kubernetes",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How does Helm help in a CI/CD pipeline?",
+    "options": ["It builds Docker images", "It simplifies the deployment of complex applications to Kubernetes", "It runs unit tests", "It manages Git branches"],
+    "answer": "It simplifies the deployment of complex applications to Kubernetes",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Argo CD'?",
+    "options": ["A tool for GitOps-based continuous delivery to Kubernetes", "A video player for DevOps", "A cloud-based database", "A Python framework"],
+    "answer": "A tool for GitOps-based continuous delivery to Kubernetes",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'Prometheus'?",
+    "options": ["A Greek god of code", "A monitoring and alerting toolkit", "A type of CI/CD runner", "A YAML validator"],
+    "answer": "A monitoring and alerting toolkit",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Grafana'?",
+    "options": ["A visualization tool for monitoring data", "A tool for building UIs", "A database engine", "A CI/CD platform"],
+    "answer": "A visualization tool for monitoring data",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Why is monitoring important for CD?",
+    "options": ["It makes the dashboard look good", "It provides the data needed for automatic rollbacks and health checks", "It speeds up the build process", "It replaces the need for testing"],
+    "answer": "It provides the data needed for automatic rollbacks and health checks",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Serverless Computing'?",
+    "options": ["Running code without any physical servers anywhere", "A model where the cloud provider manages the server allocation", "A way to run code offline", "A type of local database"],
+    "answer": "A model where the cloud provider manages the server allocation",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you deploy to AWS Lambda from a pipeline?",
+    "options": ["Using the AWS CLI or specialized Actions", "By emailing the code to Amazon", "By uploading a ZIP file to a website", "It's done automatically by Git"],
+    "answer": "Using the AWS CLI or specialized Actions",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is a 'Multi-Stage Build' in Docker?",
+    "options": ["A build that runs on multiple servers", "A Dockerfile that uses multiple FROM statements to create smaller images", "Building multiple images at once", "A build that includes many steps"],
+    "answer": "A Dockerfile that uses multiple FROM statements to create smaller images",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Why are Multi-Stage builds good for CI/CD?",
+    "options": ["They make the YAML file shorter", "They reduce the final image size and improve security", "They are faster to write", "They don't require Docker"],
+    "answer": "They reduce the final image size and improve security",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'Code Coverage'?",
+    "options": ["The percentage of code that is covered by documentation", "The percentage of source code executed during testing", "The amount of code written per day", "The number of files in the repo"],
+    "answer": "The percentage of source code executed during testing",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which of these is a 'Headless Browser' used for testing?",
+    "options": ["Chrome (Headless)", "Puppeteer", "Playwright", "All of the above"],
+    "answer": "All of the above",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'End-to-End' (E2E) testing?",
+    "options": ["Testing from the beginning of a file to the end", "Testing the entire application flow from start to finish", "Testing only the back-end", "Testing only the front-end"],
+    "answer": "Testing the entire application flow from start to finish",
+    "difficulty": "medium"
+  },
+  {
+    "question": "When should E2E tests be run in a pipeline?",
+    "options": ["Before the build", "After the application is deployed to a staging environment", "On the developer's machine only", "Once a year"],
+    "answer": "After the application is deployed to a staging environment",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'GitHub Packages'?",
+    "options": ["A physical delivery service", "A software package hosting service integrated with GitHub", "A list of suggested repo settings", "A type of discount for students"],
+    "answer": "A software package hosting service integrated with GitHub",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Docker Hub'?",
+    "options": ["A social network for whales", "The world's largest library and community for container images", "A tool for managing Git repos", "A type of cloud server"],
+    "answer": "The world's largest library and community for container images",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the command to login to a private Docker registry in a pipeline?",
+    "options": ["docker signin", "docker login", "docker auth", "docker connect"],
+    "answer": "docker login",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What does 'TDD' stand for?",
+    "options": ["Total Deployment Delivery", "Test-Driven Development", "Technical Design Document", "Timed Data Display"],
+    "answer": "Test-Driven Development",
+    "difficulty": "medium"
+  },
+  {
+    "question": "In TDD, when do you write the tests?",
+    "options": ["After the code is finished", "Before the code is written", "During deployment", "Never"],
+    "answer": "Before the code is written",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'BDD'?",
+    "options": ["Build-Driven Deployment", "Behavior-Driven Development", "Basic Data Display", "Binary Delivery Division"],
+    "answer": "Behavior-Driven Development",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'Gherkin'?",
+    "options": ["A type of vegetable", "A business-readable language for defining test scenarios", "A YAML validator", "A specialized CI runner"],
+    "answer": "A business-readable language for defining test scenarios",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'Secret Masking' in CI/CD logs?",
+    "options": ["Hiding the entire log", "Replacing sensitive values with asterisks (***) in the output", "Deleting the logs immediately", "Encrypting the logs with a password"],
+    "answer": "Replacing sensitive values with asterisks (***) in the output",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Concurrency' in GitHub Actions?",
+    "options": ["Running multiple versions of Git", "Ensuring only one workflow/job runs at a time for a specific group", "Speeding up the internet connection", "Writing code in multiple languages"],
+    "answer": "Ensuring only one workflow/job runs at a time for a specific group",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Why would you use 'Concurrency' settings?",
+    "options": ["To save money", "To prevent multiple deployments from overlapping and causing conflicts", "To make the pipeline run slower", "To debug errors"],
+    "answer": "To prevent multiple deployments from overlapping and causing conflicts",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'Dynamic Analysis' (DAST)?",
+    "options": ["Checking the code while it's being written", "Testing a running application for security vulnerabilities", "A type of unit test", "Measuring the speed of a database"],
+    "answer": "Testing a running application for security vulnerabilities",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'Static Application Security Testing' (SAST)?",
+    "options": ["Testing a running app", "Analyzing the source code for security flaws without executing it", "Physical security at the office", "Encrypting the source code"],
+    "answer": "Analyzing the source code for security flaws without executing it",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'DevSecOps'?",
+    "options": ["A new type of Linux distribution", "Integrating security practices into the DevOps process", "A specialized security team", "A software tool for hackers"],
+    "answer": "Integrating security practices into the DevOps process",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'ChatOps'?",
+    "options": ["Talking to your coworkers about code", "Managing operations tasks through a chat interface", "An AI that writes code", "A type of support ticket system"],
+    "answer": "Managing operations tasks through a chat interface",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is a 'Bot' in the context of ChatOps?",
+    "options": ["A robot that builds servers", "An automated assistant that executes commands in a chat room", "A bug in the code", "A slow computer"],
+    "answer": "An automated assistant that executes commands in a chat room",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Terraform'?",
+    "options": ["A tool for terraforming planets", "A popular Infrastructure as Code tool from HashiCorp", "A cloud provider", "A type of database"],
+    "answer": "A popular Infrastructure as Code tool from HashiCorp",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Ansible'?",
+    "options": ["A configuration management and automation tool", "A programming language", "A Git branch strategy", "A hardware manufacturer"],
+    "answer": "A configuration management and automation tool",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the difference between Terraform and Ansible?",
+    "options": ["Terraform is for provisioning infrastructure; Ansible is for configuring it", "Ansible is for provisioning; Terraform is for configuration", "They are exactly the same", "Terraform is only for AWS; Ansible is only for Azure"],
+    "answer": "Terraform is for provisioning infrastructure; Ansible is for configuring it",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'Idempotency' in automation?",
+    "options": ["A command that always fails", "A property where an operation can be applied multiple times without changing the result beyond the initial application", "The ability to run commands in parallel", "An error in the YAML syntax"],
+    "answer": "A property where an operation can be applied multiple times without changing the result beyond the initial application",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Why is Idempotency important in CI/CD?",
+    "options": ["It makes the pipeline faster", "It ensures that running the same deployment multiple times is safe and predictable", "It reduces the size of artifacts", "It fixes broken code automatically"],
+    "answer": "It ensures that running the same deployment multiple times is safe and predictable",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is 'YAML Linting'?",
+    "options": ["Checking the application code", "Checking the YAML file for formatting and syntax errors", "Converting YAML to JSON", "Writing YAML documentation"],
+    "answer": "checking the YAML file for formatting and syntax errors",
+    "difficulty": "easy"
+    },
+    {
+    "question": "What is 'Continuous Delivery' vs 'Continuous Deployment'?",
+    "options": ["Delivery is manual; Deployment is automated", "Deployment is manual; Delivery is automated", "Both are manual", "Both are automated"],
+    "answer": "Delivery is manual; Deployment is automated",
+    "difficulty": "medium"
+    },
+    {
+    "question": "Which GitHub Actions event triggers on a scheduled basis?",
+    "options": ["schedule", "cron", "on: schedule", "time"],
+    "answer": "on: schedule",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is the 'working-directory' keyword used for in a step?",
+    "options": ["To change the OS", "To specify the directory where the step's commands run", "To set environment variables", "To name the job"],
+    "answer": "To specify the directory where the step's commands run",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is an 'Ephemeral' runner?",
+    "options": ["A runner that lasts forever", "A runner that is destroyed after one job execution", "A runner that runs on multiple servers", "A type of database"],
+    "answer": "A runner that is destroyed after one job execution",
+    "difficulty": "hard"
+    },
+    {
+    "question": "What is 'Artifact Attestation'?",
+    "options": ["Deleting old artifacts", "Creating a signed record of how and where an artifact was built", "Testing if an artifact is valid", "Naming an artifact"],
+    "answer": "Creating a signed record of how and where an artifact was built",
+    "difficulty": "hard"
+    },
+    {
+    "question": "What does 'SCA' stand for in DevSecOps?",
+    "options": ["Software Composition Analysis", "Source Code Audit", "Security Configuration Assessment", "System Control Access"],
+    "answer": "Software Composition Analysis",
+    "difficulty": "hard"
+    },
+    {
+    "question": "Which tool is commonly used for SCA?",
+    "options": ["Snyk", "Docker", "Git", "Jenkins"],
+    "answer": "Snyk",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Pipeline Orchestration'?",
+    "options": ["Writing YAML files", "Managing multiple pipelines across different services and teams", "Building Docker images", "Running unit tests"],
+    "answer": "Managing multiple pipelines across different services and teams",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is the purpose of the 'matrix' strategy in GitHub Actions?",
+    "options": ["To store secrets", "To run a job multiple times with different variables", "To visualize the pipeline", "To lock the repository"],
+    "answer": "To run a job multiple times with different variables",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'DORA metrics' named after?",
+    "options": ["A cartoon character", "DevOps Research and Assessment team", "A cloud provider", "A programming language"],
+    "answer": "DevOps Research and Assessment team",
+    "difficulty": "medium"
+    },
+    {
+    "question": "Which of these is NOT one of the 4 DORA metrics?",
+    "options": ["Deployment Frequency", "Mean Time to Recovery", "Lead Time for Changes", "Lines of Code Written"],
+    "answer": "Lines of Code Written",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Progressive Delivery'?",
+    "options": ["Building code faster", "Techniques like canary and blue/green that reduce the blast radius of releases", "Writing better documentation", "Using AI to deploy"],
+    "answer": "Techniques like canary and blue/green that reduce the blast radius of releases",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Observability' in the context of CI/CD?",
+    "options": ["Looking at the code", "The ability to understand the internal state of a system by looking at its outputs (logs, metrics, traces)", "Watching the pipeline run", "Writing tests"],
+    "answer": "The ability to understand the internal state of a system by looking at its outputs (logs, metrics, traces)",
+    "difficulty": "hard"
+    },
+    {
+    "question": "What is the 'SLSA' (Salsa) framework?",
+    "options": ["A type of dance for DevOps", "Supply-chain Levels for Software Artifacts (a security framework)", "A new YAML parser", "A tool for building images"],
+    "answer": "Supply-chain Levels for Software Artifacts (a security framework)",
+    "difficulty": "hard"
+    },
+    {
+    "question": "What is 'Blast Radius'?",
+    "options": ["The size of a Docker image", "The potential impact of a failure in a specific environment", "The speed of a pipeline", "The number of files changed"],
+    "answer": "The potential impact of a failure in a specific environment",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Roll Forward'?",
+    "options": ["Going back to a previous version", "Fixing a bug in production by pushing a new fix instead of reverting", "Moving the pipeline to a new server", "Building the code twice"],
+    "answer": "Fixing a bug in production by pushing a new fix instead of reverting",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Dry Run' in a pipeline?",
+    "options": ["Running tests without code", "Executing a process to see its outcome without making any actual changes", "A failed build", "A manual trigger"],
+    "answer": "Executing a process to see its outcome without making any actual changes",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Lint Staged'?",
+    "options": ["Linting only the files that are currently staged in Git", "Linting the entire repository", "Linting the production server", "A type of test"],
+    "answer": "Linting only the files that are currently staged in Git",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Infrastructure Drift Detection'?",
+    "options": ["Finding where a server is located", "Automatically identifying when production infrastructure differs from the IaC definition", "A type of network error", "Moving code to a new region"],
+    "answer": "Automatically identifying when production infrastructure differs from the IaC definition",
+    "difficulty": "hard"
+    },
+    {
+    "question": "What is 'Self-Healing' infrastructure?",
+    "options": ["Infrastructure that never breaks", "Systems that automatically detect and correct failures (e.g., restarting a failed container)", "A type of security software", "Manual server maintenance"],
+    "answer": "Systems that automatically detect and correct failures (e.g., restarting a failed container)",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Hermetic' build?",
+    "options": ["A build that runs on a private server", "A build that is fully self-contained and has no external dependencies or network access", "A very fast build", "A build that uses Docker"],
+    "answer": "A build that is fully self-contained and has no external dependencies or network access",
+    "difficulty": "hard"
+    },
+    {
+    "question": "What is the purpose of 'Code Signing'?",
+    "options": ["To prove who wrote the code", "To verify the integrity and origin of the code or artifact", "To encrypt the source code", "To hide the commit history"],
+    "answer": "To verify the integrity and origin of the code or artifact",
+    "difficulty": "medium"
+    },
+    {
+    "question": "What is 'Policy as Code'?",
+    "options": ["Writing laws in Python", "Defining security and compliance rules in code (e.g., using OPA/Rego)", "A type of documentation", "The company's HR policy"],
+    "answer": "Defining security and compliance rules in code (e.g., using OPA/Rego)",
+    "difficulty": "hard"
+    },
+    {
+    "question": "What is 'OPA' (Open Policy Agent)?",
+    "options": ["A cloud provider", "A general-purpose policy engine", "A CI/CD runner", "A Git extension"],
+    "answer": "A general-purpose policy engine",
+    "difficulty": "hard"
+    },
+    {
+    "question": "What is the 'Runner Workspace'?",
+    "options": ["The developer's desk", "The directory on the runner where the workflow executes", "A social network for DevOps", "The GitHub website"],
+    "answer": "The directory on the runner where the workflow executes",
+    "difficulty": "easy"
+    }
+    ]
