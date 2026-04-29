@@ -30,7 +30,7 @@ program
   .name('shellcraft')
   .description('The open-source terminal-based training platform.')
   .version('0.1.0')
-  .argument('[module]', 'Module to start (linux, networking, docker, git, cicd)')
+  .argument('[module]', 'Module to start (linux, networking, docker, git, cicd, terraform)')
   .argument('[action]', 'Action to perform (learn, quiz, sim)')
   .action(async (module, action) => {
     if (module && action) {
@@ -41,7 +41,7 @@ program
       console.log(COLORS.error(`\n Unknown action: "${action}" for module "${module}".`));
       return;
     } else if (module) {
-      const knownCommands = ['linux', 'docker', 'networking', 'git', 'cicd', 'start', 'list', 'score', 'ai-setup', 'progress', 'mission', 'explain', 'history', 'replay'];
+      const knownCommands = ['linux', 'docker', 'networking', 'git', 'cicd', 'terraform', 'start', 'list', 'score', 'ai-setup', 'progress', 'mission', 'explain', 'history', 'replay'];
       if (!knownCommands.includes(module)) {
         return await startModuleREPL(module);
       }
@@ -77,7 +77,7 @@ program
     console.log(`${COLORS.muted('Missions:      ')} ${COLORS.accent(completedMissions.length + ' completed')}`);
     
     console.log(`\n${COLORS.primary.bold('Module Completion:')}`);
-    ['linux', 'networking', 'docker', 'git', 'cicd'].forEach(m => {
+    ['linux', 'networking', 'docker', 'git', 'cicd', 'terraform'].forEach(m => {
       const keys = Object.keys(handbookProgress).filter(k => k.startsWith(m));
       const status = keys.length > 0 ? COLORS.accent(`${keys.length} chapters started`) : COLORS.muted('Not started');
       console.log(`${COLORS.muted(` • ${m.padEnd(12)}: `)} ${status}`);
@@ -91,7 +91,7 @@ program
   .argument('<name>', 'Name of the mission')
   .action(async (name) => {
     preActionHook('mission', name);
-    const modules = ['linux', 'networking', 'docker', 'git', 'cicd'];
+    const modules = ['linux', 'networking', 'docker', 'git', 'cicd', 'terraform'];
     const targetMod = modules.find(m => name.toLowerCase().includes(m)) || 'linux';
     await startMissions(targetMod);
   });
@@ -139,7 +139,7 @@ program
 
 program.on('command:*', function () {
   const attempted = program.args[0];
-  const known = ['linux', 'docker', 'networking', 'git', 'cicd', 'start', 'progress', 'mission', 'explain', 'history', 'replay'];
+  const known = ['linux', 'docker', 'networking', 'git', 'cicd', 'terraform', 'start', 'progress', 'mission', 'explain', 'history', 'replay'];
   const suggestion = known.find(k => k.startsWith(attempted.slice(0, 3)));
   console.error(COLORS.error(`\n Invalid command: "${attempted}"`));
   if (suggestion) console.log(COLORS.muted(` Did you mean "shellcraft ${suggestion}"?\n`));
@@ -231,7 +231,8 @@ async function interactiveMenu() {
       console.log(`${COLORS.warning(' • networking ')} ${COLORS.highlight('(Modern Connectivity)')}`);
       console.log(`${COLORS.warning(' • docker     ')} ${COLORS.highlight('(Containerization)')}`);
       console.log(`${COLORS.warning(' • git        ')} ${COLORS.highlight('(Version Control System)')}`);
-      console.log(`${COLORS.warning(' • cicd       ')} ${COLORS.highlight('(Automation & Pipelines)')}\n`);
+      console.log(`${COLORS.warning(' • cicd       ')} ${COLORS.highlight('(Automation & Pipelines)')}`);
+      console.log(`${COLORS.warning(' • terraform  ')} ${COLORS.highlight('(Infrastructure as Code)')}\n`);
       
       await inquirer.prompt([{ type: 'input', name: 'continue', message: 'Press Enter to return...' }]);
       console.clear();
@@ -280,6 +281,7 @@ async function runLearningSession() {
         { name: COLORS.highlight('Docker (Containerization)'), value: 'docker' },
         { name: COLORS.highlight('Git (Version Control)'), value: 'git' },
         { name: COLORS.highlight('CI/CD (Automation)'), value: 'cicd' },
+        { name: COLORS.highlight('Terraform (IaC)'), value: 'terraform' },
         new inquirer.Separator(),
         { name: `🏠 ${COLORS.muted('Back to Main Menu')}`, value: 'back' }
       ]

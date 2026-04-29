@@ -1,0 +1,352 @@
+[
+  {
+    "question": "What is the primary purpose of Terraform?",
+    "options": ["To configure software inside servers", "To provision and manage infrastructure as code", "To monitor application performance", "To manage container orchestration"],
+    "answer": "To provision and manage infrastructure as code",
+    "difficulty": "easy",
+    "explanation": "Terraform is an IaC tool used to create, manage, and version infrastructure across various cloud providers."
+  },
+  {
+    "question": "Which command initializes a new Terraform working directory?",
+    "options": ["terraform plan", "terraform apply", "terraform init", "terraform setup"],
+    "answer": "terraform init",
+    "difficulty": "easy",
+    "explanation": "'terraform init' downloads provider plugins and prepares the environment for other commands."
+  },
+  {
+    "question": "What does 'terraform plan' do?",
+    "options": ["Deploys infrastructure to the cloud", "Creates an execution plan showing what changes will be made", "Formats your HCL code", "Deletes existing infrastructure"],
+    "answer": "Creates an execution plan showing what changes will be made",
+    "difficulty": "easy",
+    "explanation": "'terraform plan' allows you to review changes before they are actually applied to your infrastructure."
+  },
+  {
+    "question": "Which file is the 'source of truth' for Terraform's knowledge of your infrastructure?",
+    "options": ["main.tf", "terraform.tfvars", "terraform.tfstate", "variables.tf"],
+    "answer": "terraform.tfstate",
+    "difficulty": "easy",
+    "explanation": "The state file (.tfstate) maps your configuration to real-world resources."
+  },
+  {
+    "question": "What language does Terraform use for its configuration files?",
+    "options": ["YAML", "JSON", "HCL (HashiCorp Configuration Language)", "Python"],
+    "answer": "HCL (HashiCorp Configuration Language)",
+    "difficulty": "easy",
+    "explanation": "HCL is designed to be human-readable and optimized for describing infrastructure."
+  },
+  {
+    "question": "What is a Terraform Provider?",
+    "options": ["A person who writes HCL code", "A plugin that translates HCL into API calls for a specific service", "A remote storage for state files", "A module that defines multiple resources"],
+    "answer": "A plugin that translates HCL into API calls for a specific service",
+    "difficulty": "medium",
+    "explanation": "Providers like 'aws', 'google', or 'azure' allow Terraform to interact with different cloud platforms."
+  },
+  {
+    "question": "How do you define an input variable in Terraform?",
+    "options": ["variable \"name\" {}", "input \"name\" {}", "set \"name\" =", "define var \"name\""],
+    "answer": "variable \"name\" {}",
+    "difficulty": "easy",
+    "explanation": "The 'variable' block is used to declare input parameters for your modules."
+  },
+  {
+    "question": "Which command is used to remove all infrastructure managed by a configuration?",
+    "options": ["terraform delete", "terraform remove", "terraform destroy", "terraform cleanup"],
+    "answer": "terraform destroy",
+    "difficulty": "easy",
+    "explanation": "'terraform destroy' identifies and terminates all resources defined in your project."
+  },
+  {
+    "question": "What is the purpose of the 'output' block in Terraform?",
+    "options": ["To write logs to a file", "To export information about infrastructure after it is created", "To define the cloud provider's region", "To specify which resources to destroy"],
+    "answer": "To export information about infrastructure after it is created",
+    "difficulty": "medium",
+    "explanation": "Outputs can expose resource attributes like IP addresses or DNS names for easy access or use by other modules."
+  },
+  {
+    "question": "What is an 'Implicit Dependency' in Terraform?",
+    "options": ["A dependency defined using the 'depends_on' argument", "A dependency automatically discovered by referencing a resource's attribute", "A dependency on a specific provider version", "A dependency on a local file"],
+    "answer": "A dependency automatically discovered by referencing a resource's attribute",
+    "difficulty": "medium",
+    "explanation": "If Resource B uses an attribute from Resource A (e.g., A.id), Terraform knows A must be created first."
+  },
+  {
+    "question": "Which meta-argument allows you to create multiple instances of a resource using a map or set of strings?",
+    "options": ["count", "for_each", "lifecycle", "provider"],
+    "answer": "for_each",
+    "difficulty": "medium",
+    "explanation": "'for_each' is ideal for creating resources based on a collection of unique keys."
+  },
+  {
+    "question": "What is 'Configuration Drift'?",
+    "options": ["The process of moving state from local to remote", "When the actual state of infrastructure differs from the defined configuration", "A slow degradation of network performance", "Updating provider versions in HCL"],
+    "answer": "When the actual state of infrastructure differs from the defined configuration",
+    "difficulty": "medium",
+    "explanation": "Drift occurs when manual changes are made to infrastructure outside of Terraform."
+  },
+  {
+    "question": "Which command automatically formats your Terraform code to a standard style?",
+    "options": ["terraform validate", "terraform clean", "terraform fmt", "terraform lint"],
+    "answer": "terraform fmt",
+    "difficulty": "easy",
+    "explanation": "'terraform fmt' ensures consistent indentation and style across your HCL files."
+  },
+  {
+    "question": "What is the benefit of using Remote Backends?",
+    "options": ["Faster deployment times", "Team collaboration and state locking", "Automatic HCL code generation", "Reduced cloud costs"],
+    "answer": "Team collaboration and state locking",
+    "difficulty": "medium",
+    "explanation": "Remote backends store state centrally, allowing teams to work together without overwriting each other's changes."
+  },
+  {
+    "question": "What does the 'lifecycle' block's 'prevent_destroy' setting do?",
+    "options": ["Prevents any changes to the resource", "Rejects plans that would result in the destruction of the resource", "Keeps the resource even if 'terraform destroy' is run", "Automatically recreates the resource if deleted"],
+    "answer": "Rejects plans that would result in the destruction of the resource",
+    "difficulty": "hard",
+    "explanation": "'prevent_destroy' is a safety lock for critical resources like production databases."
+  },
+  {
+    "question": "Which command is used to move a resource from one address to another in the state file without recreating it?",
+    "options": ["terraform state push", "terraform state mv", "terraform state rm", "terraform rename"],
+    "answer": "terraform state mv",
+    "difficulty": "hard",
+    "explanation": "'terraform state mv' is essential for refactoring code while keeping infrastructure intact."
+  },
+  {
+    "question": "How can you mark a variable as containing sensitive information (like a password)?",
+    "options": ["password = true", "sensitive = true", "hidden = true", "private = true"],
+    "answer": "sensitive = true",
+    "difficulty": "medium",
+    "explanation": "Marking a variable as 'sensitive' hides its value from CLI output to prevent leaking secrets."
+  },
+  {
+    "question": "What is 'Idempotency' in the context of Terraform?",
+    "options": ["The ability to run the same command multiple times with the same result", "The capacity to manage thousands of resources", "The speed at which providers communicate with APIs", "The complexity of the dependency graph"],
+    "answer": "The ability to run the same command multiple times with the same result",
+    "difficulty": "medium",
+    "explanation": "Idempotency ensures that if infrastructure already matches the code, running 'apply' does nothing."
+  },
+  {
+    "question": "Which function allows you to look up a value in a map using a key?",
+    "options": ["get()", "find()", "lookup()", "map_get()"],
+    "answer": "lookup()",
+    "difficulty": "medium",
+    "explanation": "lookup(map, key, default) retrieves the value for a given key from a map."
+  },
+  {
+    "question": "What is a 'Data Source' used for?",
+    "options": ["To store logs from Terraform runs", "To fetch information about resources defined outside of the current configuration", "To define the source of the Terraform binary", "To provide input values for variables"],
+    "answer": "To fetch information about resources defined outside of the current configuration",
+    "difficulty": "medium",
+    "explanation": "Data sources are read-only and allow you to query information from your cloud provider."
+  },
+  {
+    "question": "Which block type is used to set internal, reusable expressions within a module?",
+    "options": ["variable", "output", "locals", "resource"],
+    "answer": "locals",
+    "difficulty": "medium",
+    "explanation": "'locals' are for internal module logic and are not exposed to users of the module."
+  },
+  {
+    "question": "What is the purpose of 'terraform validate'?",
+    "options": ["To check if cloud credentials are valid", "To check configuration files for syntax and internal consistency", "To verify that the cloud provider is online", "To confirm that the state file is encrypted"],
+    "answer": "To check configuration files for syntax and internal consistency",
+    "difficulty": "easy",
+    "explanation": "'terraform validate' ensures your code is syntactically correct before running a plan."
+  },
+  {
+    "question": "Which command is used to manually bring a resource created outside of Terraform under its management?",
+    "options": ["terraform add", "terraform link", "terraform import", "terraform capture"],
+    "answer": "terraform import",
+    "difficulty": "hard",
+    "explanation": "'terraform import' populates the state file with an existing resource's information."
+  },
+  {
+    "question": "In HCL, which comment style is used for single-line comments?",
+    "options": ["# only", "// only", "Both # and //", "/* */ only"],
+    "answer": "Both # and //",
+    "difficulty": "easy",
+    "explanation": "HCL supports both # and // for single-line comments, and /* */ for multi-line comments."
+  },
+  {
+    "question": "What does 'terraform state list' show?",
+    "options": ["A list of all .tf files in the directory", "A list of all resources currently tracked in the state file", "A list of all available cloud providers", "A history of all terraform apply commands"],
+    "answer": "A list of all resources currently tracked in the state file",
+    "difficulty": "medium",
+    "explanation": "It provides a quick overview of what Terraform is currently managing."
+  },
+  {
+    "question": "What happens if you change a resource's attribute in HCL and run 'terraform apply'?",
+    "options": ["Terraform will always destroy and recreate the resource", "Terraform will always update the resource in place", "Terraform will determine if an in-place update or a recreate is needed", "Terraform will fail if the resource already exists"],
+    "answer": "Terraform will determine if an in-place update or a recreate is needed",
+    "difficulty": "medium",
+    "explanation": "Some changes (like changing a server name) can be updated in-place, while others (like changing an AMI) require recreation."
+  },
+  {
+    "question": "What is a 'Module' in Terraform?",
+    "options": ["A single resource block", "A container for multiple resources used together", "A specific version of a provider", "A special type of state file"],
+    "answer": "A container for multiple resources used together",
+    "difficulty": "medium",
+    "explanation": "Modules allow you to group related resources into reusable, encapsulated components."
+  },
+  {
+    "question": "Which file extension is used for Terraform configuration files?",
+    "options": [".tf", ".tform", ".hclx", ".json only"],
+    "answer": ".tf",
+    "difficulty": "easy",
+    "explanation": ".tf is the standard extension for Terraform files. (.tf.json is also supported but less common)."
+  },
+  {
+    "question": "What is the purpose of the 'required_providers' block?",
+    "options": ["To list the people allowed to run Terraform", "To specify which provider versions are compatible with the configuration", "To list the cloud accounts being used", "To define the network requirements for Terraform"],
+    "answer": "To specify which provider versions are compatible with the configuration",
+    "difficulty": "medium",
+    "explanation": "It ensures that the correct plugins are used and prevents issues with breaking changes in newer provider versions."
+  },
+  {
+    "question": "What does the 'count' meta-argument do when set to 0?",
+    "options": ["Creates one resource with an ID of 0", "Creates no instances of the resource", "Creates 10 resources", "Throws an error"],
+    "answer": "Creates no instances of the resource",
+    "difficulty": "medium",
+    "explanation": "Setting 'count = 0' is a common trick to conditionally disable a resource."
+  },
+  {
+    "question": "Which command would you use to remove a specific resource from the state file without deleting it in the cloud?",
+    "options": ["terraform destroy -target", "terraform state rm", "terraform forget", "terraform detach"],
+    "answer": "terraform state rm",
+    "difficulty": "hard",
+    "explanation": "'terraform state rm' tells Terraform to stop tracking a resource while leaving it running in the cloud."
+  },
+  {
+    "question": "What is the 'Default Workspace' in Terraform?",
+    "options": ["The 'default' workspace created for every project", "The first module defined in main.tf", "The local machine where Terraform is installed", "A special mode for debugging"],
+    "answer": "The 'default' workspace created for every project",
+    "difficulty": "medium",
+    "explanation": "Workspaces allow you to manage multiple states for the same configuration; 'default' is the initial one."
+  },
+  {
+    "question": "Which tool provides a managed backend and UI for Terraform state and runs?",
+    "options": ["Terraform Registry", "Terraform Cloud", "Terraform Vault", "Terraform CLI"],
+    "answer": "Terraform Cloud",
+    "difficulty": "medium",
+    "explanation": "Terraform Cloud is HashiCorp's SaaS offering for Terraform collaboration and automation."
+  },
+  {
+    "question": "In a 'resource \"aws_instance\" \"web\"' block, what is 'web'?",
+    "options": ["The resource type", "The resource's local name (label)", "The name of the server in AWS", "The provider name"],
+    "answer": "The resource's local name (label)",
+    "difficulty": "easy",
+    "explanation": "The local name 'web' is how you reference this specific instance elsewhere in your HCL."
+  },
+  {
+    "question": "What is the primary difference between Provisioning and Configuration Management?",
+    "options": ["They are the same thing", "Provisioning creates infrastructure; CM configures the software on it", "Provisioning is manual; CM is automated", "Provisioning is for cloud; CM is for on-prem"],
+    "answer": "Provisioning creates infrastructure; CM configures the software on it",
+    "difficulty": "medium",
+    "explanation": "Terraform provisions servers; Ansible or Chef configure the software inside them."
+  },
+  {
+    "question": "What is the 'Dependency Graph' in Terraform?",
+    "options": ["A chart of cloud provider pricing", "A visual representation of resource relationships and creation order", "A list of all team members and their permissions", "A map of physical data centers"],
+    "answer": "A visual representation of resource relationships and creation order",
+    "difficulty": "medium",
+    "explanation": "Terraform uses the graph to parallelize creation while ensuring dependencies are met."
+  },
+  {
+    "question": "Which meta-argument ensures a resource is created before its replacement is destroyed?",
+    "options": ["create_before_destroy", "prevent_destroy", "ignore_changes", "depends_on"],
+    "answer": "create_before_destroy",
+    "difficulty": "hard",
+    "explanation": "This is defined within the 'lifecycle' block and is useful for minimizing downtime."
+  },
+  {
+    "question": "How do you access the value of an input variable named 'instance_type'?",
+    "options": ["instance_type", "var.instance_type", "input.instance_type", "${instance_type}"],
+    "answer": "var.instance_type",
+    "difficulty": "easy",
+    "explanation": "Input variables are always accessed through the 'var' object."
+  },
+  {
+    "question": "What is the purpose of 'terraform.tfvars' files?",
+    "options": ["To define variable types", "To provide values for input variables", "To store the state file", "To list the required providers"],
+    "answer": "To provide values for input variables",
+    "difficulty": "easy",
+    "explanation": ".tfvars files allow you to separate your configuration from the values used for a specific deployment."
+  },
+  {
+    "question": "Which command displays the current version of Terraform?",
+    "options": ["terraform --version", "terraform -v", "Both A and B", "terraform version show"],
+    "answer": "Both A and B",
+    "difficulty": "easy",
+    "explanation": "Both '--version' and '-v' are standard ways to check the CLI version."
+  },
+  {
+    "question": "What is a 'Tainted' resource in Terraform?",
+    "options": ["A resource that is marked for deletion because its provisioner failed", "A resource that has a security vulnerability", "A resource that was created manually", "A resource that belongs to a deprecated provider"],
+    "answer": "A resource that is marked for deletion because its provisioner failed",
+    "difficulty": "hard",
+    "explanation": "Terraform 'taints' a resource if it was partially created but failed a post-creation step."
+  },
+  {
+    "question": "What does the 'ignore_changes' lifecycle argument do?",
+    "options": ["Prevents anyone from editing the HCL code", "Tells Terraform to ignore certain attributes when comparing state to configuration", "Ignores syntax errors in the resource block", "Skips the 'plan' phase for that resource"],
+    "answer": "Tells Terraform to ignore certain attributes when comparing state to configuration",
+    "difficulty": "hard",
+    "explanation": "Useful for attributes like 'tags' that might be modified by external cloud tools (e.g., auto-scaling)."
+  },
+  {
+    "question": "What is the 'terraform_remote_state' data source used for?",
+    "options": ["To back up your state file to a different cloud", "To read output values from another, separate Terraform configuration", "To migrate local state to a remote backend", "To encrypt the state file"],
+    "answer": "To read output values from another, separate Terraform configuration",
+    "difficulty": "hard",
+    "explanation": "It allows for decoupling infrastructure into smaller, independent projects that share information."
+  },
+  {
+    "question": "Which command is used to unlock a state file that was left locked after a crashed run?",
+    "options": ["terraform unlock", "terraform force-unlock", "terraform state unlock", "terraform release"],
+    "answer": "terraform force-unlock",
+    "difficulty": "hard",
+    "explanation": "This command should be used with caution as it can lead to state corruption if another process is actually running."
+  },
+  {
+    "question": "In HCL, how do you concatenate two strings 'foo' and 'bar'?",
+    "options": ["\"foo\" + \"bar\"", "concat(\"foo\", \"bar\")", "\"foobar\"", "\"${var.prefix}bar\" (via interpolation)"],
+    "answer": "\"${var.prefix}bar\" (via interpolation)",
+    "difficulty": "medium",
+    "explanation": "HCL uses string interpolation to combine variables and text within strings."
+  },
+  {
+    "question": "Which Terraform command is generally NOT used in a CI/CD pipeline?",
+    "options": ["terraform init", "terraform plan", "terraform login", "terraform apply"],
+    "answer": "terraform login",
+    "difficulty": "medium",
+    "explanation": "'terraform login' is interactive and intended for local user setup, not automated pipelines."
+  },
+  {
+    "question": "What is the purpose of the 'terraform workspace' command?",
+    "options": ["To open the Terraform web dashboard", "To manage multiple environments (e.g., dev/prod) using the same configuration", "To organize .tf files into subfolders", "To switch between different cloud providers"],
+    "answer": "To manage multiple environments (e.g., dev/prod) using the same configuration",
+    "difficulty": "medium",
+    "explanation": "Workspaces provide isolated state files for different instances of the same infrastructure."
+  },
+  {
+    "question": "What is a 'Provider Alias' used for?",
+    "options": ["To give a provider a shorter name", "To use multiple instances of the same provider (e.g., for different regions)", "To hide the name of the cloud provider for security", "To rename a resource in the state file"],
+    "answer": "To use multiple instances of the same provider (e.g., for different regions)",
+    "difficulty": "hard",
+    "explanation": "Aliases allow you to manage resources in different AWS regions or accounts within one configuration."
+  },
+  {
+    "question": "What does the 'file()' function do in Terraform?",
+    "options": ["Creates a new file on the local disk", "Reads the contents of a file at a given path into a string", "Uploads a file to a server", "Deletes a file after a terraform apply"],
+    "answer": "Reads the contents of a file at a given path into a string",
+    "difficulty": "medium",
+    "explanation": "It's often used to load SSH public keys or startup scripts (user_data) into resource arguments."
+  },
+  {
+    "question": "Which command provides a human-readable detailed view of a single resource in the state file?",
+    "options": ["terraform show", "terraform state show <address>", "terraform state list", "terraform inspect"],
+    "answer": "terraform state show <address>",
+    "difficulty": "medium",
+    "explanation": "'terraform state show' displays all attributes of a specific resource as tracked by Terraform."
+  }
+]

@@ -170,5 +170,19 @@
       { "id": "mc5", "name": "Mission 5: Deployment Strategies", "commands": ["blue/green", "canary", "rolling"] },
       { "id": "mc6", "name": "Mission 6: Observability Hero", "commands": ["logs", "monitor", "rollback"] }
     ]
+  },
+  {
+    "id": "world_tf",
+    "module": "terraform",
+    "name": "WORLD 10: Infrastructure as Code",
+    "description": "Master the art of provisioning with Terraform",
+    "missions": [
+      { "id": "tf1", "name": "Mission 1: The First Provision", "commands": ["init", "plan", "apply", "hcl"] },
+      { "id": "tf2", "name": "Mission 2: Variable Power", "commands": ["variable", "tfvars", "output", "locals"] },
+      { "id": "tf3", "name": "Mission 3: Resource Mastery", "commands": ["resource", "count", "for_each", "depends_on"] },
+      { "id": "tf4", "name": "Mission 4: State Secrets", "commands": ["state", "backend", "lock", "show"] },
+      { "id": "tf5", "name": "Mission 5: Lifecycle & Safety", "commands": ["lifecycle", "taint", "import", "validate"] },
+      { "id": "tf6", "name": "Mission 6: Multi-Cloud Architect", "commands": ["provider", "alias", "workspace", "module"] }
+    ]
   }
 ]

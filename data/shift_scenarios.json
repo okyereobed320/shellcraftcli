@@ -1383,5 +1383,85 @@
     "resolution": "Switched to ubuntu-latest runner. Build now executes on supported infrastructure.",
     "hints": ["Check the 'runs-on' value.", "What is the most common Linux runner in GitHub Actions?"],
     "suggested_tools": ["cat", "sed"]
+  },
+  {
+    "id": "501",
+    "module": "terraform",
+    "type": "routine",
+    "title": "Cloud Genesis: S3 Bucket Provisioning",
+    "severity": "LOW",
+    "problem": "Marketing needs a new S3 bucket for assets. Provision it using the standard template.",
+    "fix_commands": ["terraform apply", "terraform apply -auto-approve"],
+    "investigations": {
+      "terraform plan": "Plan: 1 to add, 0 to change, 0 to destroy.\n\n+ aws_s3_bucket.marketing_assets\n    bucket: 'shellcraft-marketing-2024'\n    acl: 'private'",
+      "ls": "main.tf  terraform.tfstate  variables.tf"
+    },
+    "resolution": "S3 bucket 'shellcraft-marketing-2024' successfully provisioned. Access keys rotated and delivered.",
+    "hints": ["Have you initialized the directory?", "Check the plan before applying."],
+    "suggested_tools": ["terraform init", "terraform plan", "terraform apply"]
+  },
+  {
+    "id": "502",
+    "module": "terraform",
+    "type": "incident",
+    "title": "The State Lock Mystery",
+    "severity": "MEDIUM",
+    "problem": "Automation is failing with 'Error acquiring the state lock'. Another developer might have crashed during an apply.",
+    "fix_commands": ["terraform force-unlock 1234-5678-9012"],
+    "investigations": {
+      "terraform apply": "Error: Error acquiring the state lock.\nLock Info:\n  ID: 1234-5678-9012\n  Operation: OperationTypeApply\n  Who: dev-user@workstation-01",
+      "terraform show": "Error: State is locked."
+    },
+    "resolution": "Stale lock cleared. Pipeline is now flowing again.",
+    "hints": ["Look for the Lock ID in the error message.", "Use the 'force-unlock' command if you're sure nobody is applying."],
+    "suggested_tools": ["terraform force-unlock"]
+  },
+  {
+    "id": "503",
+    "module": "terraform",
+    "type": "incident",
+    "title": "Ghost in the Machine: Configuration Drift",
+    "severity": "HIGH",
+    "problem": "A security group rule was manually changed in the console. Terraform needs to revert it to the approved state.",
+    "fix_commands": ["terraform apply", "terraform apply -auto-approve"],
+    "investigations": {
+      "terraform plan": "~ aws_security_group.web_sg\n    ~ ingress {\n        ~ from_port = 0 -> 80\n        ~ to_port   = 65535 -> 80\n        ~ cidr_blocks = ['0.0.0.0/0']\n      }",
+      "terraform refresh": "State updated. 1 resource changed externally."
+    },
+    "resolution": "Security group rules reverted to HCL definitions. Unauthorized manual changes wiped.",
+    "hints": ["Run a plan to see what drifted.", "Terraform will automatically propose reverts for manual changes."],
+    "suggested_tools": ["terraform plan", "terraform refresh"]
+  },
+  {
+    "id": "504",
+    "module": "terraform",
+    "type": "routine",
+    "title": "Scaling the Web Fleet",
+    "severity": "LOW",
+    "problem": "Traffic is increasing. Update the variable to increase the 'web_server' count from 2 to 5.",
+    "fix_commands": ["terraform apply", "terraform apply -var='instance_count=5'"],
+    "investigations": {
+      "cat terraform.tfvars": "instance_count = 2",
+      "terraform plan": "Plan: 3 to add, 0 to change, 0 to destroy."
+    },
+    "resolution": "Web server count increased to 5. Load balancer re-registering new targets.",
+    "hints": ["Check terraform.tfvars or pass the variable via the command line."],
+    "suggested_tools": ["cat", "terraform plan", "terraform apply"]
+  },
+  {
+    "id": "505",
+    "module": "terraform",
+    "type": "incident",
+    "title": "Provider Version Conflict",
+    "severity": "MEDIUM",
+    "problem": "A new developer cannot run init due to a provider version mismatch. Fix the version constraint in required_providers.",
+    "fix_commands": ["terraform init -upgrade"],
+    "investigations": {
+      "terraform init": "Error: Failed to query available provider packages.\nCould not retrieve the list of available versions for provider hashicorp/aws: locked to 4.0.0",
+      "cat versions.tf": "required_providers { aws = { source = 'hashicorp/aws', version = '4.0.0' } }"
+    },
+    "resolution": "Provider plugins upgraded. Local locks synchronized with repository constraints.",
+    "hints": ["Try upgrading the plugins.", "Check if the locked version is still available."],
+    "suggested_tools": ["terraform init -upgrade"]
   }
 ]

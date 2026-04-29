@@ -1,0 +1,282 @@
+[
+    {
+      "id": "plan_tf_01",
+      "title": "Introduction to Plan",
+      "content": "Terraform Plan is the most important command in your workflow. It performs a dry run of your configuration to show you exactly what changes will be made to your infrastructure before they happen. This allows you to catch errors early and ensure your changes match your intentions.",
+      "insight": "Think of 'terraform plan' as your safety net; never skip it in a production environment.",
+      "next": "The Dry Run Principle"
+    },
+    {
+      "id": "plan_tf_02",
+      "title": "The Dry Run Principle",
+      "content": "The dry run principle means that Terraform compares your current configuration with the real-world resources and the state file. It identifies the delta between 'what should be' and 'what is' without actually making any modifications. This read-only operation is safe to run as often as needed.",
+      "insight": "A plan doesn't change anything, so feel free to run it frequently during development.",
+      "next": "Refreshing State"
+    },
+    {
+      "id": "plan_tf_03",
+      "title": "Refreshing State",
+      "content": "Terraform refresh reconciles the state file with the real-world infrastructure. It ensures that the current state is up-to-date before planning any changes. This step is automatic during a plan unless explicitly disabled.",
+      "insight": "Refreshing ensures your plan is based on current reality, not stale information.",
+      "next": "Planning with Changes"
+    },
+    {
+      "id": "plan_tf_04",
+      "title": "Planning with Changes",
+      "content": "When you run a plan, Terraform identifies which resources need to be created, updated, or deleted. It provides a summary of these actions at the end of the output, making it easy to review high-level impacts.",
+      "insight": "Always check the 'plan' summary for a quick overview of the total impact.",
+      "next": "Resource Creation (+)"
+    },
+    {
+      "id": "plan_tf_05",
+      "title": "Resource Creation (+)",
+      "content": "The '+' symbol indicates that a resource will be created. This happens when you add a new resource block to your configuration that doesn't yet exist in the cloud or the state file.",
+      "insight": "Look for the green '+' to see what's being added to your environment.",
+      "next": "Resource Destruction (-)"
+    },
+    {
+      "id": "plan_tf_06",
+      "title": "Resource Destruction (-)",
+      "content": "The '-' symbol indicates that a resource will be destroyed. This occurs when you remove a resource block from your configuration or if an update requires replacing the existing resource.",
+      "insight": "Be extremely careful when you see the red '-' symbol in your plan.",
+      "next": "Resource In-place Update (~)"
+    },
+    {
+      "id": "plan_tf_07",
+      "title": "Resource In-place Update (~)",
+      "content": "The '~' symbol indicates an in-place update. This means Terraform will modify the existing resource's attributes without destroying it, such as changing a server's tags or a bucket's policy.",
+      "insight": "In-place updates are generally safer and faster than resource replacement.",
+      "next": "Resource Replacement (-/+)"
+    },
+    {
+      "id": "plan_tf_08",
+      "title": "Resource Replacement (-/+)",
+      "content": "The '-/+' symbol indicates that a resource will be destroyed and then recreated. This happens when you change an attribute that the cloud provider does not allow to be updated in-place (like a subnet's CIDR block).",
+      "insight": "Replacement causes downtime for the resource; plan accordingly.",
+      "next": "Planning for Data Sources"
+    },
+    {
+      "id": "plan_tf_09",
+      "title": "Planning for Data Sources",
+      "content": "Terraform plans also include information fetched from data sources. It shows the values retrieved from the cloud during the refresh phase, allowing you to verify that the data being used is correct.",
+      "insight": "Verify data source outputs to ensure your logic is based on correct external information.",
+      "next": "The Plan Output File"
+    },
+    {
+      "id": "plan_tf_10",
+      "title": "The Plan Output File",
+      "content": "You can save the result of a plan to a file using the '-out' flag. This file is an opaque binary that contains the full state and the proposed changes, ensuring that the same actions can be executed later.",
+      "insight": "Saving plans is essential for stable, multi-stage deployment pipelines.",
+      "next": "Reading a Saved Plan"
+    },
+    {
+      "id": "plan_tf_11",
+      "title": "Reading a Saved Plan",
+      "content": "To review a saved plan file in human-readable format, use the 'terraform show' command followed by the filename. This allows you to audit the exact actions that will be taken before applying them.",
+      "insight": "Use 'show' to double-check saved plans before they go live.",
+      "next": "Why Save a Plan?"
+    },
+    {
+      "id": "plan_tf_12",
+      "title": "Why Save a Plan?",
+      "content": "Saving a plan prevents 'configuration drift' between the plan and apply phases. If someone else changes the infrastructure while you're reviewing your plan, Terraform will reject the apply of the old plan file, preventing conflicts.",
+      "insight": "Saved plans are a vital concurrency control for team environments.",
+      "next": "Out-of-band Changes"
+    },
+    {
+      "id": "plan_tf_13",
+      "title": "Out-of-band Changes",
+      "content": "Out-of-band changes occur when resources are modified outside of Terraform. During a plan, Terraform detects these changes and offers to revert them to match your configuration, maintaining the source of truth.",
+      "insight": "Plan is your primary tool for fighting configuration drift.",
+      "next": "Parallelism in Planning"
+    },
+    {
+      "id": "plan_tf_14",
+      "title": "Parallelism in Planning",
+      "content": "Terraform plans multiple resources in parallel to save time. By default, it manages up to 10 resources at once, but you can adjust this using the '-parallelism' flag if you run into API rate limits.",
+      "insight": "Tune parallelism to find the sweet spot between speed and API stability.",
+      "next": "Planning with Variables"
+    },
+    {
+      "id": "plan_tf_15",
+      "title": "Planning with Variables",
+      "content": "You can provide variable values during a plan using the '-var' flag. This allows you to test different configurations (like different instance types) without changing your source code.",
+      "insight": "Use command-line variables for quick experimentation during the planning phase.",
+      "next": "The -var-file Flag"
+    },
+    {
+      "id": "plan_tf_16",
+      "title": "The -var-file Flag",
+      "content": "For more complex variable sets, use the '-var-file' flag to point to a '.tfvars' file. This is the standard way to manage environment-specific configurations like dev.tfvars or prod.tfvars.",
+      "insight": "Variable files keep your CLI commands short and reproducible.",
+      "next": "Sensitive Variables in Plans"
+    },
+    {
+      "id": "plan_tf_17",
+      "title": "Sensitive Variables in Plans",
+      "content": "Variables marked as sensitive will be masked (shown as '(sensitive)') in the plan output. This prevents secrets from being leaked into your logs or terminal history during a run.",
+      "insight": "Always mark passwords and keys as sensitive to protect your credentials.",
+      "next": "Planning with Modules"
+    },
+    {
+      "id": "plan_tf_18",
+      "title": "Planning with Modules",
+      "content": "Terraform plans encompass all resources, including those defined within modules. It shows the hierarchical path to each resource, helping you understand which module is responsible for each change.",
+      "insight": "Follow the module paths in the plan to trace changes back to their source.",
+      "next": "Planning for Specific Targets"
+    },
+    {
+      "id": "plan_tf_19",
+      "title": "Planning for Specific Targets",
+      "content": "The '-target' flag allows you to limit the plan to a specific resource or module. This is useful for troubleshooting or applying an urgent fix without affecting the rest of the infrastructure.",
+      "insight": "Use targeting only as a last resort; it can lead to inconsistent state.",
+      "next": "Why Targeting is Dangerous"
+    },
+    {
+      "id": "plan_tf_20",
+      "title": "Why Targeting is Dangerous",
+      "content": "Targeting bypasses Terraform's automatic dependency management. It can result in a partial state that doesn't reflect your actual intent, potentially leading to errors during future full runs.",
+      "insight": "Targeting is a scalpel; use it with extreme care and only when necessary.",
+      "next": "Input Prompts in Plan"
+    },
+    {
+      "id": "plan_tf_21",
+      "title": "Input Prompts in Plan",
+      "content": "If you don't provide all required variables, Terraform will prompt you for them. To prevent this in automated environments, use the '-input=false' flag to make the command fail instead.",
+      "insight": "Automation requires non-interactive plans to ensure pipelines don't hang.",
+      "next": "Disabling Refresh (-refresh=false)"
+    },
+    {
+      "id": "plan_tf_22",
+      "title": "Disabling Refresh (-refresh=false)",
+      "content": "If your cloud API is slow or you have thousands of resources, you can skip the refresh phase using '-refresh=false'. This makes the plan much faster but relies on the potentially stale state file.",
+      "insight": "Use -refresh=false for speed during frequent dev iterations, but never in production.",
+      "next": "The -detailed-exitcode Flag"
+    },
+    {
+      "id": "plan_tf_23",
+      "title": "The -detailed-exitcode Flag",
+      "content": "The '-detailed-exitcode' flag tells Terraform to return different exit codes based on the plan's result: 0 for no changes, 2 for pending changes, and 1 for errors. This is crucial for scripts.",
+      "insight": "Detailed exit codes allow your CI scripts to intelligently decide whether to proceed.",
+      "next": "Exit Codes Explained"
+    },
+    {
+      "id": "plan_tf_24",
+      "title": "Exit Codes Explained",
+      "content": "Understanding exit codes is vital for automation. A 0 means 'infrastructure matches code,' while a 2 means 'changes detected.' Handling these correctly prevents unnecessary deployments.",
+      "insight": "Use exit codes to build smart, self-correcting automation pipelines.",
+      "next": "Planning for Destroy"
+    },
+    {
+      "id": "plan_tf_25",
+      "title": "Planning for Destroy",
+      "content": "You can plan for the destruction of your entire infrastructure using the '-destroy' flag. This shows exactly which resources will be removed, providing a final audit before cleanup.",
+      "insight": "Always review a destroy plan carefully before proceeding with a total teardown.",
+      "next": "Moving Resources in State (mv)"
+    },
+    {
+      "id": "plan_tf_26",
+      "title": "Moving Resources in State (mv)",
+      "content": "If you rename a resource in your code, Terraform will think you want to delete the old one and create a new one. Use 'terraform state mv' to update the state so it matches your new naming.",
+      "insight": "Renaming resources requires a state move to avoid unnecessary resource replacement.",
+      "next": "Impact of Provider Upgrades"
+    },
+    {
+      "id": "plan_tf_27",
+      "title": "Impact of Provider Upgrades",
+      "content": "Upgrading providers can change the underlying API calls. A plan will detect if a provider upgrade requires any adjustments to your resources to maintain compatibility.",
+      "insight": "Run a plan immediately after upgrading providers to catch breaking changes early.",
+      "next": "Managing State Locks"
+    },
+    {
+      "id": "plan_tf_28",
+      "title": "Managing State Locks",
+      "content": "Terraform locks the state file during a plan to prevent others from modifying it. If a plan crashes, you may need to manually release the lock using 'terraform force-unlock'.",
+      "insight": "Locking ensures that only one person can plan or apply at any given time.",
+      "next": "Concurrent Plans"
+    },
+    {
+      "id": "plan_tf_29",
+      "title": "Concurrent Plans",
+      "content": "While you can't apply concurrently, some backends allow multiple concurrent plans. However, it's generally safer to serialize your workflow to avoid conflicting views of the infrastructure.",
+      "insight": "Serializing your workflow is the safest way to manage large-scale infrastructure.",
+      "next": "Planning in CI/CD"
+    },
+    {
+      "id": "plan_tf_30",
+      "title": "Planning in CI/CD",
+      "content": "In CI/CD, plans are often posted as comments on Pull Requests. This gives reviewers immediate visibility into the impact of the proposed code change.",
+      "insight": "Automated plan comments are a game-changer for collaborative infrastructure reviews.",
+      "next": "The JSON Plan Output"
+    },
+    {
+      "id": "plan_tf_31",
+      "title": "The JSON Plan Output",
+      "content": "You can output a plan in JSON format using 'terraform show -json <planfile>'. This is essential for building custom tools and automated policy checks (like Sentinel or OPA).",
+      "insight": "JSON output allows you to programmatically audit your infrastructure changes.",
+      "next": "Using jq with JSON Plans"
+    },
+    {
+      "id": "plan_tf_32",
+      "title": "Using jq with JSON Plans",
+      "content": "You can pipe JSON plan output into 'jq' to extract specific information, such as a list of all resources being destroyed or the total count of new servers.",
+      "insight": "jq + JSON plans = powerful custom infrastructure auditing.",
+      "next": "Plan for Compliance"
+    },
+    {
+      "id": "plan_tf_33",
+      "title": "Plan for Compliance",
+      "content": "By analyzing the plan before apply, you can ensure that every change follows your company's security and compliance rules, such as 'no public S3 buckets'.",
+      "insight": "Compliant infrastructure starts with an automated plan review.",
+      "next": "Drift Detection"
+    },
+    {
+      "id": "plan_tf_34",
+      "title": "Drift Detection",
+      "content": "Drift detection is the process of using 'terraform plan' to identify manual changes in the cloud. Running this regularly (e.g., once an hour) ensures your code remains the source of truth.",
+      "insight": "Automated drift detection is your early warning system for unauthorized changes.",
+      "next": "The Refresh-Only Plan"
+    },
+    {
+      "id": "plan_tf_35",
+      "title": "The Refresh-Only Plan",
+      "content": "The '-refresh-only' flag creates a plan that only updates the state file to match the real-world infrastructure, without proposing any changes to the resources themselves.",
+      "insight": "Use refresh-only to safely sync your state file after manual cloud updates.",
+      "next": "Visualizing Plans"
+    },
+    {
+      "id": "plan_tf_36",
+      "title": "Visualizing Plans",
+      "content": "For massive plans, the text output can be overwhelming. Some tools (like Blast Radius) can turn your plan into a visual diagram, making it easier to understand the relationships.",
+      "insight": "Visualizing a plan helps you see the 'big picture' of your infrastructure changes.",
+      "next": "Terraform Graph"
+    },
+    {
+      "id": "plan_tf_37",
+      "title": "Terraform Graph",
+      "content": "The 'terraform graph' command generates a visual representation of your configuration's dependency graph. This shows exactly how different resources rely on one another.",
+      "insight": "Use graphs to debug complex dependency issues in your configuration.",
+      "next": "Understanding Dependencies"
+    },
+    {
+      "id": "plan_tf_38",
+      "title": "Understanding Dependencies",
+      "content": "Dependencies determine the order of operations in a plan. Terraform will always plan to create a VPC before the subnets that reside within it.",
+      "insight": "Let Terraform handle the 'order'; you just focus on the 'objects'.",
+      "next": "Implicit vs Explicit Dependencies"
+    },
+    {
+      "id": "plan_tf_39",
+      "title": "Implicit vs Explicit Dependencies",
+      "content": "Implicit dependencies are found automatically via variable references. Explicit dependencies are set using the 'depends_on' argument when a link isn't obvious to Terraform.",
+      "insight": "Prefer implicit dependencies to keep your code clean and manageable.",
+      "next": "Finalizing the Plan"
+    },
+    {
+      "id": "plan_tf_40",
+      "title": "Finalizing the Plan",
+      "content": "Once the plan is reviewed and approved, you are ready for the next stage. A successful plan is the green light for you to proceed with 'terraform apply'.",
+      "insight": "A solid plan is the foundation of a successful deployment.",
+      "next": "Terraform Apply: Bringing Code to Life"
+    }
+]

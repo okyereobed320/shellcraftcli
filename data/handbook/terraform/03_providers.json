@@ -1,0 +1,282 @@
+[
+  {
+    "id": "provider_basics_01",
+    "title": "What are Providers?",
+    "content": "Providers are the plugins that Terraform uses to communicate with cloud providers, SaaS providers, and other APIs. Each provider translates Terraform's generic HCL code into the specific API calls required by the service.",
+    "insight": "Providers are the 'hands' that Terraform uses to build things.",
+    "next": "The Terraform Registry"
+  },
+  {
+    "id": "provider_basics_02",
+    "title": "The Terraform Registry",
+    "content": "The Terraform Registry is the central hub where you can find providers for almost every service imaginable, from AWS and GCP to GitHub and Kubernetes. Most providers are maintained by the community or the service vendors themselves.",
+    "insight": "Always check the registry for the latest provider documentation.",
+    "next": "Declaring a Provider"
+  },
+  {
+    "id": "provider_basics_03",
+    "title": "Declaring a Provider",
+    "content": "To use a provider, you must declare it in your configuration using a 'provider' block. This block specifies the provider's name and any configuration settings it needs, like a region or an API endpoint.",
+    "insight": "The provider block is the 'handshake' between Terraform and the cloud.",
+    "next": "Provider Source and Version"
+  },
+  {
+    "id": "provider_basics_04",
+    "title": "Provider Source and Version",
+    "content": "Since Terraform 0.13, you must use a 'required_providers' block to specify the source address and version of each provider. This ensures that your code always uses a compatible version of the plugin.",
+    "insight": "Explicit versioning prevents breaking changes from ruining your day.",
+    "next": "Authenticating with AWS"
+  },
+  {
+    "id": "provider_basics_05",
+    "title": "Authenticating with AWS",
+    "content": "The AWS provider needs credentials to talk to your account. The best practice is to use environment variables or shared credentials files (~/.aws/credentials) rather than hard-coding access keys in your .tf files.",
+    "insight": "Never, ever commit your AWS access keys to a Git repository.",
+    "next": "AWS Regions"
+  },
+  {
+    "id": "provider_basics_06",
+    "title": "AWS Regions",
+    "content": "The AWS provider is usually scoped to a specific region. You specify the region in the provider block, which tells Terraform where to create your resources, such as 'us-east-1' or 'eu-west-1'.",
+    "insight": "Choose your region carefully based on latency and cost.",
+    "next": "The GCP Provider"
+  },
+  {
+    "id": "provider_basics_07",
+    "title": "The GCP Provider",
+    "content": "The Google Cloud (GCP) provider allows you to manage resources like Compute Engine instances and Cloud Storage buckets. It requires a project ID and a region or zone to be specified in the configuration.",
+    "insight": "GCP's resource hierarchy starts with the Project.",
+    "next": "GCP Authentication"
+  },
+  {
+    "id": "provider_basics_08",
+    "title": "GCP Authentication",
+    "content": "To authenticate with GCP, you typically use a Service Account JSON key file. You can point the GCP provider to this file using the 'GOOGLE_APPLICATION_CREDENTIALS' environment variable.",
+    "insight": "Service accounts provide a secure, non-personal way to automate GCP.",
+    "next": "Multiple Provider Instances"
+  },
+  {
+    "id": "provider_basics_09",
+    "title": "Multiple Provider Instances",
+    "content": "Sometimes you need to manage resources in two different regions or two different cloud accounts simultaneously. You can do this by using the 'alias' argument to create multiple instances of the same provider.",
+    "insight": "Use aliases to manage multi-region deployments in a single project.",
+    "next": "The Default Provider"
+  },
+  {
+    "id": "provider_basics_10",
+    "title": "The Default Provider",
+    "content": "If you don't specify an alias, the first provider block of a certain type becomes the 'default'. All resources of that type will use this provider unless they explicitly request an alias.",
+    "insight": "Keep your default provider as the one you use for the majority of your resources.",
+    "next": "Provider Plugin Architecture"
+  },
+  {
+    "id": "provider_basics_11",
+    "title": "Provider Plugin Architecture",
+    "content": "Terraform downloads provider plugins as separate binaries during 'terraform init'. This modular design means the core Terraform tool stays small and doesn't need to be updated every time a cloud provider adds a new feature.",
+    "insight": "The separation of core and plugins is what makes Terraform so flexible.",
+    "next": "Official vs. Community Providers"
+  },
+  {
+    "id": "provider_basics_12",
+    "title": "Official vs. Community Providers",
+    "content": "Official providers are maintained by HashiCorp, while Verified providers are maintained by the vendors (like AWS). Community providers are built by individuals or other companies and offer support for niche services.",
+    "insight": "Stick to official or verified providers for production-critical infrastructure.",
+    "next": "Implicit Provider Inheritance"
+  },
+  {
+    "id": "provider_basics_13",
+    "title": "Implicit Provider Inheritance",
+    "content": "In a modular project, child modules automatically inherit providers from their parents. This means you only need to configure your cloud credentials once in the root module.",
+    "insight": "Let the root module handle the 'who' and 'where', while child modules handle the 'what'.",
+    "next": "AWS: IAM User vs. Role"
+  },
+  {
+    "id": "provider_basics_14",
+    "title": "AWS: IAM User vs. Role",
+    "content": "When running Terraform on your local machine, use an IAM User. When running Terraform inside an AWS service (like EC2 or GitHub Actions), use an IAM Role for better security.",
+    "insight": "Roles are more secure than users because they use temporary credentials.",
+    "next": "GCP: Projects and Folders"
+  },
+  {
+    "id": "provider_basics_15",
+    "title": "GCP: Projects and Folders",
+    "content": "In GCP, every resource must belong to a project. The GCP provider allows you to set a default project, but you can also override it at the resource level if needed.",
+    "insight": "Organize your GCP resources into projects to manage billing and access controls.",
+    "next": "Provider Version Constraints"
+  },
+  {
+    "id": "provider_basics_16",
+    "title": "Provider Version Constraints",
+    "content": "You can use operators like '~>' to allow Terraform to automatically download minor updates and bug fixes for a provider while preventing major versions from being installed.",
+    "insight": "Use '~>' to get the latest fixes without risking breaking changes.",
+    "next": "The .terraform.lock.hcl File"
+  },
+  {
+    "id": "provider_basics_17",
+    "title": "The .terraform.lock.hcl File",
+    "content": "When you run 'init', Terraform creates a lock file that records the exact version and checksum of the providers used. This ensures that everyone on your team is using the exact same plugin binaries.",
+    "insight": "Commit your lock file to Git to ensure consistent deployments across the team.",
+    "next": "Upgrading Providers"
+  },
+  {
+    "id": "provider_basics_18",
+    "title": "Upgrading Providers",
+    "content": "To upgrade to a newer version of a provider, you update the version constraint in your code and run 'terraform init -upgrade'. Terraform will then download the new plugin and update the lock file.",
+    "insight": "Upgrade providers regularly to stay ahead of security patches.",
+    "next": "Provider-Level Tags"
+  },
+  {
+    "id": "provider_basics_19",
+    "title": "Provider-Level Tags",
+    "content": "The AWS provider allows you to define 'default_tags' that are automatically applied to every resource it creates. This is an incredibly efficient way to ensure consistent tagging across your account.",
+    "insight": "Default tags are a 'set-it-and-forget-it' solution for cloud governance.",
+    "next": "Mocking Providers"
+  },
+  {
+    "id": "provider_basics_20",
+    "title": "Mocking Providers",
+    "content": "For testing purposes, you can use community providers that 'mock' cloud APIs. This allows you to test your Terraform logic without actually creating (or paying for) real cloud resources.",
+    "insight": "Mocking is great for testing complex logic without the cloud bill.",
+    "next": "Custom Provider Endpoints"
+  },
+  {
+    "id": "provider_basics_21",
+    "title": "Custom Provider Endpoints",
+    "content": "Some providers allow you to override the API endpoint URL. This is useful for testing against local versions of cloud services like LocalStack for AWS.",
+    "insight": "LocalStack + Terraform is a powerful combination for local development.",
+    "next": "The Role of 'Required Providers'"
+  },
+  {
+    "id": "provider_basics_22",
+    "title": "The Role of 'Required Providers'",
+    "content": "The 'required_providers' block is located inside the 'terraform' block. It tells Terraform exactly which plugins it needs to fetch from the registry before it can do anything else.",
+    "insight": "Consider 'required_providers' as the 'imports' section of your infrastructure code.",
+    "next": "Handling Sensitive Provider Data"
+  },
+  {
+    "id": "provider_basics_23",
+    "title": "Handling Sensitive Provider Data",
+    "content": "Some provider settings (like API keys) are sensitive. Instead of hard-coding them, use input variables marked as 'sensitive = true' or fetch them from a secure backend.",
+    "insight": "Terraform will hide sensitive values in the CLI output, but they are still in the state.",
+    "next": "Provider Timeouts"
+  },
+  {
+    "id": "provider_basics_24",
+    "title": "Provider Timeouts",
+    "content": "Most resources allow you to configure 'timeouts' for creation, updates, and deletion. This is useful for resources that take a long time to provision, like database clusters.",
+    "insight": "Don't let a slow API call cause your deployment to fail; increase the timeout.",
+    "next": "Data Sources and Providers"
+  },
+  {
+    "id": "provider_basics_25",
+    "title": "Data Sources and Providers",
+    "content": "Data sources also use providers. For example, the AWS provider's 'aws_ami' data source allows you to query the AWS API for the latest Amazon Linux image ID.",
+    "insight": "Data sources are just 'read-only' windows into your provider's world.",
+    "next": "Local-Only Providers"
+  },
+  {
+    "id": "provider_basics_26",
+    "title": "Local-Only Providers",
+    "content": "Not all providers talk to the cloud. The 'random' provider generates random strings, and the 'local' provider writes files to your disk. They follow the same rules as cloud providers.",
+    "insight": "Use the 'random' provider to ensure globally unique names for your buckets.",
+    "next": "Provider Caching"
+  },
+  {
+    "id": "provider_basics_27",
+    "title": "Provider Caching",
+    "content": "You can configure a global plugin cache on your machine to avoid downloading the same large provider binaries every time you initialize a new project.",
+    "insight": "Caching saves disk space and speeds up your 'init' time.",
+    "next": "Offline Provider Usage"
+  },
+  {
+    "id": "provider_basics_28",
+    "title": "Offline Provider Usage",
+    "content": "If you are working in an air-gapped environment, you can pre-download providers and point Terraform to a local directory using a filesystem mirror.",
+    "insight": "Terraform can work anywhere, even without an internet connection.",
+    "next": "AWS: S3 Bucket Example"
+  },
+  {
+    "id": "provider_basics_29",
+    "title": "AWS: S3 Bucket Example",
+    "content": "To create an S3 bucket, you use the 'aws_s3_bucket' resource from the AWS provider. You only need to provide a globally unique name.",
+    "insight": "Simple resources are the best way to start learning a new provider.",
+    "next": "GCP: Storage Bucket Example"
+  },
+  {
+    "id": "provider_basics_30",
+    "title": "GCP: Storage Bucket Example",
+    "content": "In GCP, you use 'google_storage_bucket'. Similar to AWS, you need a name, but you also need to specify a 'location' (like 'US' or 'EU').",
+    "insight": "Notice the patterns: different names, but similar concepts across clouds.",
+    "next": "AWS: EC2 Instance Example"
+  },
+  {
+    "id": "provider_basics_31",
+    "title": "AWS: EC2 Instance Example",
+    "content": "An 'aws_instance' requires an AMI (image ID) and an instance type (like 't2.micro'). The provider handles the API call to start the server.",
+    "insight": "The EC2 instance is the classic hello-world of the AWS provider.",
+    "next": "GCP: Compute Instance Example"
+  },
+  {
+    "id": "provider_basics_32",
+    "title": "GCP: Compute Instance Example",
+    "content": "A 'google_compute_instance' requires a machine type and a boot disk. You also need to specify the network interface to connect it to the internet.",
+    "insight": "GCP instances require a bit more networking setup than AWS by default.",
+    "next": "Multi-Cloud: The Best of Both Worlds"
+  },
+  {
+    "id": "provider_basics_33",
+    "title": "Multi-Cloud: The Best of Both Worlds",
+    "content": "You can define an AWS provider and a GCP provider in the same file. You could create a database in AWS and a frontend in GCP, and Terraform will manage both.",
+    "insight": "Terraform is the glue that holds your multi-cloud architecture together.",
+    "next": "Provider Documentation Layout"
+  },
+  {
+    "id": "provider_basics_34",
+    "title": "Provider Documentation Layout",
+    "content": "Every provider in the registry has a 'Documentation' tab. It's split into 'Guides' (for setup) and 'Resources/Data Sources' (for the actual code syntax).",
+    "insight": "Get comfortable reading provider docs; they are your most valuable resource.",
+    "next": "Deprecated Provider Features"
+  },
+  {
+    "id": "provider_basics_35",
+    "title": "Deprecated Provider Features",
+    "content": "As cloud APIs evolve, providers deprecate old arguments. Terraform will show warnings in the CLI when you use them. Always plan to migrate to the new versions.",
+    "insight": "Pay attention to warnings; they are your early warning system for future breaks.",
+    "next": "Terraform vs. Cloud-Native Tools"
+  },
+  {
+    "id": "provider_basics_36",
+    "title": "Terraform vs. Cloud-Native Tools",
+    "content": "Tools like AWS CloudFormation or GCP Deployment Manager only work for one cloud. Terraform's provider model gives you a single, unified language for everything.",
+    "insight": "Terraform's ecosystem is its greatest competitive advantage.",
+    "next": "Troubleshooting Provider Errors"
+  },
+  {
+    "id": "provider_basics_37",
+    "title": "Troubleshooting Provider Errors",
+    "content": "If Terraform can't connect, check your credentials and network. Use 'TF_LOG=DEBUG' to see the raw API calls that the provider is making to the cloud.",
+    "insight": "Debug logs reveal the 'secret' conversations between Terraform and the cloud.",
+    "next": "Provider Lifecycle"
+  },
+  {
+    "id": "provider_basics_38",
+    "title": "Provider Lifecycle",
+    "content": "When you run 'destroy', the provider is responsible for calling the correct 'delete' API. If a provider is buggy, it might leave 'orphan' resources behind.",
+    "insight": "Always double-check your cloud console after a 'destroy' when using new providers.",
+    "next": "Developing Custom Providers"
+  },
+  {
+    "id": "provider_basics_39",
+    "title": "Developing Custom Providers",
+    "content": "If you have a private API, you can write your own provider in Go. This allows you to manage your internal services using the same Terraform workflow.",
+    "insight": "Anything with an API can be managed by a Terraform provider.",
+    "next": "Summary: The Provider Power"
+  },
+  {
+    "id": "provider_basics_40",
+    "title": "Summary: The Provider Power",
+    "content": "Mastering providers is the key to unlocking Terraform's full potential. They turn HCL into action and make the cloud accessible through code.",
+    "insight": "Now you're ready to initialize your project and bring these providers to life.",
+    "next": "Terraform Init: The First Command"
+  }
+]

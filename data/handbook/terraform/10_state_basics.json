@@ -1,0 +1,282 @@
+[
+    {
+      "id": "state_basics_tf_01",
+      "title": "What is Terraform State?",
+      "content": "Terraform state is a database that maps your HCL configuration to real-world resources. It tracks metadata and dependencies so Terraform knows what it is currently managing. This state file is the 'source of truth' for your environment's current status.",
+      "insight": "Never delete your state file unless you want to lose control of your infrastructure.",
+      "next": "terraform.tfstate file"
+    },
+    {
+      "id": "state_basics_tf_02",
+      "title": "terraform.tfstate file",
+      "content": "By default, Terraform stores state in a local file named 'terraform.tfstate'. This is a JSON file that contains a detailed record of every resource you've provisioned. You should never edit this file manually, as it can easily become corrupted.",
+      "insight": "Use a '.gitignore' file to ensure local '.tfstate' files are never committed to Git.",
+      "next": "State File Format (JSON)"
+    },
+    {
+      "id": "state_basics_tf_03",
+      "title": "State File Format (JSON)",
+      "content": "The state file uses a structured JSON format to store resource attributes, dependencies, and provider versions. Understanding this structure helps when troubleshooting complex state issues. It includes a unique 'serial' number that increments with every change.",
+      "insight": "The 'serial' number in the JSON is a great way to track how many changes have occurred.",
+      "next": "Local State"
+    },
+    {
+      "id": "state_basics_tf_04",
+      "title": "Local State",
+      "content": "Storing state locally is fine for individual projects or learning, but it makes collaboration difficult. If multiple people work on the same local state file, they can easily overwrite each other's changes. It also risks losing your infrastructure tracking if your laptop fails.",
+      "insight": "Local state is the #1 cause of 'works on my machine' issues in Terraform teams.",
+      "next": "Remote State Intro"
+    },
+    {
+      "id": "state_basics_tf_05",
+      "title": "Remote State Intro",
+      "content": "Remote state allows you to store your state file in a shared location like an S3 bucket or Terraform Cloud. This enables team collaboration and provides a more secure and durable home for your state. It is a fundamental requirement for production environments.",
+      "insight": "Migrating to remote state is usually the first task for any professional Terraform setup.",
+      "next": "Why Remote State?"
+    },
+    {
+      "id": "state_basics_tf_06",
+      "title": "Why Remote State?",
+      "content": "Remote state solves the problem of 'who is doing what' by providing a central location for the state file. It also supports state locking, which prevents two people from running Terraform at the same time. This ensures that your infrastructure remains in a consistent state.",
+      "insight": "State locking is like a 'traffic light' for your infrastructure changes.",
+      "next": "State Locking"
+    },
+    {
+      "id": "state_basics_tf_07",
+      "title": "State Locking",
+      "content": "State locking is a feature that prevents multiple 'apply' operations from running simultaneously on the same state. When an operation starts, Terraform creates a lock; when it finishes, the lock is released. This prevents race conditions and state corruption.",
+      "insight": "Locking prevents 'half-applied' states that are a nightmare to fix.",
+      "next": "Backend Configuration"
+    },
+    {
+      "id": "state_basics_tf_08",
+      "title": "Backend Configuration",
+      "content": "A 'backend' defines where and how Terraform stores its state. You configure it within a 'terraform' block, specifying the type and required settings. Changing your backend usually requires running 'terraform init' again to migrate the state.",
+      "insight": "Think of the 'backend' as the 'storage engine' for your infrastructure's memory.",
+      "next": "S3 Backend"
+    },
+    {
+      "id": "state_basics_tf_09",
+      "title": "S3 Backend",
+      "content": "The S3 backend is a popular choice for AWS users, storing state in an S3 bucket. It supports state locking when combined with a DynamoDB table. This setup is highly durable and provides easy versioning for your state files.",
+      "insight": "Use DynamoDB with S3 to get full state locking support on AWS.",
+      "next": "GCS Backend"
+    },
+    {
+      "id": "state_basics_tf_10",
+      "title": "GCS Backend",
+      "content": "Google Cloud Storage (GCS) provides a native backend for Terraform state. It includes built-in support for state locking without needing an extra database. GCS also offers versioning to protect against accidental state deletion.",
+      "insight": "GCS is one of the simplest backends to set up because locking is built-in.",
+      "next": "Azure Backend"
+    },
+    {
+      "id": "state_basics_tf_11",
+      "title": "Azure Backend",
+      "content": "Azure Blob Storage can be used as a remote backend, storing state in a container. Like GCS, it supports native state locking through blob leases. It integrates perfectly with Azure AD for secure access control.",
+      "insight": "Use 'blob leases' in Azure to ensure only one person can apply at a time.",
+      "next": "Terraform Cloud Backend"
+    },
+    {
+      "id": "state_basics_tf_12",
+      "title": "Terraform Cloud Backend",
+      "content": "Terraform Cloud provides a managed backend service that handles state storage, locking, and history automatically. It also offers a web UI to view state changes and manage runs. It's the easiest way to get started with remote state for teams.",
+      "insight": "Terraform Cloud is free for small teams and takes the headache out of state management.",
+      "next": "Backend Initialization"
+    },
+    {
+      "id": "state_basics_tf_13",
+      "title": "Backend Initialization",
+      "content": "When you configure or change a backend, you must run 'terraform init'. Terraform will detect the change and ask if you want to migrate your existing state to the new location. This process ensures your infrastructure tracking isn't lost during the move.",
+      "insight": "Run 'terraform init' immediately after changing any backend settings.",
+      "next": "Migrating State"
+    },
+    {
+      "id": "state_basics_tf_14",
+      "title": "Migrating State",
+      "content": "Migrating state involves moving your 'source of truth' from one backend to another. Terraform handles the heavy lifting, but you should always have a backup before starting. Successful migration ends with your local '.tfstate' file being empty or deleted.",
+      "insight": "Always verify your infrastructure after a state migration to ensure nothing was lost.",
+      "next": "Sensitive Data in State"
+    },
+    {
+      "id": "state_basics_tf_15",
+      "title": "Sensitive Data in State",
+      "content": "The state file often contains sensitive information like passwords or private keys in plain text. This is because Terraform needs these values to compare the current state with your configuration. Securing access to your remote state bucket is critical.",
+      "insight": "Use backend-specific encryption (like AWS KMS) to protect sensitive data in state.",
+      "next": "The .terraform.tfstate.lock.info file"
+    },
+    {
+      "id": "state_basics_tf_16",
+      "title": "The .terraform.tfstate.lock.info file",
+      "content": "When using local state or certain backends, Terraform creates a '.lock.info' file to signal that a process is running. This file contains details about the operation, such as the PID and the user. If Terraform crashes, you might need to manually remove this lock.",
+      "insight": "If a lock is stuck, use 'terraform force-unlock' only as a last resort.",
+      "next": "State File Security"
+    },
+    {
+      "id": "state_basics_tf_17",
+      "title": "State File Security",
+      "content": "Securing your state file should be a top priority. Use encryption at rest and strictly control who has access to the remote storage. Avoid storing secrets in HCL if possible, though Terraform will still track them if they are resource attributes.",
+      "insight": "Encryption at rest and in transit is mandatory for state files in production.",
+      "next": "Versioning State Files"
+    },
+    {
+      "id": "state_basics_tf_18",
+      "title": "Versioning State Files",
+      "content": "Most remote backends support file versioning, which allows you to roll back to a previous state if something goes wrong. This is a lifesaver when a 'terraform apply' results in accidental destruction. Always enable versioning on your state buckets.",
+      "insight": "Versioning is your 'undo' button for infrastructure-level mistakes.",
+      "next": "terraform state list"
+    },
+    {
+      "id": "state_basics_tf_19",
+      "title": "terraform state list",
+      "content": "The 'terraform state list' command provides a quick way to see all resources currently tracked by Terraform. It's useful for verifying that your resources are correctly managed. You can also filter the list by module or resource type.",
+      "insight": "Use 'terraform state list' to quickly find a resource's full address for other commands.",
+      "next": "terraform state show"
+    },
+    {
+      "id": "state_basics_tf_20",
+      "title": "terraform state show",
+      "content": "To see the detailed attributes of a specific resource in the state, use 'terraform state show'. This displays the exact values that Terraform is currently tracking for that resource. It's the best way to inspect the state without opening the JSON file.",
+      "insight": "Inspect the 'show' output to see exactly what values the cloud provider assigned.",
+      "next": "terraform state pull"
+    },
+    {
+      "id": "state_basics_tf_21",
+      "title": "terraform state pull",
+      "content": "The 'terraform state pull' command downloads the current state from the remote backend and prints it to the console. This is useful for manual inspection or for use in custom scripts. It doesn't modify the remote state at all.",
+      "insight": "Pulling state is a safe way to share the current infrastructure status with other tools.",
+      "next": "terraform state push"
+    },
+    {
+      "id": "state_basics_tf_22",
+      "title": "terraform state push",
+      "content": "The 'terraform state push' command allows you to manually upload a state file to the remote backend. This is an advanced command that should be used with extreme caution. It's typically only used during complex state recovery operations.",
+      "insight": "Never 'push' a state file unless you are absolutely sure it's the correct version.",
+      "next": "terraform state mv"
+    },
+    {
+      "id": "state_basics_tf_23",
+      "title": "terraform state mv",
+      "content": "The 'terraform state mv' command is used to rename resources in the state file. This allows you to refactor your HCL code (e.g., renaming a resource or moving it to a module) without destroying and recreating the actual infrastructure.",
+      "insight": "Rename in code, then 'mv' in state to keep your resources from being destroyed.",
+      "next": "terraform state rm"
+    },
+    {
+      "id": "state_basics_tf_24",
+      "title": "terraform state rm",
+      "content": "If you want Terraform to stop managing a resource without destroying it in the cloud, use 'terraform state rm'. This removes the resource from the state file. It's useful when you want to hand off management to another tool or person.",
+      "insight": "Use 'rm' if you want to keep the resource but stop paying the 'Terraform tax' for managing it.",
+      "next": "terraform state replace-provider"
+    },
+    {
+      "id": "state_basics_tf_25",
+      "title": "terraform state replace-provider",
+      "content": "This command allows you to update the provider source for resources in your state. It's useful when a provider is renamed or moved to a different namespace in the Terraform Registry. It ensures your state remains compatible with your 'required_providers' block.",
+      "insight": "The 'replace-provider' command is essential during major provider migrations.",
+      "next": "Refreshing State"
+    },
+    {
+      "id": "state_basics_tf_26",
+      "title": "Refreshing State",
+      "content": "Refreshing is the process where Terraform queries the cloud provider to update its local knowledge of your infrastructure. This happens automatically during 'plan' and 'apply'. It ensures that Terraform's 'source of truth' matches the real world.",
+      "insight": "Refreshing ensures you are making decisions based on reality, not old data.",
+      "next": "State Out-of-sync"
+    },
+    {
+      "id": "state_basics_tf_27",
+      "title": "State Out-of-sync",
+      "content": "State becomes 'out-of-sync' when changes are made to your infrastructure outside of Terraform (e.g., via the AWS console). Terraform detects these differences during the next refresh. This is known as 'drift' and should generally be avoided.",
+      "insight": "Minimize drift by using Terraform for all infrastructure changes, no exceptions.",
+      "next": "The terraform refresh command"
+    },
+    {
+      "id": "state_basics_tf_28",
+      "title": "The terraform refresh command",
+      "content": "While 'plan' and 'apply' do a refresh automatically, you can run 'terraform refresh' to update the state file alone. This command doesn't change your infrastructure; it only updates the state file to reflect reality. Note that this command is deprecated in favor of 'plan -refresh-only'.",
+      "insight": "Use '-refresh-only' plans to safely update your state without changing infrastructure.",
+      "next": "Handling Manual Changes (Drift)"
+    },
+    {
+      "id": "state_basics_tf_29",
+      "title": "Handling Manual Changes (Drift)",
+      "content": "When drift is detected, Terraform will propose changes to bring the infrastructure back in line with your HCL. You can either apply the changes to 'fix' the drift or update your HCL to match the new reality. Constant drift is a sign of poor infrastructure governance.",
+      "insight": "Drift is a signal that your team needs better access controls on the cloud console.",
+      "next": "Importing Existing Resources"
+    },
+    {
+      "id": "state_basics_tf_30",
+      "title": "Importing Existing Resources",
+      "content": "The 'terraform import' command allows you to take control of infrastructure that was created manually. You must first write the resource block in HCL, then run 'import' to link it to the existing resource. This is a key step in migrating legacy systems to IaC.",
+      "insight": "Importing is a slow process; do it one resource at a time and verify frequently.",
+      "next": "State File Backups"
+    },
+    {
+      "id": "state_basics_tf_31",
+      "title": "State File Backups",
+      "content": "Terraform automatically creates a '.backup' file when you perform operations that modify the local state. For remote state, you should rely on the versioning features of your storage provider. Regular backups are your best defense against state corruption.",
+      "insight": "Always check your current state before running a large 'import' operation.",
+      "next": "Partial State Recovery"
+    },
+    {
+      "id": "state_basics_tf_32",
+      "title": "Partial State Recovery",
+      "content": "If your state file becomes corrupted, you might need to manually edit it or restore from a backup. This is a high-risk activity that should be done with extreme care. Always try to use the 'terraform state' commands before resorting to manual JSON edits.",
+      "insight": "Restoring state from a backup is like 'heart surgery' for your infrastructure.",
+      "next": "Workspaces (Intro)"
+    },
+    {
+      "id": "state_basics_tf_33",
+      "title": "Workspaces (Intro)",
+      "content": "Workspaces allow you to manage multiple distinct states from a single configuration. This is useful for deploying the same infrastructure to multiple environments (like dev and prod) without duplicating code. Each workspace has its own independent state file.",
+      "insight": "Workspaces are perfect for 'ephemeral' environments like feature-branch testing.",
+      "next": "Workspaces and State"
+    },
+    {
+      "id": "state_basics_tf_34",
+      "title": "Workspaces and State",
+      "content": "When using workspaces, Terraform stores state in a sub-directory or with a prefix in your remote backend. This keeps the infrastructure for 'dev' completely separate from 'prod'. You can switch between workspaces using the 'terraform workspace select' command.",
+      "insight": "Use the 'terraform.workspace' variable in your HCL to create unique resource names.",
+      "next": "Default Workspace"
+    },
+    {
+      "id": "state_basics_tf_35",
+      "title": "Default Workspace",
+      "content": "Every Terraform configuration starts with a workspace named 'default'. If you don't explicitly create or select a workspace, this is where your state is stored. It's best to use named workspaces for anything beyond simple local tests.",
+      "insight": "Don't use 'default' for production; create a named workspace like 'prod' instead.",
+      "next": "Multi-account State Strategy"
+    },
+    {
+      "id": "state_basics_tf_36",
+      "title": "Multi-account State Strategy",
+      "content": "For large organizations, it's common to store state files in a dedicated 'security' or 'operations' account. This limits who can access the state and reduces the risk of accidental deletion. It's a key part of a robust multi-account AWS or Azure strategy.",
+      "insight": "Isolating state files by environment is the best way to limit the 'blast radius' of an error.",
+      "next": "Data Source: terraform_remote_state"
+    },
+    {
+      "id": "state_basics_tf_37",
+      "title": "Data Source: terraform_remote_state",
+      "content": "The 'terraform_remote_state' data source allows one Terraform configuration to read the output values from another. This is the standard way to share information (like VPC IDs) between decoupled infrastructure components. It promotes a 'modular' approach to large systems.",
+      "insight": "Only expose what is necessary through outputs to keep your state interfaces clean.",
+      "next": "State Lineage"
+    },
+    {
+      "id": "state_basics_tf_38",
+      "title": "State Lineage",
+      "content": "Every state file has a unique 'lineage' ID that stays the same throughout its life. This ID is used by Terraform to ensure that you don't accidentally overwrite one state with a completely different one. It's a safety check during state migration and push operations.",
+      "insight": "Lineage protects you from 'cross-pollinating' different infrastructure projects.",
+      "next": "Terraform Version in State"
+    },
+    {
+      "id": "state_basics_tf_39",
+      "title": "Terraform Version in State",
+      "content": "The state file records the version of Terraform that was last used to update it. Terraform will generally refuse to run if the current version is older than the one in the state. This prevents issues caused by incompatible state file formats between versions.",
+      "insight": "Keep your team on the same Terraform version to avoid state format conflicts.",
+      "next": "State File Best Practices"
+    },
+    {
+      "id": "state_basics_tf_40",
+      "title": "State File Best Practices",
+      "content": "Always use remote state for team projects, enable versioning, and secure access with IAM roles. Treat your state file as a critical database\u2014if you lose it, you lose Terraform's ability to manage your infrastructure. Regularly audit your state for drift and unused resources.",
+      "insight": "A healthy state file is the foundation of a reliable infrastructure-as-code platform.",
+      "next": null
+    }
+  ]

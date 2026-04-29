@@ -1,0 +1,282 @@
+[
+    {
+      "id": "variables_outputs_tf_01",
+      "title": "Input Variables Intro",
+      "content": "Input variables serve as parameters for your Terraform modules, allowing you to customize behavior without editing the source code. They make your configurations reusable across different environments like dev, staging, and prod. Think of them as function arguments for your infrastructure.",
+      "insight": "Think of variables as the 'knobs and dials' of your infrastructure blueprints.",
+      "next": "Variable Declaration"
+    },
+    {
+      "id": "variables_outputs_tf_02",
+      "title": "Variable Declaration",
+      "content": "Variables are declared using the 'variable' block followed by a unique label. Inside the block, you can define the variable's type, default value, and a description. Providing clear definitions helps other users understand how to use your module.",
+      "insight": "Always define a 'type' for your variables to catch configuration errors early.",
+      "next": "Variable Types (string)"
+    },
+    {
+      "id": "variables_outputs_tf_03",
+      "title": "Variable Types (string)",
+      "content": "The 'string' type is used for single lines of text, such as names, IDs, or region codes. It is the most common variable type and is often used for resource naming. Strings are enclosed in double quotes in your configuration.",
+      "insight": "Use strings for any value that doesn't need mathematical operations or logic.",
+      "next": "Variable Types (number/bool)"
+    },
+    {
+      "id": "variables_outputs_tf_04",
+      "title": "Variable Types (number/bool)",
+      "content": "The 'number' type handles both integers and floating-point values, while 'bool' handles true or false. These types are useful for counts, sizes, or toggling specific features on and off. Terraform automatically validates that the input matches the specified type.",
+      "insight": "Booleans are great for 'enable_monitoring' or 'is_production' flags.",
+      "next": "Complex Types: list"
+    },
+    {
+      "id": "variables_outputs_tf_05",
+      "title": "Complex Types: list",
+      "content": "A 'list' is a sequence of values of the same type, indexed by their position starting from zero. Lists are useful for providing a set of IDs or names to a resource that uses 'count'. They maintain the order of the items you provide.",
+      "insight": "Lists are perfect for passing a set of subnet IDs to a load balancer.",
+      "next": "Complex Types: map"
+    },
+    {
+      "id": "variables_outputs_tf_06",
+      "title": "Complex Types: map",
+      "content": "A 'map' is a collection of key-value pairs, where all values must be of the same type. Maps are ideal for lookup tables, such as mapping environment names to specific AMI IDs. You access map values using their keys in square brackets.",
+      "insight": "Use maps to store environment-specific configurations like AMI IDs per region.",
+      "next": "Complex Types: object"
+    },
+    {
+      "id": "variables_outputs_tf_07",
+      "title": "Complex Types: object",
+      "content": "An 'object' is a complex type that can contain multiple attributes of different types. It allows you to group related settings into a single variable, which is much cleaner than using many individual variables. You must define the schema for every attribute in the object.",
+      "insight": "Objects are the best way to group all settings for a specific component together.",
+      "next": "Complex Types: set"
+    },
+    {
+      "id": "variables_outputs_tf_08",
+      "title": "Complex Types: set",
+      "content": "A 'set' is a collection of unique values with no specific order. It is similar to a list but automatically removes duplicates and is often used with 'for_each'. Using sets ensures that you don't accidentally create duplicate resources.",
+      "insight": "Sets are your friend when using 'for_each' to ensure resource uniqueness.",
+      "next": "Complex Types: tuple"
+    },
+    {
+      "id": "variables_outputs_tf_09",
+      "title": "Complex Types: tuple",
+      "content": "A 'tuple' is a fixed-length sequence where each element can have a different type. They are less common than lists but useful when you need a specific structure for an ordered set of data. Tuples are defined with a specific sequence of types.",
+      "insight": "Tuples are rarely needed but useful for strict data structures from external APIs.",
+      "next": "Default Values"
+    },
+    {
+      "id": "variables_outputs_tf_10",
+      "title": "Default Values",
+      "content": "Setting a 'default' value makes a variable optional during execution. If a user doesn't provide a value, Terraform will use the default instead. This is great for providing sensible defaults while still allowing for customization when needed.",
+      "insight": "Provide sensible defaults to make your modules easy to use 'out of the box'.",
+      "next": "Description Field"
+    },
+    {
+      "id": "variables_outputs_tf_11",
+      "title": "Description Field",
+      "content": "The 'description' argument provides documentation for your variable directly in the code. This text is displayed when users run 'terraform plan' or view module documentation. Good descriptions reduce the need for external README files.",
+      "insight": "A good description is often the only documentation a user will read.",
+      "next": "Validation Blocks"
+    },
+    {
+      "id": "variables_outputs_tf_12",
+      "title": "Validation Blocks",
+      "content": "Validation blocks allow you to enforce custom rules on your variable inputs using expressions. You can check for string length, specific prefixes, or allowed ranges. This catches configuration errors early, before any infrastructure is touched.",
+      "insight": "Validation blocks are the first line of defense against 'fat-finger' errors.",
+      "next": "Custom Error Messages"
+    },
+    {
+      "id": "variables_outputs_tf_13",
+      "title": "Custom Error Messages",
+      "content": "When a validation rule fails, Terraform displays a 'condition_message' that you define. This message should clearly explain why the input was rejected and how to fix it. Clear error messages significantly improve the user experience for your modules.",
+      "insight": "Make your error messages helpful by suggesting the correct format or range.",
+      "next": "Sensitive Variables"
+    },
+    {
+      "id": "variables_outputs_tf_14",
+      "title": "Sensitive Variables",
+      "content": "Marking a variable as 'sensitive' tells Terraform to hide its value in the CLI output. This is crucial for passwords, API keys, and other secrets. Note that the value is still stored in plain text within the state file.",
+      "insight": "Never forget to mark credentials as sensitive to avoid leaking them in logs.",
+      "next": "Nullable Variables"
+    },
+    {
+      "id": "variables_outputs_tf_15",
+      "title": "Nullable Variables",
+      "content": "By default, variables can be set to null, which might cause issues if your logic doesn't handle it. You can set 'nullable = false' to ensure that a variable always has a concrete value. This helps prevent 'null pointer' style errors in your expressions.",
+      "insight": "Use 'nullable = false' to make your code more predictable and crash-resistant.",
+      "next": "Assigning Variables (tfvars)"
+    },
+    {
+      "id": "variables_outputs_tf_16",
+      "title": "Assigning Variables (tfvars)",
+      "content": "The most common way to assign variable values is through '.tfvars' files. These files use a simple 'key = value' syntax and allow you to separate configuration from your HCL code. You can use different var files for different environments.",
+      "insight": "Keep your '.tfvars' files out of version control if they contain environment secrets.",
+      "next": "Command Line Variables (-var)"
+    },
+    {
+      "id": "variables_outputs_tf_17",
+      "title": "Command Line Variables (-var)",
+      "content": "You can pass variable values directly to Terraform commands using the '-var' flag. This is useful for quick tests or passing dynamic data from a CI/CD pipeline. Multiple '-var' flags can be used in a single command.",
+      "insight": "The '-var' flag is perfect for overriding a single value during a quick test.",
+      "next": "Environment Variables (TF_VAR_x)"
+    },
+    {
+      "id": "variables_outputs_tf_18",
+      "title": "Environment Variables (TF_VAR_x)",
+      "content": "Terraform automatically looks for environment variables starting with 'TF_VAR_'. For example, an environment variable named 'TF_VAR_region' will set the value for a variable named 'region'. This is a secure way to pass secrets in automated environments.",
+      "insight": "Environment variables are the standard way to handle secrets in GitHub Actions or Jenkins.",
+      "next": "Variable Precedence"
+    },
+    {
+      "id": "variables_outputs_tf_19",
+      "title": "Variable Precedence",
+      "content": "Terraform follows a specific order when multiple sources provide a value for the same variable. Command line flags take the highest precedence, followed by '.tfvars' files, environment variables, and finally default values. Understanding this order is key to debugging value conflicts.",
+      "insight": "Use a 'terraform.tfvars' file for common settings and '-var' for overrides.",
+      "next": "Auto-loading tfvars"
+    },
+    {
+      "id": "variables_outputs_tf_20",
+      "title": "Auto-loading tfvars",
+      "content": "Files named 'terraform.tfvars' or ending in '.auto.tfvars' are automatically loaded by Terraform. This saves you from having to manually specify them with the '-var-file' flag. It's a standard practice for storing core configuration.",
+      "insight": "Auto-loading files keep your command line short and readable.",
+      "next": "Local Values (locals)"
+    },
+    {
+      "id": "variables_outputs_tf_21",
+      "title": "Local Values (locals)",
+      "content": "Local values, defined in a 'locals' block, allow you to assign a name to an expression. They are internal to the module and cannot be set from outside. Use them to simplify complex logic or avoid repeating the same value multiple times.",
+      "insight": "Use locals to give meaningful names to complex, repeated expressions.",
+      "next": "Locals vs Variables"
+    },
+    {
+      "id": "variables_outputs_tf_22",
+      "title": "Locals vs Variables",
+      "content": "Input variables are like function parameters, while local values are like local variables within a function. Variables are for user-provided inputs, and locals are for internal calculations and constants. Keeping this distinction clear makes your code more maintainable.",
+      "insight": "If a value is internal and doesn't need to be changed by users, make it a local.",
+      "next": "Complex Locals"
+    },
+    {
+      "id": "variables_outputs_tf_23",
+      "title": "Complex Locals",
+      "content": "Locals can contain complex expressions, including conditional logic and function calls. You can use them to transform input variables into a format that your resources expect. This keeps your resource blocks clean and focused on infrastructure.",
+      "insight": "Locals are evaluated after variables, so you can use variables inside your local logic.",
+      "next": "Output Values Intro"
+    },
+    {
+      "id": "variables_outputs_tf_24",
+      "title": "Output Values Intro",
+      "content": "Outputs are like return values for your Terraform modules. They allow you to export information about your infrastructure, such as IP addresses or DNS names. Outputs are displayed at the end of a 'terraform apply' and can be used by other modules.",
+      "insight": "Outputs are essential for connecting multiple Terraform configurations together.",
+      "next": "Output Declaration"
+    },
+    {
+      "id": "variables_outputs_tf_25",
+      "title": "Output Declaration",
+      "content": "Outputs are declared using the 'output' block and a unique label. The 'value' argument defines what data will be exported, usually referencing an attribute of a resource. Like variables, outputs can also have descriptions.",
+      "insight": "Include the resource ID in your outputs to make troubleshooting much easier.",
+      "next": "Outputting Attributes"
+    },
+    {
+      "id": "variables_outputs_tf_26",
+      "title": "Outputting Attributes",
+      "content": "The primary use of outputs is to expose resource attributes that are only known after creation. For example, you might output the ID of a VPC so that a subnet module can use it. This creates a data link between different parts of your infrastructure.",
+      "insight": "Outputs are the primary way to verify what was actually built after an apply.",
+      "next": "Sensitive Outputs"
+    },
+    {
+      "id": "variables_outputs_tf_27",
+      "title": "Sensitive Outputs",
+      "content": "Just like variables, outputs can be marked as 'sensitive' to prevent them from being printed to the console. This is important when exporting generated passwords or private keys. Terraform will show '(sensitive)' instead of the actual value.",
+      "insight": "Sensitive outputs protect your secrets while still allowing them to be used by other modules.",
+      "next": "Output Description"
+    },
+    {
+      "id": "variables_outputs_tf_28",
+      "title": "Output Description",
+      "content": "Adding a description to your outputs helps users understand what data they are receiving. It is especially useful when your module is used as a component in a larger system. Good documentation starts with clear output labels and descriptions.",
+      "insight": "Use descriptions to explain what the output value represents (e.g., 'Primary DB endpoint').",
+      "next": "Depends_on in Outputs"
+    },
+    {
+      "id": "variables_outputs_tf_29",
+      "title": "Depends_on in Outputs",
+      "content": "In rare cases, you might need an output to wait for a specific resource to be fully ready before it is calculated. The 'depends_on' argument in an output block can enforce this timing. Use it sparingly as it can sometimes lead to circular dependencies.",
+      "insight": "Only use 'depends_on' in outputs if the value relies on a side-effect of a provisioner.",
+      "next": "Preconditions in Outputs"
+    },
+    {
+      "id": "variables_outputs_tf_30",
+      "title": "Preconditions in Outputs",
+      "content": "You can add validation rules to your outputs using 'precondition' blocks. This ensures that the infrastructure was provisioned correctly before the output is returned. It's a great way to verify the results of your 'apply' operation.",
+      "insight": "Output preconditions can catch deployment failures that the cloud provider missed.",
+      "next": "Using Outputs in Modules"
+    },
+    {
+      "id": "variables_outputs_tf_31",
+      "title": "Using Outputs in Modules",
+      "content": "When using a module, you can access its outputs using the 'module.<NAME>.<OUTPUT_NAME>' syntax. This is how you pass data from one module to another. It enables a modular architecture where small, specialized components work together.",
+      "insight": "Modular design relies on passing outputs from one module into variables of another.",
+      "next": "Variable Interpolation"
+    },
+    {
+      "id": "variables_outputs_tf_32",
+      "title": "Variable Interpolation",
+      "content": "Variable interpolation allows you to insert variable values into strings using the '${var.name}' syntax. This is commonly used to construct resource names or configuration paths. Terraform's modern syntax also allows using variables directly in most expressions.",
+      "insight": "Modern HCL doesn't need '${}' for simple variable references; just use 'var.name'.",
+      "next": "Variable Files (.tfvars)"
+    },
+    {
+      "id": "variables_outputs_tf_33",
+      "title": "Variable Files (.tfvars)",
+      "content": "Using separate '.tfvars' files for different environments (e.g., dev.tfvars, prod.tfvars) is a best practice. It allows you to use the same HCL code while varying the parameters for each deployment. You specify the file using the '-var-file' flag.",
+      "insight": "Use environment-specific '.tfvars' files to manage multiple stages of your app.",
+      "next": "JSON Var Files"
+    },
+    {
+      "id": "variables_outputs_tf_34",
+      "title": "JSON Var Files",
+      "content": "Terraform also supports variable files in JSON format, using the '.tfvars.json' extension. This is useful when your variable values are generated by another tool or script. The structure must match the variable declarations in your HCL.",
+      "insight": "JSON var files are great for integrating Terraform into automated workflows.",
+      "next": "The any type constraint"
+    },
+    {
+      "id": "variables_outputs_tf_35",
+      "title": "The any type constraint",
+      "content": "The 'any' keyword is a special type constraint that tells Terraform to accept any value type. It should be used very sparingly as it disables type checking. It's sometimes necessary for modules that handle generic or dynamic data structures.",
+      "insight": "Avoid 'any' whenever possible to maintain the benefits of strong typing.",
+      "next": "Optional Object Attributes"
+    },
+    {
+      "id": "variables_outputs_tf_36",
+      "title": "Optional Object Attributes",
+      "content": "When defining an object type, you can mark specific attributes as optional using the 'optional()' function. You can also provide a default value for that specific attribute. This makes your complex variable types much more flexible.",
+      "insight": "Optional attributes with defaults significantly reduce 'boilerplate' configuration code.",
+      "next": "Type Conversion"
+    },
+    {
+      "id": "variables_outputs_tf_37",
+      "title": "Type Conversion",
+      "content": "Terraform can often automatically convert values between types, such as turning a number into a string. However, it's better to be explicit about your types to avoid unexpected behavior. You can use built-in functions like 'tostring()' or 'tonumber()' for manual conversion.",
+      "insight": "Explicit type conversion makes your logic clearer to anyone reading your code.",
+      "next": "Variable Scope"
+    },
+    {
+      "id": "variables_outputs_tf_38",
+      "title": "Variable Scope",
+      "content": "Variables are scoped to the module where they are declared. To use a variable from a parent module in a child module, you must pass it explicitly as an input. This encapsulation makes modules easier to test and reason about independently.",
+      "insight": "Pass variables down the module tree explicitly to maintain clear data flow.",
+      "next": "Best Practices for Naming"
+    },
+    {
+      "id": "variables_outputs_tf_39",
+      "title": "Best Practices for Naming",
+      "content": "Use clear, descriptive names for your variables and outputs. Avoid overly generic names like 'var1' or 'output_a'. Standardizing on names like 'instance_count' or 'vpc_id' makes your entire codebase more cohesive.",
+      "insight": "Consistent naming across modules makes your infrastructure feel like a single system.",
+      "next": "Variables & Outputs Summary"
+    },
+    {
+      "id": "variables_outputs_tf_40",
+      "title": "Variables & Outputs Summary",
+      "content": "Variables and outputs are the interfaces of your Terraform code. By using types, defaults, and validation, you can create robust and user-friendly modules. They are the key to building scalable and maintainable infrastructure-as-code.",
+      "insight": "Mastering variables and outputs is the key to creating professional-grade HCL.",
+      "next": null
+    }
+  ]

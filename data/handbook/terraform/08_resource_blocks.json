@@ -1,0 +1,282 @@
+[
+    {
+      "id": "resource_blocks_tf_01",
+      "title": "Resource Declaration",
+      "content": "The resource block is the most important element in HCL, defining a piece of infrastructure. It takes two strings: the resource type and the local resource name. Together, these form a unique ID for the resource within your module.",
+      "insight": "Use descriptive local names to make your resource graph easier to understand.",
+      "next": "Resource Types"
+    },
+    {
+      "id": "resource_blocks_tf_02",
+      "title": "Resource Types",
+      "content": "Each provider offers various resource types, such as 'aws_instance' or 'google_compute_instance'. These types tell Terraform which API to call and what kind of object to manage. You can find all available types in the provider's documentation.",
+      "insight": "Always check the provider documentation for 'Required' vs 'Optional' arguments.",
+      "next": "Resource Names"
+    },
+    {
+      "id": "resource_blocks_tf_03",
+      "title": "Resource Names",
+      "content": "The local name you give a resource is used to refer to it elsewhere in your Terraform code. This name does not necessarily affect the name of the resource in the cloud provider. Use descriptive names like 'web_server' or 'main_db' for clarity.",
+      "insight": "Resource names should be unique within their module scope.",
+      "next": "Resource Arguments"
+    },
+    {
+      "id": "resource_blocks_tf_04",
+      "title": "Resource Arguments",
+      "content": "Arguments are the configuration settings you provide within a resource block. They define the desired state of the resource, such as 'ami' or 'instance_type' for a server. Required arguments must be present for the configuration to be valid.",
+      "insight": "Group related arguments together to improve code readability.",
+      "next": "Resource Attributes"
+    },
+    {
+      "id": "resource_blocks_tf_05",
+      "title": "Resource Attributes",
+      "content": "After a resource is created, it has attributes that you can reference, like 'id' or 'public_ip'. These are values that the provider returns after the resource is provisioned. You can use these attributes as inputs for other resources.",
+      "insight": "Reference attributes directly to create automatic dependencies between resources.",
+      "next": "Meta-arguments: count"
+    },
+    {
+      "id": "resource_blocks_tf_06",
+      "title": "Meta-arguments: count",
+      "content": "The 'count' meta-argument allows you to create multiple instances of a single resource block. It takes a whole number and creates that many nearly identical resources. Each instance can be accessed using an index, starting from zero.",
+      "insight": "Use 'count' for simple scaling of identical resources.",
+      "next": "Meta-arguments: for_each"
+    },
+    {
+      "id": "resource_blocks_tf_07",
+      "title": "Meta-arguments: for_each",
+      "content": "The 'for_each' meta-argument is a more flexible alternative to 'count' for creating multiple resources. It accepts a map or a set of strings and creates one instance for each item. This makes it easier to manage resources when items are added or removed.",
+      "insight": "Prefer 'for_each' over 'count' when you need to identify resources by a unique key.",
+      "next": "Meta-arguments: depends_on"
+    },
+    {
+      "id": "resource_blocks_tf_08",
+      "title": "Meta-arguments: depends_on",
+      "content": "Terraform usually handles resource dependencies automatically, but 'depends_on' lets you specify explicit ones. You use it when a dependency exists that Terraform cannot detect through attribute references. It ensures one resource is created only after another is fully ready.",
+      "insight": "Only use 'depends_on' when there is a hidden dependency the provider cannot see.",
+      "next": "Meta-arguments: lifecycle"
+    },
+    {
+      "id": "resource_blocks_tf_09",
+      "title": "Meta-arguments: lifecycle",
+      "content": "The 'lifecycle' block allows you to customize how Terraform handles resource creation, updates, and destruction. It contains settings like 'create_before_destroy' or 'prevent_destroy'. This provides fine-grained control over the resource lifecycle.",
+      "insight": "The 'lifecycle' block is your best tool for managing zero-downtime updates.",
+      "next": "create_before_destroy"
+    },
+    {
+      "id": "resource_blocks_tf_10",
+      "title": "create_before_destroy",
+      "content": "By default, Terraform destroys an old resource before creating its replacement if an update requires it. Setting 'create_before_destroy' to true reverses this behavior, minimizing downtime. This is particularly useful for load balancers or web servers.",
+      "insight": "Use 'create_before_destroy' for resources that are slow to start up.",
+      "next": "prevent_destroy"
+    },
+    {
+      "id": "resource_blocks_tf_11",
+      "title": "prevent_destroy",
+      "content": "The 'prevent_destroy' lifecycle setting acts as a safety lock for critical infrastructure. If set to true, Terraform will reject any plan that would result in the destruction of that resource. This prevents accidental data loss or service interruption.",
+      "insight": "Set 'prevent_destroy' on databases and core network components for extra safety.",
+      "next": "ignore_changes"
+    },
+    {
+      "id": "resource_blocks_tf_12",
+      "title": "ignore_changes",
+      "content": "Sometimes external factors or other tools might change a resource attribute that you don't want Terraform to revert. The 'ignore_changes' list tells Terraform to skip certain attributes during the plan phase. This is common for tags added by cloud auto-scaling or security tools.",
+      "insight": "Use 'ignore_changes' for attributes like 'tags' that might be modified by auto-scaling.",
+      "next": "replace_triggered_by"
+    },
+    {
+      "id": "resource_blocks_tf_13",
+      "title": "replace_triggered_by",
+      "content": "The 'replace_triggered_by' argument allows you to force a resource replacement when another resource changes. This is useful when a resource depends on another in a way that requires a full rebuild rather than an update. It helps maintain consistency across dependent components.",
+      "insight": "Trigger replacements when configuration changes require a clean start.",
+      "next": "Resource Addressing"
+    },
+    {
+      "id": "resource_blocks_tf_14",
+      "title": "Resource Addressing",
+      "content": "A resource's address is its unique identifier in Terraform, formatted as 'type.name'. If the resource is inside a module, the address includes the module path. Understanding addressing is crucial for using commands like 'terraform state' or 'import'.",
+      "insight": "Resource addresses are the key to surgical state management operations.",
+      "next": "Data Sources vs Resources"
+    },
+    {
+      "id": "resource_blocks_tf_15",
+      "title": "Data Sources vs Resources",
+      "content": "While resources manage infrastructure you want to create, data sources allow you to fetch information about existing resources. Data sources use the 'data' block and are read-only. They are perfect for looking up AMIs, VPC IDs, or existing security groups.",
+      "insight": "Use data sources to make your configuration dynamic and environment-aware.",
+      "next": "Local-only resources"
+    },
+    {
+      "id": "resource_blocks_tf_16",
+      "title": "Local-only resources",
+      "content": "Some resources only exist within the Terraform state and don't correspond to cloud infrastructure. Examples include 'tls_private_key' or 'random_password'. These are useful for generating credentials or unique identifiers within your workflow.",
+      "insight": "Local resources are great for managing secrets and unique IDs without cloud costs.",
+      "next": "Provisioners (Intro)"
+    },
+    {
+      "id": "resource_blocks_tf_17",
+      "title": "Provisioners (Intro)",
+      "content": "Provisioners allow you to execute scripts or commands on a local or remote machine as part of the resource lifecycle. They should be used as a last resort when native resource arguments aren't enough. Terraform cannot track the internal state changes made by provisioners.",
+      "insight": "Try to use cloud-init or user-data instead of provisioners whenever possible.",
+      "next": "local-exec"
+    },
+    {
+      "id": "resource_blocks_tf_18",
+      "title": "local-exec",
+      "content": "The 'local-exec' provisioner runs a command on the machine where you are running Terraform. It is often used to trigger local scripts or configuration tools after a resource is created. Remember that it won't run if the resource creation fails.",
+      "insight": "Keep 'local-exec' commands idempotent so they can run multiple times safely.",
+      "next": "remote-exec"
+    },
+    {
+      "id": "resource_blocks_tf_19",
+      "title": "remote-exec",
+      "content": "The 'remote-exec' provisioner connects to a remote resource via SSH or WinRM to run commands. It's commonly used for initial server bootstrap or software installation. You must provide connection details like host, user, and keys.",
+      "insight": "Ensure your Terraform machine has network access to the remote resource for 'remote-exec'.",
+      "next": "file provisioner"
+    },
+    {
+      "id": "resource_blocks_tf_20",
+      "title": "file provisioner",
+      "content": "The 'file' provisioner copies files or directories from your local machine to a newly created remote resource. It requires a valid connection block to function. This is a simple way to move configuration files or scripts to a server.",
+      "insight": "Use the 'file' provisioner to inject small config files before starting services.",
+      "next": "Connection Blocks"
+    },
+    {
+      "id": "resource_blocks_tf_21",
+      "title": "Connection Blocks",
+      "content": "Connection blocks define how provisioners connect to a remote resource. You specify the type (ssh or winrm), the user, and the authentication method. These blocks can be defined within a resource or inside a specific provisioner.",
+      "insight": "Store your SSH private keys securely and never commit them to version control.",
+      "next": "Provisioner Failure Behavior"
+    },
+    {
+      "id": "resource_blocks_tf_22",
+      "title": "Provisioner Failure Behavior",
+      "content": "By default, if a provisioner fails, the resource is marked as tainted and the 'apply' operation stops. You can change this using 'on_failure' to either 'continue' or 'fail'. Choosing 'continue' allows the rest of your infrastructure to be built regardless of script errors.",
+      "insight": "Set 'on_failure' to continue for non-critical setup steps to avoid blocking builds.",
+      "next": "Destroy-time provisioners"
+    },
+    {
+      "id": "resource_blocks_tf_23",
+      "title": "Destroy-time provisioners",
+      "content": "You can configure provisioners to run only when a resource is being destroyed by setting 'when = destroy'. These are useful for cleanup tasks like de-registering a node from a cluster. Note that they have limited access to attributes compared to creation-time provisioners.",
+      "insight": "Destroy-time provisioners are perfect for cleaning up external API registrations.",
+      "next": "Resource Dependencies (Implicit)"
+    },
+    {
+      "id": "resource_blocks_tf_24",
+      "title": "Resource Dependencies (Implicit)",
+      "content": "Implicit dependencies are automatically discovered by Terraform when one resource references an attribute of another. This is the most common and recommended way to link resources. Terraform uses these links to build a dependency graph and determine creation order.",
+      "insight": "Implicit dependencies are the 'secret sauce' that makes Terraform's graph so powerful.",
+      "next": "Resource Dependencies (Explicit)"
+    },
+    {
+      "id": "resource_blocks_tf_25",
+      "title": "Resource Dependencies (Explicit)",
+      "content": "Explicit dependencies are defined using the 'depends_on' meta-argument. They are used when a dependency exists but isn't clear from the attribute references alone. Always prefer implicit dependencies where possible to keep your code clean.",
+      "insight": "Too many 'depends_on' entries can make your resource graph hard to maintain.",
+      "next": "Moving Resources (state mv)"
+    },
+    {
+      "id": "resource_blocks_tf_26",
+      "title": "Moving Resources (state mv)",
+      "content": "If you rename a resource in your code, Terraform will think you want to destroy the old one and create a new one. To avoid this, use the 'terraform state mv' command to update the state file with the new name. This keeps your actual infrastructure intact while refactoring code.",
+      "insight": "Use 'state mv' instead of destroying and recreating when refactoring your HCL.",
+      "next": "Importing Resources (import)"
+    },
+    {
+      "id": "resource_blocks_tf_27",
+      "title": "Importing Resources (import)",
+      "content": "The 'import' command allows you to bring existing infrastructure under Terraform management. You first write the resource block in your code, then run 'import' with the cloud ID. This populates the state file so Terraform can track the resource.",
+      "insight": "Importing resources is a great way to migrate legacy infrastructure into HCL.",
+      "next": "Resource Timeouts"
+    },
+    {
+      "id": "resource_blocks_tf_28",
+      "title": "Resource Timeouts",
+      "content": "Some resources take a long time to create or update, which might exceed Terraform's default limits. The 'timeouts' block lets you specify custom durations for create, update, and delete operations. This is often necessary for complex resources like database clusters.",
+      "insight": "Increase timeouts for resources that frequently fail due to cloud API slowness.",
+      "next": "Tagging Resources"
+    },
+    {
+      "id": "resource_blocks_tf_29",
+      "title": "Tagging Resources",
+      "content": "Most cloud resources support tags, which are key-value pairs used for organization and billing. It is a best practice to apply consistent tags to all your resources. Many providers also allow you to set default tags at the provider level.",
+      "insight": "Standardize your tags across all modules for easier cost tracking and auditing.",
+      "next": "Resource Naming Conventions"
+    },
+    {
+      "id": "resource_blocks_tf_30",
+      "title": "Resource Naming Conventions",
+      "content": "Using a consistent naming convention for your resource local names makes your code much easier to read. Common patterns include using underscores and descriptive prefixes. Avoid redundant names like 'aws_instance.instance_1'.",
+      "insight": "Follow a 'type_name' convention for local names to avoid confusion.",
+      "next": "The self Object"
+    },
+    {
+      "id": "resource_blocks_tf_31",
+      "title": "The self Object",
+      "content": "Inside a provisioner or connection block, you can use the 'self' object to reference the current resource's attributes. This allows you to avoid hardcoding the resource's type and name. It makes your provisioner blocks more portable and easier to maintain.",
+      "insight": "The 'self' keyword keeps your provisioner code DRY and less error-prone.",
+      "next": "Resource Validation (check blocks)"
+    },
+    {
+      "id": "resource_blocks_tf_32",
+      "title": "Resource Validation (check blocks)",
+      "content": "Check blocks allow you to define custom validation rules that run after Terraform has finished its main operations. They are useful for verifying that your infrastructure is actually working as expected. Unlike preconditions, checks do not stop the execution of other resources.",
+      "insight": "Check blocks are excellent for 'smoke testing' your infrastructure after a run.",
+      "next": "Precondition blocks"
+    },
+    {
+      "id": "resource_blocks_tf_33",
+      "title": "Precondition blocks",
+      "content": "Preconditions are validation rules that must be met before a resource is created or updated. They are defined inside a lifecycle block and can check attributes of other resources. If a precondition fails, Terraform stops the operation for that resource.",
+      "insight": "Use preconditions to validate input ranges before calling the cloud API.",
+      "next": "Postcondition blocks"
+    },
+    {
+      "id": "resource_blocks_tf_34",
+      "title": "Postcondition blocks",
+      "content": "Postconditions are validation rules that are checked after a resource has been created or updated. They ensure that the resource was provisioned with the correct attributes or state. They help catch issues that only appear after the provider API has finished.",
+      "insight": "Postconditions can verify that a resource was actually assigned the expected IP range.",
+      "next": "Resource Providers"
+    },
+    {
+      "id": "resource_blocks_tf_35",
+      "title": "Resource Providers",
+      "content": "Every resource belongs to a specific provider, which acts as a bridge between Terraform and an API. You must declare which providers your configuration uses in the 'required_providers' block. Providers handle all the low-level logic for managing resources.",
+      "insight": "Keep your provider versions pinned to avoid breaking changes in resource schema.",
+      "next": "Alias Providers in Resources"
+    },
+    {
+      "id": "resource_blocks_tf_36",
+      "title": "Alias Providers in Resources",
+      "content": "If you need to manage resources in different regions or accounts, you can use provider aliases. You declare the alias in the provider block and then reference it in the resource block using the 'provider' argument. This allows for multi-region deployments in a single file.",
+      "insight": "Aliases are the standard way to handle multi-region AWS deployments.",
+      "next": "Resource Documentation"
+    },
+    {
+      "id": "resource_blocks_tf_37",
+      "title": "Resource Documentation",
+      "content": "The official Terraform Registry is the best place to find documentation for every resource type. It lists all available arguments, attributes, and example configurations. Always refer to the documentation for the specific version of the provider you are using.",
+      "insight": "The Terraform Registry often has 'hidden' tips in the example sections.",
+      "next": "Resource Syntax (HCL)"
+    },
+    {
+      "id": "resource_blocks_tf_38",
+      "title": "Resource Syntax (HCL)",
+      "content": "Resource blocks follow the HashiCorp Configuration Language (HCL) syntax, which is designed to be human-readable. It uses blocks, arguments, and expressions to define infrastructure. The syntax is consistent across all providers and resource types.",
+      "insight": "Use a linter like 'tflint' to catch HCL syntax errors before running a plan.",
+      "next": "Dynamic Blocks (Intro)"
+    },
+    {
+      "id": "resource_blocks_tf_39",
+      "title": "Dynamic Blocks (Intro)",
+      "content": "Dynamic blocks allow you to generate multiple nested blocks within a resource based on a complex variable. They are useful for resources with repetitive configuration, like security group rules or load balancer listeners. They help keep your code DRY (Don't Repeat Yourself).",
+      "insight": "Avoid overusing dynamic blocks as they can make your code harder to debug.",
+      "next": "Summary of Resource Blocks"
+    },
+    {
+      "id": "resource_blocks_tf_40",
+      "title": "Summary of Resource Blocks",
+      "content": "Resource blocks are the foundation of your Terraform configuration, representing the 'nouns' of your infrastructure. By mastering arguments, attributes, and meta-arguments, you can build complex and resilient cloud environments. Always prioritize clarity and modularity when defining your resources.",
+      "insight": "Mastering resources is the first step to becoming a Terraform expert.",
+      "next": null
+    }
+  ]
