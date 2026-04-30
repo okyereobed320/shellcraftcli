@@ -11,12 +11,13 @@ Shellcraft is an open-source, terminal-based training platform designed to take 
 
 ## ✨ Features
 
-- **📖 Interactive Handbook:** 9+ Volumes of deep-dive Linux content, from foundations to cloud-native primitives.
-- **🎯 Mission Maps:** 30+ structured missions across 9 "Worlds" covering everything from filesystem navigation to server deployment.
-- **💼 On-Duty Simulations (Shellcraft Shift):** Step into the shoes of a Senior Systems Administrator. Resolve CRITICAL incidents, manage disk space, and patch security vulnerabilities in a simulated Linux environment.
-- **⭐ XP & Rank System:** Earn experience points and level up from a *Shell Apprentice* to a *Shell Overlord*.
-- **❤️ Survival Modes:** Test your knowledge with "Shellcraft Life" (3 lives) or race against the clock for XP.
-- **🔍 Concept Search:** Instantly find explanations for Linux commands and concepts.
+- **🏗️ Structured Learning Groups:** Modules organized into Core Engineering, Cloud Basics, and Cloud Platforms.
+- **📖 Interactive Handbook:** Deep-dive content from foundations to cloud-native primitives.
+- **🌐 Cloud Platforms:** Dedicated tracks for **AWS**, **GCP**, and **Azure** (Practitioner, Architect, and more).
+- **🎯 Mission Maps:** Structured missions covering everything from filesystem navigation to server deployment.
+- **💼 On-Duty Simulations (Shellcraft Shift):** Step into the shoes of a Senior Systems Administrator. Resolve CRITICAL incidents in a simulated environment.
+- **⚡ Slash Command System:** Navigate instantly with `/core`, `/cloud-basics`, and `/cloud-platforms` from any interactive mode.
+- **⭐ XP & Rank System:** Earn experience points and level up as you master the craft.
 
 ---
 
@@ -45,37 +46,51 @@ Launch the interactive dashboard:
 shellcraft
 ```
 
-### Direct Commands
+### Direct Group Commands
 
 | Command | Description |
 | :--- | :--- |
-| `shellcraft` | Launch the main interactive menu |
-| `shellcraft start linux` | Jump straight into the Linux module |
-| `shellcraft score` | View your XP, Rank, and earned Badges |
-| `shellcraft list` | See all available training modules |
+| `shellcraft core <module>` | Access Core Engineering (linux, networking, git, etc.) |
+| `shellcraft cloud-basics` | Jump into Cloud Engineering fundamentals |
+| `shellcraft cloud-platforms <provider> <track>` | Start a Cloud Platform track (e.g., aws practitioner) |
+| `shellcraft progress` | View your XP, Rank, and earned Badges |
+
+### Examples
+
+- `shellcraft core git learn` - Start learning Git
+- `shellcraft core linux quiz` - Take a Linux quiz
+- `shellcraft cloud-platforms aws practitioner learn` - Start the AWS Practitioner track
 
 ---
 
 ## 🗺️ Learning Path
 
-### 1. The Handbook
-Browse structured chapters to build your theoretical foundation.
-- **Foundations:** Kernel, Shell, and Filesystem hierarchy.
-- **Command Mastery:** Advanced piping, redirection, and text processing (`grep`, `awk`, `sed`).
-- **Networking:** DNS, Ports, SSH, and troubleshooting.
-- **Cloud Native:** Containers, Microservices, and Modern Infrastructure.
+### 1. Core Engineering
+The bedrock of your journey.
+- **Linux:** Foundations, Command Mastery, and System Internals.
+- **Networking:** DNS, Ports, SSH, and Connectivity.
+- **Git & Docker:** Version control and Containerization.
+- **IaC & CI/CD:** Terraform, Automation, and Pipelines.
 
-### 2. The Mission Map
-Apply your knowledge in focused challenges.
-- **World 1-3:** Filesystem & Permissions.
-- **World 4-6:** Networking & User Management.
-- **World 7-9:** Automation, Servers, and Advanced Ops.
+### 2. Cloud Engineering Basics
+The bridge to the cloud.
+- **Fundamentals:** Shared Responsibility, IAM, VPC, and Compute.
+- **Architecture:** Designing scalable and resilient systems.
 
-### 3. Shellcraft Shift (The Simulation)
-The ultimate test. Handle tickets like:
-- **"The Silent Web Server":** Nginx is down, but why?
-- **"Disk Full Disaster":** Find and clear 15GB of rogue logs.
-- **"Permission Denied Crisis":** Fix web directory ownership for developers.
+### 3. Cloud Platforms
+Specialized tracks for major providers.
+- **AWS:** Practitioner & Solutions Architect.
+- **GCP:** Associate Cloud Engineer (ACE) & Professional.
+- **Azure:** AZ-900 & AZ-104.
+
+---
+
+## ⌨️ Slash Commands (Interactive Mode)
+
+When inside an interactive session, use these shortcuts:
+- `/core <module> <action>` - Switch to a core module.
+- `/cloud-basics <action>` - Switch to cloud basics.
+- `/cloud-platforms <aws|gcp|azure> <track> <action>` - Switch to a specific cloud platform.
 
 ---
 
@@ -92,7 +107,7 @@ The ultimate test. Handle tickets like:
 ## 🤝 Contributing
 
 We welcome contributors! Help us build the best DevOps training tool.
-- Add new **Quiz Questions** in `data/linux.json`.
+- Add new **Quiz Questions** in `data/core/` or `data/cloud-platforms/`.
 - Design new **Missions** in `data/missions.json`.
 - Create **Simulation Scenarios** in `data/shift_scenarios.json`.
 
