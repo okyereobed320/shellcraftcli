@@ -19,6 +19,7 @@ const shuffle = (array) => {
 import { addXP, XP_VALUES } from '../utils/progress.js';
 import { COLORS, displayDivider } from '../utils/ui.js';
 import { askAI, isAIConfigured } from './ai.js';
+import { getDataPath } from '../utils/paths.js';
 
 const getLifeDisplay = (lives) => {
   if (lives <= 0) return COLORS.error('Shell Life: 0');
@@ -31,7 +32,7 @@ export async function startQuiz(moduleName, mode = 'normal', preFilteredQuestion
     if (preFilteredQuestions) {
       questions = preFilteredQuestions;
     } else {
-      const dataPath = path.join(__dirname, '../../data', moduleName + '.json');
+      const dataPath = getDataPath(moduleName);
       const content = await fs.readFile(dataPath, 'utf-8');
       questions = JSON.parse(content);
     }

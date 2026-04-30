@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { startQuiz } from './quiz.js';
 import { getProgress, completeMission } from '../utils/progress.js';
 import { COLORS, displayHeader } from '../utils/ui.js';
+import { getDataPath } from '../utils/paths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -73,7 +74,7 @@ export async function startMissions(moduleName) {
     console.log(`${COLORS.muted('Commands: ')}${COLORS.highlight(selectedMission.commands.join(', '))}\n`);
 
     // Filter questions based on mission commands
-    const dataPath = path.join(__dirname, '../../data', moduleName + '.json');
+    const dataPath = getDataPath(moduleName);
     const content = await fs.readFile(dataPath, 'utf-8');
     const allQuestions = JSON.parse(content);
 

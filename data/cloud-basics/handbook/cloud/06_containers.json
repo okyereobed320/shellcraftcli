@@ -1,0 +1,282 @@
+[
+  {
+    "id": "cloud_cont_01",
+    "title": "Containers in Cloud Overview",
+    "content": "Containers have revolutionized how we develop and deploy applications in the cloud. They provide a lightweight, consistent environment that ensures your app runs the same way on your laptop as it does in production.",
+    "insight": "Containers are the 'shipping containers' of the digital world.",
+    "next": "Docker Recap"
+  },
+  {
+    "id": "cloud_cont_02",
+    "title": "Why Containers for Cloud?",
+    "content": "Containers are more efficient than virtual machines because they share the host's OS kernel. This means they start in seconds and use fewer resources, making them perfect for the highly dynamic and scalable environment of the cloud.",
+    "insight": "Containers allow for much higher 'bin-packing' (density) than VMs.",
+    "next": "Docker in the Cloud"
+  },
+  {
+    "id": "cloud_cont_03",
+    "title": "Docker in the Cloud",
+    "content": "Docker is the industry standard for creating and running containers. In the cloud, you use Docker to 'package' your application and its dependencies into a single image that can be deployed anywhere.",
+    "insight": "Docker makes 'it works on my machine' a reality in production.",
+    "next": "Container Registries (ECR)"
+  },
+  {
+    "id": "cloud_cont_04",
+    "title": "Elastic Container Registry (ECR)",
+    "content": "ECR is a fully managed Docker container registry that makes it easy for developers to store, manage, and deploy Docker container images.",
+    "insight": "ECR is the 'GitHub' for your Docker images.",
+    "next": "Container Orchestration"
+  },
+  {
+    "id": "cloud_cont_05",
+    "title": "What is Orchestration?",
+    "content": "When you have hundreds of containers, you need a way to manage their lifecycle: starting them, stopping them, health checking them, and scaling them. This is called container orchestration.",
+    "insight": "Orchestration is the 'conductor' for your container 'orchestra'.",
+    "next": "ECS: Elastic Container Service"
+  },
+  {
+    "id": "cloud_cont_06",
+    "title": "ECS Overview",
+    "content": "ECS is a highly scalable, high-performance container management service that supports Docker containers and allows you to easily run applications on a managed cluster of EC2 instances.",
+    "insight": "The AWS-native way to run containers at scale.",
+    "next": "ECS Task Definitions"
+  },
+  {
+    "id": "cloud_cont_07",
+    "title": "ECS Task Definitions",
+    "content": "A task definition is a blueprint for your application. It specifies which Docker image to use, how much CPU and memory to allocate, which ports to open, and what environment variables to set.",
+    "insight": "Task definitions are the 'recipes' for your containers.",
+    "next": "ECS Tasks and Services"
+  },
+  {
+    "id": "cloud_cont_08",
+    "title": "Tasks vs. Services",
+    "content": "A 'Task' is a running instance of a task definition. A 'Service' allows you to run and maintain a specified number of instances of a task definition simultaneously in an ECS cluster.",
+    "insight": "Use Tasks for one-off jobs; use Services for long-running apps.",
+    "next": "ECS Cluster"
+  },
+  {
+    "id": "cloud_cont_09",
+    "title": "ECS Cluster",
+    "content": "An ECS cluster is a logical grouping of tasks or services. You can run your tasks on a cluster of EC2 instances that you manage, or use the serverless Fargate launch type.",
+    "insight": "The cluster is the 'home' for your running containers.",
+    "next": "AWS Fargate"
+  },
+  {
+    "id": "cloud_cont_10",
+    "title": "Fargate: Serverless Containers",
+    "content": "Fargate allows you to run containers without having to manage the underlying EC2 instances. You specify the CPU and memory requirements, and AWS handles the rest.",
+    "insight": "Fargate is 'Compute for Containers' without the server management.",
+    "next": "ECS Launch Types"
+  },
+  {
+    "id": "cloud_cont_11",
+    "title": "EC2 vs. Fargate Launch Type",
+    "content": "With the EC2 launch type, you manage the servers and have more control. With Fargate, you focus only on the containers and AWS manages the infrastructure.",
+    "insight": "Choose EC2 for cost-optimization at scale; choose Fargate for simplicity.",
+    "next": "EKS: Elastic Kubernetes Service"
+  },
+  {
+    "id": "cloud_cont_12",
+    "title": "What is EKS?",
+    "content": "EKS is a managed service that makes it easy for you to run Kubernetes on AWS without needing to install and operate your own Kubernetes control plane or nodes.",
+    "insight": "EKS is the 'Gold Standard' for running Kubernetes in the cloud.",
+    "next": "Kubernetes Concepts"
+  },
+  {
+    "id": "cloud_cont_13",
+    "title": "Pods, Nodes, and Clusters",
+    "content": "In Kubernetes, the smallest deployable unit is a 'Pod'. Pods run on 'Nodes' (servers), and a group of nodes forms a 'Cluster'.",
+    "insight": "Pods are the 'atoms' of the Kubernetes universe.",
+    "next": "Kubectl"
+  },
+  {
+    "id": "cloud_cont_14",
+    "title": "Kubectl",
+    "content": "Kubectl is the command-line tool for communicating with a Kubernetes cluster's control plane, using the Kubernetes API.",
+    "insight": "Mastering kubectl is essential for any Kubernetes operator.",
+    "next": "Helm: The Package Manager"
+  },
+  {
+    "id": "cloud_cont_15",
+    "title": "Helm",
+    "content": "Helm is a tool for managing Kubernetes charts. Charts are packages of pre-configured Kubernetes resources.",
+    "insight": "Helm is like 'apt' or 'npm' for Kubernetes.",
+    "next": "Container Security"
+  },
+  {
+    "id": "cloud_cont_16",
+    "title": "Image Scanning",
+    "content": "ECR and other registries can automatically scan your images for known software vulnerabilities, helping you ensure your containers are secure before deployment.",
+    "insight": "Never deploy an image without scanning it first.",
+    "next": "Least Privilege for Containers"
+  },
+  {
+    "id": "cloud_cont_17",
+    "title": "IAM Roles for Tasks",
+    "content": "Instead of using access keys inside your containers, you should assign IAM roles to your ECS tasks or EKS pods to grant them permissions to other cloud services.",
+    "insight": "Secure your containers by giving them 'identities', not 'secrets'.",
+    "next": "Container Networking"
+  },
+  {
+    "id": "cloud_cont_18",
+    "title": "The awsvpc Network Mode",
+    "content": "In ECS, the 'awsvpc' network mode gives each task its own elastic network interface (ENI) and a private IP address from the VPC subnet.",
+    "insight": "awsvpc mode makes containers first-class citizens in your VPC.",
+    "next": "Service Discovery"
+  },
+  {
+    "id": "cloud_cont_19",
+    "title": "Service Discovery in ECS",
+    "content": "ECS integrates with AWS Cloud Map to provide service discovery. This allows your containers to find and talk to each other using friendly DNS names like 'auth.service.local'.",
+    "insight": "Containers don't need to know each other's IP addresses, only their names.",
+    "next": "App Mesh"
+  },
+  {
+    "id": "cloud_cont_20",
+    "title": "Service Mesh (AWS App Mesh)",
+    "content": "App Mesh is a service mesh that provides application-level networking, making it easy for your services to communicate with each other across multiple types of compute infrastructure.",
+    "insight": "App Mesh gives you 'X-ray vision' and control over microservices traffic.",
+    "next": "Container Storage"
+  },
+  {
+    "id": "cloud_cont_21",
+    "title": "Ephemeral vs. Persistent Storage",
+    "content": "By default, container storage is ephemeral (lost when the container stops). For persistent data, you must mount external volumes like EBS or EFS.",
+    "insight": "Don't store your database files inside a container without a mounted volume.",
+    "next": "EFS for Containers"
+  },
+  {
+    "id": "cloud_cont_22",
+    "title": "EFS Integration",
+    "content": "Both ECS and EKS can natively mount EFS file systems. This allows multiple containers to share the same persistent data simultaneously.",
+    "insight": "The perfect storage solution for stateful applications in a container world.",
+    "next": "Logging and Monitoring"
+  },
+  {
+    "id": "cloud_cont_23",
+    "title": "CloudWatch Logs for Containers",
+    "content": "Containers should log to 'stdout' and 'stderr'. CloudWatch can automatically collect these logs, making them searchable and persistent.",
+    "insight": "Centralized logs are essential for debugging distributed container apps.",
+    "next": "Container Insights"
+  },
+  {
+    "id": "cloud_cont_24",
+    "title": "CloudWatch Container Insights",
+    "content": "A feature of CloudWatch that provides automated dashboards and metrics for your container clusters, nodes, pods, and tasks.",
+    "insight": "Real-time visibility into the performance of your containerized infrastructure.",
+    "next": "Scaling Containers"
+  },
+  {
+    "id": "cloud_cont_25",
+    "title": "Horizontal Pod Autoscaling (HPA)",
+    "content": "In Kubernetes, HPA automatically scales the number of pods in a deployment based on observed CPU utilization or other metrics.",
+    "insight": "Scaling that reacts to the needs of your application automatically.",
+    "next": "Cluster Autoscaler"
+  },
+  {
+    "id": "cloud_cont_26",
+    "title": "Cluster Autoscaler",
+    "content": "While HPA scales pods, the Cluster Autoscaler scales the underlying nodes (servers) when there are no more resources to run new pods.",
+    "insight": "Ensures your 'house' (cluster) grows when your 'family' (pods) expands.",
+    "next": "Blue/Green Deployments"
+  },
+  {
+    "id": "cloud_cont_27",
+    "title": "Blue/Green with ECS",
+    "content": "Blue/green deployment is a strategy where you create two identical environments. You shift traffic from 'Blue' (current) to 'Green' (new) using a load balancer.",
+    "insight": "Minimize downtime and risk by testing the new version before flipping the switch.",
+    "next": "Canary Deployments"
+  },
+  {
+    "id": "cloud_cont_28",
+    "title": "Canary Deployments",
+    "content": "A canary deployment involves rolling out a new version of your app to a small subset of users before deploying it to everyone.",
+    "insight": "Detect issues with a 'canary' before they affect all your users.",
+    "next": "Sidecar Pattern"
+  },
+  {
+    "id": "cloud_cont_29",
+    "title": "The Sidecar Pattern",
+    "content": "A sidecar is a secondary container that runs alongside the main application container in a pod or task to provide supporting features like logging, monitoring, or proxying.",
+    "insight": "Add functionality to your app without changing the application code itself.",
+    "next": "Batch Jobs in Containers"
+  },
+  {
+    "id": "cloud_cont_30",
+    "title": "ECS RunTask for Batch",
+    "content": "You can use the 'RunTask' API in ECS to run one-off batch jobs as containers. They run to completion and then exit, and you only pay for the time they ran.",
+    "insight": "Containers are ideal for repeatable, isolated batch processing tasks.",
+    "next": "Microservices in Containers"
+  },
+  {
+    "id": "cloud_cont_31",
+    "title": "Decomposing the Monolith",
+    "content": "The first step to cloud-native is often breaking a large monolithic application into smaller services, each packaged in its own container.",
+    "insight": "Containers make it easy to manage the 'mess' of many small microservices.",
+    "next": "CI/CD for Containers"
+  },
+  {
+    "id": "cloud_cont_32",
+    "title": "The Container Pipeline",
+    "content": "A typical container CI/CD pipeline: Code Commit -> Build Docker Image -> Push to ECR -> Update ECS Task Definition -> Deploy to Cluster.",
+    "insight": "Automate the path from code to a running container.",
+    "next": "Docker Compose for Local Dev"
+  },
+  {
+    "id": "cloud_cont_33",
+    "title": "Docker Compose",
+    "content": "Docker Compose is a tool for defining and running multi-container Docker applications locally. It uses a YAML file to configure your application's services.",
+    "insight": "Mirror your cloud environment on your local laptop for faster development.",
+    "next": "ECS Anywhere"
+  },
+  {
+    "id": "cloud_cont_34",
+    "title": "Amazon ECS Anywhere",
+    "content": "ECS Anywhere allows you to run ECS tasks on your own on-premises infrastructure using the same ECS APIs and control plane.",
+    "insight": "Consistent container management from the cloud to your own data center.",
+    "next": "EKS Anywhere"
+  },
+  {
+    "id": "cloud_cont_35",
+    "title": "Amazon EKS Anywhere",
+    "content": "EKS Anywhere is a deployment option for Amazon EKS that allows you to easily create and operate Kubernetes clusters on-premises.",
+    "insight": "The power of Kubernetes managed by AWS, even in your own office.",
+    "next": "Serverless Container Strategy"
+  },
+  {
+    "id": "cloud_cont_36",
+    "title": "When to choose Fargate?",
+    "content": "Choose Fargate when you want to minimize operational overhead, don't need access to the underlying OS, and want to pay for exactly what you use.",
+    "insight": "Fargate is the 'easier' button for containers.",
+    "next": "When to choose EC2?"
+  },
+  {
+    "id": "cloud_cont_37",
+    "title": "When to choose EC2?",
+    "content": "Choose EC2 when you need specific instance types (like GPU), have large-scale clusters where you can optimize server usage, or need deep custom OS configurations.",
+    "insight": "EC2 gives you the control that Fargate abstracts away.",
+    "next": "Container Cost Allocation"
+  },
+  {
+    "id": "cloud_cont_38",
+    "title": "Tagging Containers",
+    "content": "Use tags on your ECS tasks and services to track costs by application, environment, or team. This is essential for managing cloud budgets.",
+    "insight": "Visibility into container costs is the first step to optimization.",
+    "next": "The Future of Containers"
+  },
+  {
+    "id": "cloud_cont_39",
+    "title": "WebAssembly (Wasm)",
+    "content": "Wasm is an emerging technology that some believe will complement or even replace containers for certain workloads due to its even smaller size and faster startup times.",
+    "insight": "The landscape of 'units of compute' is always evolving.",
+    "next": "Conclusion"
+  },
+  {
+    "id": "cloud_cont_40",
+    "title": "Conclusion",
+    "content": "Containers are the building blocks of modern cloud-native applications. By mastering Docker, ECS, and EKS, you can build systems that are truly portable, scalable, and resilient.",
+    "insight": "Pack your apps in containers to unlock the full power of the cloud.",
+    "next": "Next Chapter: Terraform Integration"
+  }
+]

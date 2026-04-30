@@ -4,13 +4,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { COLORS, displayHeader, displayDivider, displayLogo } from '../utils/ui.js';
 import { getProgress, updateHandbookProgress, earnBadge } from '../utils/progress.js';
+import { getHandbookPath } from '../utils/paths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function startHandbook(moduleName = 'linux') {
   try {
-    const chaptersDir = path.join(__dirname, `../../data/handbook/${moduleName}`);
+    const chaptersDir = getHandbookPath(moduleName);
     await fs.mkdir(chaptersDir, { recursive: true });
     
     const files = await fs.readdir(chaptersDir);

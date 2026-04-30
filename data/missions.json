@@ -183,6 +183,19 @@
       { "id": "tf4", "name": "Mission 4: State Secrets", "commands": ["state", "backend", "lock", "show"] },
       { "id": "tf5", "name": "Mission 5: Lifecycle & Safety", "commands": ["lifecycle", "taint", "import", "validate"] },
       { "id": "tf6", "name": "Mission 6: Multi-Cloud Architect", "commands": ["provider", "alias", "workspace", "module"] }
-    ]
-  }
-]
+      ]
+      },
+      {
+      "id": "world_cloud",
+      "module": "cloud",
+      "name": "CLOUD WORLD 1: Elastic Frontiers",
+      "description": "Master the fundamentals of Cloud Engineering & Infrastructure",
+      "missions": [
+      { "id": "mcld1", "name": "Mission 1: The Shared Responsibility", "commands": ["SaaS", "PaaS", "IaaS"] },
+      { "id": "mcld2", "name": "Mission 2: Identity Architect", "commands": ["IAM", "Role", "Policy"] },
+      { "id": "mcld3", "name": "Mission 3: Virtual Private Realm", "commands": ["VPC", "Subnet", "Gateway"] },
+      { "id": "mcld4", "name": "Mission 4: Compute on Demand", "commands": ["EC2", "Lambda", "Auto Scaling"] },
+      { "id": "mcld5", "name": "Mission 5: The Infinite Vault", "commands": ["S3", "EBS", "EFS"] }
+      ]
+      }
+      ]

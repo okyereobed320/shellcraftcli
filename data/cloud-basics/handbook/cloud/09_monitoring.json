@@ -1,0 +1,282 @@
+[
+  {
+    "id": "cloud_mon_01",
+    "title": "Cloud Monitoring Overview",
+    "content": "Monitoring is about more than just knowing if a server is up. It's about having deep visibility into the health, performance, and security of your entire cloud environment.",
+    "insight": "You can't fix what you can't see.",
+    "next": "Monitoring vs. Observability"
+  },
+  {
+    "id": "cloud_mon_02",
+    "title": "Monitoring vs. Observability",
+    "content": "Monitoring tells you 'when' something is wrong (e.g., CPU is high). Observability helps you understand 'why' it's wrong by looking at logs, metrics, and traces.",
+    "insight": "Monitoring is for the 'known unknowns'; Observability is for the 'unknown unknowns'.",
+    "next": "The Three Pillars"
+  },
+  {
+    "id": "cloud_mon_03",
+    "title": "The Three Pillars of Observability",
+    "content": "The three pillars are: Logs (immutable records of events), Metrics (numerical data over time), and Traces (the journey of a single request).",
+    "insight": "Use all three pillars to get a complete picture of your system.",
+    "next": "CloudWatch Metrics"
+  },
+  {
+    "id": "cloud_mon_04",
+    "title": "Metrics (CloudWatch)",
+    "content": "CloudWatch automatically collects metrics from most cloud services, such as CPU utilization, disk I/O, and network traffic.",
+    "insight": "Metrics are the 'heartbeat' of your cloud resources.",
+    "next": "Custom Metrics"
+  },
+  {
+    "id": "cloud_mon_05",
+    "title": "Custom Metrics",
+    "content": "You can publish your own application-specific metrics to CloudWatch, such as the number of users logged in or the time it takes to process an order.",
+    "insight": "Measure what matters to your business, not just your infrastructure.",
+    "next": "CloudWatch Alarms"
+  },
+  {
+    "id": "cloud_mon_06",
+    "title": "Alarms",
+    "content": "Alarms watch a single metric over a specified period. If the metric crosses a threshold, the alarm can trigger actions like sending a notification or scaling an ASG.",
+    "insight": "Alarms are the 'smoke detectors' of your cloud infrastructure.",
+    "next": "CloudWatch Logs"
+  },
+  {
+    "id": "cloud_mon_07",
+    "title": "Logs",
+    "content": "CloudWatch Logs allows you to centralize the logs from all your systems, applications, and cloud services in a single, highly scalable service.",
+    "insight": "Centralized logs are the first place to look when debugging distributed systems.",
+    "next": "Log Groups and Streams"
+  },
+  {
+    "id": "cloud_mon_08",
+    "title": "Log Groups and Log Streams",
+    "content": "Logs are organized into Log Groups (e.g., all logs for a specific app) and Log Streams (e.g., logs from a specific instance of that app).",
+    "insight": "Organization is key to finding the needle in the haystack of logs.",
+    "next": "Log Insights"
+  },
+  {
+    "id": "cloud_mon_09",
+    "title": "CloudWatch Logs Insights",
+    "content": "A fully managed, pay-as-you-go log analytics service. It allows you to search and analyze your log data using a powerful query language.",
+    "insight": "Query your logs like a database to find errors and patterns fast.",
+    "next": "Distributed Tracing"
+  },
+  {
+    "id": "cloud_mon_10",
+    "title": "Distributed Tracing (AWS X-Ray)",
+    "content": "X-Ray helps you understand how your application and its underlying services are performing to identify and troubleshoot the root cause of performance issues and errors.",
+    "insight": "Follow a request as it 'hops' across different microservices.",
+    "next": "Service Maps"
+  },
+  {
+    "id": "cloud_mon_11",
+    "title": "Service Maps",
+    "content": "X-Ray provides a visual map of the connections between the different services in your application, showing latency and error rates for each connection.",
+    "insight": "Visualize your architecture and see where the bottlenecks are.",
+    "next": "Dashboards"
+  },
+  {
+    "id": "cloud_mon_12",
+    "title": "CloudWatch Dashboards",
+    "content": "Customizable home pages in the CloudWatch console that you can use to monitor your resources in a single view, even across different regions.",
+    "insight": "A 'Single Pane of Glass' for your system health.",
+    "next": "Synthetics Monitoring"
+  },
+  {
+    "id": "cloud_mon_13",
+    "title": "Synthetics (Canaries)",
+    "content": "CloudWatch Synthetics allows you to create 'canaries'—scripts that run on a schedule to check your endpoints and APIs from the outside world.",
+    "insight": "Test your site like a user does, 24/7.",
+    "next": "Real User Monitoring (RUM)"
+  },
+  {
+    "id": "cloud_mon_14",
+    "title": "CloudWatch RUM",
+    "content": "RUM allows you to collect client-side data about your web application's performance from actual user sessions in near real-time.",
+    "insight": "See exactly what your users are experiencing in their browsers.",
+    "next": "Debugging Cloud Apps"
+  },
+  {
+    "id": "cloud_mon_15",
+    "title": "Debugging Strategy",
+    "content": "When an error occurs, the typical workflow is: Alarm triggers -> Check Dashboard for spikes -> Query Logs for errors -> Use Tracing to find the broken service.",
+    "insight": "Follow a structured path to find the needle in the haystack.",
+    "next": "Common Error: Connection Refused"
+  },
+  {
+    "id": "cloud_mon_16",
+    "title": "Connection Refused (Port 80/443)",
+    "content": "If you can't reach your app, first check if the process is running on the server, then check if the Security Group allows traffic on that port.",
+    "insight": "Security Groups are a common source of 'mysterious' connection issues.",
+    "next": "Common Error: 403 Forbidden"
+  },
+  {
+    "id": "cloud_mon_17",
+    "title": "403 Forbidden",
+    "content": "Usually indicates an IAM permission issue or a Bucket Policy blocking access. Check the IAM role assigned to the compute instance.",
+    "insight": "403 almost always means 'The cloud provider says No'.",
+    "next": "Common Error: 502 Bad Gateway"
+  },
+  {
+    "id": "cloud_mon_18",
+    "title": "502 Bad Gateway",
+    "content": "Commonly seen on load balancers when they can't get a response from the backend server. Check the target group health and the application logs.",
+    "insight": "A 502 means the traffic cop (ALB) can't talk to the server (EC2).",
+    "next": "Health Checks in Load Balancers"
+  },
+  {
+    "id": "cloud_mon_19",
+    "title": "Unhealthy Targets",
+    "content": "If your load balancer reports targets as 'unhealthy', ensure your app is responding on the health check path (e.g., /health) with a 200 OK status.",
+    "insight": "Health checks keep broken servers out of the traffic pool.",
+    "next": "Debugging with VPC Flow Logs"
+  },
+  {
+    "id": "cloud_mon_20",
+    "title": "Using Flow Logs",
+    "content": "If network traffic isn't reaching your instance, check Flow Logs to see if it's being 'REJECTED' by an SG or NACL.",
+    "insight": "Flow logs show you exactly where a packet was dropped.",
+    "next": "Application Performance Monitoring (APM)"
+  },
+  {
+    "id": "cloud_mon_21",
+    "title": "External APM Tools",
+    "content": "Tools like Datadog, New Relic, and Dynatrace provide even deeper visibility than native cloud tools, often with automated root-cause analysis.",
+    "insight": "Use third-party APM for a unified view across multi-cloud environments.",
+    "next": "Incident Management"
+  },
+  {
+    "id": "cloud_mon_22",
+    "title": "PagerDuty / Opsgenie",
+    "content": "Incident management platforms that take alerts from CloudWatch and page the on-call engineer via phone, text, or app notification.",
+    "insight": "Ensuring the right person is notified when production breaks.",
+    "next": "Post-Mortems"
+  },
+  {
+    "id": "cloud_mon_23",
+    "title": "Blame-Free Post-Mortems",
+    "content": "After a major incident, teams should conduct a post-mortem to understand what happened and how to prevent it, focusing on process and systems rather than individuals.",
+    "insight": "Every failure is an opportunity to make the system more resilient.",
+    "next": "Cost Monitoring"
+  },
+  {
+    "id": "cloud_mon_24",
+    "title": "Cost Explorer",
+    "content": "A tool that enables you to visualize, understand, and manage your cloud costs and usage over time.",
+    "insight": "Monitoring your bill is just as important as monitoring your servers.",
+    "next": "AWS Budgets"
+  },
+  {
+    "id": "cloud_mon_25",
+    "title": "Budgets and Alerts",
+    "content": "AWS Budgets allows you to set custom budgets that alert you when your costs or usage exceed (or are forecasted to exceed) your budgeted amount.",
+    "insight": "Avoid 'bill shock' by setting up budget alerts early.",
+    "next": "Trusted Advisor"
+  },
+  {
+    "id": "cloud_mon_26",
+    "title": "AWS Trusted Advisor",
+    "content": "An online tool that provides real-time guidance to help you provision your resources following AWS best practices for cost, security, performance, and fault tolerance.",
+    "insight": "Your 'personal consultant' for cloud optimization.",
+    "next": "Log Exporting"
+  },
+  {
+    "id": "cloud_mon_27",
+    "title": "Exporting Logs to S3",
+    "content": "For long-term storage and compliance, you should export your CloudWatch logs to S3, where you can use lifecycle policies to move them to Glacier.",
+    "insight": "CloudWatch is for 'hot' logs; S3/Glacier is for 'cold' historical logs.",
+    "next": "EventBridge (CloudWatch Events)"
+  },
+  {
+    "id": "cloud_mon_28",
+    "title": "Amazon EventBridge",
+    "content": "A serverless event bus that makes it easy to connect applications together using data from your own applications, integrated SaaS applications, and AWS services.",
+    "insight": "React to changes in your infrastructure (e.g., an instance stopping) in real-time.",
+    "next": "CloudTrail"
+  },
+  {
+    "id": "cloud_mon_29",
+    "title": "AWS CloudTrail",
+    "content": "CloudTrail records every API call made in your AWS account. It tells you 'Who' did 'What', 'When', and 'From Where'.",
+    "insight": "CloudTrail is the 'audit log' for your entire cloud account.",
+    "next": "Security Hub"
+  },
+  {
+    "id": "cloud_mon_30",
+    "title": "AWS Security Hub",
+    "content": "Security Hub gives you a comprehensive view of your security alerts and security posture across your AWS accounts.",
+    "insight": "A central dashboard for all your cloud security monitoring.",
+    "next": "GuardDuty"
+  },
+  {
+    "id": "cloud_mon_31",
+    "title": "Amazon GuardDuty",
+    "content": "A threat detection service that continuously monitors for malicious activity and unauthorized behavior to protect your AWS accounts and workloads.",
+    "insight": "Intelligent threat detection that watches your back.",
+    "next": "Detective"
+  },
+  {
+    "id": "cloud_mon_32",
+    "title": "Amazon Detective",
+    "content": "Detective makes it easy to analyze, investigate, and quickly identify the root cause of potential security issues or suspicious activities.",
+    "insight": "A 'detective' that helps you piece together security incidents.",
+    "next": "Managed Prometheus and Grafana"
+  },
+  {
+    "id": "cloud_mon_33",
+    "title": "Prometheus and Grafana",
+    "content": "Popular open-source tools for monitoring and visualization. Many cloud providers offer 'Managed' versions to reduce operational overhead.",
+    "insight": "The industry standard for Kubernetes monitoring.",
+    "next": "Elasticsearch / OpenSearch"
+  },
+  {
+    "id": "cloud_mon_34",
+    "title": "The ELK Stack",
+    "content": "Elasticsearch, Logstash, and Kibana (ELK) is a powerful suite for searching, analyzing, and visualizing log data in real-time.",
+    "insight": "Deep log analysis for complex, high-volume data.",
+    "next": "CloudWatch ServiceLens"
+  },
+  {
+    "id": "cloud_mon_35",
+    "title": "ServiceLens",
+    "content": "A feature of CloudWatch that integrates traces, metrics, and logs into a single view for your entire application.",
+    "insight": "Cross-pillar observability in a single dashboard.",
+    "next": "Infrastructure Monitoring"
+  },
+  {
+    "id": "cloud_mon_36",
+    "title": "Agent-Based Monitoring",
+    "content": "Some monitoring requires installing an agent on the server (like the CloudWatch Agent) to collect disk and memory metrics that the hypervisor can't see.",
+    "insight": "Install an agent for 'deep' visibility into your Linux or Windows OS.",
+    "next": "Uptime Monitoring"
+  },
+  {
+    "id": "cloud_mon_37",
+    "title": "Uptime Checks",
+    "content": "Simple 'ping' tests from multiple global locations to ensure your application is reachable by users everywhere.",
+    "insight": "The most basic, yet most important, monitoring metric.",
+    "next": "Error Tracking (Sentry)"
+  },
+  {
+    "id": "cloud_mon_38",
+    "title": "Error Tracking",
+    "content": "Tools like Sentry capture application crashes and unhandled exceptions, providing the stack trace and state of the app at the time of the error.",
+    "insight": "Find the line of code that caused the crash in production.",
+    "next": "AI-Ops"
+  },
+  {
+    "id": "cloud_mon_39",
+    "title": "AI in Monitoring (DevOps Guru)",
+    "content": "A managed service that uses machine learning to detect anomalous behavior and provide recommendations to improve application availability.",
+    "insight": "Let AI find the 'weird' patterns that humans might miss.",
+    "next": "Conclusion"
+  },
+  {
+    "id": "cloud_mon_40",
+    "title": "Conclusion",
+    "content": "Observability is a journey, not a destination. By implementing robust logging, metrics, and tracing, you can build systems that are not only easier to debug but also more resilient and performant.",
+    "insight": "Great monitoring turns reactive firefighting into proactive engineering.",
+    "next": "Next Chapter: Real Deployment Workflow"
+  }
+]

@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { addXP } from '../utils/progress.js';
 import { COLORS, displayHeader, displayDivider } from '../utils/ui.js';
+import { getDataPath } from '../utils/paths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,0 +1,282 @@
+[
+  {
+    "id": "cloud_cicd_01",
+    "title": "Cloud CI/CD Overview",
+    "content": "CI/CD is the backbone of modern cloud engineering. It automates the journey from a developer's 'git push' to a live application running in the cloud, ensuring speed, reliability, and consistency.",
+    "insight": "Automation is the key to scaling your software delivery.",
+    "next": "Continuous Integration (CI)"
+  },
+  {
+    "id": "cloud_cicd_02",
+    "title": "What is CI?",
+    "content": "Continuous Integration is the practice of frequently merging code changes into a central repository. Automated builds and tests are run to detect bugs as early as possible.",
+    "insight": "CI is about catching errors 'left' (earlier) in the development cycle.",
+    "next": "Continuous Delivery (CD)"
+  },
+  {
+    "id": "cloud_cicd_03",
+    "title": "What is CD?",
+    "content": "Continuous Delivery ensures that the code is always in a deployable state. Continuous Deployment goes one step further and automatically deploys every change that passes the tests to production.",
+    "insight": "CD is about making releases a non-event through automation.",
+    "next": "The Pipeline"
+  },
+  {
+    "id": "cloud_cicd_04",
+    "title": "The CI/CD Pipeline",
+    "content": "A pipeline is a series of automated steps that your code passes through. Typical stages include: Source, Build, Test, and Deploy.",
+    "insight": "A pipeline is the 'assembly line' for your software.",
+    "next": "Source Stage"
+  },
+  {
+    "id": "cloud_cicd_05",
+    "title": "Source Stage (Git)",
+    "content": "The pipeline is triggered when changes are detected in your version control system (like GitHub, GitLab, or Bitbucket).",
+    "insight": "Git is the 'start button' for your automation.",
+    "next": "Build Stage"
+  },
+  {
+    "id": "cloud_cicd_06",
+    "title": "Build Stage",
+    "content": "In the build stage, your code is compiled (if necessary), dependencies are downloaded, and the application is packaged into an artifact (like a JAR file or a Docker image).",
+    "insight": "The build stage turns raw code into a 'shippable' package.",
+    "next": "Test Stage"
+  },
+  {
+    "id": "cloud_cicd_07",
+    "title": "Test Stage",
+    "content": "Automated tests (Unit, Integration, Linting) are run to ensure the code meets quality standards and doesn't break existing functionality.",
+    "insight": "Tests are the 'quality control' of your assembly line.",
+    "next": "Deploy Stage"
+  },
+  {
+    "id": "cloud_cicd_08",
+    "title": "Deploy Stage",
+    "content": "The final stage where the artifact is moved to the target environment (e.g., pushed to ECS, updated in Lambda, or uploaded to S3).",
+    "insight": "The deploy stage is when your changes become visible to users.",
+    "next": "GitHub Actions"
+  },
+  {
+    "id": "cloud_cicd_09",
+    "title": "GitHub Actions Overview",
+    "content": "GitHub Actions is a popular CI/CD tool integrated directly into GitHub. You define your pipelines in YAML files stored in the '.github/workflows' directory.",
+    "insight": "Build, test, and deploy right where your code lives.",
+    "next": "Workflows and Jobs"
+  },
+  {
+    "id": "cloud_cicd_10",
+    "title": "Workflows, Jobs, and Steps",
+    "content": "A 'Workflow' is an automated process. A workflow contains one or more 'Jobs'. A job contains a series of 'Steps' that run in a specific environment (runner).",
+    "insight": "GitHub Actions structure: Workflow -> Jobs -> Steps.",
+    "next": "GitHub Actions Runners"
+  },
+  {
+    "id": "cloud_cicd_11",
+    "title": "Runners",
+    "content": "Runners are the servers that execute your GitHub Actions jobs. You can use GitHub-hosted runners (Ubuntu, Windows, macOS) or host your own (self-hosted runners).",
+    "insight": "Runners are the 'laborers' that do the work of your pipeline.",
+    "next": "Secrets Management"
+  },
+  {
+    "id": "cloud_cicd_12",
+    "title": "GitHub Secrets",
+    "content": "Never hardcode API keys or passwords in your YAML files. Store them as 'Secrets' in GitHub and access them in your workflow via environment variables.",
+    "insight": "Secrets keep your sensitive credentials safe from the public eye.",
+    "next": "AWS CodePipeline"
+  },
+  {
+    "id": "cloud_cicd_13",
+    "title": "AWS CodePipeline",
+    "content": "A fully managed continuous delivery service that helps you automate your release pipelines for fast and reliable application and infrastructure updates.",
+    "insight": "The AWS-native way to build enterprise-grade pipelines.",
+    "next": "AWS CodeBuild"
+  },
+  {
+    "id": "cloud_cicd_14",
+    "title": "AWS CodeBuild",
+    "content": "A fully managed build service that compiles source code, runs tests, and produces software packages that are ready to deploy.",
+    "insight": "CodeBuild scales automatically and you only pay for the build minutes you use.",
+    "next": "Buildspec File"
+  },
+  {
+    "id": "cloud_cicd_15",
+    "title": "The buildspec.yml",
+    "content": "A collection of build commands and related settings, in YAML format, that CodeBuild uses to run a build.",
+    "insight": "The 'instruction manual' for your AWS build process.",
+    "next": "AWS CodeDeploy"
+  },
+  {
+    "id": "cloud_cicd_16",
+    "title": "AWS CodeDeploy",
+    "content": "A fully managed deployment service that automates software deployments to various compute services such as Amazon EC2, AWS Fargate, AWS Lambda, and on-premises servers.",
+    "insight": "CodeDeploy handles the complex logic of rolling out updates safely.",
+    "next": "AppSpec File"
+  },
+  {
+    "id": "cloud_cicd_17",
+    "title": "The appspec.yml",
+    "content": "The Application Specification (AppSpec) file is used by CodeDeploy to manage the deployment of an application to the target environment.",
+    "insight": "The 'instruction manual' for your AWS deployment process.",
+    "next": "Artifacts"
+  },
+  {
+    "id": "cloud_cicd_18",
+    "title": "Pipeline Artifacts",
+    "content": "Artifacts are the files or data produced by a stage and used by another stage. They are typically stored in an S3 bucket during the pipeline run.",
+    "insight": "Artifacts are the 'hand-offs' between different stages of your pipeline.",
+    "next": "Deployment Strategies"
+  },
+  {
+    "id": "cloud_cicd_19",
+    "title": "In-Place Deployment",
+    "content": "The application on each instance in the deployment group is stopped, the latest application revision is installed, and the new version of the application is started.",
+    "insight": "Fastest but involves downtime during the update.",
+    "next": "Blue/Green Deployment"
+  },
+  {
+    "id": "cloud_cicd_20",
+    "title": "Blue/Green Deployment",
+    "content": "The new version (green) is deployed to a new set of instances. Once tested, traffic is shifted from the old version (blue) to the new version.",
+    "insight": "Zero downtime and easy rollback if the new version fails.",
+    "next": "Canary Release"
+  },
+  {
+    "id": "cloud_cicd_21",
+    "title": "Canary Deployment",
+    "content": "Traffic is shifted to the new version in small increments (e.g., 10%, then 50%, then 100%). This allows you to monitor the new version with a small percentage of users.",
+    "insight": "The safest way to roll out changes to a large user base.",
+    "next": "Infrastructure CI/CD"
+  },
+  {
+    "id": "cloud_cicd_22",
+    "title": "Terraform in CI/CD",
+    "content": "Just like application code, your Terraform code should be in a pipeline. The pipeline runs 'terraform plan' on pull requests and 'terraform apply' on merges.",
+    "insight": "Automate your infrastructure changes for total consistency.",
+    "next": "OIDC Authentication"
+  },
+  {
+    "id": "cloud_cicd_23",
+    "title": "OIDC (OpenID Connect)",
+    "content": "OIDC allows your GitHub Actions workflows to access AWS resources without needing long-lived AWS access keys. It uses short-lived tokens for better security.",
+    "insight": "The modern, 'keyless' way to connect your CI/CD to the cloud.",
+    "next": "Build Caching"
+  },
+  {
+    "id": "cloud_cicd_24",
+    "title": "Build Caching",
+    "content": "Caching dependencies (like node_modules) between pipeline runs can significantly speed up your builds by avoiding redundant downloads.",
+    "insight": "Save time and bandwidth by remembering what you've already built.",
+    "next": "Container CI/CD"
+  },
+  {
+    "id": "cloud_cicd_25",
+    "title": "Docker Build in Pipeline",
+    "content": "The pipeline builds a Docker image, tags it with the commit hash, and pushes it to a registry like ECR. This image is then used for deployment.",
+    "insight": "Images are the perfect, immutable artifacts for cloud pipelines.",
+    "next": "Static Analysis"
+  },
+  {
+    "id": "cloud_cicd_26",
+    "title": "Linting and Static Analysis",
+    "content": "Tools like ESLint (for JS) or TFLint (for Terraform) run in the pipeline to check code style and detect potential errors without running the code.",
+    "insight": "Catch 'silly' mistakes before they ever reach a test server.",
+    "next": "Security Scanning (SCA)"
+  },
+  {
+    "id": "cloud_cicd_27",
+    "title": "SCA (Software Composition Analysis)",
+    "content": "Tools like Snyk or GitHub Dependency Review scan your dependencies for known vulnerabilities in the CI/CD pipeline.",
+    "insight": "Don't let insecure third-party libraries compromise your cloud apps.",
+    "next": "Quality Gates"
+  },
+  {
+    "id": "cloud_cicd_28",
+    "title": "Quality Gates",
+    "content": "A quality gate is a condition that must be met for the pipeline to continue (e.g., 'Unit test coverage must be > 80%').",
+    "insight": "Enforce high standards automatically with every commit.",
+    "next": "Manual Approvals"
+  },
+  {
+    "id": "cloud_cicd_29",
+    "title": "Manual Approval Actions",
+    "content": "In some environments (like Production), you may want the pipeline to stop and wait for a human to review the changes before proceeding with the deployment.",
+    "insight": "Combine automation with human oversight where it matters most.",
+    "next": "Environment Variables"
+  },
+  {
+    "id": "cloud_cicd_30",
+    "title": "Environment Variables",
+    "content": "Pipelines use environment variables to configure different settings for different environments (e.g., DB_URL for Dev vs. DB_URL for Prod).",
+    "insight": "Same code, different configurations for different stages.",
+    "next": "Rollback Strategies"
+  },
+  {
+    "id": "cloud_cicd_31",
+    "title": "Automated Rollback",
+    "content": "If a deployment fails (detected by health checks or CloudWatch alarms), the pipeline should automatically roll back to the previous stable version.",
+    "insight": "Failure happens; being able to recover instantly is what matters.",
+    "next": "Infrastructure Drift in CI/CD"
+  },
+  {
+    "id": "cloud_cicd_32",
+    "title": "Drift Detection Pipelines",
+    "content": "You can schedule a pipeline to run 'terraform plan' daily to detect if anyone has made manual changes to your infrastructure.",
+    "insight": "Ensure your code and your cloud are always in sync.",
+    "next": "GitOps Overview"
+  },
+  {
+    "id": "cloud_cicd_33",
+    "title": "What is GitOps?",
+    "content": "GitOps is a set of practices that uses Git as the single source of truth for declarative infrastructure and applications. Tools like ArgoCD or Flux are commonly used.",
+    "insight": "In GitOps, the 'actual state' of the cloud automatically pulls from the 'desired state' in Git.",
+    "next": "ArgoCD"
+  },
+  {
+    "id": "cloud_cicd_34",
+    "title": "ArgoCD and Kubernetes",
+    "content": "ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes. it monitors your Git repo and automatically applies changes to your cluster.",
+    "insight": "Keep your Kubernetes cluster perfectly in sync with your Git manifests.",
+    "next": "Pipeline-as-Code"
+  },
+  {
+    "id": "cloud_cicd_35",
+    "title": "Pipeline-as-Code",
+    "content": "Treating your pipeline definition (YAML) as code means it is versioned, reviewed, and stored alongside your application code.",
+    "insight": "The 'how we deploy' is just as important as the 'what we deploy'.",
+    "next": "Self-Service Infrastructure"
+  },
+  {
+    "id": "cloud_cicd_36",
+    "title": "Internal Developer Platforms",
+    "content": "Advanced CI/CD setups allow developers to provision their own 'ephemeral' environments for testing just by creating a pull request.",
+    "insight": "Empower developers to move fast without waiting for Ops teams.",
+    "next": "Multi-Region CI/CD"
+  },
+  {
+    "id": "cloud_cicd_37",
+    "title": "Global Pipelines",
+    "content": "For global applications, a single pipeline can deploy your application to multiple cloud regions sequentially, ensuring a consistent global rollout.",
+    "insight": "Deploy once, run everywhere (around the world).",
+    "next": "Compliance as Code"
+  },
+  {
+    "id": "cloud_cicd_38",
+    "title": "Compliance Scanning",
+    "content": "Pipelines can run compliance checks (e.g., using 'checkov' or 'tfsec') to ensure your infrastructure meets regulatory standards before it's deployed.",
+    "insight": "Security and compliance are built into the delivery process.",
+    "next": "Cost Analysis in CI/CD"
+  },
+  {
+    "id": "cloud_cicd_39",
+    "title": "Infracost",
+    "content": "Infracost is a tool that runs in your CI/CD pipeline to show you exactly how much your infrastructure costs will change before you merge a pull request.",
+    "insight": "See the bill before you build.",
+    "next": "Conclusion"
+  },
+  {
+    "id": "cloud_cicd_40",
+    "title": "Conclusion",
+    "content": "CI/CD is the engine that drives cloud speed and reliability. By automating the build, test, and deploy process, you can focus on writing great code while the pipeline handles the rest.",
+    "insight": "A great cloud engineer is an expert at building great pipelines.",
+    "next": "Next Chapter: Monitoring and Debugging"
+  }
+]

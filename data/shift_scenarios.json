@@ -1463,5 +1463,36 @@
     "resolution": "Provider plugins upgraded. Local locks synchronized with repository constraints.",
     "hints": ["Try upgrading the plugins.", "Check if the locked version is still available."],
     "suggested_tools": ["terraform init -upgrade"]
+  },
+  {
+    "id": "401",
+    "module": "cloud",
+    "type": "incident",
+    "title": "The Leaky Bucket",
+    "severity": "CRITICAL",
+    "problem": "Sensitive customer data is publicly accessible via an S3 bucket URL.",
+    "investigations": {
+      "aws s3api get-bucket-policy --bucket data-vault": "{\"Statement\": [{\"Effect\": \"Allow\", \"Principal\": \"*\", \"Action\": \"s3:GetObject\", ...}]}",
+      "curl https://data-vault.s3.amazonaws.com/passwords.txt": "HTTP/1.1 200 OK"
+    },
+    "fix_commands": ["aws s3api delete-bucket-policy --bucket data-vault", "aws s3api put-bucket-policy --bucket data-vault --policy file://secure.json"],
+    "resolution": "Public bucket policy removed. Bucket is now private.",
+    "hints": ["Check the bucket policy.", "Remove the '*' principal access."],
+    "suggested_tools": ["aws", "curl"]
+  },
+  {
+    "id": "402",
+    "module": "cloud",
+    "type": "incident",
+    "title": "IAM Privilege Escalation",
+    "severity": "HIGH",
+    "problem": "A developer's IAM role has 'AdministratorAccess'. This violates the principle of least privilege.",
+    "investigations": {
+      "aws iam list-attached-role-policies --role-name dev-role": "AttachedPolicies: [ { PolicyName: 'AdministratorAccess' } ]"
+    },
+    "fix_commands": ["aws iam detach-role-policy --role-name dev-role --policy-arn arn:aws:iam::aws:policy/AdministratorAccess && aws iam attach-role-policy --role-name dev-role --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess"],
+    "resolution": "Admin access detached and ReadOnly access attached.",
+    "hints": ["List attached policies for the role.", "Switch Admin access for something more restrictive."],
+    "suggested_tools": ["aws"]
   }
 ]

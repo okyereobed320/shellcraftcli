@@ -1,0 +1,282 @@
+[
+  {
+    "id": "cloud_stor_01",
+    "title": "Cloud Storage Overview",
+    "content": "Data is the most valuable asset in the cloud. Cloud storage provides scalable, resilient, and secure ways to store your data, whether it's for a high-performance database, a static website, or long-term backups.",
+    "insight": "Choosing the right storage type is critical for performance and cost.",
+    "next": "Block vs. Object vs. File"
+  },
+  {
+    "id": "cloud_stor_02",
+    "title": "Block Storage (EBS)",
+    "content": "Block storage provides raw storage volumes that you can attach to an instance. It behaves like a physical hard drive. In AWS, this is called Elastic Block Store (EBS).",
+    "insight": "Block storage is for data that changes frequently, like operating systems or databases.",
+    "next": "EBS Volume Types"
+  },
+  {
+    "id": "cloud_stor_03",
+    "title": "EBS: SSD vs. HDD",
+    "content": "EBS volumes come in different types: SSD-backed volumes (gp3, io2) are for transactional workloads, while HDD-backed volumes (st1, sc1) are for large, sequential workloads like log processing.",
+    "insight": "SSD for speed; HDD for volume and throughput.",
+    "next": "Provisioned IOPS"
+  },
+  {
+    "id": "cloud_stor_04",
+    "title": "Provisioned IOPS",
+    "content": "IOPS (Input/Output Operations Per Second) measures how fast you can read and write to a disk. For mission-critical databases, you can 'provision' a specific amount of IOPS to guarantee performance.",
+    "insight": "Pay for the exact performance your database needs.",
+    "next": "EBS Snapshots"
+  },
+  {
+    "id": "cloud_stor_05",
+    "title": "EBS Snapshots",
+    "content": "Snapshots are point-in-time backups of your EBS volumes. They are stored incrementally in S3, meaning you only pay for the data that has changed since the last snapshot.",
+    "insight": "Snapshots are your safety net for block storage.",
+    "next": "Object Storage (S3)"
+  },
+  {
+    "id": "cloud_stor_06",
+    "title": "Object Storage (Amazon S3)",
+    "content": "Simple Storage Service (S3) is an object storage service that offers industry-leading scalability, data availability, security, and performance. Unlike block storage, you access objects via a URL.",
+    "insight": "S3 is the 'bottomless' storage bucket of the internet.",
+    "next": "Buckets and Objects"
+  },
+  {
+    "id": "cloud_stor_07",
+    "title": "Buckets and Objects",
+    "content": "In S3, data is stored in 'buckets'. A bucket is a container for 'objects'. An object consists of the file itself, its metadata, and a unique identifier (the key).",
+    "insight": "Bucket names must be globally unique across all AWS accounts.",
+    "next": "S3 Storage Classes"
+  },
+  {
+    "id": "cloud_stor_08",
+    "title": "S3 Standard",
+    "content": "The default storage class for frequently accessed data. It offers high durability, availability, and performance.",
+    "insight": "Use S3 Standard for active files that need immediate access.",
+    "next": "S3 Intelligent-Tiering"
+  },
+  {
+    "id": "cloud_stor_09",
+    "title": "S3 Intelligent-Tiering",
+    "content": "S3 Intelligent-Tiering automatically moves your data between two access tiers (frequent and infrequent) when access patterns change, saving you money automatically.",
+    "insight": "Let AWS optimize your storage costs for you.",
+    "next": "S3 Infrequent Access (IA)"
+  },
+  {
+    "id": "cloud_stor_10",
+    "title": "S3 Standard-IA",
+    "content": "For data that is accessed less frequently but requires rapid access when needed. It has a lower storage price but a higher retrieval fee.",
+    "insight": "Perfect for backups or older data that you might still need quickly.",
+    "next": "S3 Glacier (Archival)"
+  },
+  {
+    "id": "cloud_stor_11",
+    "title": "S3 Glacier",
+    "content": "Glacier is for long-term data archiving. Retrieval times can range from minutes to hours, but the storage cost is extremely low.",
+    "insight": "Glacier is the 'cold storage' for data you rarely look at.",
+    "next": "S3 Durability and Availability"
+  },
+  {
+    "id": "cloud_stor_12",
+    "title": "The 'Eleven Nines' (Durability)",
+    "content": "S3 is designed for 99.999999999% (11 nines) durability. This means if you store 10 million objects, you can expect to lose one object every 10,000 years.",
+    "insight": "Your data is safer in S3 than in your own data center.",
+    "next": "S3 Versioning"
+  },
+  {
+    "id": "cloud_stor_13",
+    "title": "S3 Versioning",
+    "content": "Versioning allows you to keep multiple variants of an object in the same bucket. You can use it to recover objects from accidental deletion or overwrite.",
+    "insight": "Versioning is the 'Undo' button for your S3 objects.",
+    "next": "S3 Lifecycle Policies"
+  },
+  {
+    "id": "cloud_stor_14",
+    "title": "Lifecycle Policies",
+    "content": "Lifecycle policies allow you to automatically transition objects to cheaper storage classes or delete them after a certain period of time.",
+    "insight": "Automate your data's journey from 'hot' to 'cold' to 'deleted'.",
+    "next": "S3 Static Website Hosting"
+  },
+  {
+    "id": "cloud_stor_15",
+    "title": "Static Website Hosting",
+    "content": "S3 can host static websites (HTML, CSS, JS, images) without a server. It is highly scalable and very inexpensive.",
+    "insight": "The easiest way to host a modern frontend application.",
+    "next": "File Storage (EFS)"
+  },
+  {
+    "id": "cloud_stor_16",
+    "title": "Elastic File System (EFS)",
+    "content": "EFS provides a simple, scalable, fully managed elastic NFS file system. Unlike EBS, EFS can be mounted by hundreds of instances simultaneously.",
+    "insight": "EFS is a 'shared drive' for your cloud servers.",
+    "next": "Instance Store (Ephemeral)"
+  },
+  {
+    "id": "cloud_stor_17",
+    "title": "Instance Store",
+    "content": "Instance store provides temporary block-level storage for your instance. This storage is located on disks that are physically attached to the host computer. Data is lost if the instance is stopped or terminated.",
+    "insight": "Use instance store for scratch space or temporary caches only.",
+    "next": "Data Transfer Costs"
+  },
+  {
+    "id": "cloud_stor_18",
+    "title": "Cloud Data Transfer",
+    "content": "Inbound data transfer is usually free. Outbound data transfer (egress) to the internet or across regions usually incurs a cost. Transfers within the same AZ are often free.",
+    "insight": "Watch your outbound traffic; it's a common hidden cost.",
+    "next": "Storage Gateway"
+  },
+  {
+    "id": "cloud_stor_19",
+    "title": "AWS Storage Gateway",
+    "content": "Storage Gateway connects an on-premises software appliance with cloud-based storage to provide seamless integration between your data center and the cloud.",
+    "insight": "A bridge for moving your local data to the cloud.",
+    "next": "Snow Family"
+  },
+  {
+    "id": "cloud_stor_20",
+    "title": "The Snow Family",
+    "content": "Devices like Snowball and Snowcone are physical hardware used to migrate massive amounts of data (petabytes) into the cloud when the internet is too slow.",
+    "insight": "Sometimes the fastest way to move data is by truck.",
+    "next": "FSx (Managed File Systems)"
+  },
+  {
+    "id": "cloud_stor_21",
+    "title": "AWS FSx",
+    "content": "FSx makes it easy to launch and run popular file systems like Windows File Server and Lustre in the cloud.",
+    "insight": "Managed file systems for specific enterprise workloads.",
+    "next": "Database Storage"
+  },
+  {
+    "id": "cloud_stor_22",
+    "title": "Relational Database Service (RDS)",
+    "content": "RDS is a managed service that makes it easy to set up, operate, and scale a relational database (like MySQL, PostgreSQL, or SQL Server) in the cloud.",
+    "insight": "Let AWS manage patches and backups for your SQL databases.",
+    "next": "DynamoDB (NoSQL)"
+  },
+  {
+    "id": "cloud_stor_23",
+    "title": "Amazon DynamoDB",
+    "content": "A key-value and document database that delivers single-digit millisecond performance at any scale. It is fully managed and serverless.",
+    "insight": "NoSQL storage that scales to millions of requests per second.",
+    "next": "Amazon Aurora"
+  },
+  {
+    "id": "cloud_stor_24",
+    "title": "Amazon Aurora",
+    "content": "A MySQL and PostgreSQL-compatible relational database built for the cloud that combines the performance of high-end commercial databases with the simplicity of open source.",
+    "insight": "Aurora is AWS's premium, cloud-native relational database.",
+    "next": "S3 Security"
+  },
+  {
+    "id": "cloud_stor_25",
+    "title": "Bucket Policies",
+    "content": "Bucket policies are JSON-based access policy language that you can use to add or deny permissions to your S3 buckets and the objects in them.",
+    "insight": "Control access to your data at the bucket level.",
+    "next": "S3 Access Control Lists (ACLs)"
+  },
+  {
+    "id": "cloud_stor_26",
+    "title": "S3 Public Access Block",
+    "content": "A critical security feature that provides a centralized control to prevent the accidental exposure of S3 buckets to the public internet.",
+    "insight": "Always enable 'Block Public Access' unless you are hosting a public website.",
+    "next": "Encryption at Rest"
+  },
+  {
+    "id": "cloud_stor_27",
+    "title": "Encryption at Rest",
+    "content": "Encryption at rest protects your data by encrypting it while it's stored on disk. Cloud providers offer managed keys (KMS) to make this easy.",
+    "insight": "Encrypted data is useless to anyone who steals the physical disk.",
+    "next": "Encryption in Transit"
+  },
+  {
+    "id": "cloud_stor_28",
+    "title": "Encryption in Transit",
+    "content": "Encryption in transit (using SSL/TLS) ensures your data is encrypted while it travels over the network between your computer and the cloud.",
+    "insight": "Always use HTTPS to talk to cloud storage APIs.",
+    "next": "EFS Performance Modes"
+  },
+  {
+    "id": "cloud_stor_29",
+    "title": "EFS Performance Modes",
+    "content": "EFS offers 'General Purpose' for most workloads and 'Max I/O' for large-scale, highly parallelized workloads.",
+    "insight": "Choose the right performance mode for your file sharing needs.",
+    "next": "Backup and Restore"
+  },
+  {
+    "id": "cloud_stor_30",
+    "title": "AWS Backup",
+    "content": "A centralized backup service that makes it easy to automate and consolidate backup tasks across AWS services for compute, storage, and databases.",
+    "insight": "One tool to rule all your cloud backups.",
+    "next": "Object Lock"
+  },
+  {
+    "id": "cloud_stor_31",
+    "title": "S3 Object Lock",
+    "content": "Object Lock prevents objects from being deleted or overwritten for a fixed amount of time. This is useful for compliance and protection against ransomware.",
+    "insight": "Write Once, Read Many (WORM) storage for critical data.",
+    "next": "S3 Select"
+  },
+  {
+    "id": "cloud_stor_32",
+    "title": "S3 Select",
+    "content": "S3 Select allows you to use SQL statements to filter the contents of an S3 object and retrieve only the subset of data that you need.",
+    "insight": "Retrieve only the data you need, reducing transfer costs and time.",
+    "next": "EBS Multi-Attach"
+  },
+  {
+    "id": "cloud_stor_33",
+    "title": "EBS Multi-Attach",
+    "content": "Multi-attach allows you to attach a single Provisioned IOPS SSD volume to multiple EC2 instances in the same AZ.",
+    "insight": "Useful for clustered applications that need shared block storage.",
+    "next": "S3 Replication"
+  },
+  {
+    "id": "cloud_stor_34",
+    "title": "S3 Replication",
+    "content": "S3 can automatically replicate objects across buckets in different regions (CRR) or the same region (SRR).",
+    "insight": "Perfect for global data distribution and disaster recovery.",
+    "next": "Transfer Acceleration"
+  },
+  {
+    "id": "cloud_stor_35",
+    "title": "S3 Transfer Acceleration",
+    "content": "Uses Edge Locations to provide fast, easy, and secure transfers of files over long distances between your client and an S3 bucket.",
+    "insight": "Speed up uploads from around the world by using the AWS backbone.",
+    "next": "Elastic Volume"
+  },
+  {
+    "id": "cloud_stor_36",
+    "title": "Elastic Volumes",
+    "content": "EBS Elastic Volumes allow you to increase volume size, change volume type, or adjust performance while the volume is still attached and in use.",
+    "insight": "Grow your storage without taking your server offline.",
+    "next": "Pre-Signed URLs"
+  },
+  {
+    "id": "cloud_stor_37",
+    "title": "S3 Pre-Signed URLs",
+    "content": "A pre-signed URL gives temporary access to an object in S3 without requiring AWS credentials. You can set an expiration time for the link.",
+    "insight": "The best way to share private files securely with users.",
+    "next": "Athena"
+  },
+  {
+    "id": "cloud_stor_38",
+    "title": "Amazon Athena",
+    "content": "An interactive query service that makes it easy to analyze data directly in Amazon S3 using standard SQL. There is no infrastructure to manage.",
+    "insight": "Query your 'S3 data lake' as if it were a database.",
+    "next": "Redshift (Data Warehouse)"
+  },
+  {
+    "id": "cloud_stor_39",
+    "title": "Amazon Redshift",
+    "content": "A fast, fully managed data warehouse that makes it simple and cost-effective to analyze all your data using standard SQL and your existing Business Intelligence (BI) tools.",
+    "insight": "Storage for massive analytical workloads.",
+    "next": "Conclusion"
+  },
+  {
+    "id": "cloud_stor_40",
+    "title": "Conclusion",
+    "content": "Cloud storage is about much more than just saving files. It's about building a durable, scalable, and automated data foundation for your entire application stack.",
+    "insight": "Automate your storage lifecycle to keep performance high and costs low.",
+    "next": "Next Chapter: Cloud Networking"
+  }
+]

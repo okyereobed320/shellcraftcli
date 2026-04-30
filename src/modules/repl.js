@@ -4,6 +4,7 @@ import { startQuiz } from './quiz.js';
 import { startShift } from './shift.js';
 import { COLORS, displayHeader } from '../utils/ui.js';
 import { addHistory } from '../utils/progress.js';
+import { handleSlashCommand } from './slash_commands.js';
 
 export async function startModuleREPL(moduleName) {
   const rl = readline.createInterface({
@@ -16,18 +17,28 @@ export async function startModuleREPL(moduleName) {
   console.clear();
   displayHeader(`${moduleName.toUpperCase()} INTERACTIVE TRAINING`, COLORS.primary);
   console.log(COLORS.muted(' Available actions: learn, quiz, sim, exit\n'));
+  console.log(COLORS.muted(' You can also use slash commands like /core, /cloud-basics, /cloud-platforms\n'));
   
   rl.prompt();
 
   rl.on('line', async (line) => {
-    const action = line.trim().toLowerCase();
+    const input = line.trim();
+    const action = input.toLowerCase();
 
     if (action === 'exit' || action === 'back') {
       rl.close();
       return;
     }
 
-    if (!action) {
+    if (!input) {
+      rl.prompt();
+      return;
+    }
+
+    if (input.startsWith('/')) {
+      rl.pause();
+      await handleSlashCommand(input);
+      rl.resume();
       rl.prompt();
       return;
     }

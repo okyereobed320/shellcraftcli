@@ -1,0 +1,282 @@
+[
+  {
+    "id": "cloud_tf_01",
+    "title": "Terraform in Cloud Overview",
+    "content": "Terraform is the industry-standard Infrastructure as Code (IaC) tool. It allows you to define your cloud resources in human-readable configuration files, ensuring your infrastructure is versioned, repeatable, and automated.",
+    "insight": "Terraform is the 'architect' that builds your cloud based on your 'blueprints' (code).",
+    "next": "Infrastructure as Code (IaC)"
+  },
+  {
+    "id": "cloud_tf_02",
+    "title": "Why IaC?",
+    "content": "Manual 'click-ops' in the web console is slow, prone to error, and hard to track. IaC brings the best practices of software development—like version control, code review, and CI/CD—to infrastructure management.",
+    "insight": "Treat your infrastructure like you treat your application code.",
+    "next": "HCL: HashiCorp Configuration Language"
+  },
+  {
+    "id": "cloud_tf_03",
+    "title": "HCL Basics",
+    "content": "Terraform uses HCL, a declarative language designed for humans to read and write. You describe the 'desired state' of your infrastructure, and Terraform figure out how to make it happen.",
+    "insight": "Declarative means you say 'what' you want, not 'how' to build it.",
+    "next": "Terraform Providers"
+  },
+  {
+    "id": "cloud_tf_04",
+    "title": "Terraform Providers",
+    "content": "Providers are plugins that allow Terraform to talk to specific cloud platforms (like AWS, Azure, GCP). Each provider translates HCL code into API calls that the cloud platform understands.",
+    "insight": "Providers are the 'translators' between Terraform and the cloud.",
+    "next": "Terraform Resources"
+  },
+  {
+    "id": "cloud_tf_05",
+    "title": "Resources",
+    "content": "Resources are the building blocks of your infrastructure. A resource block describes one or more infrastructure objects, such as a VPC, an EC2 instance, or an S3 bucket.",
+    "insight": "Resources are the actual 'things' you are building in the cloud.",
+    "next": "Terraform Workflow"
+  },
+  {
+    "id": "cloud_tf_06",
+    "title": "Workflow: terraform init",
+    "content": "The first command you run in any Terraform project. It initializes the working directory and downloads the necessary provider plugins.",
+    "insight": "Init prepares your environment for Terraform commands.",
+    "next": "terraform plan"
+  },
+  {
+    "id": "cloud_tf_07",
+    "title": "Workflow: terraform plan",
+    "content": "The 'dry run' command. Terraform compares your code to the current state of your infrastructure and shows you exactly what it will create, change, or destroy.",
+    "insight": "Always check the plan before you apply any changes.",
+    "next": "terraform apply"
+  },
+  {
+    "id": "cloud_tf_08",
+    "title": "Workflow: terraform apply",
+    "content": "The command that actually builds your infrastructure. It executes the actions proposed in the plan to reach the desired state defined in your code.",
+    "insight": "Apply is where your code turns into real cloud resources.",
+    "next": "terraform destroy"
+  },
+  {
+    "id": "cloud_tf_09",
+    "title": "Workflow: terraform destroy",
+    "content": "Terminates all resources managed by your Terraform project. It's a clean way to tear down an entire environment when you no longer need it.",
+    "insight": "Destroy is the 'delete all' button for your infrastructure project.",
+    "next": "Terraform State"
+  },
+  {
+    "id": "cloud_tf_10",
+    "title": "The State File",
+    "content": "Terraform keeps track of the resources it manages in a file called 'terraform.tfstate'. This file maps your HCL code to the real-world IDs of resources in your cloud account.",
+    "insight": "The state file is the 'brain' of your Terraform project; protect it at all costs.",
+    "next": "Remote State"
+  },
+  {
+    "id": "cloud_tf_11",
+    "title": "Remote Backends",
+    "content": "In a team environment, you should store your state file in a remote location (like an S3 bucket) so everyone is working from the same 'source of truth'.",
+    "insight": "Remote state is essential for team collaboration and state locking.",
+    "next": "State Locking"
+  },
+  {
+    "id": "cloud_tf_12",
+    "title": "State Locking",
+    "content": "State locking prevents two people from running 'terraform apply' at the same time, which could corrupt the state file. DynamoDB is often used with S3 for this purpose.",
+    "insight": "Locking ensures only one person can change the infrastructure at a time.",
+    "next": "Variables and Outputs"
+  },
+  {
+    "id": "cloud_tf_13",
+    "title": "Input Variables",
+    "content": "Variables allow you to parameterize your HCL code. Instead of hardcoding values like instance types or region names, you can pass them in as variables.",
+    "insight": "Variables make your Terraform code reusable and flexible.",
+    "next": "Output Values"
+  },
+  {
+    "id": "cloud_tf_14",
+    "title": "Output Values",
+    "content": "Outputs are like return values in a programming language. You can use them to display information (like a server's public IP) after a 'terraform apply'.",
+    "insight": "Use outputs to get the important details of your newly built infrastructure.",
+    "next": "Terraform Modules"
+  },
+  {
+    "id": "cloud_tf_15",
+    "title": "What are Modules?",
+    "content": "A module is a container for multiple resources that are used together. Modules allow you to group related resources into reusable components (e.g., a 'webserver' module).",
+    "insight": "Modules are the 'functions' of the infrastructure world.",
+    "next": "The Module Registry"
+  },
+  {
+    "id": "cloud_tf_16",
+    "title": "Terraform Registry",
+    "content": "The Terraform Registry is a public repository of modules and providers created by HashiCorp and the community. You can use these to quickly build complex architectures.",
+    "insight": "Don't reinvent the wheel; check the registry for proven modules first.",
+    "next": "Provisioning a VPC"
+  },
+  {
+    "id": "cloud_tf_17",
+    "title": "VPC via Terraform",
+    "content": "To build a VPC, you define resources for 'aws_vpc', 'aws_subnet', 'aws_internet_gateway', and 'aws_route_table'. You then link them together using their IDs.",
+    "insight": "Terraform automatically handles the dependencies between resources.",
+    "next": "Implicit Dependencies"
+  },
+  {
+    "id": "cloud_tf_18",
+    "title": "Implicit Dependencies",
+    "content": "Terraform automatically determines the order in which resources must be created. If a subnet needs a VPC ID, Terraform will build the VPC first.",
+    "insight": "Terraform builds your infrastructure 'bottom-up' based on dependencies.",
+    "next": "Explicit Dependencies (depends_on)"
+  },
+  {
+    "id": "cloud_tf_19",
+    "title": "depends_on",
+    "content": "Sometimes a dependency isn't obvious to Terraform. You can use the 'depends_on' meta-argument to explicitly tell Terraform that one resource depends on another.",
+    "insight": "Use 'depends_on' sparingly for hidden dependencies.",
+    "next": "Terraform Provisioners"
+  },
+  {
+    "id": "cloud_tf_20",
+    "title": "Provisioners (local-exec, remote-exec)",
+    "content": "Provisioners allow you to run scripts on your local machine or a remote server after a resource is created. They are often used for initial software installation.",
+    "insight": "Provisioners are a 'last resort'; prefer User Data or configuration management tools.",
+    "next": "Data Sources"
+  },
+  {
+    "id": "cloud_tf_21",
+    "title": "Data Sources",
+    "content": "Data sources allow Terraform to fetch information about resources that already exist in your cloud account but aren't managed by the current Terraform project.",
+    "insight": "Read existing cloud data to use it in your infrastructure code.",
+    "next": "Terraform Refresh"
+  },
+  {
+    "id": "cloud_tf_22",
+    "title": "terraform refresh",
+    "content": "This command updates the local state file against the real-world resources. It doesn't change your infrastructure, just your 'knowledge' of it.",
+    "insight": "Refresh keeps your state file in sync with reality.",
+    "next": "Drift Detection"
+  },
+  {
+    "id": "cloud_tf_23",
+    "title": "Configuration Drift",
+    "content": "Drift happens when someone changes a resource manually in the console. Terraform detects this during a 'plan' and will propose changes to bring it back to the 'desired state'.",
+    "insight": "Terraform is your 'police force' against manual, untracked changes.",
+    "next": "Terraform Workspaces"
+  },
+  {
+    "id": "cloud_tf_24",
+    "title": "Terraform Workspaces",
+    "content": "Workspaces allow you to manage multiple environments (like dev, staging, prod) using the same HCL code but separate state files.",
+    "insight": "Use workspaces to keep your environments isolated from each other.",
+    "next": "Sensitive Data in Terraform"
+  },
+  {
+    "id": "cloud_tf_25",
+    "title": "Sensitive Variables",
+    "content": "You can mark variables as 'sensitive = true' to prevent Terraform from printing their values in the CLI output (useful for passwords and keys).",
+    "insight": "Keep your secrets out of your logs.",
+    "next": "Terraform and CI/CD"
+  },
+  {
+    "id": "cloud_tf_26",
+    "title": "Automating Terraform",
+    "content": "In a professional setting, Terraform is run in a CI/CD pipeline. The pipeline runs 'plan' on pull requests and 'apply' once the code is merged to the main branch.",
+    "insight": "Manual 'apply' from a developer's laptop should be rare in production.",
+    "next": "Terraform Cloud / Enterprise"
+  },
+  {
+    "id": "cloud_tf_27",
+    "title": "Terraform Cloud",
+    "content": "A managed service by HashiCorp that provides a consistent environment for Terraform runs, remote state management, and team collaboration features.",
+    "insight": "The 'SaaS' version of Terraform for teams.",
+    "next": "Infrastructure Lifecycle"
+  },
+  {
+    "id": "cloud_tf_28",
+    "title": "Immutable Infrastructure",
+    "content": "Terraform encourages replacing resources instead of updating them in place. This avoids 'configuration drift' and ensures your servers are always in a known state.",
+    "insight": "Servers are cattle, not pets; if they are sick, replace them.",
+    "next": "Terraform fmt and validate"
+  },
+  {
+    "id": "cloud_tf_29",
+    "title": "fmt and validate",
+    "content": "'terraform fmt' automatically formats your HCL code for consistency. 'terraform validate' checks your code for syntax errors and internal consistency.",
+    "insight": "Clean and valid code is easier to maintain and less likely to fail.",
+    "next": "Resource Lifecycle: prevent_destroy"
+  },
+  {
+    "id": "cloud_tf_30",
+    "title": "prevent_destroy",
+    "content": "A lifecycle setting that prevents Terraform from destroying a specific resource (like a production database).",
+    "insight": "Use 'prevent_destroy' as a safety lock for critical resources.",
+    "next": "Resource Lifecycle: create_before_destroy"
+  },
+  {
+    "id": "cloud_tf_31",
+    "title": "create_before_destroy",
+    "content": "Ensures a new resource is created and healthy before the old one is destroyed, which is useful for minimizing downtime during updates.",
+    "insight": "Achieve zero-downtime updates for your infrastructure.",
+    "next": "Terraform and Security"
+  },
+  {
+    "id": "cloud_tf_32",
+    "title": "Sentinel / OPA",
+    "content": "Policy-as-code tools that allow you to enforce rules on your infrastructure (e.g., 'no public S3 buckets' or 'only use t3.micro instances').",
+    "insight": "Enforce security and cost policies automatically at the code level.",
+    "next": "Multi-Cloud with Terraform"
+  },
+  {
+    "id": "cloud_tf_33",
+    "title": "Multi-Cloud Strategy",
+    "content": "Because Terraform supports many providers, you can use the same workflow and language to manage resources in AWS, Azure, and Google Cloud simultaneously.",
+    "insight": "Terraform is your 'universal remote' for all cloud platforms.",
+    "next": "Terraform state mv"
+  },
+  {
+    "id": "cloud_tf_34",
+    "title": "Refactoring State",
+    "content": "The 'terraform state mv' command allows you to rename resources in your code without destroying and recreating them in the cloud.",
+    "insight": "Essential for cleaning up and organizing your infrastructure code over time.",
+    "next": "Terraform Import"
+  },
+  {
+    "id": "cloud_tf_35",
+    "title": "terraform import",
+    "content": "Allows you to bring existing cloud resources under Terraform's management by populating the state file with their current configuration.",
+    "insight": "Use import to 'adopt' resources that were created manually.",
+    "next": "Terraform Provisioning for K8s"
+  },
+  {
+    "id": "cloud_tf_36",
+    "title": "Terraform and EKS",
+    "content": "Terraform is commonly used to provision the EKS cluster, its nodes, and the necessary IAM roles and VPC networking.",
+    "insight": "Terraform builds the cluster; kubectl/Helm manage the apps inside it.",
+    "next": "Local Values"
+  },
+  {
+    "id": "cloud_tf_37",
+    "title": "locals",
+    "content": "Local values are like temporary variables inside a module. They help you simplify complex expressions and avoid repeating the same logic.",
+    "insight": "Use locals to make your HCL more readable and DRY (Don't Repeat Yourself).",
+    "next": "Dynamic Blocks"
+  },
+  {
+    "id": "cloud_tf_38",
+    "title": "Dynamic Blocks",
+    "content": "Dynamic blocks allow you to generate multiple nested blocks (like security group rules) within a resource based on a list or map of data.",
+    "insight": "Generate complex resource configurations dynamically based on your inputs.",
+    "next": "The Future of IaC"
+  },
+  {
+    "id": "cloud_tf_39",
+    "title": "CDK for Terraform (CDKTF)",
+    "content": "Allows you to define infrastructure using familiar programming languages like Python, TypeScript, or Go, which then translates into HCL for Terraform to execute.",
+    "insight": "Infrastructure as Code meets full-featured programming languages.",
+    "next": "Conclusion"
+  },
+  {
+    "id": "cloud_tf_40",
+    "title": "Conclusion",
+    "content": "Terraform is the most powerful tool in the cloud engineer's toolkit. By defining infrastructure as code, you unlock the ability to build massive, complex, and reliable systems with ease.",
+    "insight": "Master Terraform to become a professional cloud architect.",
+    "next": "Next Chapter: CI/CD Integration"
+  }
+]

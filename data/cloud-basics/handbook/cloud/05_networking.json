@@ -1,0 +1,282 @@
+[
+  {
+    "id": "cloud_net_01",
+    "title": "Cloud Networking Overview",
+    "content": "Networking is the connective tissue of the cloud. It defines how your resources talk to each other and how users reach your applications. In the cloud, networking is software-defined, giving you total control via APIs.",
+    "insight": "Networking is no longer about cables; it's about configuration.",
+    "next": "VPC: Virtual Private Cloud"
+  },
+  {
+    "id": "cloud_net_02",
+    "title": "The VPC",
+    "content": "A VPC is a logically isolated virtual network in your cloud account. You define its IP address range (using CIDR blocks), create subnets, configure route tables, and set up network gateways.",
+    "insight": "Your VPC is the 'fence' around your cloud resources.",
+    "next": "IP Addressing: CIDR"
+  },
+  {
+    "id": "cloud_net_03",
+    "title": "CIDR Blocks",
+    "content": "Classless Inter-Domain Routing (CIDR) is a method for allocating IP addresses. A VPC CIDR block like 10.0.0.0/16 provides 65,536 IP addresses.",
+    "insight": "Choose a large enough CIDR block to allow for future growth.",
+    "next": "Subnets"
+  },
+  {
+    "id": "cloud_net_04",
+    "title": "Subnets",
+    "content": "A subnet is a range of IP addresses in your VPC. You launch resources like EC2 instances into a specific subnet. Each subnet must reside entirely within one Availability Zone.",
+    "insight": "Subnets allow you to segment your network for security and organization.",
+    "next": "Public vs. Private Subnets"
+  },
+  {
+    "id": "cloud_net_05",
+    "title": "Public Subnets",
+    "content": "A public subnet has a direct route to an Internet Gateway. Resources in this subnet can have public IP addresses and are reachable from the internet.",
+    "insight": "Public subnets are for 'front-facing' resources like load balancers.",
+    "next": "Private Subnets"
+  },
+  {
+    "id": "cloud_net_06",
+    "title": "Private Subnets",
+    "content": "A private subnet does not have a direct route to an Internet Gateway. Resources in this subnet only have private IP addresses and are protected from direct internet access.",
+    "insight": "Private subnets are the safest place for your databases and internal logic.",
+    "next": "Route Tables"
+  },
+  {
+    "id": "cloud_net_07",
+    "title": "Route Tables",
+    "content": "A route table contains a set of rules (routes) that are used to determine where network traffic is directed. Each subnet in your VPC must be associated with a route table.",
+    "insight": "Route tables are the 'GPS' for your network packets.",
+    "next": "Internet Gateway (IGW)"
+  },
+  {
+    "id": "cloud_net_08",
+    "title": "Internet Gateway",
+    "content": "The IGW allows communication between instances in your VPC and the internet. It performs network address translation (NAT) for instances that have been assigned public IP addresses.",
+    "insight": "The IGW is the 'front door' of your VPC.",
+    "next": "NAT Gateway"
+  },
+  {
+    "id": "cloud_net_09",
+    "title": "NAT Gateway",
+    "content": "A NAT Gateway lives in a public subnet and allows instances in a private subnet to connect to the internet while preventing the internet from initiating a connection with them.",
+    "insight": "NAT Gateways provide secure outbound-only internet access.",
+    "next": "Security Groups"
+  },
+  {
+    "id": "cloud_net_10",
+    "title": "Security Groups (SGs)",
+    "content": "SGs act as a virtual firewall for your instances. They are stateful, meaning if you allow an inbound request, the outbound response is automatically allowed.",
+    "insight": "SGs control traffic at the instance level.",
+    "next": "Network ACLs (NACLs)"
+  },
+  {
+    "id": "cloud_net_11",
+    "title": "Network ACLs",
+    "content": "NACLs are an optional layer of security for your VPC that acts as a firewall for controlling traffic in and out of one or more subnets. They are stateless.",
+    "insight": "NACLs control traffic at the subnet level.",
+    "next": "VPC Peering"
+  },
+  {
+    "id": "cloud_net_12",
+    "title": "VPC Peering",
+    "content": "VPC peering allows you to connect two VPCs (in the same or different accounts/regions) so they can communicate using private IP addresses as if they were on the same network.",
+    "insight": "Peering is the easiest way to connect separate virtual networks.",
+    "next": "VPC Endpoints"
+  },
+  {
+    "id": "cloud_net_13",
+    "title": "VPC Endpoints (PrivateLink)",
+    "content": "VPC endpoints enable you to privately connect your VPC to supported cloud services (like S3 or DynamoDB) without requiring an Internet Gateway or NAT Gateway.",
+    "insight": "Keep your traffic on the cloud provider's private backbone for security.",
+    "next": "Transit Gateway"
+  },
+  {
+    "id": "cloud_net_14",
+    "title": "Transit Gateway",
+    "content": "A Transit Gateway acts as a central hub that connects VPCs and on-premises networks. It simplifies your network topology as you scale to many VPCs.",
+    "insight": "The 'Router in the Cloud' for complex, multi-VPC architectures.",
+    "next": "Route 53: DNS"
+  },
+  {
+    "id": "cloud_net_15",
+    "title": "Cloud DNS (Route 53)",
+    "content": "Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service. It translates human-readable names like example.com into numeric IP addresses.",
+    "insight": "DNS is how users find your application in the vast cloud.",
+    "next": "Alias Records"
+  },
+  {
+    "id": "cloud_net_16",
+    "title": "Alias Records",
+    "content": "Alias records are a Route 53-specific extension to DNS. They allow you to point your domain name directly to cloud resources like CloudFront distributions or Load Balancers.",
+    "insight": "Use Alias records to point to AWS resources instead of CNAMEs for better performance.",
+    "next": "Health Checks"
+  },
+  {
+    "id": "cloud_net_17",
+    "title": "DNS Health Checks",
+    "content": "Route 53 can monitor the health of your resources. If a resource becomes unhealthy, DNS can automatically stop sending traffic to it and failover to a healthy resource.",
+    "insight": "Route 53 ensures users are only sent to working servers.",
+    "next": "Routing Policies"
+  },
+  {
+    "id": "cloud_net_18",
+    "title": "Simple Routing",
+    "content": "The most basic routing policy, where you point a domain name to a single resource (e.g., one IP address).",
+    "insight": "Best for single-server setups.",
+    "next": "Weighted Routing"
+  },
+  {
+    "id": "cloud_net_19",
+    "title": "Weighted Routing",
+    "content": "Weighted routing allows you to associate multiple resources with a single domain name and choose how much traffic is routed to each (e.g., for A/B testing).",
+    "insight": "Split your traffic between different versions of your app.",
+    "next": "Latency Routing"
+  },
+  {
+    "id": "cloud_net_20",
+    "title": "Latency Routing",
+    "content": "Latency routing directs user requests to the region that provides the lowest latency for that specific user.",
+    "insight": "Automatic global performance optimization.",
+    "next": "Failover Routing"
+  },
+  {
+    "id": "cloud_net_21",
+    "title": "Failover Routing",
+    "content": "Failover routing is used for active-passive configurations. Traffic is sent to the primary resource unless it's unhealthy, in which case it goes to the secondary.",
+    "insight": "The foundation of DNS-based disaster recovery.",
+    "next": "Geolocation Routing"
+  },
+  {
+    "id": "cloud_net_22",
+    "title": "Geolocation Routing",
+    "content": "Geolocation routing lets you choose the resources that serve your traffic based on the geographic location of your users (e.g., send European users to a specific server).",
+    "insight": "Tailor your application's reach based on where your users live.",
+    "next": "Geoproximity Routing"
+  },
+  {
+    "id": "cloud_net_23",
+    "title": "Geoproximity Routing",
+    "content": "Geoproximity routing lets Route 53 route traffic to your resources based on the geographic location of your users and your resources.",
+    "insight": "More complex than Geolocation; allows for 'biasing' traffic toward certain regions.",
+    "next": "Multi-Value Answer Routing"
+  },
+  {
+    "id": "cloud_net_24",
+    "title": "Multi-Value Answer Routing",
+    "content": "Multi-value answer routing lets you configure Route 53 to return multiple values, such as IP addresses for your web servers, in response to DNS queries.",
+    "insight": "A simple way to achieve client-side load balancing and high availability.",
+    "next": "Elastic Load Balancing"
+  },
+  {
+    "id": "cloud_net_25",
+    "title": "Elastic Load Balancing (ELB)",
+    "content": "ELB automatically distributes incoming application traffic across multiple targets. It handles the varying load of your application traffic in a single AZ or across multiple AZs.",
+    "insight": "Load balancers prevent any single server from becoming a bottleneck.",
+    "next": "CloudFront (CDN)"
+  },
+  {
+    "id": "cloud_net_26",
+    "title": "CloudFront",
+    "content": "CloudFront is a CDN service that securely delivers data, videos, applications, and APIs to customers globally with low latency and high transfer speeds.",
+    "insight": "Speed up your global application by caching content at the edge.",
+    "next": "Global Accelerator"
+  },
+  {
+    "id": "cloud_net_27",
+    "title": "Global Accelerator",
+    "content": "AWS Global Accelerator uses the AWS global network to direct traffic to your optimal regional endpoint based on health, client location, and policies.",
+    "insight": "Provides static IP addresses that act as a fixed entry point to your global application.",
+    "next": "Direct Connect"
+  },
+  {
+    "id": "cloud_net_28",
+    "title": "AWS Direct Connect",
+    "content": "Direct Connect is a cloud service solution that makes it easy to establish a dedicated network connection from your premises to AWS. It bypasses the public internet.",
+    "insight": "For consistent, high-bandwidth connections between your data center and the cloud.",
+    "next": "Site-to-Site VPN"
+  },
+  {
+    "id": "cloud_net_29",
+    "title": "Site-to-Site VPN",
+    "content": "AWS Site-to-Site VPN creates a secure connection between your data center or branch office and your AWS VPCs over the public internet using IPsec.",
+    "insight": "A fast and encrypted way to connect your office to the cloud.",
+    "next": "Client VPN"
+  },
+  {
+    "id": "cloud_net_30",
+    "title": "AWS Client VPN",
+    "content": "A managed client-based VPN service that enables you to securely access your AWS resources and resources in your on-premises network from anywhere.",
+    "insight": "Secure remote access for your developers and staff.",
+    "next": "Elastic Network Interface (ENI)"
+  },
+  {
+    "id": "cloud_net_31",
+    "title": "Elastic Network Interface (ENI)",
+    "content": "An ENI is a logical networking component in a VPC that represents a virtual network card. It can include IP addresses, a MAC address, and security group memberships.",
+    "insight": "Instances can have multiple ENIs for complex networking setups.",
+    "next": "Enhanced Networking"
+  },
+  {
+    "id": "cloud_net_32",
+    "title": "Enhanced Networking",
+    "content": "Enhanced networking uses single root I/O virtualization (SR-IOV) to provide high-performance networking capabilities (higher I/O and lower CPU usage).",
+    "insight": "For when your application needs the absolute highest network throughput.",
+    "next": "Elastic Fabric Adapter (EFA)"
+  },
+  {
+    "id": "cloud_net_33",
+    "title": "Elastic Fabric Adapter (EFA)",
+    "content": "An EFA is a network interface for EC2 instances that enables customers to run applications requiring high levels of inter-node communications at scale on AWS.",
+    "insight": "Used for High Performance Computing (HPC) and machine learning workloads.",
+    "next": "VPC Flow Logs"
+  },
+  {
+    "id": "cloud_net_34",
+    "title": "VPC Flow Logs",
+    "content": "VPC Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in your VPC.",
+    "insight": "The 'security camera' for your network traffic.",
+    "next": "Traffic Mirroring"
+  },
+  {
+    "id": "cloud_net_35",
+    "title": "Traffic Mirroring",
+    "content": "Traffic Mirroring allows you to copy network traffic from an ENI of an EC2 instance and send it to security and monitoring appliances for deep packet inspection.",
+    "insight": "Useful for advanced network forensics and troubleshooting.",
+    "next": "IPv6 in the Cloud"
+  },
+  {
+    "id": "cloud_net_36",
+    "title": "IPv6 in VPC",
+    "content": "VPCs and subnets can support both IPv4 and IPv6. IPv6 addresses are globally unique and do not require NAT for outbound internet access.",
+    "insight": "Prepare for the future by enabling IPv6 in your cloud networks.",
+    "next": "Egress-Only Internet Gateway"
+  },
+  {
+    "id": "cloud_net_37",
+    "title": "Egress-Only IGW",
+    "content": "An egress-only internet gateway is a horizontally scaled, redundant, and highly available VPC component that allows outbound communication over IPv6 from instances in your VPC to the internet.",
+    "insight": "The IPv6 equivalent of a NAT Gateway.",
+    "next": "VPC Reachability Analyzer"
+  },
+  {
+    "id": "cloud_net_38",
+    "title": "Reachability Analyzer",
+    "content": "A configuration analysis tool that enables you to perform connectivity testing between a source resource and a destination resource in your VPC.",
+    "insight": "Automated troubleshooting for 'Why can't Server A talk to Server B?'.",
+    "next": "Cloud Map"
+  },
+  {
+    "id": "cloud_net_39",
+    "title": "AWS Cloud Map",
+    "content": "Cloud Map is a cloud resource discovery service. It allows you to name your application resources and it keeps track of the changing locations of these dynamically changing resources.",
+    "insight": "Service discovery for modern, dynamic microservices.",
+    "next": "Conclusion"
+  },
+  {
+    "id": "cloud_net_40",
+    "title": "Conclusion",
+    "content": "Cloud networking provides the foundation for building secure, scalable, and global applications. By mastering VPCs, DNS, and load balancing, you can architect systems that are both resilient and performant.",
+    "insight": "A well-designed network is the secret to a secure and fast cloud application.",
+    "next": "Next Chapter: Containers in Cloud"
+  }
+]

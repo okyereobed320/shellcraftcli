@@ -1,0 +1,282 @@
+[
+  {
+    "id": "cloud_comp_01",
+    "title": "Cloud Compute Overview",
+    "content": "Compute is the brain of your cloud infrastructure. It provides the processing power needed to run your applications. In the cloud, compute comes in many forms, from raw virtual machines to managed containers and serverless functions.",
+    "insight": "Compute is where your code actually turns into a running application.",
+    "next": "Virtual Machines (VMs)"
+  },
+  {
+    "id": "cloud_comp_02",
+    "title": "Virtual Machines (EC2)",
+    "content": "A Virtual Machine (VM) is a software-based emulation of a physical computer. In AWS, these are called Elastic Compute Cloud (EC2) instances. You can choose the CPU, memory, storage, and networking capacity for your VM.",
+    "insight": "VMs give you the most control over your server environment.",
+    "next": "Amazon Machine Images (AMIs)"
+  },
+  {
+    "id": "cloud_comp_03",
+    "title": "Amazon Machine Images (AMI)",
+    "content": "An AMI is a template that contains the software configuration (operating system, application server, and applications) required to launch your instance.",
+    "insight": "Think of an AMI as a pre-packaged disk image for your server.",
+    "next": "Instance Types"
+  },
+  {
+    "id": "cloud_comp_04",
+    "title": "Instance Types",
+    "content": "Cloud providers offer different 'families' of instances optimized for various use cases: General Purpose, Compute Optimized, Memory Optimized, Accelerated Computing, and Storage Optimized.",
+    "insight": "Choose the right 'tool' (instance type) for the job.",
+    "next": "vCPUs and RAM"
+  },
+  {
+    "id": "cloud_comp_05",
+    "title": "vCPUs and RAM",
+    "content": "A vCPU represents a portion of the physical CPU assigned to your VM. RAM is the memory available for your applications to run. Higher instance sizes provide more vCPUs and more RAM.",
+    "insight": "Vertical scaling means moving to an instance with more vCPUs and RAM.",
+    "next": "Instance Lifecycle"
+  },
+  {
+    "id": "cloud_comp_06",
+    "title": "The Lifecycle: Launching",
+    "content": "When you launch an instance, it enters the 'pending' state while the provider allocates the hardware and boots the AMI. Once it's ready, it moves to 'running'.",
+    "insight": "The 'pending' state is the cloud provider's setup phase.",
+    "next": "The Lifecycle: Stopping"
+  },
+  {
+    "id": "cloud_comp_07",
+    "title": "The Lifecycle: Stopping",
+    "content": "Stopping an instance is like turning off your computer. You stop paying for compute time, but you still pay for the storage (EBS volumes) attached to it. The data on your disk persists.",
+    "insight": "Stop instances when not in use to save money on compute costs.",
+    "next": "The Lifecycle: Terminating"
+  },
+  {
+    "id": "cloud_comp_08",
+    "title": "The Lifecycle: Terminating",
+    "content": "Terminating an instance permanently deletes it. By default, the attached root storage volume is also deleted. You cannot 'restart' a terminated instance.",
+    "insight": "Termination is permanent—ensure your data is backed up.",
+    "next": "Public vs. Private IP"
+  },
+  {
+    "id": "cloud_comp_09",
+    "title": "Public IP Addresses",
+    "content": "A public IP address is reachable from the internet. When you launch an instance in a public subnet, it usually gets a dynamic public IP that changes if the instance is stopped and started.",
+    "insight": "Public IPs are for servers that need to talk to the world.",
+    "next": "Private IP Addresses"
+  },
+  {
+    "id": "cloud_comp_10",
+    "title": "Private IP Addresses",
+    "content": "A private IP address is only reachable within your VPC. It is used for communication between your instances (e.g., a web server talking to a database server).",
+    "insight": "Internal traffic should always use private IPs for security and speed.",
+    "next": "Elastic IP Addresses"
+  },
+  {
+    "id": "cloud_comp_11",
+    "title": "Elastic IP (Static IP)",
+    "content": "An Elastic IP is a static, public IPv4 address designed for dynamic cloud computing. You can associate it with an instance, and it stays the same even if you restart the instance.",
+    "insight": "Use Elastic IPs for fixed endpoints that need a consistent address.",
+    "next": "SSH Key Pairs"
+  },
+  {
+    "id": "cloud_comp_12",
+    "title": "SSH Key Pairs",
+    "content": "Cloud providers use public-key cryptography to secure the login to your instances. You keep the private key, and the provider places the public key on the server.",
+    "insight": "Never share your private key (.pem file); it is the master key to your server.",
+    "next": "User Data Scripts"
+  },
+  {
+    "id": "cloud_comp_13",
+    "title": "User Data",
+    "content": "User data is a script that runs automatically when an instance boots for the first time. It is commonly used to install software, update the OS, or configure applications.",
+    "insight": "Use User Data to automate the initial setup of your servers.",
+    "next": "Security Groups for Compute"
+  },
+  {
+    "id": "cloud_comp_14",
+    "title": "Opening Ports",
+    "content": "To access your instance, you must open the correct ports in its Security Group. For example, port 22 for SSH, port 80 for HTTP, and port 443 for HTTPS.",
+    "insight": "Security Groups are 'deny all' by default; you must explicitly allow traffic.",
+    "next": "Instance Metadata"
+  },
+  {
+    "id": "cloud_comp_15",
+    "title": "Instance Metadata",
+    "content": "Instances can query their own configuration (like their IP address or instance ID) by making an HTTP request to a special internal IP: 169.254.169.254.",
+    "insight": "A server can 'ask' the cloud provider about itself via metadata.",
+    "next": "Burstable Performance"
+  },
+  {
+    "id": "cloud_comp_16",
+    "title": "Burstable Performance (T-series)",
+    "content": "Burstable instances (like T3) provide a baseline level of CPU performance with the ability to burst above that baseline when needed using 'CPU Credits'.",
+    "insight": "Perfect for workloads that are mostly idle but have occasional spikes.",
+    "next": "Spot Instances"
+  },
+  {
+    "id": "cloud_comp_17",
+    "title": "Spot Instances",
+    "content": "Spot instances allow you to bid on spare cloud capacity at a significant discount (up to 90%). However, the provider can reclaim them with a 2-minute notice if they need the capacity back.",
+    "insight": "Use Spot for flexible, fault-tolerant workloads to save massive costs.",
+    "next": "Reserved Instances"
+  },
+  {
+    "id": "cloud_comp_18",
+    "title": "Reserved Instances (RI)",
+    "content": "By committing to a 1-year or 3-year term, you can get a significant discount on your compute costs. This is ideal for steady-state workloads.",
+    "insight": "Commit to the cloud to lower your long-term bill.",
+    "next": "Dedicated Hosts"
+  },
+  {
+    "id": "cloud_comp_19",
+    "title": "Dedicated Hosts",
+    "content": "A dedicated host is a physical server fully dedicated to your use. This is often required for specific software licensing (like BYOL) or strict compliance requirements.",
+    "insight": "The ultimate isolation: the whole physical machine is yours.",
+    "next": "Placement Groups"
+  },
+  {
+    "id": "cloud_comp_20",
+    "title": "Placement Groups",
+    "content": "Placement groups allow you to influence the placement of a group of interdependent instances to meet the needs of your workload (e.g., low latency or high availability).",
+    "insight": "Control how your servers are physically arranged in the data center.",
+    "next": "Compute Optimizer"
+  },
+  {
+    "id": "cloud_comp_21",
+    "title": "Compute Optimizer",
+    "content": "A managed service that uses machine learning to analyze your usage patterns and recommend the most cost-effective instance types for your workloads.",
+    "insight": "Let AI tell you if you are over-provisioning your servers.",
+    "next": "AWS Lambda (Serverless)"
+  },
+  {
+    "id": "cloud_comp_22",
+    "title": "AWS Lambda",
+    "content": "Lambda lets you run code without provisioning or managing servers. You pay only for the compute time you consume—there is no charge when your code is not running.",
+    "insight": "Serverless is the logical conclusion of cloud abstraction.",
+    "next": "Lambda Triggers"
+  },
+  {
+    "id": "cloud_comp_23",
+    "title": "Event Triggers",
+    "content": "Lambda functions are triggered by events, such as an HTTP request via API Gateway, a file upload to S3, or a message in a queue.",
+    "insight": "Code that waits for something to happen, runs, and then disappears.",
+    "next": "Fargate (Serverless Containers)"
+  },
+  {
+    "id": "cloud_comp_24",
+    "title": "AWS Fargate",
+    "content": "Fargate is a serverless compute engine for containers. It works with ECS and EKS, allowing you to run containers without having to manage the underlying EC2 instances.",
+    "insight": "Run containers without managing the nodes.",
+    "next": "ECS: Elastic Container Service"
+  },
+  {
+    "id": "cloud_comp_25",
+    "title": "ECS vs. EKS",
+    "content": "ECS is a highly scalable, high-performance container orchestration service that is AWS-native. EKS is a managed Kubernetes service that provides the flexibility of open-source K8s.",
+    "insight": "Choose ECS for simplicity; choose EKS for Kubernetes compatibility.",
+    "next": "Scaling Compute"
+  },
+  {
+    "id": "cloud_comp_26",
+    "title": "Vertical Scaling (Scale Up)",
+    "content": "Increasing the size of an instance (e.g., from t3.micro to t3.large) to handle more load. This usually requires a reboot and has an upper limit.",
+    "insight": "Scaling up is limited by the largest available instance size.",
+    "next": "Horizontal Scaling (Scale Out)"
+  },
+  {
+    "id": "cloud_comp_27",
+    "title": "Horizontal Scaling",
+    "content": "Adding more instances to a pool to handle traffic. This is the foundation of cloud elasticity and is managed by Auto Scaling Groups.",
+    "insight": "Scaling out is the key to infinite growth in the cloud.",
+    "next": "Health Checks"
+  },
+  {
+    "id": "cloud_comp_28",
+    "title": "Compute Health Checks",
+    "content": "The cloud provider constantly monitors the health of your instances. If an instance fails a health check, Auto Scaling can automatically terminate it and launch a new one.",
+    "insight": "Self-healing infrastructure: broken servers are replaced automatically.",
+    "next": "Load Balancer Integration"
+  },
+  {
+    "id": "cloud_comp_29",
+    "title": "Target Groups",
+    "content": "A target group tells a load balancer where to direct traffic. You register your compute instances with a target group to make them part of the pool.",
+    "insight": "Compute instances join a 'team' (target group) to serve traffic.",
+    "next": "Lightsail"
+  },
+  {
+    "id": "cloud_comp_30",
+    "title": "AWS Lightsail",
+    "content": "Lightsail is a simplified cloud platform that provides everything you need to build an application or website, plus a cost-effective, monthly plan.",
+    "insight": "The 'Cloud for Beginners'—VPS, DNS, and storage in one easy package.",
+    "next": "Batch Computing"
+  },
+  {
+    "id": "cloud_comp_31",
+    "title": "AWS Batch",
+    "content": "AWS Batch enables developers to easily and efficiently run hundreds of thousands of batch computing jobs on AWS by dynamically provisioning the right amount of compute.",
+    "insight": "For when you need to run 10,000 tasks at once.",
+    "next": "High-Performance Computing (HPC)"
+  },
+  {
+    "id": "cloud_comp_32",
+    "title": "HPC in the Cloud",
+    "content": "High-performance computing (HPC) uses clusters of powerful compute instances to solve complex, compute-intensive problems like weather modeling or genomic research.",
+    "insight": "Supercomputing power on a pay-as-you-go basis.",
+    "next": "Nitro System"
+  },
+  {
+    "id": "cloud_comp_33",
+    "title": "The Nitro System",
+    "content": "The Nitro System is the underlying platform for modern EC2 instances. It offloads virtualization functions to dedicated hardware, providing better performance and security.",
+    "insight": "The secret hardware that makes modern VMs nearly as fast as bare metal.",
+    "next": "Bare Metal Instances"
+  },
+  {
+    "id": "cloud_comp_34",
+    "title": "Bare Metal Instances",
+    "content": "Bare metal instances provide your applications with direct access to the processor and memory of the underlying server. No hypervisor is used.",
+    "insight": "For applications that need deep hardware access or bypass virtualization.",
+    "next": "Outposts"
+  },
+  {
+    "id": "cloud_comp_35",
+    "title": "AWS Outposts",
+    "content": "AWS Outposts brings native AWS services, infrastructure, and operating models to virtually any data center, co-location space, or on-premises facility.",
+    "insight": "Run AWS-managed servers inside your own office.",
+    "next": "Local Zones"
+  },
+  {
+    "id": "cloud_comp_36",
+    "title": "Local Zones",
+    "content": "Local Zones place compute, storage, database, and other select services closer to large population, industry, and IT centers.",
+    "insight": "Lowering latency by moving the cloud into major cities.",
+    "next": "Wavelength"
+  },
+  {
+    "id": "cloud_comp_37",
+    "title": "AWS Wavelength",
+    "content": "Wavelength embeds AWS compute and storage services within 5G networks, providing mobile edge computing for ultra-low latency applications.",
+    "insight": "Compute at the edge of the 5G network for mobile apps.",
+    "next": "Graviton Processors"
+  },
+  {
+    "id": "cloud_comp_38",
+    "title": "Graviton Processors",
+    "content": "AWS-designed ARM-based processors that offer the best price-performance for a wide variety of cloud workloads compared to x86 processors.",
+    "insight": "ARM in the cloud: cheaper, faster, and more energy-efficient.",
+    "next": "Compute Cost Optimization"
+  },
+  {
+    "id": "cloud_comp_39",
+    "title": "Right-Sizing",
+    "content": "Right-sizing is the process of matching instance types and sizes to your workload performance and capacity requirements at the lowest possible cost.",
+    "insight": "Don't pay for a Ferrari if a bicycle will do the job.",
+    "next": "Conclusion"
+  },
+  {
+    "id": "cloud_comp_40",
+    "title": "Conclusion",
+    "content": "Compute is the engine of the cloud. Whether you choose VMs, containers, or serverless, understanding how to provision and scale these resources is critical to cloud success.",
+    "insight": "The best compute strategy is the one that minimizes management and maximizes performance.",
+    "next": "Next Chapter: Cloud Storage"
+  }
+]

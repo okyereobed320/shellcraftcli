@@ -1,0 +1,282 @@
+[
+  {
+    "id": "cloud_fund_01",
+    "title": "What is Cloud Computing?",
+    "content": "Cloud computing is the on-demand delivery of IT resources over the internet with pay-as-you-go pricing. Instead of buying, owning, and maintaining physical data centers and servers, you can access technology services, such as computing power, storage, and databases, on an as-needed basis from a cloud provider like AWS, Azure, or Google Cloud.",
+    "insight": "The cloud is just someone else's computer, but with a massive API and infinite scale.",
+    "next": "The Utility Model"
+  },
+  {
+    "id": "cloud_fund_02",
+    "title": "The Utility Model",
+    "content": "Cloud computing works like a utility, similar to electricity or water. You use what you need, when you need it, and you only pay for what you consume. This shifts IT costs from Capital Expenditure (CapEx - buying hardware) to Operational Expenditure (OpEx - paying for usage).",
+    "insight": "Stop paying for 'shelf-ware' hardware and start paying for actual runtime.",
+    "next": "Five Essential Characteristics"
+  },
+  {
+    "id": "cloud_fund_03",
+    "title": "On-Demand Self-Service",
+    "content": "Users can unilaterally provision computing capabilities, such as server time and network storage, as needed automatically without requiring human interaction with each service provider. This is the foundation of cloud speed.",
+    "insight": "Speed is the greatest feature of the cloud—no more waiting weeks for a server rack.",
+    "next": "Broad Network Access"
+  },
+  {
+    "id": "cloud_fund_04",
+    "title": "Broad Network Access",
+    "content": "Capabilities are available over the network and accessed through standard mechanisms that promote use by heterogeneous thin or thick client platforms (e.g., mobile phones, tablets, laptops, and workstations).",
+    "insight": "If you can't reach it over the internet via an API, it's not truly 'cloud'.",
+    "next": "Resource Pooling"
+  },
+  {
+    "id": "cloud_fund_05",
+    "title": "Resource Pooling",
+    "content": "The provider's computing resources are pooled to serve multiple consumers using a multi-tenant model, with different physical and virtual resources dynamically assigned and reassigned according to consumer demand.",
+    "insight": "Multi-tenancy is how cloud providers achieve the economies of scale that make it cheap.",
+    "next": "Rapid Elasticity"
+  },
+  {
+    "id": "cloud_fund_06",
+    "title": "Rapid Elasticity",
+    "content": "Capabilities can be elastically provisioned and released, in some cases automatically, to scale rapidly outward and inward commensurate with demand. To the consumer, the capabilities available for provisioning often appear to be unlimited.",
+    "insight": "Elasticity is 'auto-scaling'—growing and shrinking with your traffic.",
+    "next": "Measured Service"
+  },
+  {
+    "id": "cloud_fund_07",
+    "title": "Measured Service",
+    "content": "Cloud systems automatically control and optimize resource use by leveraging a metering capability at some level of abstraction appropriate to the type of service (e.g., storage, processing, bandwidth, and active user accounts).",
+    "insight": "Transparency in billing is a core requirement for any cloud platform.",
+    "next": "IaaS: Infrastructure as a Service"
+  },
+  {
+    "id": "cloud_fund_08",
+    "title": "IaaS: Infrastructure as a Service",
+    "content": "IaaS contains the basic building blocks for cloud IT. It typically provides access to networking features, computers (virtual or on dedicated hardware), and data storage space. You have the highest level of flexibility and management control over your IT resources.",
+    "insight": "IaaS gives you the 'raw ingredients': VMs, disks, and networks.",
+    "next": "PaaS: Platform as a Service"
+  },
+  {
+    "id": "cloud_fund_09",
+    "title": "PaaS: Platform as a Service",
+    "content": "PaaS removes the need for you to manage underlying infrastructure (usually hardware and operating systems) and allows you to focus on the deployment and management of your applications. This helps you be more efficient as you don’t need to worry about resource procurement or capacity planning.",
+    "insight": "PaaS is for developers who want to write code, not manage Linux patches.",
+    "next": "SaaS: Software as a Service"
+  },
+  {
+    "id": "cloud_fund_10",
+    "title": "SaaS: Software as a Service",
+    "content": "SaaS provides you with a completed product that is run and managed by the service provider. In most cases, people referring to Software as a Service are referring to end-user applications (such as web-based email).",
+    "insight": "SaaS is the 'finished meal'—just log in and use it.",
+    "next": "Deployment Models"
+  },
+  {
+    "id": "cloud_fund_11",
+    "title": "Public Cloud",
+    "content": "Public clouds are the most common way of deploying cloud computing. The cloud resources (like servers and storage) are owned and operated by a third-party cloud service provider and delivered over the internet.",
+    "insight": "Everyone shares the same massive pool of hardware.",
+    "next": "Private Cloud"
+  },
+  {
+    "id": "cloud_fund_12",
+    "title": "Private Cloud",
+    "content": "A private cloud consists of cloud computing resources used exclusively by one business or organization. The private cloud can be physically located at your organization's on-site data center, or it can be hosted by a third-party service provider.",
+    "insight": "Private cloud offers cloud-like agility with the isolation of on-prem hardware.",
+    "next": "Hybrid Cloud"
+  },
+  {
+    "id": "cloud_fund_13",
+    "title": "Hybrid Cloud",
+    "content": "Hybrid cloud is a type of cloud computing that combines on-premises infrastructure—or a private cloud—with a public cloud. Hybrid clouds allow data and apps to move between the two environments.",
+    "insight": "The best of both worlds: sensitive data stays local, while web apps scale in the public cloud.",
+    "next": "Multi-Cloud"
+  },
+  {
+    "id": "cloud_fund_14",
+    "title": "Multi-Cloud",
+    "content": "Multi-cloud refers to the use of multiple cloud computing and storage services in a single heterogeneous architecture. This is often done to avoid vendor lock-in or to take advantage of specific services unique to certain providers.",
+    "insight": "Don't put all your eggs in one cloud provider's basket.",
+    "next": "Shared Responsibility Model"
+  },
+  {
+    "id": "cloud_fund_15",
+    "title": "Shared Responsibility Model",
+    "content": "Security and compliance is a shared responsibility between the cloud provider and the customer. The provider is responsible for 'security OF the cloud', while the customer is responsible for 'security IN the cloud'.",
+    "insight": "The provider secures the hardware; you secure the OS, data, and access.",
+    "next": "Total Cost of Ownership (TCO)"
+  },
+  {
+    "id": "cloud_fund_16",
+    "title": "Total Cost of Ownership (TCO)",
+    "content": "TCO is a financial estimate intended to help buyers and owners determine the direct and indirect costs of a product or system. In cloud, TCO helps compare the cost of on-premises hardware vs. cloud services over time.",
+    "insight": "Remember to include power, cooling, and staff time when calculating on-prem costs.",
+    "next": "Cloud Economics"
+  },
+  {
+    "id": "cloud_fund_17",
+    "title": "Economies of Scale",
+    "content": "Cloud providers can purchase hardware in such massive quantities that they get much lower prices than any individual company. They pass these savings on to you through lower per-unit costs for storage and compute.",
+    "insight": "Bulk buying is the secret sauce of cloud affordability.",
+    "next": "High Availability"
+  },
+  {
+    "id": "cloud_fund_18",
+    "title": "High Availability (HA)",
+    "content": "HA ensures your application is operational and accessible for a high percentage of time (e.g., 99.99%). This is achieved by removing single points of failure through redundancy.",
+    "insight": "HA is about making sure 'up' stays 'up', even when hardware fails.",
+    "next": "Fault Tolerance"
+  },
+  {
+    "id": "cloud_fund_19",
+    "title": "Fault Tolerance",
+    "content": "Fault tolerance is the ability of a system to continue operating without interruption even if one or more components fail. It is a more rigorous standard than High Availability.",
+    "insight": "HA recovers from failure; Fault Tolerance masks it entirely.",
+    "next": "Scalability"
+  },
+  {
+    "id": "cloud_fund_20",
+    "title": "Scalability",
+    "content": "Scalability is the ability to handle an increasing amount of work by adding resources to the system. Vertical scaling (up) means adding more power to an existing server. Horizontal scaling (out) means adding more servers to a pool.",
+    "insight": "Horizontal scaling is almost always preferred in the cloud.",
+    "next": "Agility"
+  },
+  {
+    "id": "cloud_fund_21",
+    "title": "Agility",
+    "content": "Agility represents how quickly you can respond to change. In the cloud, you can spin up thousands of servers in minutes, allowing for rapid experimentation and faster time-to-market for your software.",
+    "insight": "Fail fast, learn fast, and scale fast.",
+    "next": "Cloud Service Providers (CSPs)"
+  },
+  {
+    "id": "cloud_fund_22",
+    "title": "The Big Three: AWS",
+    "content": "Amazon Web Services (AWS) was the first major public cloud provider. It is known for its massive service catalog and being the industry leader in market share.",
+    "insight": "If a service exists, AWS probably has a version of it.",
+    "next": "The Big Three: Azure"
+  },
+  {
+    "id": "cloud_fund_23",
+    "title": "The Big Three: Azure",
+    "content": "Microsoft Azure is a strong competitor, particularly for enterprises already using Microsoft software. It offers deep integration with Active Directory and Office 365.",
+    "insight": "The natural choice for the Windows-centric enterprise.",
+    "next": "The Big Three: GCP"
+  },
+  {
+    "id": "cloud_fund_24",
+    "title": "The Big Three: GCP",
+    "content": "Google Cloud Platform (GCP) is known for its strengths in data analytics, machine learning, and container orchestration (it's the birthplace of Kubernetes).",
+    "insight": "Choose GCP for high-performance data and AI workloads.",
+    "next": "The API-First Mindset"
+  },
+  {
+    "id": "cloud_fund_25",
+    "title": "The API-First Mindset",
+    "content": "Everything in the cloud is an API call. Whether you use the Web Console, the CLI, or Terraform, you are ultimately sending JSON or XML to an endpoint to create a resource.",
+    "insight": "The Console is just a GUI for the API. Professionals use code.",
+    "next": "Cloud CLI Basics"
+  },
+  {
+    "id": "cloud_fund_26",
+    "title": "The Cloud CLI",
+    "content": "The Command Line Interface (CLI) allows you to manage cloud resources using text commands. It is faster than the console and allows for automation through shell scripting.",
+    "insight": "Learn the CLI to automate your infrastructure tasks.",
+    "next": "Virtualization: The Foundation"
+  },
+  {
+    "id": "cloud_fund_27",
+    "title": "Virtualization",
+    "content": "Virtualization is the technology that allows cloud providers to run multiple virtual machines on a single physical server. A 'Hypervisor' manages these VMs and isolates their resources.",
+    "insight": "Virtualization turns physical hardware into software building blocks.",
+    "next": "Serverless Computing"
+  },
+  {
+    "id": "cloud_fund_28",
+    "title": "Serverless Computing",
+    "content": "Serverless doesn't mean there are no servers; it means you don't manage them. You upload code, and the provider runs it on-demand, scaling it automatically and charging only for execution time.",
+    "insight": "Pay for code execution, not for idle CPU cycles.",
+    "next": "Microservices"
+  },
+  {
+    "id": "cloud_fund_29",
+    "title": "Microservices",
+    "content": "Microservices is an architectural style that structures an application as a collection of small, independent services. Cloud platforms are ideally suited for hosting and scaling microservices.",
+    "insight": "Break big problems into small, deployable units.",
+    "next": "Edge Computing"
+  },
+  {
+    "id": "cloud_fund_30",
+    "title": "Edge Computing",
+    "content": "Edge computing brings computation and data storage closer to the devices where it's being gathered, rather than relying on a central location. This reduces latency and bandwidth usage.",
+    "insight": "Process data where it happens—at the 'edge' of the network.",
+    "next": "Cloud Governance"
+  },
+  {
+    "id": "cloud_fund_31",
+    "title": "Cloud Governance",
+    "content": "Governance is the set of rules and policies an organization follows to manage its cloud resources. This includes cost control, security policies, and resource tagging.",
+    "insight": "Good governance prevents 'bill shock' and security leaks.",
+    "next": "Resource Tagging"
+  },
+  {
+    "id": "cloud_fund_32",
+    "title": "Resource Tagging",
+    "content": "Tags are key-value pairs assigned to cloud resources. They are essential for organizing resources, tracking costs by department, and automating management tasks.",
+    "insight": "If it isn't tagged, you don't know who's paying for it.",
+    "next": "Compliance in the Cloud"
+  },
+  {
+    "id": "cloud_fund_33",
+    "title": "Compliance",
+    "content": "Compliance ensures that your cloud infrastructure meets industry-specific standards (like HIPAA for healthcare or PCI-DSS for payments). Cloud providers offer tools to audit and enforce compliance.",
+    "insight": "The cloud provider helps you meet standards, but you must configure it correctly.",
+    "next": "Disaster Recovery (DR)"
+  },
+  {
+    "id": "cloud_fund_34",
+    "title": "Disaster Recovery",
+    "content": "DR is the plan for restoring your systems after a major failure. The cloud provides cost-effective DR options, such as 'Pilot Light' or 'Warm Standby' environments in different regions.",
+    "insight": "The cloud makes DR affordable for even small businesses.",
+    "next": "The Well-Architected Framework"
+  },
+  {
+    "id": "cloud_fund_35",
+    "title": "Well-Architected Framework",
+    "content": "Most major cloud providers offer a 'Well-Architected Framework'—a set of best practices based on pillars like Security, Reliability, Performance, and Cost Optimization.",
+    "insight": "Follow the pillars to build a solid foundation.",
+    "next": "Cloud Migration Strategies"
+  },
+  {
+    "id": "cloud_fund_36",
+    "title": "Lift and Shift (Rehosting)",
+    "content": "Lift and shift involves moving an application to the cloud with minimal or no changes. It's the fastest way to migrate but doesn't take full advantage of cloud-native features.",
+    "insight": "Fastest migration path, but least efficient in the long run.",
+    "next": "Refactoring"
+  },
+  {
+    "id": "cloud_fund_37",
+    "title": "Refactoring",
+    "content": "Refactoring involves re-imagining how an application is architected and developed using cloud-native features, like moving from a monolith to microservices.",
+    "insight": "Highest effort to migrate, but highest payoff in scalability and cost.",
+    "next": "Cloud Security Basics"
+  },
+  {
+    "id": "cloud_fund_38",
+    "title": "Identity and Access Management (IAM)",
+    "content": "IAM is the service that controls who can access your cloud resources and what they can do with them. It follows the principle of 'Least Privilege'.",
+    "insight": "Only give people the access they absolutely need to do their jobs.",
+    "next": "Least Privilege"
+  },
+  {
+    "id": "cloud_fund_39",
+    "title": "Least Privilege",
+    "content": "The principle of least privilege states that a user or process should have only the minimum permissions necessary to perform its function. This minimizes the 'blast radius' if an account is compromised.",
+    "insight": "Don't use the 'Root' account for daily tasks.",
+    "next": "Conclusion: The Cloud Journey"
+  },
+  {
+    "id": "cloud_fund_40",
+    "title": "Conclusion",
+    "content": "Cloud computing is not just a technology shift; it's a fundamental change in how we build and deliver software. By embracing automation, elasticity, and utility pricing, you can build systems that were impossible a decade ago.",
+    "insight": "The journey starts with understanding fundamentals and ends with total automation.",
+    "next": "Next Chapter: Cloud Architecture"
+  }
+]

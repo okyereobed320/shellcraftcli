@@ -1,0 +1,716 @@
+[
+  {
+    "question": "What is the primary benefit of Cloud Computing's 'Elasticity'?",
+    "options": ["Lowering security risks", "Ability to scale resources up or down automatically", "Paying a fixed monthly fee", "Using only physical servers"],
+    "answer": "Ability to scale resources up or down automatically",
+    "explanation": "Elasticity allows a system to match resource allocation with demand automatically."
+  },
+  {
+    "question": "Which cloud service model provides the most control over the underlying hardware?",
+    "options": ["SaaS", "PaaS", "IaaS", "Serverless"],
+    "answer": "IaaS",
+    "explanation": "Infrastructure as a Service (IaaS) gives you raw compute, storage, and network resources."
+  },
+  {
+    "question": "What does 'SaaS' stand for?",
+    "options": ["System as a Service", "Storage as a Service", "Software as a Service", "Security as a Service"],
+    "answer": "Software as a Service",
+    "explanation": "SaaS provides ready-to-use software applications over the internet."
+  },
+  {
+    "question": "In the Shared Responsibility Model, who is responsible for 'Security OF the Cloud'?",
+    "options": ["The Customer", "The Cloud Provider", "The Government", "The End User"],
+    "answer": "The Cloud Provider",
+    "explanation": "The provider secures the physical data centers, hardware, and the virtualization layer."
+  },
+  {
+    "question": "What is an 'Availability Zone' (AZ)?",
+    "options": ["A collection of regions", "One or more discrete data centers with redundant power", "A single server rack", "A virtual private cloud"],
+    "answer": "One or more discrete data centers with redundant power",
+    "explanation": "AZs are isolated locations within a region designed for high availability."
+  },
+  {
+    "question": "Which service allows you to route users to the lowest latency region?",
+    "options": ["IAM", "VPC", "Route 53", "S3"],
+    "answer": "Route 53",
+    "explanation": "Route 53's latency-based routing directs users to the fastest performing region."
+  },
+  {
+    "question": "What is a 'VPC'?",
+    "options": ["Virtual Private Computer", "Virtual Private Cloud", "Verified Public Cloud", "Virtual Public Connection"],
+    "answer": "Virtual Private Cloud",
+    "explanation": "A VPC is a private, isolated section of the cloud provider's network."
+  },
+  {
+    "question": "Which component allows a VPC to communicate with the internet?",
+    "options": ["NAT Gateway", "Internet Gateway", "Virtual Private Gateway", "Direct Connect"],
+    "answer": "Internet Gateway",
+    "explanation": "An Internet Gateway (IGW) provides a target in your VPC route tables for internet traffic."
+  },
+  {
+    "question": "What is the purpose of a NAT Gateway?",
+    "options": ["To allow internet traffic into a private subnet", "To allow private subnet resources to reach the internet securely", "To connect two VPCs", "To manage DNS records"],
+    "answer": "To allow private subnet resources to reach the internet securely",
+    "explanation": "NAT Gateways provide outbound-only internet access for private resources."
+  },
+  {
+    "question": "What is 'Object Storage' primarily used for?",
+    "options": ["Running operating systems", "High-speed databases", "Storing unstructured data like images and videos", "Managing virtual machine memory"],
+    "answer": "Storing unstructured data like images and videos",
+    "explanation": "Object storage (like S3) is ideal for files, backups, and static content."
+  },
+  {
+    "question": "What is the maximum durability of Amazon S3?",
+    "options": ["99.9%", "99.99%", "99.999999999% (11 nines)", "100%"],
+    "answer": "99.999999999% (11 nines)",
+    "explanation": "S3 is designed for extremely high durability to prevent data loss."
+  },
+  {
+    "question": "Which EBS volume type is best for a high-performance database?",
+    "options": ["Throughput Optimized HDD (st1)", "Cold HDD (sc1)", "Provisioned IOPS SSD (io2)", "General Purpose SSD (gp2)"],
+    "answer": "Provisioned IOPS SSD (io2)",
+    "explanation": "Provisioned IOPS (PIOPS) provides guaranteed high-speed disk performance."
+  },
+  {
+    "question": "What is 'Serverless' computing?",
+    "options": ["Computing without any servers", "Computing where you don't manage the underlying servers", "Running code on physical hardware only", "A type of private cloud"],
+    "answer": "Computing where you don't manage the underlying servers",
+    "explanation": "In serverless (like Lambda), the provider manages server provisioning and scaling."
+  },
+  {
+    "question": "What is 'Auto Scaling'?",
+    "options": ["Manually adding servers when traffic is high", "Automatically adjusting the number of instances based on load", "Scaling the physical size of a server", "Moving data between storage classes"],
+    "answer": "Automatically adjusting the number of instances based on load",
+    "explanation": "Auto Scaling ensures you have enough capacity to handle current traffic."
+  },
+  {
+    "question": "Which command initializes a Terraform directory?",
+    "options": ["terraform plan", "terraform apply", "terraform init", "terraform start"],
+    "answer": "terraform init",
+    "explanation": "'terraform init' downloads providers and prepares the project."
+  },
+  {
+    "question": "What does 'terraform plan' show?",
+    "options": ["The cost of your infrastructure", "The actions Terraform will take to reach the desired state", "A map of your physical data centers", "The history of all previous changes"],
+    "answer": "The actions Terraform will take to reach the desired state",
+    "explanation": "Plan allows you to review changes before they are applied."
+  },
+  {
+    "question": "Where does Terraform store information about managed resources?",
+    "options": ["In the cloud provider's console", "In a 'state' file", "In the variables.tf file", "In a GitHub repository"],
+    "answer": "In a 'state' file",
+    "explanation": "The 'terraform.tfstate' file is the source of truth for your infrastructure."
+  },
+  {
+    "question": "What is a Docker 'Image'?",
+    "options": ["A running instance of an application", "A read-only template for creating a container", "A screenshot of a server", "A type of cloud storage"],
+    "answer": "A read-only template for creating a container",
+    "explanation": "Images contain the code, libraries, and dependencies needed to run an app."
+  },
+  {
+    "question": "Which service is used to run managed Kubernetes on AWS?",
+    "options": ["ECS", "EKS", "Fargate", "Lambda"],
+    "answer": "EKS",
+    "explanation": "Elastic Kubernetes Service (EKS) provides a managed K8s control plane."
+  },
+  {
+    "question": "What is the purpose of 'CloudWatch'?",
+    "options": ["To manage user identities", "To monitor and observe cloud resources", "To encrypt data at rest", "To host static websites"],
+    "answer": "To monitor and observe cloud resources",
+    "explanation": "CloudWatch provides metrics, logs, and alarms for cloud health."
+  },
+  {
+    "question": "What is 'IAM' used for?",
+    "options": ["Internal Application Messaging", "Identity and Access Management", "Infrastructure and Monitoring", "Internet Access Method"],
+    "answer": "Identity and Access Management",
+    "explanation": "IAM controls who can access which resources and what they can do."
+  },
+  {
+    "question": "Which 'Load Balancer' operates at Layer 7 (Application)?",
+    "options": ["Network Load Balancer", "Classic Load Balancer", "Application Load Balancer", "Gateway Load Balancer"],
+    "answer": "Application Load Balancer",
+    "explanation": "ALB makes routing decisions based on HTTP/HTTPS content."
+  },
+  {
+    "question": "What is 'CloudFront'?",
+    "options": ["A cloud-based weather service", "A Content Delivery Network (CDN)", "A tool for managing VPCs", "A database migration service"],
+    "answer": "A Content Delivery Network (CDN)",
+    "explanation": "CloudFront speeds up content delivery by caching data at Edge Locations."
+  },
+  {
+    "question": "What is a 'Subnet'?",
+    "options": ["A secondary cloud provider", "A range of IP addresses within a VPC", "A type of encrypted disk", "A user group in IAM"],
+    "answer": "A range of IP addresses within a VPC",
+    "explanation": "Subnets allow you to group resources within a VPC."
+  },
+  {
+    "question": "What is 'High Availability' (HA)?",
+    "options": ["Using the most expensive servers", "Ensuring a system is operational for a high percentage of time", "Scaling a system to millions of users", "Encrypting all network traffic"],
+    "answer": "Ensuring a system is operational for a high percentage of time",
+    "explanation": "HA is achieved through redundancy and removing single points of failure."
+  },
+  {
+    "question": "What is 'Fault Tolerance'?",
+    "options": ["The ability to ignore all system errors", "The ability of a system to continue operating despite component failures", "Automatically deleting failed servers", "Limiting user access to a system"],
+    "answer": "The ability of a system to continue operating despite component failures",
+    "explanation": "Fault tolerance masks failures so they don't affect the user."
+  },
+  {
+    "question": "Which S3 storage class is best for archival data with long retrieval times?",
+    "options": ["S3 Standard", "S3 Intelligent-Tiering", "S3 Glacier", "S3 Standard-IA"],
+    "answer": "S3 Glacier",
+    "explanation": "Glacier offers the lowest cost for data that is rarely accessed."
+  },
+  {
+    "question": "What is an 'IAM Role'?",
+    "options": ["A set of permissions that can be assumed by a user or service", "A password for the root account", "A physical location in a data center", "A type of network firewall"],
+    "answer": "A set of permissions that can be assumed by a user or service",
+    "explanation": "Roles provide temporary security credentials for services like EC2."
+  },
+  {
+    "question": "What is 'Continuous Integration' (CI)?",
+    "options": ["Manually merging code once a month", "Automatically building and testing code with every change", "Deploying code directly to production", "Managing infrastructure with code"],
+    "answer": "Automatically building and testing code with every change",
+    "explanation": "CI ensures code changes are valid and integrated frequently."
+  },
+  {
+    "question": "What is the primary purpose of 'CloudTrail'?",
+    "options": ["Monitoring server performance", "Auditing API calls and user activity", "Distributing traffic to servers", "Scaling database capacity"],
+    "answer": "Auditing API calls and user activity",
+    "explanation": "CloudTrail tracks who did what and when in your cloud account."
+  },
+  {
+    "question": "What is 'Infrastructure as Code' (IaC)?",
+    "options": ["Writing applications for the cloud", "Managing and provisioning infrastructure using configuration files", "Drawing diagrams of cloud networks", "Using a GUI to build servers"],
+    "answer": "Managing and provisioning infrastructure using configuration files",
+    "explanation": "IaC allows infrastructure to be versioned and automated like software."
+  },
+  {
+    "question": "Which component acts as a firewall at the instance level?",
+    "options": ["Network ACL", "Security Group", "Internet Gateway", "Route Table"],
+    "answer": "Security Group",
+    "explanation": "Security Groups control inbound and outbound traffic for EC2 instances."
+  },
+  {
+    "question": "What is 'Stateless' architecture?",
+    "options": ["A system that doesn't use a database", "A system where servers don't store client data locally", "A system that is always offline", "A system with only one server"],
+    "answer": "A system where servers don't store client data locally",
+    "explanation": "Stateless systems are easier to scale because any server can handle any request."
+  },
+  {
+    "question": "What is 'Horizontal Scaling'?",
+    "options": ["Adding more CPU to a server", "Adding more instances to a pool", "Moving a server to a different region", "Increasing the size of a database"],
+    "answer": "Adding more instances to a pool",
+    "explanation": "Horizontal scaling (scaling out) adds more resources of the same type."
+  },
+  {
+    "question": "What is 'Vertical Scaling'?",
+    "options": ["Adding more servers", "Increasing the capacity (CPU/RAM) of an existing server", "Distributing traffic globally", "Backing up data to S3"],
+    "answer": "Increasing the capacity (CPU/RAM) of an existing server",
+    "explanation": "Vertical scaling (scaling up) makes a single resource more powerful."
+  },
+  {
+    "question": "Which tool is used to analyze cloud costs over time?",
+    "options": ["Trusted Advisor", "Cost Explorer", "CloudWatch", "CloudTrail"],
+    "answer": "Cost Explorer",
+    "explanation": "Cost Explorer provides detailed reports on your cloud spend."
+  },
+  {
+    "question": "What is 'Microservices' architecture?",
+    "options": ["One large application that does everything", "A collection of small, independent, communicating services", "A system with only one user", "A type of storage for small files"],
+    "answer": "A collection of small, independent, communicating services",
+    "explanation": "Microservices allow for independent development and scaling."
+  },
+  {
+    "question": "What does 'TCO' stand for in cloud economics?",
+    "options": ["Total Cloud Organization", "Total Cost of Ownership", "Technical Cloud Optimization", "Target Cloud Operation"],
+    "answer": "Total Cost of Ownership",
+    "explanation": "TCO compares the cost of cloud vs. on-premises over its lifetime."
+  },
+  {
+    "question": "Which service provides a 'shared file system' for multiple EC2 instances?",
+    "options": ["EBS", "S3", "EFS", "Glacier"],
+    "answer": "EFS",
+    "explanation": "Elastic File System (EFS) provides scalable network storage for many instances."
+  },
+  {
+    "question": "What is 'Drift' in Infrastructure as Code?",
+    "options": ["Moving data between regions", "When actual infrastructure differs from the defined code", "A slow network connection", "Updating the version of Terraform"],
+    "answer": "When actual infrastructure differs from the defined code",
+    "explanation": "Drift happens when manual changes are made outside of the IaC tool."
+  },
+  {
+    "question": "What is a 'Golden Image'?",
+    "options": ["An expensive cloud resource", "A pre-configured template (AMI) with all software installed", "A type of cloud security certificate", "A backup of a database"],
+    "answer": "A pre-configured template (AMI) with all software installed",
+    "explanation": "Golden images speed up deployment by providing a ready-to-use OS."
+  },
+  {
+    "question": "What is 'Blue/Green' deployment?",
+    "options": ["A way to color-code servers", "Switching traffic between two identical environments (old and new)", "Deploying only during daylight hours", "A type of database replication"],
+    "answer": "Switching traffic between two identical environments (old and new)",
+    "explanation": "Blue/Green minimizes downtime and risk during updates."
+  },
+  {
+    "question": "What is a 'Canary' release?",
+    "options": ["Releasing a new version to a small subset of users first", "A tool for monitoring bird migrations", "Testing code only in a dev environment", "Deleting all old servers instantly"],
+    "answer": "Releasing a new version to a small subset of users first",
+    "explanation": "Canaries help detect issues with a small percentage of live traffic."
+  },
+  {
+    "question": "What is 'Infrastructure as a Service' (IaaS)?",
+    "options": ["Renting a finished software application", "Renting virtualized computing resources over the internet", "A way to manage cloud billing", "A security protocol for data"],
+    "answer": "Renting virtualized computing resources over the internet",
+    "explanation": "IaaS provides the foundation (VMs, networks, disks) for your IT."
+  },
+  {
+    "question": "What is 'Platform as a Service' (PaaS)?",
+    "options": ["Managing your own physical servers", "A platform for developers to build and run apps without managing infra", "A type of cloud networking", "Storing data in the cloud"],
+    "answer": "A platform for developers to build and run apps without managing infra",
+    "explanation": "PaaS (like Elastic Beanstalk) abstracts away the underlying OS and servers."
+  },
+  {
+    "question": "Which AWS service is used to manage SSL/TLS certificates?",
+    "options": ["IAM", "ACM (Certificate Manager)", "Route 53", "WAF"],
+    "answer": "ACM (Certificate Manager)",
+    "explanation": "ACM makes it easy to provision and manage SSL certificates."
+  },
+  {
+    "question": "What is 'Cloud Governance'?",
+    "options": ["The company that owns the cloud", "Rules and policies to manage cloud resources and costs", "A tool for debugging code", "A type of cloud storage"],
+    "answer": "Rules and policies to manage cloud resources and costs",
+    "explanation": "Governance ensures the cloud is used securely and efficiently."
+  },
+  {
+    "question": "What is the purpose of 'Resource Tags'?",
+    "options": ["To encrypt files", "To organize, track costs, and manage resources", "To increase server speed", "To limit user access"],
+    "answer": "To organize, track costs, and manage resources",
+    "explanation": "Tags are key-value pairs that provide metadata for your resources."
+  },
+  {
+    "question": "What is 'Elastic Load Balancing' (ELB)?",
+    "options": ["A tool for scaling databases", "Automatically distributing traffic across multiple targets", "A way to back up servers", "A security service for VPCs"],
+    "answer": "Automatically distributing traffic across multiple targets",
+    "explanation": "ELB ensures no single server is overwhelmed by requests."
+  },
+  {
+    "question": "Which service helps protect against DDoS attacks?",
+    "options": ["CloudWatch", "AWS Shield", "S3", "Lambda"],
+    "answer": "AWS Shield",
+    "explanation": "Shield provides managed protection against DDoS attacks."
+  },
+  {
+    "question": "What is 'VPC Peering'?",
+    "options": ["Connecting a VPC to the internet", "Connecting two VPCs so they can communicate privately", "Viewing the contents of another user's VPC", "A way to monitor VPC traffic"],
+    "answer": "Connecting two VPCs so they can communicate privately",
+    "explanation": "Peering allows resources in different VPCs to talk via private IP."
+  },
+  {
+    "question": "What is 'Direct Connect'?",
+    "options": ["A fast way to log into the AWS console", "A dedicated private network connection from on-prem to AWS", "A type of high-speed storage", "A tool for migrating databases"],
+    "answer": "A dedicated private network connection from on-prem to AWS",
+    "explanation": "Direct Connect bypasses the public internet for consistent performance."
+  },
+  {
+    "question": "What is 'Edge Computing'?",
+    "options": ["Computing at the center of the cloud", "Computing closer to the data source or end user", "Using only the latest cloud features", "Computing in a private cloud"],
+    "answer": "Computing closer to the data source or end user",
+    "explanation": "Edge computing (like Lambda@Edge) reduces latency for users."
+  },
+  {
+    "question": "Which service is used for data warehousing in the cloud?",
+    "options": ["RDS", "DynamoDB", "Redshift", "ElastiCache"],
+    "answer": "Redshift",
+    "explanation": "Redshift is a fast, fully managed data warehouse for large-scale analytics."
+  },
+  {
+    "question": "What is 'Idempotency' in Infrastructure as Code?",
+    "options": ["The ability to run code only once", "Running the same code multiple times with the same result", "A way to encrypt passwords", "The speed of a deployment"],
+    "answer": "Running the same code multiple times with the same result",
+    "explanation": "Idempotency ensures that if the infra is correct, 'apply' does nothing."
+  },
+  {
+    "question": "What is 'Least Privilege'?",
+    "options": ["Giving everyone root access", "Giving users only the minimum permissions they need", "A way to lower cloud costs", "A type of network security"],
+    "answer": "Giving users only the minimum permissions they need",
+    "explanation": "Least privilege minimizes the 'blast radius' if an account is compromised."
+  },
+  {
+    "question": "What is 'Cloud Migration'?",
+    "options": ["Deleting servers in the cloud", "Moving data and applications from on-prem to the cloud", "Using two different cloud providers", "Updating software in the cloud"],
+    "answer": "Moving data and applications from on-prem to the cloud",
+    "explanation": "Migration can involve 'Lift and Shift' or 'Refactoring'."
+  },
+  {
+    "question": "What is 'Lift and Shift'?",
+    "options": ["Re-writing an app for the cloud", "Moving an app to the cloud with little or no change", "Scaling a server vertically", "Deleting a database"],
+    "answer": "Moving an app to the cloud with little or no change",
+    "explanation": "Rehosting is the fastest but often least optimized migration path."
+  },
+  {
+    "question": "What is 'Refactoring' in cloud migration?",
+    "options": ["Re-architecting an app to be cloud-native", "Moving files to S3", "Renaming servers", "Changing the cloud provider"],
+    "answer": "Re-architecting an app to be cloud-native",
+    "explanation": "Refactoring takes full advantage of cloud scalability and services."
+  },
+  {
+    "question": "What is 'Serverless' storage?",
+    "options": ["Storage on physical tapes", "Managed storage where you don't provision capacity (like S3)", "A hard drive attached to a VM", "A database that is always offline"],
+    "answer": "Managed storage where you don't provision capacity (like S3)",
+    "explanation": "In S3, you just store data and pay for what you use."
+  },
+  {
+    "question": "Which tool provides automated recommendations for cost and security?",
+    "options": ["CloudWatch", "Trusted Advisor", "IAM", "VPC"],
+    "answer": "Trusted Advisor",
+    "explanation": "Trusted Advisor checks your account against AWS best practices."
+  },
+  {
+    "question": "What is 'Elastic Network Interface' (ENI)?",
+    "options": ["A physical network cable", "A logical networking component (virtual NIC) in a VPC", "A tool for managing DNS", "A type of load balancer"],
+    "answer": "A logical networking component (virtual NIC) in a VPC",
+    "explanation": "ENIs can be attached to EC2 instances for network connectivity."
+  },
+  {
+    "question": "What is 'VPC Flow Logs'?",
+    "options": ["A list of all users in a VPC", "Capturing information about IP traffic in your VPC", "A way to increase network speed", "A tool for building VPCs"],
+    "answer": "Capturing information about IP traffic in your VPC",
+    "explanation": "Flow logs help with network security auditing and troubleshooting."
+  },
+  {
+    "question": "What is 'Auto Scaling Group' (ASG)?",
+    "options": ["A collection of users", "A group of EC2 instances managed as a logical unit for scaling", "A way to organize S3 buckets", "A type of cloud database"],
+    "answer": "A group of EC2 instances managed as a logical unit for scaling",
+    "explanation": "ASG maintains the desired number of instances and scales them."
+  },
+  {
+    "question": "What is a 'Target Group'?",
+    "options": ["A group of users to receive emails", "A set of resources that a load balancer sends traffic to", "A list of IP addresses to block", "A type of cloud storage"],
+    "answer": "A set of resources that a load balancer sends traffic to",
+    "explanation": "Target groups route requests to registered targets (like EC2 instances)."
+  },
+  {
+    "question": "What is 'Multi-Tenancy' in cloud computing?",
+    "options": ["One user per physical server", "Multiple customers sharing the same physical resources", "Using multiple cloud providers", "Renting many different services"],
+    "answer": "Multiple customers sharing the same physical resources",
+    "explanation": "Multi-tenancy is how cloud providers achieve economies of scale."
+  },
+  {
+    "question": "What is 'Measured Service'?",
+    "options": ["A service that is always online", "Cloud usage that is metered and reported for billing", "A system with high performance", "Limiting the size of a server"],
+    "answer": "Cloud usage that is metered and reported for billing",
+    "explanation": "You only pay for what you actually use in the cloud."
+  },
+  {
+    "question": "Which service is a managed NoSQL database?",
+    "options": ["RDS", "DynamoDB", "Aurora", "Redshift"],
+    "answer": "DynamoDB",
+    "explanation": "DynamoDB is a fast and flexible NoSQL database service."
+  },
+  {
+    "question": "What is 'JSON' used for in the cloud?",
+    "options": ["Writing application code", "Defining cloud resources, policies, and API data", "Storing large video files", "Managing physical data centers"],
+    "answer": "Defining cloud resources, policies, and API data",
+    "explanation": "JSON is a common format for HCL (optionally), IAM policies, and API responses."
+  },
+  {
+    "question": "What is 'GitHub Actions' primarily used for?",
+    "options": ["Hosting static websites", "Automating software workflows (CI/CD)", "Managing user passwords", "Creating virtual machines"],
+    "answer": "Automating software workflows (CI/CD)",
+    "explanation": "GitHub Actions allows you to build, test, and deploy directly from GitHub."
+  },
+  {
+    "question": "What is a 'Deployment Stage' in a pipeline?",
+    "options": ["Where the code is written", "Where the code is moved to a target environment (e.g., live server)", "Where the code is deleted", "Where the code is manually reviewed"],
+    "answer": "Where the code is moved to a target environment (e.g., live server)",
+    "explanation": "Deploy is the final step in getting code to the user."
+  },
+  {
+    "question": "What is 'Cloud Observability'?",
+    "options": ["Looking at the sky", "Gaining insights into a system's internal state via logs, metrics, and traces", "Watching users use your app", "Reading cloud provider documentation"],
+    "answer": "Gaining insights into a system's internal state via logs, metrics, and traces",
+    "explanation": "Observability helps you understand and debug complex systems."
+  },
+  {
+    "question": "What is 'Metric' in cloud monitoring?",
+    "options": ["A written log of an error", "A numerical representation of data over time (e.g., CPU %)", "A list of all servers", "A security policy"],
+    "answer": "A numerical representation of data over time (e.g., CPU %)",
+    "explanation": "Metrics help you track performance and health."
+  },
+  {
+    "question": "What is 'Tracing'?",
+    "options": ["Drawing a map of the network", "Following the journey of a single request across multiple services", "Searching for errors in logs", "Copying data between regions"],
+    "answer": "Following the journey of a single request across multiple services",
+    "explanation": "Distributed tracing (like X-Ray) is essential for microservices."
+  },
+  {
+    "question": "Which HTTP status code means 'Internal Server Error'?",
+    "options": ["200", "404", "500", "503"],
+    "answer": "500",
+    "explanation": "500-level codes indicate errors on the server side."
+  },
+  {
+    "question": "Which HTTP status code means 'Not Found'?",
+    "options": ["200", "401", "404", "500"],
+    "answer": "404",
+    "explanation": "404 means the requested resource could not be found."
+  },
+  {
+    "question": "Which HTTP status code means 'Success'?",
+    "options": ["200", "301", "403", "502"],
+    "answer": "200",
+    "explanation": "200 OK means the request was successful."
+  },
+  {
+    "question": "What is 'Artifact' in a CI/CD pipeline?",
+    "options": ["A historical object", "A package produced by a build (e.g., a .zip or .jar file)", "A failed test case", "A line of code"],
+    "answer": "A package produced by a build (e.g., a .zip or .jar file)",
+    "explanation": "Artifacts are the 'results' of the build stage ready for deployment."
+  },
+  {
+    "question": "What is 'Environment Variable'?",
+    "options": ["A variable that changes the weather", "A dynamic value that configures how an application runs", "A password for the cloud console", "A type of network setting"],
+    "answer": "A dynamic value that configures how an application runs",
+    "explanation": "Env vars allow the same code to work in dev, staging, and prod."
+  },
+  {
+    "question": "What is 'Manual Approval' in a pipeline?",
+    "options": ["Typing code manually", "A step where a human must review and approve before proceeding", "A way to fix broken servers", "A type of cloud security"],
+    "answer": "A step where a human must review and approve before proceeding",
+    "explanation": "Manual approvals are common before deploying to production."
+  },
+  {
+    "question": "What is 'Rollback'?",
+    "options": ["Moving a server to a new rack", "Reverting to a previous stable version of an application", "Deleting a database backup", "A type of cloud cost optimization"],
+    "answer": "Reverting to a previous stable version of an application",
+    "explanation": "Rollbacks are used to recover from failed deployments."
+  },
+  {
+    "question": "Which service is used for serverless container execution?",
+    "options": ["EC2", "Fargate", "S3", "EFS"],
+    "answer": "Fargate",
+    "explanation": "Fargate allows you to run containers without managing EC2 nodes."
+  },
+  {
+    "question": "What is 'Bucket Policy'?",
+    "options": ["A limit on how many files you can store", "A JSON policy that controls access to an S3 bucket", "A type of cloud insurance", "A way to rename buckets"],
+    "answer": "A JSON policy that controls access to an S3 bucket",
+    "explanation": "Bucket policies define who can access your S3 data."
+  },
+  {
+    "question": "What is 'Encryption at Rest'?",
+    "options": ["Encrypting data while it is stored on disk", "Encrypting data while it moves over the network", "Turning off a server for security", "Deleting data you don't need"],
+    "answer": "Encrypting data while it is stored on disk",
+    "explanation": "Encryption at rest protects data stored on physical disks."
+  },
+  {
+    "question": "What is 'Encryption in Transit'?",
+    "options": ["Encrypting data on a hard drive", "Encrypting data while it travels over the network (e.g., TLS)", "Moving data between regions", "Encrypting data using a physical key"],
+    "answer": "Encrypting data while it travels over the network (e.g., TLS)",
+    "explanation": "Encryption in transit protects data 'in flight'."
+  },
+  {
+    "question": "What is 'KMS' (Key Management Service)?",
+    "options": ["A tool for managing physical keys", "A managed service for creating and controlling encryption keys", "A type of cloud database", "A way to monitor network traffic"],
+    "answer": "A managed service for creating and controlling encryption keys",
+    "explanation": "KMS makes it easy to manage encryption keys in the cloud."
+  },
+  {
+    "question": "What is 'WAF' (Web Application Firewall)?",
+    "options": ["A physical firewall in a data center", "A service that filters malicious web traffic (e.g., SQL injection)", "A tool for managing VPCs", "A type of cloud storage"],
+    "answer": "A service that filters malicious web traffic (e.g., SQL injection)",
+    "explanation": "WAF protects web apps from common exploits."
+  },
+  {
+    "question": "What is 'Multi-Region' deployment?",
+    "options": ["Using multiple AZs in one region", "Deploying an application across two or more geographic regions", "Using multiple cloud providers", "Scaling a server vertically"],
+    "answer": "Deploying an application across two or more geographic regions",
+    "explanation": "Multi-region increases availability and reduces global latency."
+  },
+  {
+    "question": "What is 'Global Accelerator'?",
+    "options": ["A way to speed up the internet", "A service that uses the cloud backbone to improve global app performance", "A tool for migrating to the cloud", "A type of high-speed server"],
+    "answer": "A service that uses the cloud backbone to improve global app performance",
+    "explanation": "Global Accelerator provides static IPs and fast global routing."
+  },
+  {
+    "question": "What is 'CloudWatch Alarm'?",
+    "options": ["A physical alarm in a data center", "A rule that triggers an action based on a metric threshold", "A tool for managing passwords", "A type of cloud database"],
+    "answer": "A rule that triggers an action based on a metric threshold",
+    "explanation": "Alarms notify you when something needs attention (e.g., high CPU)."
+  },
+  {
+    "question": "What is 'Log Group'?",
+    "options": ["A collection of users who read logs", "A logical grouping of log streams in CloudWatch", "A type of cloud storage", "A way to delete logs"],
+    "answer": "A logical grouping of log streams in CloudWatch",
+    "explanation": "Log groups help you organize logs by application or environment."
+  },
+  {
+    "question": "What is 'Service Map' in X-Ray?",
+    "options": ["A map of physical server locations", "A visual representation of how microservices are connected", "A list of all cloud services", "A way to organize S3 buckets"],
+    "answer": "A visual representation of how microservices are connected",
+    "explanation": "Service maps help you visualize request flows and errors."
+  },
+  {
+    "question": "What is 'Provisioning'?",
+    "options": ["Deleting servers", "The process of setting up and preparing cloud resources", "Monitoring server health", "Paying the cloud bill"],
+    "answer": "The process of setting up and preparing cloud resources",
+    "explanation": "Provisioning includes creating VMs, networks, and databases."
+  },
+  {
+    "question": "What is 'De-provisioning'?",
+    "options": ["Scaling up a server", "Removing cloud resources when they are no longer needed", "Creating a new VPC", "Backing up a database"],
+    "answer": "Removing cloud resources when they are no longer needed",
+    "explanation": "De-provisioning saves money by terminating idle resources."
+  },
+  {
+    "question": "What is 'Config Drift'?",
+    "options": ["Moving files between buckets", "When a resource's configuration changes from its intended state", "A type of cloud security", "Updating Terraform version"],
+    "answer": "When a resource's configuration changes from its intended state",
+    "explanation": "Drift is often caused by manual, untracked changes."
+  },
+  {
+    "question": "What is 'Immutable Infrastructure'?",
+    "options": ["Infrastructure that never changes", "Replacing resources instead of updating them in place", "Infrastructure that is always offline", "Infrastructure that is free to use"],
+    "answer": "Replacing resources instead of updating them in place",
+    "explanation": "Immutable infrastructure prevents configuration drift."
+  },
+  {
+    "question": "What is 'Blue' in Blue/Green deployment?",
+    "options": ["The new environment", "The current, live production environment", "A type of cloud storage", "A security policy"],
+    "answer": "The current, live production environment",
+    "explanation": "Blue is the stable, existing version."
+  },
+  {
+    "question": "What is 'Green' in Blue/Green deployment?",
+    "options": ["The environment where money is saved", "The new version ready to be tested and deployed", "A type of cloud networking", "A failed server"],
+    "answer": "The new version ready to be tested and deployed",
+    "explanation": "Green is the stage for the next release."
+  },
+  {
+    "question": "Which AWS service provides a managed GraphQL API?",
+    "options": ["API Gateway", "AppSync", "Lambda", "ECS"],
+    "answer": "AppSync",
+    "explanation": "AppSync is a managed GraphQL service with real-time capabilities."
+  },
+  {
+    "question": "What is 'API Gateway'?",
+    "options": ["A physical gate at a data center", "A service that makes it easy to create, publish, and secure APIs", "A tool for managing VPCs", "A type of cloud storage"],
+    "answer": "A service that makes it easy to create, publish, and secure APIs",
+    "explanation": "API Gateway is the 'entry point' for your application's APIs."
+  },
+  {
+    "question": "What is 'Serverless Function' (e.g., Lambda)?",
+    "options": ["A function that doesn't return any data", "A piece of code that runs on-demand without server management", "A function that only runs on physical hardware", "A type of database query"],
+    "answer": "A piece of code that runs on-demand without server management",
+    "explanation": "Functions run in response to events and scale automatically."
+  },
+  {
+    "question": "Which service is best for real-time data streaming?",
+    "options": ["S3", "Kinesis", "RDS", "EBS"],
+    "answer": "Kinesis",
+    "explanation": "Kinesis allows you to collect and process large streams of data in real-time."
+  },
+  {
+    "question": "What is 'Cloud Economics'?",
+    "options": ["The price of a single server", "The study of how cloud affects IT costs and business value", "A tool for managing cloud billing", "A type of cloud storage"],
+    "answer": "The study of how cloud affects IT costs and business value",
+    "explanation": "Cloud economics includes TCO, CapEx vs. OpEx, and ROI."
+  },
+  {
+    "question": "What is 'OpEx' (Operational Expenditure)?",
+    "options": ["Buying a data center upfront", "The ongoing costs of running a business (like cloud usage fees)", "The cost of developing an app", "A type of cloud security"],
+    "answer": "The ongoing costs of running a business (like cloud usage fees)",
+    "explanation": "Cloud turns IT costs from CapEx into OpEx."
+  },
+  {
+    "question": "What is 'CapEx' (Capital Expenditure)?",
+    "options": ["Paying for monthly cloud usage", "Upfront investment in physical assets (like servers and buildings)", "The cost of marketing an app", "A type of cloud networking"],
+    "answer": "Upfront investment in physical assets (like servers and buildings)",
+    "explanation": "CapEx involves large, upfront payments for hardware."
+  },
+  {
+    "question": "What is 'AWS Organizations'?",
+    "options": ["A list of all companies using AWS", "A service for managing multiple AWS accounts centrally", "A tool for building VPCs", "A type of cloud database"],
+    "answer": "A service for managing multiple AWS accounts centrally",
+    "explanation": "Organizations helps with consolidated billing and policy enforcement."
+  },
+  {
+    "question": "What is 'Consolidated Billing'?",
+    "options": ["Receiving many different bills", "One bill for multiple AWS accounts in an organization", "A way to lower server costs", "A type of cloud storage"],
+    "answer": "One bill for multiple AWS accounts in an organization",
+    "explanation": "Consolidated billing simplifies payment and can lower costs via volume discounts."
+  },
+  {
+    "question": "What is 'Service Quotas'?",
+    "options": ["A limit on how many users can use an app", "The maximum number of resources you can create in an AWS account", "The price of a cloud service", "A type of network firewall"],
+    "answer": "The maximum number of resources you can create in an AWS account",
+    "explanation": "Quotas (limits) prevent accidental over-provisioning."
+  },
+  {
+    "question": "What is 'Reserved Instance' (RI)?",
+    "options": ["A server that is currently offline", "A commitment to use an instance for 1-3 years for a discount", "A server used only by one user", "A backup of an instance"],
+    "answer": "A commitment to use an instance for 1-3 years for a discount",
+    "explanation": "RIs provide significant cost savings for steady-state workloads."
+  },
+  {
+    "question": "What is 'Spot Instance'?",
+    "options": ["An instance with a lot of spots", "Using spare cloud capacity at a large discount with no guarantee of availability", "A server in a specific location", "A type of high-speed server"],
+    "answer": "Using spare cloud capacity at a large discount with no guarantee of availability",
+    "explanation": "Spot is the cheapest compute option but can be interrupted."
+  },
+  {
+    "question": "What is 'Cloud-Native'?",
+    "options": ["Living in the cloud", "Applications specifically designed for cloud environments", "An app that only runs on-premises", "A type of cloud storage"],
+    "answer": "Applications specifically designed for cloud environments",
+    "explanation": "Cloud-native apps leverage elasticity, microservices, and automation."
+  },
+  {
+    "question": "What is 'Hybrid Cloud'?",
+    "options": ["A cloud with different colors", "A mix of on-premises and public cloud resources", "Using two different regions", "A cloud that is also a physical server"],
+    "answer": "A mix of on-premises and public cloud resources",
+    "explanation": "Hybrid cloud provides flexibility between local and cloud infra."
+  },
+  {
+    "question": "What is 'Multi-Cloud'?",
+    "options": ["A cloud with many users", "Using services from multiple cloud providers (e.g., AWS and Azure)", "Using multiple accounts in one cloud", "A very large cloud"],
+    "answer": "Using services from multiple cloud providers (e.g., AWS and Azure)",
+    "explanation": "Multi-cloud avoids vendor lock-in and provides redundancy."
+  },
+  {
+    "question": "What is 'Shared File System'?",
+    "options": ["A file system that anyone can read", "Storage that can be mounted by multiple servers simultaneously", "A way to send files to users", "A type of database"],
+    "answer": "Storage that can be mounted by multiple servers simultaneously",
+    "explanation": "EFS is a common shared file system in the cloud."
+  },
+  {
+    "question": "What is 'In-Memory Cache'?",
+    "options": ["Storing data on a hard drive", "Storing frequently accessed data in RAM for ultra-fast access", "A backup of a database", "A type of cloud networking"],
+    "answer": "Storing frequently accessed data in RAM for ultra-fast access",
+    "explanation": "Caches (like Redis) speed up application performance."
+  },
+  {
+    "question": "Which service is a managed Redis/Memcached service?",
+    "options": ["RDS", "ElastiCache", "DynamoDB", "Redshift"],
+    "answer": "ElastiCache",
+    "explanation": "ElastiCache provides managed in-memory data stores."
+  },
+  {
+    "question": "What is 'Cloud Migration Hub'?",
+    "options": ["A physical building for cloud engineers", "A central place to track the progress of cloud migrations", "A tool for building VPCs", "A type of cloud storage"],
+    "answer": "A central place to track the progress of cloud migrations",
+    "explanation": "Migration Hub provides visibility into your migration journey."
+  },
+  {
+    "question": "What is 'Database Migration Service' (DMS)?",
+    "options": ["A way to delete databases", "A tool to migrate databases to the cloud with minimal downtime", "A type of cloud networking", "A tool for writing SQL queries"],
+    "answer": "A tool to migrate databases to the cloud with minimal downtime",
+    "explanation": "DMS supports both homogenous and heterogeneous migrations."
+  },
+  {
+    "question": "What is 'Snowball'?",
+    "options": ["A ball made of snow", "A physical device for moving petabytes of data to the cloud", "A type of fast server", "A tool for managing VPCs"],
+    "answer": "A physical device for moving petabytes of data to the cloud",
+    "explanation": "Snowball is used when internet bandwidth is insufficient for large transfers."
+  }
+]

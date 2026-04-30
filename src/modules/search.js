@@ -3,12 +3,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import inquirer from 'inquirer';
 import { COLORS, displayHeader } from '../utils/ui.js';
+import { getHandbookPath } from '../utils/paths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function searchHandbook(query, moduleName = 'linux') {
-  const chaptersDir = path.join(__dirname, `../../data/handbook/${moduleName}`);
+  const chaptersDir = getHandbookPath(moduleName);
   const files = await fs.readdir(chaptersDir);
   const results = [];
 
