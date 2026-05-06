@@ -1,0 +1,322 @@
+[
+  {
+    "id": "gcp_ace_01_01",
+    "title": "Introduction to Projects",
+    "content": "**LEARNING OBJECTIVE**: Understand the Project as the root container for GCP resources.\n\n**CONCEPT**: Every resource in Google Cloud must belong to exactly one Project. A Project is a logical isolation boundary for billing, permissions (IAM), and enabled APIs. Without a project, you cannot use any GCP services.\n\n**REAL-WORLD USE**: Engineers create separate projects for 'Development', 'Staging', and 'Production' to ensure that a misconfiguration in Dev doesn't accidentally delete production databases.\n\n**IDENTIFIERS**:\n- **Project Name**: For humans. Mutable. Not globally unique.\n- **Project ID**: For systems. Permanent. Globally unique.\n- **Project Number**: Assigned by Google. Permanent. Globally unique.\n\n**BEST PRACTICE**: Always use Project IDs in your scripts and CLI commands to avoid ambiguity.",
+    "insight": "Projects are the smallest unit of billing. If you want to see exactly how much one app costs, put it in its own project.",
+    "next": "Managing Projects via CLI",
+    "lab": { "command": "gcloud projects list", "output": "PROJECT_ID       NAME            PROJECT_NUMBER\nmy-project-123  My Project      123456789012" }
+  },
+  {
+    "id": "gcp_ace_01_02",
+    "title": "Managing Projects via CLI",
+    "content": "**LEARNING OBJECTIVE**: Create and configure projects using the gcloud SDK.\n\n**COMMANDS**:\n- `gcloud projects create [ID]` : Create a new project.\n- `gcloud projects list` : View all projects you have access to.\n- `gcloud projects delete [ID]` : Shut down a project (remains in grace period for 30 days).\n\n**PROJECT CONTEXT**: To avoid passing the `--project` flag to every command, set a default project in your active configuration using `gcloud config set project [ID]`.\n\n**COMMON MISTAKE**: Forgetting to set the project context and running commands against the wrong environment. Always verify with `gcloud config get-value project` before running destructive actions.",
+    "insight": "Use a descriptive naming convention for IDs, like 'company-app-env' (e.g., acme-portal-prod).",
+    "next": "The Resource Hierarchy",
+    "lab": { "command": "gcloud projects create gcp-ace-lab-99", "output": "Create in progress for [gcp-ace-lab-99].\nWaiting for [operations/cp.12345] to finish...done." }
+  },
+  {
+    "id": "gcp_ace_01_03",
+    "title": "The Resource Hierarchy",
+    "content": "**LEARNING OBJECTIVE**: Understand policy inheritance from Organizations down to Resources.\n\n**THE TREE STRUCTURE**:\n1. **Organization**: The root node (Company level). Requires Cloud Identity.\n2. **Folders**: Groups of projects. Ideal for Departments (Finance, Eng) or Environments.\n3. **Projects**: The management and billing boundary.\n4. **Resources**: Individual services (VMs, Buckets, GKE clusters).\n\n**INHERITANCE**: Permissions (IAM) and restrictions (Org Policies) flow DOWN. If you are an Owner at the Folder level, you are an Owner for every Project within that folder. You cannot 'remove' inherited permissions from a child resource; you can only 'add' more.\n\n**WHY IT MATTERS**: It allows security teams to set 'Guardrails' at the top (e.g., 'No Public IPs') that apply to everything below.",
+    "insight": "Organization-level nodes are mandatory for using features like VPC Service Controls.",
+    "next": "Cloud Billing Fundamentals",
+    "lab": { "command": "gcloud resource-manager folders list --organization=123456", "output": "ID            DISPLAY_NAME\n778899001122  Engineering\n334455667788  Marketing" }
+  },
+  {
+    "id": "gcp_ace_01_04",
+    "title": "Cloud Billing Fundamentals",
+    "content": "**LEARNING OBJECTIVE**: Connect projects to payment methods and manage costs.\n\n**CONCEPTS**:\n- **Billing Account**: A global resource that defines who pays. Linked to a Payment Profile (credit card/bank).\n- **Project Link**: A project must be linked to a Billing Account to use paid services or exceed free-tier limits.\n\n**RELATIONSHIPS**: One Billing Account can pay for many Projects, but a Project can only be linked to one Billing Account at a time.\n\n**ROLES**:\n- `Billing Account Administrator`: Full control over money/payment methods.\n- `Billing Account User`: Can link projects to the account (Standard Developer role).",
+    "insight": "Unlinking a project from billing is a quick way to 'freeze' usage without deleting data.",
+    "next": "Linking Projects to Billing",
+    "lab": { "command": "gcloud billing accounts list", "output": "ACCOUNT_ID            NAME                OPEN  MASTER_ACCOUNT_ID\n01A2B3-C4D5E6-F7G8H9  Corporate Billing   True" }
+  },
+  {
+    "id": "gcp_ace_01_05",
+    "title": "Linking Projects to Billing",
+    "content": "**LEARNING OBJECTIVE**: Programmatically manage billing associations.\n\n**CLI COMMANDS**:\n- `gcloud billing projects link [PROJ_ID] --billing-account [ACCT_ID]`\n- `gcloud billing projects describe [PROJ_ID]`\n\n**DUAL PERMISSIONS**: To link a project, you must have the `Billing Account User` role on the Billing Account AND be an `Owner` or `Project Creator` on the Project. This is a common exam 'trap'.\n\n**USE CASE**: Automation scripts that create projects for feature testing must link billing immediately so resources like VMs can be provisioned without manual intervention.",
+    "insight": "On the ACE exam, if linking fails, always check if you have permissions on BOTH the project and the billing account.",
+    "next": "Enabling APIs",
+    "lab": { "command": "gcloud billing projects link ace-lab --billing-account=01A2B3-C4D5E6-F7G8H9", "output": "billingAccountName: billingAccounts/01A2B3-C4D5E6-F7G8H9\nbillingEnabled: true" }
+  },
+  {
+    "id": "gcp_ace_01_06",
+    "title": "Enabling APIs",
+    "content": "**LEARNING OBJECTIVE**: Unlock GCP services by enabling their respective APIs.\n\n**CONCEPT**: Google Cloud is 'API-First'. By default, most services (like Compute Engine or BigQuery) are disabled in a new project. You must enable the specific API (e.g., `compute.googleapis.com`) before you can use the service.\n\n**WHY IT MATTERS**:\n- **Security**: Reduces attack surface by keeping unused services 'off'.\n- **Operations**: Commands like `gcloud compute` will fail if the API isn't enabled.\n\n**CLI COMMANDS**:\n- `gcloud services enable compute.googleapis.com` : Enable one service.\n- `gcloud services list --enabled` : Audit what is active.",
+    "insight": "Enabling an API is free, but it allows the creation of resources that DO cost money.",
+    "next": "Introduction to IAM",
+    "lab": { "command": "gcloud services enable storage.googleapis.com", "output": "Operation \"operations/acf.123\" finished successfully." }
+  },
+  {
+    "id": "gcp_ace_01_07",
+    "title": "Introduction to IAM",
+    "content": "**LEARNING OBJECTIVE**: Understand the core logic of GCP security: Who, Can do what, On which resource.\n\n**THE IAM POLICY**:\nAccess is defined by binding **Members** to **Roles** on a specific **Resource**.\n- **Member (Identity)**: The 'Who' (e.g., dev-bob@company.com).\n- **Role**: The 'What' (A collection of permissions like 'create instances').\n- **Resource**: The 'Where' (e.g., Project A or Bucket B).\n\n**LEAST PRIVILEGE**: The most important security principle. Only grant the minimum permissions required for a user to perform their job. Never use 'Owner' for daily development work.",
+    "insight": "IAM policies are 'Additive'. You cannot explicitly 'Deny' a permission that was inherited from a parent folder.",
+    "next": "IAM Members (Identities)",
+    "lab": { "command": "gcloud projects get-iam-policy my-project-id", "output": "bindings:\n- members:\n  - user:admin@example.com\n  role: roles/owner" }
+  },
+  {
+    "id": "gcp_ace_01_08",
+    "title": "IAM Members (Identities)",
+    "content": "**LEARNING OBJECTIVE**: Identify the various identity types supported by GCP.\n\n**MEMBER TYPES**:\n- **Google Account**: An individual user (e.g., `user@gmail.com`).\n- **Google Group**: A collection of users. **Best Practice** for managing team access.\n- **Service Account**: An identity for an application/VM (not a human).\n- **allAuthenticatedUsers**: Anyone with a Google account.\n- **allUsers**: Anyone on the internet (Public access).\n\n**SCALABILITY**: Always prefer granting permissions to **Groups**. When a team member joins or leaves, you only update the Group membership, not every project's IAM policy.",
+    "insight": "Using 'allUsers' on a bucket makes it publicly readable to the entire world.",
+    "next": "IAM Roles Deep Dive",
+    "lab": { "command": "gcloud projects add-iam-policy-binding ace-lab --member='group:devs@acme.com' --role='roles/viewer'", "output": "Updated IAM policy for project [ace-lab]." }
+  },
+  {
+    "id": "gcp_ace_01_09",
+    "title": "IAM Roles Deep Dive",
+    "content": "**LEARNING OBJECTIVE**: Differentiate between Basic, Predefined, and Custom roles.\n\n**ROLE TYPES**:\n1. **Basic Roles**: Broad legacy roles (Owner, Editor, Viewer). Avoid in production.\n2. **Predefined Roles**: Google-managed granular roles (e.g., `roles/compute.instanceAdmin`). Recommended for 99% of tasks.\n3. **Custom Roles**: User-defined roles with specific permissions. Use ONLY when Predefined roles are too broad.\n\n**PERMISSIONS**: Roles are just bundles of permissions. A permission looks like `service.resource.action` (e.g., `compute.instances.start`).",
+    "insight": "Custom roles require manual maintenance. If Google adds a new required permission to a service, you must update your custom role manually.",
+    "next": "Basic Roles: Owner, Editor, Viewer",
+    "lab": { "command": "gcloud iam roles list --filter='name:roles/compute.admin'", "output": "name: roles/compute.admin\ntitle: Compute Admin" }
+  },
+  {
+    "id": "gcp_ace_01_10",
+    "title": "Basic Roles: O/E/V",
+    "content": "**LEARNING OBJECTIVE**: Understand the vast scope of legacy Basic roles.\n\n**THE BIG THREE**:\n- **Viewer (`roles/viewer`)**: Read-only access. Can see resources but not modify them or see sensitive data.\n- **Editor (`roles/editor`)**: Viewer + permission to create/modify/delete most resources. CANNOT manage IAM or Billing.\n- **Owner (`roles/owner`)**: Editor + Full IAM control + Billing management + Project deletion.\n\n**DANGER**: If an 'Owner' account is compromised, the entire project is lost. Minimize the number of Owners strictly (at least 2 for redundancy, but no more).",
+    "insight": "On the ACE exam, 'Editor' is often a wrong answer because it provides too much permission.",
+    "next": "Service Accounts (Machine Identity)",
+    "lab": { "command": "gcloud projects get-iam-policy ace-lab --filter='bindings.role:roles/owner'", "output": "members: user:boss@acme.com\nrole: roles/owner" }
+  },
+  {
+    "id": "gcp_ace_01_11",
+    "title": "Service Accounts (Machine Identity)",
+    "content": "**LEARNING OBJECTIVE**: Use Service Accounts for automated tasks and machine-to-machine auth.\n\n**CONCEPT**: A Service Account (SA) is a special identity intended for applications, VMs, or GKE Pods. SAs do not have passwords. They use cryptographic keys or internal GCP tokens to authenticate.\n\n**IDENTIFICATION**: SAs have unique emails: `[NAME]@[PROJECT].iam.gserviceaccount.com`.\n\n**USE CASE**: A VM running an image-processing script needs to upload files to a bucket. You attach an SA with `roles/storage.objectCreator` to that VM. The script uses the SA's identity automatically.",
+    "insight": "A Service Account is BOTH an identity (it has permissions) AND a resource (people can have permission to use the SA).",
+    "next": "Service Account Keys",
+    "lab": { "command": "gcloud iam service-accounts create app-worker", "output": "Created service account [app-worker]." }
+  },
+  {
+    "id": "gcp_ace_01_12",
+    "title": "Service Account Keys",
+    "content": "**LEARNING OBJECTIVE**: Manage external authentication via JSON keys.\n\n**CONCEPT**: To use a Service Account from *outside* Google Cloud (e.g., your laptop or a data center), you must create a **Service Account Key** (a JSON file).\n\n**DANGER**: These keys are long-lived and very powerful. If you commit a key to GitHub, anyone can use it to hack your project. **Best Practice**: Use 'Workload Identity' or attached SAs instead of JSON keys whenever possible.\n\n**SECURITY**: If a key is leaked, delete it immediately from the Console or CLI.",
+    "insight": "Rotate user-managed keys every 90 days to minimize risk.",
+    "next": "Quota and Limits",
+    "lab": { "command": "gcloud iam service-accounts keys create key.json --iam-account=app-worker@proj.iam.gserviceaccount.com", "output": "created key [123] for [app-worker@...]" }
+  },
+  {
+    "id": "gcp_ace_01_13",
+    "title": "Quota and Limits",
+    "content": "**LEARNING OBJECTIVE**: Monitor and manage resource limits to prevent failures.\n\n**CONCEPTS**:\n- **Quotas**: Google-imposed limits on resource usage (e.g., max 24 CPUs in us-central1).\n- **Rate Quotas**: Limits on API calls per minute (to prevent DoS or abuse).\n- **Allocation Quotas**: Limits on total resources created.\n\n**WHY IT MATTERS**: Automated deployments will fail silently or crash if you hit a quota. Check your quotas before launching a major scale-up.\n\n**INCREASES**: Most quotas can be increased by submitting a request in the Console.",
+    "insight": "Quotas are per-project and per-region. High usage in 'us-east1' doesn't affect your 'us-west1' quota.",
+    "next": "Cloud Shell Mastery",
+    "lab": { "command": "gcloud compute project-info describe --format='get(quotas)'", "output": "metric: CPUS, limit: 24.0, usage: 2.0" }
+  },
+  {
+    "id": "gcp_ace_01_14",
+    "title": "Cloud Shell Mastery",
+    "content": "**LEARNING OBJECTIVE**: Use the browser-based terminal for management on the go.\n\n**CLOUD SHELL FEATURES**:\n- **Pre-installed Tools**: `gcloud`, `gsutil`, `kubectl`, `terraform`, `docker`, and more.\n- **Automatic Auth**: Logged in as your current Console user.\n- **Persistent Storage**: 5GB of storage in your `$HOME` directory that stays across sessions.\n- **IDE**: Includes a built-in code editor based on VS Code.\n\n**LIMITATION**: It is a shared resource and will time out after 20 minutes of inactivity. Don't use it for long-running production processes.",
+    "insight": "Cloud Shell is entirely free! You aren't charged for the VM or the 5GB of storage.",
+    "next": "gcloud CLI Configurations",
+    "lab": { "command": "gcloud version", "output": "Google Cloud SDK 450.0.0\nbq 2.0.98\ngsutil 5.25" }
+  },
+  {
+    "id": "gcp_ace_01_15",
+    "title": "gcloud Configurations",
+    "content": "**LEARNING OBJECTIVE**: Manage multiple projects and accounts without context errors.\n\n**CONCEPT**: A **Configuration** is a local profile in your SDK. It stores your active Account, Project, Region, and Zone. \n\n**WHY IT MATTERS**: It is safer than manually changing settings. You can have a 'prod' configuration and a 'dev' configuration and switch between them instantly.\n\n**CLI COMMANDS**:\n- `gcloud config configurations create [NAME]`\n- `gcloud config configurations activate [NAME]`\n- `gcloud config list` : Check what you are currently using.",
+    "insight": "Add the active gcloud project to your bash prompt to prevent running 'delete' in the wrong environment.",
+    "next": "Billing Export & Analysis",
+    "lab": { "command": "gcloud config configurations list", "output": "NAME        IS_ACTIVE  ACCOUNT  PROJECT\ndefault     True       bob@...  my-dev-1" }
+  },
+  {
+    "id": "gcp_ace_01_16",
+    "title": "Billing Export & Analysis",
+    "content": "**LEARNING OBJECTIVE**: Perform advanced cost analysis using BigQuery.\n\n**CONCEPT**: The Console dashboard is limited. **Billing Export** automatically sends itemized daily usage data into a BigQuery dataset. This allows you to write SQL queries to find exactly which VM or which developer is spending the most.\n\n**WHY IT MATTERS**: Crucial for 'FinOps'. You can visualize this data in Looker Studio to create departmental expense reports.\n\n**DASHBOARD VS EXPORT**: Use the dashboard for quick totals; use Export for deep-dive investigation into cost spikes.",
+    "insight": "Enable Export on Day 1! It is not retroactive; BigQuery only stores data from the moment you enable it.",
+    "next": "Budget Alerts",
+    "lab": { "command": "echo 'Setup export in Console -> Billing -> Billing Export'", "output": "Setup export in Console -> Billing -> Billing Export" }
+  },
+  {
+    "id": "gcp_ace_01_17",
+    "title": "Budget Alerts",
+    "content": "**LEARNING OBJECTIVE**: Proactively prevent runaway cloud bills.\n\n**CONCEPT**: A **Budget** tracks your spend against a limit. **Alerts** notify you when you hit a threshold (e.g., 50%, 90%, 100% of budget).\n\n**CRITICAL NOTE**: Budget alerts do **NOT** stop your services. They are notifications only. If you hit your $100 budget, your VMs will keep running (and costing money) unless you manually stop them or use advanced Pub/Sub automation.\n\n**USE CASE**: Set a $50 budget for a lab project so you get an email if you forget to delete a large cluster.",
+    "insight": "On the ACE exam, remember: Budgets are for NOTIFICATION, not for capping/stopping usage automatically.",
+    "next": "The Policy Troubleshooter",
+    "lab": { "command": "echo 'Setup in Billing -> Budgets & alerts'", "output": "Setup in Billing -> Budgets & alerts" }
+  },
+  {
+    "id": "gcp_ace_01_18",
+    "title": "The Policy Troubleshooter",
+    "content": "**LEARNING OBJECTIVE**: Debug 'Permission Denied' errors in seconds.\n\n**PROBLEM**: Access is denied, but you don't know why. Is it the Project IAM? A Folder policy? A service account limitation?\n\n**SOLUTION**: The **Policy Troubleshooter** takes a user, a resource, and a permission and tells you exactly which binding is allowing or denying access. It accounts for policy inheritance and IAM conditions.\n\n**USE CASE**: A developer can't start a VM. You run the Troubleshooter and find that while they have 'Compute Admin' on the project, an 'Organization Policy' is blocking VM starts in that specific region.",
+    "insight": "Available in the Console under IAM & Admin -> Policy Troubleshooter.",
+    "next": "Project Labels vs Tags",
+    "lab": { "command": "echo 'Enter User + Resource + Permission in the UI'", "output": "Enter User + Resource + Permission in the UI" }
+  },
+  {
+    "id": "gcp_ace_01_19",
+    "title": "Labels vs Tags",
+    "content": "**LEARNING OBJECTIVE**: Differentiate between these two similar-sounding but different features.\n\n**LABELS**:\n- **Purpose**: Billing and Organization.\n- **Scope**: Projects and most resources.\n- **Format**: Key-value pairs (e.g., `dept:finance`).\n\n**TAGS (Network Tags)**:\n- **Purpose**: Networking and Firewall rules.\n- **Scope**: Compute Engine VMs only.\n- **Format**: Single strings (e.g., `http-server`).\n\n**EXAM TIP**: If the question is about 'cost tracking', use Labels. If it's about 'firewalls', use Tags.",
+    "insight": "Labels are case-sensitive and must follow strict regex rules (lowercase only).",
+    "next": "Organization Policies",
+    "lab": { "command": "gcloud projects update ace-lab --update-labels=env=prod", "output": "Updated [ace-lab]." }
+  },
+  {
+    "id": "gcp_ace_01_20",
+    "title": "Organization Policies",
+    "content": "**LEARNING OBJECTIVE**: Implement global governance 'Guardrails'.\n\n**CONCEPT**: Org Policies are constraints that limit what resources can be created. They apply to Everyone, even Project Owners.\n\n**COMMON CONSTRAINTS**:\n- `compute.disableExternalIp` : Prevents public VMs.\n- `iam.allowedPolicyMemberDomains` : Only allows users from your domain to be added to IAM.\n- `gcp.resourceLocations` : Restrict resource creation to specific regions (e.g., Europe only for GDPR).\n\n**WHY IT MATTERS**: It allows a central security team to enforce company standards across hundreds of projects automatically.",
+    "insight": "Org policies are 'Restrictive' (Stop actions), while IAM is 'Permissive' (Allow actions).",
+    "next": "IAM Conditions",
+    "lab": { "command": "gcloud resource-manager org-policies list --organization=123", "output": "CONSTRAINT: compute.disableExternalIp" }
+  },
+  {
+    "id": "gcp_ace_01_21",
+    "title": "IAM Conditions (Contextual Security)",
+    "content": "**LEARNING OBJECTIVE**: Grant access based on attributes like time or IP.\n\n**CONCEPT**: IAM Conditions add logic to a role binding. You can grant access that only works:\n- During a specific time window (e.g., On-call shift).\n- For resources with a specific name prefix (e.g., `test-*`).\n- From a specific IP range (e.g., Office VPN).\n\n**BENEFIT**: Reduces the risk of 'Stale Permissions' where a user has high-level access they no longer need. It enables 'Just-in-Time' (JIT) security patterns.",
+    "insight": "Conditions use the Common Expression Language (CEL), which is a simple, readable logic syntax.",
+    "next": "Cloud Identity & Directory Sync",
+    "lab": { "command": "echo 'Add Condition in the IAM Policy Binding UI'", "output": "Add Condition in the IAM Policy Binding UI" }
+  },
+  {
+    "id": "gcp_ace_01_22",
+    "title": "Cloud Identity & GCDS",
+    "content": "**LEARNING OBJECTIVE**: Understand how enterprise identities reach GCP.\n\n**CLOUD IDENTITY**: Google's identity provider (IDaaS). It allows you to manage users (@yourcompany.com) that you use in GCP IAM.\n\n**GCDS (Google Cloud Directory Sync)**: A tool that runs on-premises to sync your Active Directory (AD) or LDAP users into Cloud Identity. \n\n**BENEFIT**: When an employee is fired and removed from Active Directory, GCDS automatically removes them from Cloud Identity, which immediately revokes their GCP access. This is the foundation of enterprise security.",
+    "insight": "GCDS is one-way only: from your directory TO Google. It never writes back to your AD.",
+    "next": "Cloud Asset Inventory",
+    "lab": { "command": "echo 'Identity managed in Google Admin Console'", "output": "Identity managed in Google Admin Console" }
+  },
+  {
+    "id": "gcp_ace_01_23",
+    "title": "Cloud Asset Inventory",
+    "content": "**LEARNING OBJECTIVE**: Audit your entire multi-project environment.\n\n**CONCEPT**: Cloud Asset Inventory is a massive metadata database of every resource in your Org. It allows you to search for resources across multiple projects instantly.\n\n**CAPABILITIES**:\n- **Search**: 'Find all VMs with name web-*'.\n- **Analyze**: 'Who has owner access on any project?'.\n- **History**: 'What did this bucket's permissions look like 2 weeks ago?'.\n\n**WHY IT MATTERS**: In a large company, it's the only way to perform global compliance audits (e.g., finding all unencrypted disks).",
+    "insight": "You can export the entire inventory to BigQuery for massive SQL-based auditing.",
+    "next": "Project Creation Quotas",
+    "lab": { "command": "gcloud asset search-all-resources --query='name:my-vm'", "output": "name: //compute.googleapis.com/.../my-vm" }
+  },
+  {
+    "id": "gcp_ace_01_24",
+    "title": "Project Creation Quota",
+    "content": "**LEARNING OBJECTIVE**: Manage the limit on how many projects you can own.\n\n**THE LIMIT**: By default, new accounts can only create about 25 projects. This prevents automated spam and resource hoarding.\n\n**TRAP**: If you delete a project, it stays in the 'pending deletion' state for 30 days and **STILL COUNTS** against your quota until it is permanently deleted.\n\n**SOLUTION**: If you need more, you must request a quota increase from Google. If you are doing a lab and run out, you must restore and 'undelete' some projects or wait for the 30 days.",
+    "insight": "On the exam, if project creation fails but billing is fine, the answer is usually 'Project Quota Exceeded'.",
+    "next": "Resource Manager: Folders",
+    "lab": { "command": "echo 'View quota in IAM -> Quotas -> Project Creation'", "output": "View quota in IAM -> Quotas -> Project Creation" }
+  },
+  {
+    "id": "gcp_ace_01_25",
+    "title": "Resource Manager: Folders",
+    "content": "**LEARNING OBJECTIVE**: Use folders to organize complex organizations.\n\n**CONCEPT**: Folders are nodes between the Organization and Projects. They allow you to group projects into logical units like 'Finance', 'Engineering', or 'Environments' (Prod/Dev).\n\n**BENEFITS**:\n- **Delegation**: You can make someone an 'Admin' of a folder, giving them control over all projects in that folder without giving them Org-wide access.\n- **Policy Control**: Apply an Org Policy to one folder (e.g., 'Allow Public IPs') while blocking it for another folder.",
+    "insight": "Folders can be nested (Folder inside a Folder) up to 10 levels deep.",
+    "next": "gcloud init & setup",
+    "lab": { "command": "gcloud resource-manager folders list --organization=123", "output": "ID: 456, DISPLAY_NAME: Marketing" }
+  },
+  {
+    "id": "gcp_ace_01_26",
+    "title": "gcloud CLI Mastery",
+    "content": "**LEARNING OBJECTIVE**: Use the Cloud SDK efficiently.\n\n**COMMAND STRUCTURE**: `gcloud [GROUP] [SUBGROUP] [ACTION] [FLAGS]`\n- Example: `gcloud compute instances list --filter=\"status=RUNNING\"` \n\n**INTERACTIVE HELP**: Add `--help` to any command to see the manual. Use `gcloud help [COMMAND]` for the full web-style documentation.\n\n**COMPONENTS**: `gcloud` is modular. You can install extra tools like `kubectl` or `beta` commands using `gcloud components install`. Keep it updated with `gcloud components update`.",
+    "insight": "The 'beta' and 'alpha' groups contain upcoming features that are not yet GA (General Availability).",
+    "next": "Service Usage & Auditing",
+    "lab": { "command": "gcloud components list", "output": "Installed: core, bq, gsutil, kubectl" }
+  },
+  {
+    "id": "gcp_ace_01_27",
+    "title": "Service Usage & Auditing",
+    "content": "**LEARNING OBJECTIVE**: Audit API activity in your project.\n\n**CONCEPT**: Every time an API is enabled or disabled, it is logged. You can use the **Service Usage** page to see a history of these changes.\n\n**TROUBLESHOOTING**: If a team member says 'Compute Engine is broken', check the service usage logs. Someone may have accidentally disabled the `compute.googleapis.com` API, which stops all management of VMs immediately.",
+    "insight": "Disabling an API doesn't necessarily delete the data, but it makes the service inaccessible until re-enabled.",
+    "next": "Cloud Identity Groups",
+    "lab": { "command": "gcloud services list --enabled", "output": "compute.googleapis.com, storage.googleapis.com" }
+  },
+  {
+    "id": "gcp_ace_01_28",
+    "title": "Identity Groups (Best Practice)",
+    "content": "**LEARNING OBJECTIVE**: Manage access at scale using groups.\n\n**WHY GROUPS?**: Managing individual users is a nightmare. \n- **Scenario**: You have 50 projects. If a developer leaves, you have to manually remove them from 50 projects.\n- **Solution**: Create a 'Developers' group. Add the group to the 50 projects once. When the dev leaves, just remove them from the group. One click vs 50 clicks.\n\n**ROLES FOR GROUPS**: Grant the group a predefined role (e.g., `roles/compute.instanceAdmin`) for consistency across the team.",
+    "insight": "Google Groups for GCP must be managed in the Google Admin Console or Cloud Identity UI.",
+    "next": "IAM Roles for Service Accounts",
+    "lab": { "command": "echo 'Member: group:engineers@acme.com'", "output": "Member: group:engineers@acme.com" }
+  },
+  {
+    "id": "gcp_ace_01_29",
+    "title": "IAM Roles for SAs",
+    "content": "**LEARNING OBJECTIVE**: Secure the Service Accounts themselves.\n\n**SERVICE ACCOUNT AS A RESOURCE**: Because an SA is a resource, you can control **who can use it**. \n- **Service Account User (`roles/iam.serviceAccountUser`)**: This role allows a person to 'impersonate' or attach the SA to a VM. \n\n**DANGER**: If you give a developer `serviceAccountUser` on an SA that has 'Owner' permissions, that developer effectively becomes an 'Owner' by proxy. Always protect your SAs!",
+    "insight": "On the ACE exam: To allow a developer to deploy a VM with a service account, they need the 'Service Account User' role.",
+    "next": "IAM Policy Inheritance: The 'additive' rule",
+    "lab": { "command": "gcloud iam service-accounts get-iam-policy [SA_EMAIL]", "output": "bindings: roles/iam.serviceAccountUser" }
+  },
+  {
+    "id": "gcp_ace_01_30",
+    "title": "Additive Inheritance",
+    "content": "**LEARNING OBJECTIVE**: Understand why you can't 'remove' permissions from child resources.\n\n**THE RULE**: IAM is additive. If a user is an `Owner` at the Organization level, they are an `Owner` everywhere. You cannot go to a specific Project and say 'Take away Owner access for this user'. \n\n**THE ONLY WORKAROUND**: Deny Policies (an advanced feature) or Organization Policy constraints. \n\n**BEST PRACTICE**: Grant basic broad access (Viewer) at high levels and grant specific powerful access (Compute Admin) at the Project level.",
+    "insight": "Always design your hierarchy with the 'Restrictive at the top, permissive at the bottom' mindset.",
+    "next": "Billing Roles: Granular control",
+    "lab": { "command": "echo 'Permissions: Parent (Viewer) + Child (Editor) = Editor'", "output": "Permissions: Parent (Viewer) + Child (Editor) = Editor" }
+  },
+  {
+    "id": "gcp_ace_01_31",
+    "title": "Granular Billing Roles",
+    "content": "**LEARNING OBJECTIVE**: Isolate finance tasks from engineering tasks.\n\n**ROLES**:\n- **Billing Account Creator**: Can create new accounts. Usually restricted to CTO/CFO.\n- **Billing Account Administrator**: Manages existing accounts (add users, change credit cards).\n- **Billing Account User**: Can link projects (Engineers need this).\n- **Billing Account Viewer**: Can only see charts and spend reports (Finance Auditors need this).",
+    "insight": "Billing roles are global and exist outside the standard resource hierarchy.",
+    "next": "Public Access & Security",
+    "lab": { "command": "echo 'Manage in Billing -> Account Management -> Permissions'", "output": "Manage in Billing -> Account Management -> Permissions" }
+  },
+  {
+    "id": "gcp_ace_01_32",
+    "title": "Public Access & Security",
+    "content": "**LEARNING OBJECTIVE**: Avoid accidental data exposure.\n\n**THE MEMBER: `allUsers`**: This is a built-in identifier that represents 'Anyone on the internet'. \n\n**DANGER**: Granting `roles/storage.objectViewer` to `allUsers` on a bucket makes every file in that bucket public. This is a common cause of data breaches. \n\n**GUARDRAIL**: Use the **'Public Access Prevention'** feature on buckets or an Org Policy to block `allUsers` from being used in IAM policies.",
+    "insight": "On the ACE exam, if a question asks how to make a bucket public, the answer involves 'allUsers'.",
+    "next": "Custom Roles Limitations",
+    "lab": { "command": "echo 'Member: allUsers, Role: roles/storage.objectViewer'", "output": "Member: allUsers, Role: roles/storage.objectViewer" }
+  },
+  {
+    "id": "gcp_ace_01_33",
+    "title": "Custom Role Limitations",
+    "content": "**LEARNING OBJECTIVE**: Know when Custom Roles will fail.\n\n**LIMITATIONS**:\n- **No Folders**: You cannot create or store a Custom Role in a Folder node. Only Project or Organization.\n- **Management**: You must manually add new permissions as Google releases them.\n- **Aggregation**: You cannot combine two predefined roles into a custom role easily; you must list every individual permission (`compute.instances.create`, etc.).\n\n**BEST PRACTICE**: Only use Custom Roles for very specific auditor or operator tasks that Predefined roles don't cover.",
+    "insight": "Custom roles are often used to satisfy the 'Least Privilege' requirement in highly regulated industries like Banking.",
+    "next": "Google Cloud SDK: Components",
+    "lab": { "command": "gcloud iam roles create myCustomRole --project=123 --file=role.yaml", "output": "Created role [myCustomRole]." }
+  },
+  {
+    "id": "gcp_ace_01_34",
+    "title": "SDK Components",
+    "content": "**LEARNING OBJECTIVE**: Maintain your local CLI tools.\n\n**CONCEPT**: `gcloud` is the manager for many other tools. By default, it installs the 'core' components. You can add more as needed.\n\n**USEFUL COMPONENTS**:\n- `kubectl` : For Kubernetes Engine.\n- `bq` : For BigQuery.\n- `gsutil` : For Cloud Storage.\n- `anthos-auth` : For Anthos clusters.\n\n**COMMAND**: `gcloud components install [ID]` or `gcloud components remove [ID]`.",
+    "insight": "If you are on a limited internet connection, don't run 'update' unless you need to, as it downloads several hundred MBs.",
+    "next": "Cloud Shell: Persistent Home",
+    "lab": { "command": "gcloud components list", "output": "Installed: core, gsutil, bq, kubectl" }
+  },
+  {
+    "id": "gcp_ace_01_35",
+    "title": "Cloud Shell: Persistent Home",
+    "content": "**LEARNING OBJECTIVE**: Manage files in your persistent cloud workspace.\n\n**PERSISTENCE**: Cloud Shell is ephemeral (the VM dies), but your `$HOME` directory is backed by a 5GB Persistent Disk that follows you. \n\n**STORAGE MANAGEMENT**: If you fill up the 5GB, Cloud Shell will fail to start. You can use standard Linux commands (`du -sh *`) to find large files and `rm` to delete them.\n\n**DOTFILES**: You can store your `.bashrc` or `.vimrc` in Cloud Shell, and your custom terminal settings will be there every time you log in.",
+    "insight": "If you need to upload a file to Cloud Shell, just drag and drop it into the browser window!",
+    "next": "Budgeting: Thresholds",
+    "lab": { "command": "df -h $HOME", "output": "/dev/sda1  5.0G  1.2G  3.8G  24% /home/user" }
+  },
+  {
+    "id": "gcp_ace_01_36",
+    "title": "Budget Thresholds",
+    "content": "**LEARNING OBJECTIVE**: Setup granular spending alerts.\n\n**THRESHOLDS**: You don't just alert at 100%. A good engineer sets multiple checkpoints:\n- **25%**: Early warning.\n- **50%**: Mid-month check.\n- **90%**: Critical warning.\n- **100%**: Action required.\n\n**TYPE OF SPEND**:\n- **Actual**: Based on what you've already spent.\n- **Forecasted**: Based on your current 'burn rate' (Google predicts what you WILL spend by the end of the month).",
+    "insight": "Forecasted alerts are the best way to catch a mistake early in the month.",
+    "next": "Resource Manager: Moving Projects",
+    "lab": { "command": "echo 'Set Thresholds: 50% (Actual), 90% (Forecasted)'", "output": "Set Thresholds: 50% (Actual), 90% (Forecasted)" }
+  },
+  {
+    "id": "gcp_ace_01_37",
+    "title": "Moving Projects",
+    "content": "**LEARNING OBJECTIVE**: Reorganize your hierarchy safely.\n\n**CONCEPT**: You can move a Project from one Folder to another, or from the Org root into a Folder. \n\n**DANGER: POLICY RE-CALCULATION**: When you move a project, it loses the inherited policies of the OLD folder and gains the inherited policies of the NEW folder. \n\n**EXAMPLE**: If the old folder allowed public IPs but the new folder forbids them, your existing public VMs will stay, but you won't be able to create new ones or edit the network settings until fixed.",
+    "insight": "Moving a project requires 'Project Mover' or 'Owner' permissions on both the source and destination nodes.",
+    "next": "The 'default' Service Account",
+    "lab": { "command": "gcloud projects move my-proj --folder=789", "output": "Updated project [my-proj]." }
+  },
+  {
+    "id": "gcp_ace_01_38",
+    "title": "Default Service Accounts",
+    "content": "**LEARNING OBJECTIVE**: Hardening the default project setup.\n\n**CONCEPT**: When you enable certain APIs, Google automatically creates 'Default' Service Accounts. \n- **Compute Engine Default SA**: `[NUM]-compute@developer.gserviceaccount.com`.\n- **App Engine Default SA**: `[PROJ_ID]@appspot.gserviceaccount.com`.\n\n**DANGER**: These defaults are often granted the **'Editor'** role automatically. This is too much permission! \n\n**BEST PRACTICE**: Disable the automatic 'Editor' grant in Org Settings, and manually assign only the roles your VMs actually need.",
+    "insight": "On the exam: If a VM is doing something malicious, check the permissions of the Compute Engine Default Service Account.",
+    "next": "Cloud Shell: Web Preview",
+    "lab": { "command": "gcloud iam service-accounts list", "output": "123456-compute@developer.gserviceaccount.com" }
+  },
+  {
+    "id": "gcp_ace_01_39",
+    "title": "Cloud Shell: Web Preview",
+    "content": "**LEARNING OBJECTIVE**: Test web apps directly in Cloud Shell.\n\n**CONCEPT**: If you run a web server (like Nginx or a Node.js app) inside Cloud Shell on port 8080, Google provides a secure proxy so you can see it in your browser. \n\n**HOW TO**: \n1. Start your app on port 8080.\n2. Click the 'Web Preview' button in the top right corner of the Cloud Shell window.\n3. Select 'Preview on port 8080'.\n\n**LIMITATION**: This only works for ports 8080 through 8084.",
+    "insight": "This is perfect for testing 'Cloud Run' containers locally before deploying them to the actual service.",
+    "next": "Setup Environment: Conclusion",
+    "lab": { "command": "echo 'Run: python3 -m http.server 8080'", "output": "Serving HTTP on 0.0.0.0 port 8080..." }
+  },
+  {
+    "id": "gcp_ace_01_40",
+    "title": "Setup Summary",
+    "content": "**CHAPTER COMPLETE**\n\nYou have finished the foundation of the GCP ACE curriculum. \n\n**KEY TAKEAWAYS**:\n- **Hierarchy**: Use Org -> Folders -> Projects to organize.\n- **Security**: Grant roles to Groups, not Users. Use Least Privilege.\n- **Automation**: Master `gcloud init` and project configurations.\n- **Cost**: Enable Billing Export and set multiple Budget Alerts.\n\n**WHAT IS NEXT?**: \nIn Chapter 2, we leave the 'Control Plane' and start building infrastructure. We will learn how to create virtual machines (Compute Engine) and store petabytes of data (Cloud Storage).",
+    "insight": "A solid foundation here saves hundreds of hours of troubleshooting later.",
+    "next": "Chapter Complete",
+    "lab": { "command": "gcloud projects list --limit=1", "output": "PROJECT_ID  NAME  PROJECT_NUMBER\n..." }
+  }
+]

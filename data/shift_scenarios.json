@@ -8,1491 +8,312 @@
     "problem": "Users report the website is down. Connection refused on port 80.",
     "investigations": {
       "systemctl status nginx": "● nginx.service - A high performance web server\n   Active: inactive (dead)",
-      "curl localhost": "curl: (7) Failed to connect to localhost port 80: Connection refused",
-      "ps aux | grep nginx": "root  1234  0.0  0.0  grep nginx"
+      "curl localhost": "curl: (7) Failed to connect to localhost port 80: Connection refused"
     },
-    "fix_commands": ["systemctl start nginx", "sudo systemctl start nginx", "systemctl restart nginx", "sudo systemctl restart nginx"],
+    "fix_commands": ["systemctl start nginx", "sudo systemctl start nginx"],
     "resolution": "Nginx service restored. Website is back online.",
     "hints": ["Check if nginx is running with systemctl status.", "Try starting the service."],
     "suggested_tools": ["systemctl", "ps", "curl", "journalctl"]
   },
   {
-    "id": "102",
-    "module": "linux",
-    "type": "incident",
-    "title": "Permission Denied Crisis",
+    "id": "601",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Project Setup: Initialization",
+    "severity": "LOW",
+    "problem": "New requirement: Create a fresh project for the 'ACE-Labs' initiative. The project ID must be 'ace-labs-99'.",
+    "investigations": {
+      "gcloud projects list": "PROJECT_ID       NAME            PROJECT_NUMBER\nshellcraft-prod  Prod Project    123456789012"
+    },
+    "fix_commands": ["gcloud projects create ace-labs-99"],
+    "resolution": "Project 'ace-labs-99' created successfully.",
+    "hints": ["Use the gcloud command to create a new project."],
+    "suggested_tools": ["gcloud projects"]
+  },
+  {
+    "id": "602",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Project Setup: API Enablement",
+    "severity": "LOW",
+    "problem": "You need to use Compute Engine in the 'ace-labs-99' project, but the service is currently disabled. Enable it.",
+    "investigations": {
+      "gcloud services list --enabled": "NAME                              TITLE\nstorage-api.googleapis.com        Google Cloud Storage JSON API"
+    },
+    "fix_commands": ["gcloud services enable compute.googleapis.com"],
+    "resolution": "Compute Engine API is now enabled for the project.",
+    "hints": ["Use the 'gcloud services enable' command with the correct service name."],
+    "suggested_tools": ["gcloud services"]
+  },
+  {
+    "id": "603",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Project Setup: IAM Assignment",
     "severity": "MEDIUM",
-    "problem": "Developers cannot update the website. 'Permission denied' when writing to /var/www/html.",
+    "problem": "Grant 'bob@example.com' the 'Viewer' role on the project to allow him to monitor resources.",
     "investigations": {
-      "ls -ld /var/www/html": "drwxr-xr-x 2 root root 4096 Apr  5 10:00 /var/www/html",
-      "whoami": "dev-user",
-      "groups": "dev-user developers"
+      "gcloud projects get-iam-policy ace-labs-99": "bindings: []"
     },
-    "fix_commands": [
-      "sudo chown -R www-data:www-data /var/www/html",
-      "sudo chown -R dev-user:developers /var/www/html",
-      "sudo chmod -R 775 /var/www/html"
-    ],
-    "resolution": "Ownership and permissions adjusted. Write access restored.",
-    "hints": ["Check directory ownership with ls -ld.", "Use chown or chmod to fix access."],
-    "suggested_tools": ["ls", "chown", "chmod", "whoami"]
+    "fix_commands": ["gcloud projects add-iam-policy-binding ace-labs-99 --member='user:bob@example.com' --role='roles/viewer'"],
+    "resolution": "IAM policy updated. Bob now has Viewer access.",
+    "hints": ["Use 'add-iam-policy-binding' with the project ID and member email."],
+    "suggested_tools": ["gcloud projects"]
   },
   {
-    "id": "103",
-    "module": "linux",
+    "id": "604",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Compute: Instance Creation",
+    "severity": "MEDIUM",
+    "problem": "Create a new VM instance named 'web-server-1' in zone 'us-central1-a' with machine type 'e2-micro'.",
+    "investigations": {
+      "gcloud compute instances list": "(Empty list)"
+    },
+    "fix_commands": ["gcloud compute instances create web-server-1 --zone=us-central1-a --machine-type=e2-micro"],
+    "resolution": "VM 'web-server-1' is now running in us-central1-a.",
+    "hints": ["Use 'gcloud compute instances create' and specify zone and machine-type."],
+    "suggested_tools": ["gcloud compute instances"]
+  },
+  {
+    "id": "605",
+    "module": "gcp/ace",
     "type": "incident",
-    "title": "Disk Full Disaster",
-    "severity": "HIGH",
-    "problem": "The system is sluggish and logs are failing. Monitoring shows /dev/sda1 at 100%.",
-    "investigations": {
-      "df -h": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        20G   20G     0 100% /",
-      "du -sh /var/log/*": "15G /var/log/syslog.1\n400M /var/log/auth.log",
-      "ls -lh /var/log/syslog.1": "-rw-r----- 1 root adm 15G Apr  5 10:00 /var/log/syslog.1"
-    },
-    "fix_commands": ["rm /var/log/syslog.1", "sudo rm /var/log/syslog.1", "truncate -s 0 /var/log/syslog.1"],
-    "resolution": "Large log file cleared. Disk space reclaimed.",
-    "hints": ["Use df -h to confirm disk usage.", "Find the culprit in /var/log using du -sh."],
-    "suggested_tools": ["df", "du", "rm", "ls"]
-  },
-  {
-    "id": "201",
-    "module": "linux",
-    "type": "routine",
-    "title": "Provision New Developer",
-    "severity": "LOW",
-    "problem": "New hire 'sarah' needs a user account with sudo access and a home directory.",
-    "investigations": {
-      "id sarah": "id: 'sarah': no such user",
-      "ls /home": "sysadmin  dev-user"
-    },
-    "fix_commands": [
-      "useradd -m sarah && usermod -aG sudo sarah",
-      "adduser sarah --ingroup sudo",
-      "sudo useradd -m sarah && sudo usermod -aG sudo sarah"
-    ],
-    "resolution": "User 'sarah' created and added to the sudo group.",
-    "hints": ["Use useradd or adduser to create the account.", "Use usermod to add her to the sudo group."],
-    "suggested_tools": ["useradd", "usermod", "id", "groups"]
-  },
-  {
-    "id": "202",
-    "module": "linux",
-    "type": "routine",
-    "title": "Configure Log Archival",
-    "severity": "LOW",
-    "problem": "The /var/www/html/backup.tar.gz file needs to be moved to the /mnt/storage/backups directory.",
-    "investigations": {
-      "ls /var/www/html/backup.tar.gz": "/var/www/html/backup.tar.gz",
-      "ls -d /mnt/storage/backups": "/mnt/storage/backups"
-    },
-    "fix_commands": [
-      "mv /var/www/html/backup.tar.gz /mnt/storage/backups/",
-      "sudo mv /var/www/html/backup.tar.gz /mnt/storage/backups/",
-      "cp /var/www/html/backup.tar.gz /mnt/storage/backups/ && rm /var/www/html/backup.tar.gz"
-    ],
-    "resolution": "Backup file moved successfully to long-term storage.",
-    "hints": ["Use the 'mv' command to move the file.", "Confirm the destination directory exists."],
-    "suggested_tools": ["mv", "ls", "cp"]
-  },
-  {
-    "id": "203",
-    "module": "linux",
-    "type": "routine",
-    "title": "Patch System Security",
-    "severity": "LOW",
-    "problem": "Weekly maintenance: Update the package list and upgrade only the 'openssh-server' package.",
-    "investigations": {
-      "apt list --upgradable": "openssh-server/stable 1:8.9p1-3 ... [upgradable from: 1:8.2p1-4]"
-    },
-    "fix_commands": [
-      "apt update && apt install --only-upgrade openssh-server",
-      "sudo apt update && sudo apt install --only-upgrade openssh-server",
-      "apt-get update && apt-get install --only-upgrade openssh-server"
-    ],
-    "resolution": "OpenSSH server updated to the latest security patch.",
-    "hints": ["Always run 'apt update' first.", "Use '--only-upgrade' to target a specific package."],
-    "suggested_tools": ["apt", "apt-get", "apt list"]
-  },
-  {
-    "id": "111",
-    "module": "networking",
-    "type": "incident",
-    "title": "Website Down: Multi-Stage Recovery",
+    "title": "Compute: Firewall Block",
     "severity": "CRITICAL",
-    "problem": "The website is showing a '500 Internal Server Error'. Nginx is running, but something is wrong behind the scenes.",
+    "problem": "The 'web-server-1' is running Nginx on port 80, but it is unreachable from the internet. Fix the firewall.",
     "investigations": {
-      "systemctl status nginx": "● nginx.service - Active: active (running)",
-      "curl -I localhost": "HTTP/1.1 500 Internal Server Error",
-      "tail /var/log/nginx/error.log": "connect() failed (111: Connection refused) while connecting to upstream: http://127.0.0.1:3306",
-      "systemctl status mysql": "● mysql.service - Active: inactive (dead)"
+      "gcloud compute firewall-rules list": "NAME: allow-ssh, ALLOW: tcp:22\nNAME: allow-icmp, ALLOW: icmp",
+      "curl 34.120.x.x": "(Timeout)"
     },
-    "fix_commands": ["systemctl start mysql", "sudo systemctl start mysql", "service mysql restart"],
-    "resolution": "Nginx was OK, but the Backend Database was down. MySQL started.",
-    "hints": ["Check Nginx error logs for clues.", "If it's a 500 error, check backend services like database or app server."],
-    "suggested_tools": ["systemctl", "curl", "tail", "mysql"]
+    "fix_commands": ["gcloud compute firewall-rules create allow-http --allow=tcp:80 --source-ranges=0.0.0.0/0"],
+    "resolution": "Firewall rule created. Port 80 is now open.",
+    "hints": ["Create an ingress firewall rule for TCP port 80."],
+    "suggested_tools": ["gcloud compute firewall-rules"]
   },
   {
-    "id": "112",
-    "module": "networking",
-    "type": "incident",
-    "title": "Website Not Loading (Firewall Issue)",
-    "severity": "CRITICAL",
-    "problem": "A user reports that your website is not loading in the browser. Nginx is running, but the site is unreachable from outside.",
+    "id": "606",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Compute: Reserve Static IP",
+    "severity": "LOW",
+    "problem": "Reserve a static external IP address named 'web-static-ip' in the 'us-central1' region.",
     "investigations": {
-      "systemctl status nginx": "● nginx.service - Active: active (running)",
-      "curl localhost": "HTTP/1.1 200 OK ... (Site works locally)",
-      "ufw status": "Status: active\nTo Action From\n-- ------ ----\n22 ALLOW Anywhere"
+      "gcloud compute addresses list": "(Empty list)"
     },
-    "fix_commands": ["ufw allow 80", "sudo ufw allow 80", "ufw allow http", "ufw allow 443"],
-    "resolution": "Port 80 (HTTP) was blocked by the firewall. Access restored!",
-    "hints": ["If it works on localhost but not from outside, check the firewall.", "Use 'ufw status' to see active rules."],
-    "suggested_tools": ["ufw", "curl", "systemctl"]
+    "fix_commands": ["gcloud compute addresses create web-static-ip --region=us-central1"],
+    "resolution": "Static IP 'web-static-ip' has been reserved.",
+    "hints": ["Use 'gcloud compute addresses create'."],
+    "suggested_tools": ["gcloud compute addresses"]
   },
   {
-    "id": "113",
-    "module": "networking",
+    "id": "607",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Compute: Lifecycle Management",
+    "severity": "LOW",
+    "problem": "The instance 'web-server-1' needs maintenance. Stop it safely.",
+    "investigations": {
+      "gcloud compute instances list": "NAME: web-server-1, STATUS: RUNNING"
+    },
+    "fix_commands": ["gcloud compute instances stop web-server-1 --zone=us-central1-a"],
+    "resolution": "Instance stopped successfully.",
+    "hints": ["Use the 'stop' action."],
+    "suggested_tools": ["gcloud compute instances"]
+  },
+  {
+    "id": "608",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Storage: Bucket Creation",
+    "severity": "LOW",
+    "problem": "Create a Cloud Storage bucket named 'ace-assets-bucket-unique-99' in the 'us-east1' region.",
+    "investigations": {
+      "gsutil ls": "(Empty list)"
+    },
+    "fix_commands": ["gsutil mb -l us-east1 gs://ace-assets-bucket-unique-99"],
+    "resolution": "Bucket created in us-east1.",
+    "hints": ["Use 'gsutil mb' with the '-l' flag for location."],
+    "suggested_tools": ["gsutil"]
+  },
+  {
+    "id": "609",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Storage: Uploading Data",
+    "severity": "LOW",
+    "problem": "Upload the local file 'config.json' to the root of your new bucket.",
+    "investigations": {
+      "ls": "config.json  index.html",
+      "gsutil ls gs://ace-assets-bucket-unique-99": "(Empty bucket)"
+    },
+    "fix_commands": ["gsutil cp config.json gs://ace-assets-bucket-unique-99/"],
+    "resolution": "File uploaded to GCS.",
+    "hints": ["Use 'gsutil cp'."],
+    "suggested_tools": ["gsutil"]
+  },
+  {
+    "id": "610",
+    "module": "gcp/ace",
     "type": "incident",
-    "title": "Domain Name Resolution Failure",
+    "title": "Storage: Permission Denied",
     "severity": "HIGH",
-    "problem": "You cannot reach external websites by name (e.g., google.com), but you can reach them by IP address (e.g., 8.8.8.8).",
+    "problem": "A developer 'alice@example.com' is trying to download a file from the bucket but gets a 403 error. Grant her access.",
     "investigations": {
-      "ping 8.8.8.8": "64 bytes from 8.8.8.8: icmp_seq=1 ttl=117 time=12.4 ms",
-      "ping google.com": "ping: google.com: Name or service not known",
-      "cat /etc/resolv.conf": "nameserver 127.0.0.53\n# No other nameservers found"
+      "gsutil iam get gs://ace-assets-bucket-unique-99": "bindings: []"
     },
-    "fix_commands": [
-      "echo 'nameserver 8.8.8.8' | sudo tee /etc/resolv.conf",
-      "sudo systemctl restart systemd-resolved"
-    ],
-    "resolution": "DNS configuration corrected. Name resolution restored.",
-    "hints": ["Check your DNS settings in /etc/resolv.conf.", "Try adding a reliable nameserver like 8.8.8.8."],
-    "suggested_tools": ["ping", "cat", "echo", "systemctl"]
+    "fix_commands": ["gsutil iam ch user:alice@example.com:objectViewer gs://ace-assets-bucket-unique-99"],
+    "resolution": "Alice now has objectViewer permissions.",
+    "hints": ["Use 'gsutil iam ch' to add the objectViewer role."],
+    "suggested_tools": ["gsutil"]
   },
   {
-    "id": "114",
-    "module": "networking",
+    "id": "611",
+    "module": "gcp/ace",
     "type": "incident",
-    "title": "Cloud Load Balancer: Health Check Failing",
-    "severity": "CRITICAL",
-    "problem": "The cloud load balancer is reporting 'Unhealthy' for all backend nodes. The app is running, but no traffic is reaching it.",
-    "investigations": {
-      "systemctl status node-app": "● node-app.service - Active: active (running)",
-      "curl localhost:3000/health": "HTTP/1.1 200 OK ... (App is healthy)",
-      "ufw status": "Status: active\nTo Action From\n-- ------ ----\n3000 DENY Anywhere"
-    },
-    "fix_commands": ["ufw allow 3000", "sudo ufw allow 3000", "ufw allow 3000/tcp"],
-    "resolution": "The firewall was blocking the Load Balancer's health check port (3000). Rule added.",
-    "hints": ["If the app is running but the LB says it's down, check the port used for health checks.", "Ensure the firewall allows traffic from the LB's range (or just the port)."],
-    "suggested_tools": ["ufw", "curl", "systemctl"]
-  },
-  {
-    "id": "115",
-    "module": "networking",
-    "type": "incident",
-    "title": "VPC Peering: Connectivity Lost",
+    "title": "IAM: Service Account Missing",
     "severity": "HIGH",
-    "problem": "Server A in VPC-1 cannot reach Database B in VPC-2. They were working yesterday. Peering is active.",
+    "problem": "A background worker app on a VM needs to access BigQuery. Create a service account 'bq-worker' for this purpose.",
     "investigations": {
-      "ip route": "default via 10.0.1.1 dev eth0\n10.0.1.0/24 dev eth0 proto kernel ...",
-      "ping 10.0.2.55": "PING 10.0.2.55 (10.0.2.55): 56 data bytes\nFrom 10.0.1.1: icmp_seq=1 Destination Net Unreachable"
+      "gcloud iam service-accounts list": "(Empty list)"
     },
-    "fix_commands": [
-      "ip route add 10.0.2.0/24 via 10.0.1.1",
-      "sudo ip route add 10.0.2.0/24 via 10.0.1.1"
-    ],
-    "resolution": "Static route to the peered VPC was missing from the local routing table.",
-    "hints": ["Check the routing table with 'ip route'.", "Ensure there is a route for the 10.0.2.0/24 subnet."],
-    "suggested_tools": ["ip route", "ping"]
+    "fix_commands": ["gcloud iam service-accounts create bq-worker --display-name='BigQuery Worker'"],
+    "resolution": "Service account 'bq-worker' created.",
+    "hints": ["Use 'gcloud iam service-accounts create'."],
+    "suggested_tools": ["gcloud iam"]
   },
   {
-    "id": "116",
-    "module": "networking",
-    "type": "incident",
-    "title": "Slow Downloads: MTU Mismatch",
+    "id": "612",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "Deploy: Docker on VM",
     "severity": "MEDIUM",
-    "problem": "Large file transfers are extremely slow and frequently time out, but small pings work fine. This started after moving to a new cloud provider.",
+    "problem": "Run a standard 'nginx' container on your local VM terminal and map host port 8080 to container port 80.",
     "investigations": {
-      "ip link show eth0": "eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc ...",
-      "ping -s 1472 -M do 8.8.8.8": "PING 8.8.8.8 (8.8.8.8) 1472(1500) bytes of data.\nFrom 10.0.1.1 icmp_seq=1 Frag needed and DF set (mtu = 1500)"
+      "docker ps": "(No containers running)"
     },
-    "fix_commands": ["ip link set eth0 mtu 1500", "sudo ip link set eth0 mtu 1500"],
-    "resolution": "MTU was set to 9000 (Jumbo Frames), which the external network didn't support. Reset to 1500.",
-    "hints": ["Large packets failing while small ones pass often points to MTU issues.", "Check MTU with 'ip link show'."],
-    "suggested_tools": ["ip link", "ping"]
+    "fix_commands": ["docker run -d -p 8080:80 nginx"],
+    "resolution": "Nginx container is running and exposed on port 8080.",
+    "hints": ["Use 'docker run' with '-d' for detached and '-p' for port mapping."],
+    "suggested_tools": ["docker"]
   },
   {
-    "id": "117",
-    "module": "networking",
+    "id": "613",
+    "module": "gcp/ace",
     "type": "incident",
-    "title": "DNS CNAME Loop Detected",
+    "title": "IAM: Token Creation Denied",
     "severity": "HIGH",
-    "problem": "The domain 'api.shellcraft.io' is failing to resolve. Browsers show 'Too many redirects' or resolution timeout.",
+    "problem": "A script needs to impersonate service account 'sa-1@project.iam.gserviceaccount.com'. Grant yourself the required role.",
     "investigations": {
-      "dig api.shellcraft.io": ";; ANSWER SECTION:\napi.shellcraft.io. 60 IN CNAME web.shellcraft.io.\nweb.shellcraft.io. 60 IN CNAME api.shellcraft.io."
+      "gcloud iam service-accounts get-iam-policy sa-1@project.iam.gserviceaccount.com": "bindings: []"
     },
-    "fix_commands": [
-      "echo 'api.shellcraft.io. 60 IN A 1.2.3.4' > /tmp/dns_fix.txt",
-      "dig api.shellcraft.io +trace"
-    ],
-    "resolution": "Identified a CNAME loop where A pointed to B and B pointed back to A. Fixed record to point to an A record.",
-    "hints": ["Use 'dig' to inspect the CNAME chain.", "Look for records that point to each other."],
-    "suggested_tools": ["dig", "nslookup"]
+    "fix_commands": ["gcloud iam service-accounts add-iam-policy-binding sa-1@project.iam.gserviceaccount.com --member='user:trainee@shellcraft.io' --role='roles/iam.serviceAccountTokenCreator'"],
+    "resolution": "You now have the Service Account Token Creator role.",
+    "hints": ["Impersonation requires the 'serviceAccountTokenCreator' role on the target SA."],
+    "suggested_tools": ["gcloud iam"]
   },
   {
-    "id": "118",
-    "module": "networking",
+    "id": "614",
+    "module": "gcp/ace",
     "type": "incident",
-    "title": "SSL/TLS Port 443 Timeout",
-    "severity": "CRITICAL",
-    "problem": "The site works via HTTP (80) but fails completely on HTTPS (443). Nginx says it's listening on both.",
+    "title": "Debugging: API Not Enabled",
+    "severity": "MEDIUM",
+    "problem": "You tried to run `gcloud container clusters list` but got an error: 'Cloud Kubernetes Engine API has not been used...'. Fix it.",
     "investigations": {
-      "ss -tulnp | grep :443": "tcp LISTEN 0 128 0.0.0.0:443 ... (nginx)",
-      "ufw status": "Status: active\nTo Action From\n-- ------ ----\n80 ALLOW Anywhere\n22 ALLOW Anywhere"
+      "gcloud services list --enabled --filter='NAME:container*'": "(No results)"
     },
-    "fix_commands": ["ufw allow 443", "sudo ufw allow 443", "ufw allow https"],
-    "resolution": "Port 443 was not allowed in the firewall. HTTPS traffic restored.",
-    "hints": ["Check if the port is open in the firewall with 'ufw status'.", "Confirm the service is actually listening on 443."],
-    "suggested_tools": ["ufw", "ss", "curl"]
+    "fix_commands": ["gcloud services enable container.googleapis.com"],
+    "resolution": "Kubernetes Engine API enabled.",
+    "hints": ["The GKE service name is 'container.googleapis.com'."],
+    "suggested_tools": ["gcloud services"]
   },
   {
-    "id": "119",
-    "module": "networking",
+    "id": "615",
+    "module": "gcp/ace",
     "type": "incident",
-    "title": "VPC Peering: Overlapping CIDR",
+    "title": "Debugging: Quota Exceeded",
     "severity": "HIGH",
-    "problem": "You are trying to peer VPC-A (10.0.0.0/16) with VPC-B (10.0.0.0/24), but the request is failing immediately.",
-    "investigations": {
-      "ip addr": "eth0: 10.0.1.5/16",
-      "aws ec2 describe-vpcs": "VPC-A: 10.0.0.0/16, VPC-B: 10.0.0.0/24"
-    },
-    "fix_commands": [
-      "echo 'Change CIDR of VPC-B' > /tmp/solution.txt",
-      "aws ec2 create-vpc --cidr-block 172.16.0.0/16"
-    ],
-    "resolution": "VPC Peering cannot be established between VPCs with overlapping CIDR blocks.",
-    "hints": ["VPC peering requires non-overlapping IP ranges.", "Check the CIDR blocks of both VPCs."],
-    "suggested_tools": ["aws", "ip", "cat"]
-  },
-  {
-    "id": "120",
-    "module": "networking",
-    "type": "incident",
-    "title": "Transit Gateway: Missing Propagation",
-    "severity": "HIGH",
-    "problem": "VPC-C is attached to the Transit Gateway (TGW), but it cannot reach VPC-D which is also attached. Routing looks correct on the VPC side.",
-    "investigations": {
-      "aws ec2 describe-transit-gateway-route-tables": "Table-1: No routes for VPC-C range 10.3.0.0/16",
-      "ping 10.4.0.10": "PING 10.4.0.10: Destination Host Unreachable"
-    },
-    "fix_commands": [
-      "aws ec2 enable-transit-gateway-route-table-propagation --transit-gateway-attachment-id tgw-attach-123",
-      "sudo aws ec2 enable-transit-gateway-route-table-propagation"
-    ],
-    "resolution": "The TGW attachment was not propagating routes to the Transit Gateway route table.",
-    "hints": ["Check Transit Gateway route table propagations.", "Ensure the attachment is associated and propagating."],
-    "suggested_tools": ["aws", "ping"]
-  },
-  {
-    "id": "121",
-    "module": "networking",
-    "type": "incident",
-    "title": "Security Group vs NACL Conflict",
-    "severity": "HIGH",
-    "problem": "SSH is allowed in the Security Group, but you still can't connect. You checked the firewall on the OS, and it's disabled.",
-    "investigations": {
-      "ufw status": "Status: inactive",
-      "aws ec2 describe-network-acls": "Inbound Rule 100: DENY TCP 22 0.0.0.0/0",
-      "aws ec2 describe-security-groups": "Inbound: ALLOW TCP 22 0.0.0.0/0"
-    },
-    "fix_commands": [
-      "aws ec2 replace-network-acl-entry --network-acl-id acl-123 --rule-number 100 --protocol tcp --port-range From=22,To=22 --cidr-block 0.0.0.0/0 --rule-action allow",
-      "sudo aws ec2 modify-network-acl"
-    ],
-    "resolution": "The Network ACL (NACL) was explicitly denying port 22, overriding the Security Group allow rule.",
-    "hints": ["NACLs are evaluated before Security Groups for inbound traffic.", "Check if a 'Deny' rule exists in your Subnet's NACL."],
-    "suggested_tools": ["aws", "ufw"]
-  },
-  {
-    "id": "122",
-    "module": "networking",
-    "type": "incident",
-    "title": "S3 Endpoint: DNS Resolution Issue",
-    "severity": "MEDIUM",
-    "problem": "An EC2 instance in a private subnet cannot reach S3, even though an S3 VPC Endpoint is created. You want to avoid using the public internet.",
-    "investigations": {
-      "nslookup s3.amazonaws.com": "Address: 52.216.x.x (Public IP resolved)",
-      "route -n": "0.0.0.0 10.0.1.1 (Default Gateway points to NAT)"
-    },
-    "fix_commands": [
-      "aws ec2 modify-vpc-endpoint --vpc-endpoint-id vpce-123 --private-dns-enabled",
-      "sudo aws ec2 modify-vpc-endpoint"
-    ],
-    "resolution": "Private DNS was not enabled on the VPC Endpoint, causing the instance to still try and reach S3 via its public IP.",
-    "hints": ["VPC Endpoints often require 'Private DNS' to be enabled to override public resolution.", "Check your VPC Endpoint configuration."],
-    "suggested_tools": ["nslookup", "aws", "route"]
-  },
-  {
-    "id": "123",
-    "module": "networking",
-    "type": "incident",
-    "title": "Global Accelerator: High Latency",
-    "severity": "MEDIUM",
-    "problem": "Users in Asia are reporting high latency to your US-based application, even though you enabled AWS Global Accelerator.",
-    "investigations": {
-      "dig +short api.example.com": "75.2.x.x (Anycast IP)",
-      "curl -w \"%{time_total}\" api.example.com": "0.850s (Slow)",
-      "aws globalaccelerator describe-accelerator": "Status: IN_PROGRESS (Deployment pending)"
-    },
-    "fix_commands": [
-      "echo 'Wait for Global Accelerator deployment to complete' > /tmp/wait.txt",
-      "aws globalaccelerator list-accelerators"
-    ],
-    "resolution": "Global Accelerator was still in the 'IN_PROGRESS' state, meaning the global Anycast nodes were not yet fully optimized.",
-    "hints": ["Global Accelerator takes time to propagate across all edge locations.", "Check the deployment status of your accelerator."],
-    "suggested_tools": ["dig", "curl", "aws"]
-  },
-  {
-    "id": "301",
-    "module": "docker",
-    "type": "incident",
-    "title": "Zombie Container",
-    "severity": "MEDIUM",
-    "problem": "A container named 'web-app' is unresponsive and blocking port 80. It needs to be forcefully removed.",
-    "investigations": {
-      "docker ps": "CONTAINER ID   IMAGE     COMMAND   CREATED         STATUS         PORTS                NAMES\n1a2b3c4d5e6f   nginx     \"...\"     5 minutes ago   Up 5 minutes   0.0.0.0:80->80/tcp   web-app",
-      "curl localhost": "(Timeout or no response)"
-    },
-    "fix_commands": [
-      "docker rm -f web-app",
-      "docker kill web-app && docker rm web-app",
-      "docker stop web-app && docker rm web-app"
-    ],
-    "resolution": "The unresponsive container was forcefully removed, freeing up the port.",
-    "hints": ["Use 'docker ps' to find the container.", "Try 'docker rm -f' to force removal if it's stuck."],
-    "suggested_tools": ["docker ps", "docker rm", "docker kill"]
-  },
-  {
-    "id": "302",
-    "module": "docker",
-    "type": "incident",
-    "title": "Image Bloat",
-    "severity": "LOW",
-    "problem": "The disk is filling up with unused Docker images. You need to clean up all dangling images.",
-    "investigations": {
-      "docker images": "REPOSITORY   TAG       IMAGE ID       CREATED       SIZE\n<none>       <none>    7f8e9d0c1b2a   2 days ago    500MB\n<none>       <none>    1a2b3c4d5e6f   5 days ago    1.2GB",
-      "df -h": "/dev/sda1  20G  18G  2G  90% /"
-    },
-    "fix_commands": [
-      "docker image prune",
-      "docker system prune",
-      "docker rmi $(docker images -f \"dangling=true\" -q)"
-    ],
-    "resolution": "Dangling images were removed, reclaiming several gigabytes of disk space.",
-    "hints": ["Look for images with <none> tags.", "The 'prune' command is very useful for cleanup."],
-    "suggested_tools": ["docker images", "docker image prune", "docker system prune"]
-  },
-  {
-    "id": "303",
-    "module": "docker",
-    "type": "routine",
-    "title": "Launch a Database",
-    "severity": "LOW",
-    "problem": "Start a MariaDB container named 'db-server' in the background, using the 'mariadb:latest' image, and set the root password to 'secret123' using environment variables.",
-    "investigations": {
-      "docker ps -a": "(Empty list)"
-    },
-    "fix_commands": [
-      "docker run -d --name db-server -e MARIADB_ROOT_PASSWORD=secret123 mariadb:latest",
-      "docker run --name db-server -e MARIADB_ROOT_PASSWORD=secret123 -d mariadb"
-    ],
-    "resolution": "MariaDB container is now running in the background with the specified configuration.",
-    "hints": ["Use '-d' for detached mode and '--name' to name it.", "Use '-e' to set environment variables."],
-    "suggested_tools": ["docker run", "docker ps"]
-  },
-  {
-    "id": "304",
-    "module": "docker",
-    "type": "incident",
-    "title": "Unhealthy Healthcheck",
-    "severity": "MEDIUM",
-    "problem": "The 'api-server' container is running but marked as 'unhealthy' in Docker, causing the load balancer to skip it.",
-    "investigations": {
-      "docker ps": "CONTAINER ID   IMAGE        STATUS                     NAMES\nabc123def456   node-api     Up 10 minutes (unhealthy)  api-server",
-      "docker inspect --format='{{json .State.Health}}' api-server": "{\"Status\":\"unhealthy\",\"FailingStreak\":5,\"Log\":[{\"Output\":\"curl: (7) Failed to connect to localhost port 8080: Connection refused\\n\"}]}"
-    },
-    "fix_commands": [
-      "docker run -d --name api-server -p 8080:8080 --health-cmd 'curl -f http://localhost:8080/health || exit 1' node-api",
-      "docker restart api-server"
-    ],
-    "resolution": "Corrected the healthcheck command port and restarted the container.",
-    "hints": [
-      "Check 'docker inspect' to see healthcheck logs.",
-      "Ensure the healthcheck command points to the correct internal port."
-    ],
-    "suggested_tools": ["docker ps", "docker inspect"]
-  },
-  {
-    "id": "305",
-    "module": "docker",
-    "type": "incident",
-    "title": "Isolate the Network",
-    "severity": "HIGH",
-    "problem": "The 'web' container cannot reach the 'database' container by its name, even though both are running.",
-    "investigations": {
-      "docker network ls": "NETWORK ID     NAME      DRIVER    SCOPE\n1234567890ab   bridge    bridge    local",
-      "docker inspect web --format='{{.NetworkSettings.Networks}}'": "map[bridge:0xc000...]",
-      "docker exec web ping database": "ping: database: Name or service not known"
-    },
-    "fix_commands": [
-      "docker network create app-net && docker network connect app-net web && docker network connect app-net database",
-      "docker run --network=app-net ..."
-    ],
-    "resolution": "Containers were on the default bridge network where DNS resolution by name is not supported. Moved them to a user-defined bridge network.",
-    "hints": [
-      "Default bridge network doesn't support service discovery via DNS.",
-      "Use user-defined networks for container-to-container communication."
-    ],
-    "suggested_tools": ["docker network", "docker exec"]
-  },
-  {
-    "id": "306",
-    "module": "docker",
-    "type": "incident",
-    "title": "The Rootless Volume Trap",
-    "severity": "MEDIUM",
-    "problem": "The 'app' container (running as user 'node') fails to write logs to a mounted host directory /opt/logs.",
-    "investigations": {
-      "docker logs app": "Error: EACCES: permission denied, open '/var/app/logs/error.log'",
-      "ls -ld /opt/logs": "drwxr-xr-x 2 root root 4096 Apr  5 10:00 /opt/logs"
-    },
-    "fix_commands": [
-      "sudo chown -R 1000:1000 /opt/logs",
-      "sudo chmod 777 /opt/logs"
-    ],
-    "resolution": "The host directory was owned by root, but the container process was running as a non-root user (UID 1000). Adjusted ownership on the host.",
-    "hints": [
-      "Check the UID of the user inside the container.",
-      "Ensure host permissions align with the container user."
-    ],
-    "suggested_tools": ["docker logs", "ls -l", "chown"]
-  },
-  {
-    "id": "307",
-    "module": "docker",
-    "type": "incident",
-    "title": "Scaling Collision",
-    "severity": "MEDIUM",
-    "problem": "Attempting to scale the 'worker' service to 3 replicas using Docker Compose fails with a port conflict.",
-    "investigations": {
-      "docker-compose up --scale worker=3": "ERROR: for worker_2  Cannot start service worker: driver failed programming external connectivity on endpoint... Bind for 0.0.0.0:8080 failed: port is already allocated"
-    },
-    "fix_commands": [
-      "sed -i 's/8080:80/80/' docker-compose.yml",
-      "Change 'ports: - \"8080:80\"' to 'ports: - \"80\"' in docker-compose.yml"
-    ],
-    "resolution": "Removed the static host port binding in docker-compose.yml to allow Docker to assign dynamic ports for multiple replicas.",
-    "hints": [
-      "You cannot bind multiple containers to the same host port.",
-      "Use dynamic port mapping when scaling."
-    ],
-    "suggested_tools": ["docker-compose", "sed"]
-  },
-  {
-    "id": "308",
-    "module": "docker",
-    "type": "routine",
-    "title": "Tame the Logs",
-    "severity": "LOW",
-    "problem": "Configure the Docker daemon to limit log file size to 10MB and keep only 3 rotations to prevent disk exhaustion.",
-    "investigations": {
-      "cat /etc/docker/daemon.json": "{}"
-    },
-    "fix_commands": [
-      "echo '{\"log-driver\": \"json-file\", \"log-opts\": {\"max-size\": \"10m\", \"max-file\": \"3\"}}' > /etc/docker/daemon.json && systemctl restart docker",
-      "sudo tee /etc/docker/daemon.json <<EOF\n{\n  \"log-driver\": \"json-file\",\n  \"log-opts\": {\n    \"max-size\": \"10m\",\n    \"max-file\": \"3\"\n  }\n}\nEOF\nsudo systemctl restart docker"
-    ],
-    "resolution": "Docker logging policy updated globally with size limits and rotation.",
-    "hints": [
-      "Modify /etc/docker/daemon.json.",
-      "Don't forget to restart the Docker service."
-    ],
-    "suggested_tools": ["cat", "systemctl", "tee"]
-  },
-  {
-    "id": "309",
-    "module": "docker",
-    "type": "incident",
-    "title": "CPU Throttling Mystery",
-    "severity": "MEDIUM",
-    "problem": "The 'processor' container is running much slower than expected. You suspect it's being throttled.",
-    "investigations": {
-      "docker stats --no-stream": "CONTAINER ID   NAME        CPU %     MEM USAGE / LIMIT\nxyz789       processor   49.98%    100MiB / 2GiB",
-      "docker inspect processor --format='{{.HostConfig.CpuQuota}}'": "50000"
-    },
-    "fix_commands": [
-      "docker update --cpus 2.0 processor",
-      "docker run --cpus=2.0 ..."
-    ],
-    "resolution": "The container had a strict CPU quota of 0.5 cores. Increased the limit to 2.0 cores.",
-    "hints": [
-      "Check 'docker stats' for current usage.",
-      "Use 'docker update' to change limits on the fly."
-    ],
-    "suggested_tools": ["docker stats", "docker inspect", "docker update"]
-  },
-  {
-    "id": "310",
-    "module": "docker",
-    "type": "incident",
-    "title": "The OOM Reaper Strikes",
-    "severity": "HIGH",
-    "problem": "A memory-intensive Java application container keeps restarting every few minutes.",
-    "investigations": {
-      "docker inspect app --format='{{.State.OOMKilled}}'": "true",
-      "dmesg | grep -i oom": "Out of memory: Kill process 12345 (java) score 950"
-    },
-    "fix_commands": [
-      "docker run -m 2g --memory-reservation 1g ...",
-      "docker update --memory 2g app"
-    ],
-    "resolution": "The container was exceeding its 512MB memory limit and getting killed by the kernel OOM killer. Increased memory limit to 2GB.",
-    "hints": [
-      "Check if OOMKilled is true in container state.",
-      "Look at system logs with dmesg."
-    ],
-    "suggested_tools": ["docker inspect", "dmesg", "docker update"]
-  },
-  {
-    "id": "311",
-    "module": "docker",
-    "type": "incident",
-    "title": "Ghost in the Multi-Stage",
-    "severity": "MEDIUM",
-    "problem": "The multi-stage build finishes successfully, but the final image fails to start because 'app.jar' is missing.",
-    "investigations": {
-      "docker run my-app": "docker: Error response from daemon: OCI runtime create failed: ... no such file or directory",
-      "cat Dockerfile": "FROM maven AS build\nRUN mvn package\nFROM openjdk:jre-slim\nCOPY --from=build /target/app.jar /app.jar"
-    },
-    "fix_commands": [
-      "sed -i 's|/target/|/app/target/|' Dockerfile",
-      "Update COPY path in Dockerfile to match the actual build artifact location."
-    ],
-    "resolution": "The COPY command in the final stage used a wrong source path from the build stage. Corrected the path.",
-    "hints": [
-      "Verify the working directory in the build stage.",
-      "Double-check the path of generated artifacts."
-    ],
-    "suggested_tools": ["cat", "docker build"]
-  },
-  {
-    "id": "312",
-    "module": "docker",
-    "type": "incident",
-    "title": "Registry Access Denied",
-    "severity": "MEDIUM",
-    "problem": "Failed to push image to a private registry. Error: 'insufficient_scope: authorization failed'.",
-    "investigations": {
-      "docker push my-registry.com/my-app": "The push refers to repository [my-registry.com/my-app]\nerror parsing HTTP 401 response body: unexpected end of JSON input"
-    },
-    "fix_commands": [
-      "docker login my-registry.com",
-      "cat ~/.docker/config.json"
-    ],
-    "resolution": "The user was not authenticated with the private registry. Logged in using 'docker login'.",
-    "hints": [
-      "Check if you are logged in to the registry.",
-      "Verify credentials in ~/.docker/config.json."
-    ],
-    "suggested_tools": ["docker login", "cat"]
-  },
-  {
-    "id": "313",
-    "module": "docker",
-    "type": "incident",
-    "title": "Swarm Service Stagnation",
-    "severity": "HIGH",
-    "problem": "Docker Swarm service 'web' shows 0/3 replicas running. Tasks are stuck in 'Pending' state.",
-    "investigations": {
-      "docker service ps web": "ID   NAME    IMAGE   NODE   DESIRED STATE   CURRENT STATE    ERROR\n123  web.1   nginx          Running         Pending          \"no suitable node (insufficient resources on 3 nodes)\"",
-      "docker node ls": "ID    HOSTNAME   STATUS    AVAILABILITY   MANAGER STATUS\nabc   node-1     Ready     Active         Leader"
-    },
-    "fix_commands": [
-      "docker service update --limit-memory 512mb web",
-      "docker node update --availability active node-1"
-    ],
-    "resolution": "The service had memory limits higher than available on any single node. Lowered memory limits to allow scheduling.",
-    "hints": [
-      "Check 'docker service ps' for error messages.",
-      "Verify node resources vs service requirements."
-    ],
-    "suggested_tools": ["docker service ps", "docker node ls", "docker service update"]
-  },
-  {
-    "id": "314",
-    "module": "docker",
-    "type": "incident",
-    "title": "Port Already in Use",
-    "severity": "LOW",
-    "problem": "Cannot start a new Nginx container on port 80 because another process is already using it.",
-    "investigations": {
-      "docker run -p 80:80 nginx": "Error response from daemon: driver failed programming external connectivity on endpoint... Bind for 0.0.0.0:80 failed: port is already allocated",
-      "ss -tulnp | grep :80": "tcp LISTEN 0 128 0.0.0.0:80 0.0.0.0:* users:((\"apache2\",pid=1234,fd=4))"
-    },
-    "fix_commands": [
-      "sudo systemctl stop apache2",
-      "docker run -p 8080:80 nginx"
-    ],
-    "resolution": "Identified that Apache was running on the host port 80. Stopped Apache or used a different host port.",
-    "hints": [
-      "Use 'ss' or 'netstat' to find what's using the port.",
-      "Change the host-side port mapping if needed."
-    ],
-    "suggested_tools": ["ss", "docker run", "systemctl"]
-  },
-  {
-    "id": "315",
-    "module": "docker",
-    "type": "incident",
-    "title": "Wrong Alias Discovery",
-    "severity": "MEDIUM",
-    "problem": "A frontend container cannot connect to the backend container using the alias 'api-service', even though it's configured in the network.",
-    "investigations": {
-      "docker inspect backend": "... \"Aliases\": [\"api-server\", \"backend\"] ...",
-      "docker exec frontend curl http://api-service": "curl: (6) Could not resolve host: api-service"
-    },
-    "fix_commands": [
-      "docker network connect --alias api-service my-net backend",
-      "Update frontend to use 'api-server' instead of 'api-service'"
-    ],
-    "resolution": "The backend container had 'api-server' as an alias, but the frontend was trying to use 'api-service'. Corrected the alias or the frontend config.",
-    "hints": [
-      "Check network aliases in 'docker inspect'.",
-      "Verify the service name used in the application config."
-    ],
-    "suggested_tools": ["docker inspect", "docker exec"]
-  },
-  {
-    "id": "316",
-    "module": "docker",
-    "type": "incident",
-    "title": "The Vanishing Data",
-    "severity": "HIGH",
-    "problem": "When the 'db' container is recreated, all data is lost. You realize it was using an anonymous volume.",
-    "investigations": {
-      "docker inspect db --format='{{json .Mounts}}'": "[{\"Type\":\"volume\",\"Name\":\"4f5e...\",\"Destination\":\"/var/lib/mysql\"}]",
-      "docker volume ls": "DRIVER    VOLUME NAME\nlocal     4f5e6d7c8b9a..."
-    },
-    "fix_commands": [
-      "docker run -v mysql-data:/var/lib/mysql ...",
-      "docker run --mount source=mysql-data,target=/var/lib/mysql ..."
-    ],
-    "resolution": "Replaced the anonymous volume with a named volume 'mysql-data' to ensure persistence across container removals.",
-    "hints": [
-      "Anonymous volumes have random hex names.",
-      "Always use named volumes for production data."
-    ],
-    "suggested_tools": ["docker inspect", "docker volume ls"]
-  },
-  {
-    "id": "317",
-    "module": "docker",
-    "type": "routine",
-    "title": "Survive the Reboot",
-    "severity": "LOW",
-    "problem": "Ensure the 'monitoring' container always starts automatically when the Docker daemon or the host machine reboots.",
-    "investigations": {
-      "docker inspect monitoring --format='{{.HostConfig.RestartPolicy.Name}}'": "no"
-    },
-    "fix_commands": [
-      "docker update --restart always monitoring",
-      "docker run --restart unless-stopped monitoring"
-    ],
-    "resolution": "Updated the container's restart policy to 'always'.",
-    "hints": [
-      "The default restart policy is 'no'.",
-      "Use 'docker update' for existing containers."
-    ],
-    "suggested_tools": ["docker update", "docker inspect"]
-  },
-  {
-    "id": "318",
-    "module": "docker",
-    "type": "incident",
-    "title": "Entrypoint Overload",
-    "severity": "MEDIUM",
-    "problem": "Running 'docker run my-app bash' doesn't open a shell but instead tries to pass 'bash' as an argument to the main application, which then crashes.",
-    "investigations": {
-      "cat Dockerfile": "ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]",
-      "docker logs my-app": "Error: Could not find or load main class bash"
-    },
-    "fix_commands": [
-      "docker run --entrypoint bash my-app",
-      "Change ENTRYPOINT to CMD in Dockerfile if you want it to be easily overridable."
-    ],
-    "resolution": "The Dockerfile used the exec form of ENTRYPOINT, which treats arguments as parameters to the command. Used '--entrypoint' to override it.",
-    "hints": [
-      "ENTRYPOINT is not easily overridden by trailing arguments.",
-      "CMD is easily overridden by trailing arguments."
-    ],
-    "suggested_tools": ["cat", "docker logs", "docker run"]
-  },
-  {
-    "id": "319",
-    "module": "docker",
-    "type": "routine",
-    "title": "Optimizing the Build Cache",
-    "severity": "LOW",
-    "problem": "The Docker build for a Node.js app takes too long because it runs 'npm install' every time a source file changes.",
-    "investigations": {
-      "cat Dockerfile": "COPY . .\nRUN npm install"
-    },
-    "fix_commands": [
-      "echo -e 'COPY package*.json ./\\nRUN npm install\\nCOPY . .' > Dockerfile",
-      "Update Dockerfile to COPY package.json first."
-    ],
-    "resolution": "Reordered Dockerfile layers to copy package files and run npm install before copying the rest of the source code, leveraging the build cache.",
-    "hints": [
-      "Only copy files needed for the current step.",
-      "Frequent changes should happen as late as possible in the Dockerfile."
-    ],
-    "suggested_tools": ["cat", "docker build"]
-  },
-  {
-    "id": "320",
-    "module": "docker",
-    "type": "routine",
-    "title": "Secret Clearance",
-    "severity": "LOW",
-    "problem": "Deploy a service that needs a database password. Use Docker Swarm secrets instead of environment variables for security.",
-    "investigations": {
-      "docker secret ls": "(Empty list)"
-    },
-    "fix_commands": [
-      "echo \"mypassword\" | docker secret create db_pass - && docker service create --name web --secret db_pass nginx",
-      "docker service update --secret-add db_pass web"
-    ],
-    "resolution": "Created a Swarm secret and attached it to the service. The secret is now available at /run/secrets/db_pass in the container.",
-    "hints": [
-      "Secrets are only available in Swarm mode.",
-      "Secrets are mounted as files by default."
-    ],
-    "suggested_tools": ["docker secret", "docker service"]
-  },
-  {
-    "id": "g101",
-    "module": "git",
-    "type": "incident",
-    "title": "Uninitialized Project",
-    "severity": "LOW",
-    "problem": "You have a new project directory 'website' but it's not a Git repository. Initialize it.",
-    "investigations": {
-      "ls -a": "README.md  index.html",
-      "git status": "fatal: not a git repository (or any of the parent directories): .git"
-    },
-    "fix_commands": ["git init"],
-    "resolution": "Repository initialized. You can now start tracking changes.",
-    "hints": ["Use the command to start a new Git repository.", "Check 'git help init' if unsure."],
-    "suggested_tools": ["git", "ls"]
-  },
-  {
-    "id": "g102",
-    "module": "git",
-    "type": "routine",
-    "title": "First Commit Flow",
-    "severity": "MEDIUM",
-    "problem": "You've initialized the repo. Now track README.md and make your first commit.",
-    "investigations": {
-      "git status": "On branch main\nUntracked files:\n  README.md",
-      "cat README.md": "# My Project"
-    },
-    "fix_commands": ["git add README.md && git commit -m 'Initial commit'", "git add . && git commit -m 'Initial commit'"],
-    "resolution": "Files staged and committed successfully.",
-    "hints": ["You need to 'add' before you 'commit'.", "Don't forget the commit message with -m."],
-    "suggested_tools": ["git status", "git add", "git commit"]
-  },
-  {
-    "id": "g103",
-    "module": "git",
-    "type": "routine",
-    "title": "Branching Out",
-    "severity": "LOW",
-    "problem": "Create a new branch named 'develop' and switch to it.",
-    "investigations": {
-      "git branch": "* main"
-    },
-    "fix_commands": ["git branch develop && git checkout develop", "git checkout -b develop", "git switch -c develop"],
-    "resolution": "New branch created and active.",
-    "hints": ["You can do this in two steps or one with a shortcut flag.", "Check 'git branch' to see your branches."],
-    "suggested_tools": ["git branch", "git checkout"]
-  },
-  {
-    "id": "g104",
-    "module": "git",
-    "type": "incident",
-    "title": "The Ghost Push",
-    "severity": "HIGH",
-    "problem": "You're trying to push to 'origin' but Git says the remote doesn't exist.",
-    "investigations": {
-      "git remote -v": "",
-      "git push origin main": "fatal: 'origin' does not appear to be a git repository"
-    },
-    "fix_commands": ["git remote add origin https://github.com/user/repo.git"],
-    "resolution": "Remote 'origin' added. You can now push your code.",
-    "hints": ["Check your configured remotes with 'git remote -v'.", "Use 'git remote add' to connect to a server."],
-    "suggested_tools": ["git remote", "git push"]
-  },
-  {
-    "id": "g105",
-    "module": "git",
-    "type": "incident",
-    "title": "Diverged History",
-    "severity": "MEDIUM",
-    "problem": "Your push was rejected because the remote contains work that you do not have locally.",
-    "investigations": {
-      "git push origin main": "error: failed to push some refs to ...\nhint: Updates were rejected because the remote contains work that you do not have locally."
-    },
-    "fix_commands": ["git pull origin main", "git fetch origin && git merge origin/main"],
-    "resolution": "Remote changes integrated. You can now push your work.",
-    "hints": ["You need to bring the remote changes into your local branch first.", "Use 'git pull'."],
-    "suggested_tools": ["git pull", "git fetch"]
-  },
-  {
-    "id": "g106",
-    "module": "git",
-    "type": "routine",
-    "title": "Emergency Stash",
-    "severity": "LOW",
-    "problem": "You're in the middle of a feature but need to switch to 'main' to fix a bug. Stash your changes.",
-    "investigations": {
-      "git status": "On branch feature\nChanges not staged for commit:\n  modified:   app.js"
-    },
-    "fix_commands": ["git stash"],
-    "resolution": "Work-in-progress stashed safely. Working directory is clean.",
-    "hints": ["Use the command to save temporary changes without committing.", "Check 'git stash --help'."],
-    "suggested_tools": ["git stash", "git status"]
-  },
-  {
-    "id": "g107",
-    "module": "git",
-    "type": "routine",
-    "title": "Recovering Stashed Work",
-    "severity": "LOW",
-    "problem": "You've finished the bug fix on 'main'. Switch back to 'feature' and restore your stashed work.",
-    "investigations": {
-      "git branch": "* main\n  feature",
-      "git stash list": "stash@{0}: WIP on feature: 1a2b3c4..."
-    },
-    "fix_commands": ["git checkout feature && git stash pop"],
-    "resolution": "Returned to feature branch and popped stash. Ready to resume work.",
-    "hints": ["Switch branches first.", "Use 'pop' to apply and remove from stash list."],
-    "suggested_tools": ["git checkout", "git stash pop"]
-  },
-  {
-    "id": "g108",
-    "module": "git",
-    "type": "incident",
-    "title": "Accidental Stage",
-    "severity": "LOW",
-    "problem": "You accidentally staged 'secrets.env'. Unstage it but keep the file.",
-    "investigations": {
-      "git status": "Changes to be committed:\n  new file:   secrets.env"
-    },
-    "fix_commands": ["git reset HEAD secrets.env", "git rm --cached secrets.env"],
-    "resolution": "File unstaged. It is now untracked.",
-    "hints": ["Use 'reset' or 'rm --cached' to remove from index.", "Don't use -f as it might delete the file."],
-    "suggested_tools": ["git reset", "git status"]
-  },
-  {
-    "id": "g109",
-    "module": "git",
-    "type": "routine",
-    "title": "Oops, Wrong Message",
-    "severity": "LOW",
-    "problem": "You just committed with the message 'stuff'. Change it to 'feat: add user authentication'.",
-    "investigations": {
-      "git log -n 1": "commit 1234567...\nAuthor: ...\n\n    stuff"
-    },
-    "fix_commands": ["git commit --amend -m 'feat: add user authentication'"],
-    "resolution": "Commit message updated successfully.",
-    "hints": ["Use the 'amend' flag.", "This only works for the most recent commit."],
-    "suggested_tools": ["git commit --amend", "git log"]
-  },
-  {
-    "id": "g110",
-    "module": "git",
-    "type": "routine",
-    "title": "Cleaning Up Branches",
-    "severity": "LOW",
-    "problem": "The branch 'legacy-v1' is no longer needed. Delete it.",
-    "investigations": {
-      "git branch": "* main\n  legacy-v1"
-    },
-    "fix_commands": ["git branch -d legacy-v1"],
-    "resolution": "Branch 'legacy-v1' deleted.",
-    "hints": ["Use the branch command with the delete flag.", "Standard delete is -d."],
-    "suggested_tools": ["git branch -d"]
-  },
-  {
-    "id": "g111",
-    "module": "git",
-    "type": "routine",
-    "title": "Release Tagging",
-    "severity": "LOW",
-    "problem": "The current state is ready for release. Create an annotated tag 'v1.0.0'.",
-    "investigations": {
-      "git status": "nothing to commit, working tree clean"
-    },
-    "fix_commands": ["git tag -a v1.0.0 -m 'Release version 1.0.0'"],
-    "resolution": "Tag 'v1.0.0' created.",
-    "hints": ["Use 'git tag -a' for an annotated tag.", "Include a message with -m."],
-    "suggested_tools": ["git tag"]
-  },
-  {
-    "id": "g112",
-    "module": "git",
-    "type": "routine",
-    "title": "Cherry-Pick a Fix",
-    "severity": "MEDIUM",
-    "problem": "An important fix was committed to 'develop' (hash: a1b2c3d). Apply it to your current 'hotfix' branch.",
-    "investigations": {
-      "git log develop -n 1": "commit a1b2c3d...\nAuthor: ...\n\n    fix: patch security hole"
-    },
-    "fix_commands": ["git cherry-pick a1b2c3d"],
-    "resolution": "Commit a1b2c3d applied to hotfix branch.",
-    "hints": ["Use the command to pick a specific commit by hash.", "Check 'git help cherry-pick'."],
-    "suggested_tools": ["git cherry-pick"]
-  },
-  {
-    "id": "g113",
-    "module": "git",
-    "type": "incident",
-    "title": "Untracked Clutter",
-    "severity": "LOW",
-    "problem": "Your workspace is full of temporary .tmp files. Remove all untracked files.",
-    "investigations": {
-      "ls": "README.md  app.js  test.tmp  debug.tmp",
-      "git status": "Untracked files:\n  test.tmp\n  debug.tmp"
-    },
-    "fix_commands": ["git clean -f"],
-    "resolution": "Untracked files removed.",
-    "hints": ["Use the 'clean' command.", "Use -f to force the removal."],
-    "suggested_tools": ["git clean"]
-  },
-  {
-    "id": "g114",
-    "module": "git",
-    "type": "routine",
-    "title": "Renaming for Clarity",
-    "severity": "LOW",
-    "problem": "The current branch 'fix1' is too vague. Rename it to 'fix/login-loop'.",
-    "investigations": {
-      "git branch": "* fix1"
-    },
-    "fix_commands": ["git branch -m fix/login-loop"],
-    "resolution": "Branch renamed to 'fix/login-loop'.",
-    "hints": ["The -m flag stands for 'move' or rename.", "No need to specify the old name if you're on it."],
-    "suggested_tools": ["git branch -m"]
-  },
-  {
-    "id": "g115",
-    "module": "git",
-    "type": "incident",
-    "title": "Bad Commit in History",
-    "severity": "HIGH",
-    "problem": "Commit '5e6f7g8' introduced a bug that broke production. Revert it safely.",
-    "investigations": {
-      "git log": "commit 5e6f7g8...\nAuthor: ...\n\n    feat: experimental feature"
-    },
-    "fix_commands": ["git revert 5e6f7g8"],
-    "resolution": "Revert commit created. Production fix in progress.",
-    "hints": ["'revert' creates a new commit that undoes the changes.", "Don't use 'reset' as it rewrites history."],
-    "suggested_tools": ["git revert"]
-  },
-  {
-    "id": "g116",
-    "module": "git",
-    "type": "routine",
-    "title": "Searching the Code",
-    "severity": "LOW",
-    "problem": "Find every occurrence of 'TODO' in the tracked files of your repository.",
+    "problem": "You are trying to scale your MIG but getting 'Quota exceeded for CPUS'. Check your current usage.",
     "investigations": {},
-    "fix_commands": ["git grep 'TODO'"],
-    "resolution": "Search results displayed.",
-    "hints": ["Git has its own version of 'grep'.", "It only searches tracked files."],
-    "suggested_tools": ["git grep"]
+    "fix_commands": ["gcloud compute project-info describe --format='get(quotas)'"],
+    "resolution": "Quota information displayed. You need to request an increase for CPUS.",
+    "hints": ["Usage and quotas are found in project-info."],
+    "suggested_tools": ["gcloud compute project-info"]
   },
   {
-    "id": "g117",
-    "module": "git",
+    "id": "616",
+    "module": "gcp/ace",
+    "type": "routine",
+    "title": "VPC: Create Custom Subnet",
+    "severity": "MEDIUM",
+    "problem": "In the 'default' network, create a custom subnet 'lab-subnet' in 'us-east4' with range '10.10.0.0/24'.",
+    "investigations": {
+      "gcloud compute networks subnets list --network=default": "NAME: default, REGION: us-central1, RANGE: 10.128.0.0/20"
+    },
+    "fix_commands": ["gcloud compute networks subnets create lab-subnet --network=default --region=us-east4 --range=10.10.0.0/24"],
+    "resolution": "New subnet 'lab-subnet' created.",
+    "hints": ["Use 'gcloud compute networks subnets create'."],
+    "suggested_tools": ["gcloud compute networks"]
+  },
+  {
+    "id": "617",
+    "module": "gcp/ace",
     "type": "incident",
-    "title": "The Nuclear Option",
+    "title": "Deploy: GKE Image Pull Error",
     "severity": "CRITICAL",
-    "problem": "Everything is a mess. Discard ALL local changes (tracked and untracked) to match the last commit.",
+    "problem": "A pod is failing to start because it cannot pull the image. Check the pod events.",
     "investigations": {
-      "git status": "On branch main\nChanges not staged for commit:\n  modified:   app.js\nUntracked files:\n  trash.txt"
+      "kubectl get pods": "web-pod  0/1  ImagePullBackOff",
+      "kubectl describe pod web-pod": "Events: ... Failed to pull image 'nginx:latst': Error response from daemon: manifest for nginx:latst not found"
     },
-    "fix_commands": ["git reset --hard HEAD && git clean -fd"],
-    "resolution": "Working directory reset to HEAD. Clutter removed.",
-    "hints": ["Use 'reset --hard' for tracked files.", "Use 'clean -fd' for untracked files and directories."],
-    "suggested_tools": ["git reset --hard", "git clean"]
+    "fix_commands": ["kubectl set image pod/web-pod web-container=nginx:latest"],
+    "resolution": "Corrected the image tag from 'latst' to 'latest'. Pod is now running.",
+    "hints": ["The tag is misspelled in the investigations output."],
+    "suggested_tools": ["kubectl set image"]
   },
   {
-    "id": "g118",
-    "module": "git",
+    "id": "618",
+    "module": "gcp/ace",
     "type": "routine",
-    "title": "Pushing Tags",
+    "title": "Compute: Snapshot Boot Disk",
     "severity": "LOW",
-    "problem": "You've created tag 'v2.0'. Push it to 'origin'.",
+    "problem": "Back up the boot disk of 'web-server-1' by creating a snapshot named 'web-server-backup-v1'.",
     "investigations": {
-      "git tag": "v1.0\nv2.0"
+      "gcloud compute instances describe web-server-1 --zone=us-central1-a --format='get(disks[0].source)'": "web-server-1-disk"
     },
-    "fix_commands": ["git push origin v2.0"],
-    "resolution": "Tag 'v2.0' pushed to remote.",
-    "hints": ["Specify the remote and the tag name.", "Normal 'git push' doesn't send tags."],
-    "suggested_tools": ["git push"]
+    "fix_commands": ["gcloud compute disks snapshot web-server-1 --snapshot-names=web-server-backup-v1 --zone=us-central1-a"],
+    "resolution": "Snapshot created successfully.",
+    "hints": ["Use 'gcloud compute disks snapshot'."],
+    "suggested_tools": ["gcloud compute disks"]
   },
   {
-    "id": "g119",
-    "module": "git",
+    "id": "619",
+    "module": "gcp/ace",
+    "type": "incident",
+    "title": "VPC: Static IP Conflict",
+    "severity": "MEDIUM",
+    "problem": "You need to delete the unused static IP 'old-static-ip' to stop incurring charges.",
+    "investigations": {
+      "gcloud compute addresses list": "NAME: old-static-ip, STATUS: RESERVED, REGION: us-central1"
+    },
+    "fix_commands": ["gcloud compute addresses delete old-static-ip --region=us-central1 --quiet"],
+    "resolution": "Unused static IP deleted.",
+    "hints": ["Use 'gcloud compute addresses delete'."],
+    "suggested_tools": ["gcloud compute addresses"]
+  },
+  {
+    "id": "620",
+    "module": "gcp/ace",
     "type": "routine",
-    "title": "Checking Out a Commit",
+    "title": "GCS: Lifecycle Policy",
     "severity": "MEDIUM",
-    "problem": "You need to see the state of the project at commit '1a2b3c4'. Go there in a detached HEAD state.",
-    "investigations": {},
-    "fix_commands": ["git checkout 1a2b3c4"],
-    "resolution": "Switched to commit 1a2b3c4. HEAD is now detached.",
-    "hints": ["You can checkout hashes just like branches.", "Check 'git status' to see your state."],
-    "suggested_tools": ["git checkout"]
-  },
-  {
-    "id": "g120",
-    "module": "git",
-    "type": "routine",
-    "title": "Connecting Upstream",
-    "severity": "LOW",
-    "problem": "You've forked a project. Add the original repo 'https://github.com/original/repo.git' as a remote named 'upstream'.",
+    "problem": "Set a lifecycle policy for bucket 'ace-assets-bucket-unique-99' using the local file 'policy.json'.",
     "investigations": {
-      "git remote -v": "origin  https://github.com/user/repo.git (fetch)"
+      "ls": "policy.json"
     },
-    "fix_commands": ["git remote add upstream https://github.com/original/repo.git"],
-    "resolution": "Remote 'upstream' added successfully.",
-    "hints": ["Use 'git remote add'.", "Specify the name 'upstream' and the URL."],
-    "suggested_tools": ["git remote add"]
-  },
-  {
-    "id": "c101",
-    "module": "cicd",
-    "type": "incident",
-    "title": "The Silent Pipeline",
-    "severity": "LOW",
-    "problem": "You pushed code to the 'feat/login' branch, but the GitHub Actions workflow didn't trigger.",
-    "investigations": {
-      "cat .github/workflows/main.yml": "on:\n  push:\n    branches: [ main ]",
-      "git branch": "* feat/login\n  main"
-    },
-    "fix_commands": ["sed -i 's/\\[ main \\]/\\[ main, feat\\/login \\]/' .github/workflows/main.yml"],
-    "resolution": "Workflow trigger updated to include the feature branch.",
-    "hints": ["Check the 'on' section of your workflow file.", "Is the current branch listed in the trigger branches?"],
-    "suggested_tools": ["cat", "git branch", "sed"]
-  },
-  {
-    "id": "c102",
-    "module": "cicd",
-    "type": "incident",
-    "title": "YAML Indentation Error",
-    "severity": "MEDIUM",
-    "problem": "The pipeline failed immediately with a YAML syntax error. Fix the indentation in the 'steps' section.",
-    "investigations": {
-      "cat .github/workflows/build.yml": "jobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n    - name: Checkout\n    uses: actions/checkout@v4"
-    },
-    "fix_commands": ["sed -i 's/    uses/      uses/' .github/workflows/build.yml"],
-    "resolution": "YAML indentation fixed. The 'uses' keyword is now properly nested under the step.",
-    "hints": ["YAML uses indentation to define structure.", "The 'uses' keyword should be at the same level as 'name'."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c103",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Missing Checkout Step",
-    "severity": "MEDIUM",
-    "problem": "The 'npm install' step failed because 'package.json' was not found in the workspace.",
-    "investigations": {
-      "cat .github/workflows/ci.yml": "jobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Install\n        run: npm install",
-      "ls -R": "."
-    },
-    "fix_commands": ["sed -i '/steps:/a \\      - uses: actions/checkout@v4' .github/workflows/ci.yml"],
-    "resolution": "Added 'actions/checkout@v4' step. The code is now available for the runner.",
-    "hints": ["The runner starts with an empty directory.", "How do you get your code onto the runner machine?"],
-    "suggested_tools": ["cat", "ls", "sed"]
-  },
-  {
-    "id": "c104",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Docker Build Failure",
-    "severity": "HIGH",
-    "problem": "The Docker build step failed. The Dockerfile is missing the 'FROM' instruction.",
-    "investigations": {
-      "cat Dockerfile": "WORKDIR /app\nCOPY . .\nCMD [\"node\", \"index.js\"]",
-      "git log -n 1": "commit abc123...\nAuthor: ...\n\n    chore: clean up Dockerfile"
-    },
-    "fix_commands": ["sed -i '1i FROM node:20-alpine' Dockerfile"],
-    "resolution": "Added base image to Dockerfile. Build successful.",
-    "hints": ["Every Dockerfile must start with a base image.", "What is the keyword for specifying a base image?"],
-    "suggested_tools": ["cat", "docker build", "sed"]
-  },
-  {
-    "id": "c105",
-    "module": "cicd",
-    "type": "routine",
-    "title": "Deploy to Staging",
-    "severity": "LOW",
-    "problem": "Trigger the staging deployment manually using workflow_dispatch.",
-    "investigations": {
-      "cat .github/workflows/deploy.yml": "on:\n  push:\n    branches: [ main ]"
-    },
-    "fix_commands": ["sed -i '/on:/a \\  workflow_dispatch:' .github/workflows/deploy.yml"],
-    "resolution": "Manual trigger (workflow_dispatch) added to the deployment workflow.",
-    "hints": ["Which keyword allows for manual triggers in GitHub Actions?", "Add it under the 'on' section."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c106",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Exposed API Key",
-    "severity": "CRITICAL",
-    "problem": "A security scan found an API key hardcoded in the pipeline YAML. Move it to a secret.",
-    "investigations": {
-      "cat .github/workflows/main.yml": "      - name: Deploy\n        run: ./deploy.sh --key=AIzaSyA1b2c3d4e5f"
-    },
-    "fix_commands": ["sed -i 's/--key=AIzaSyA1b2c3d4e5f/--key=${{ secrets.API_KEY }}/' .github/workflows/main.yml"],
-    "resolution": "API key moved to repository secrets. Security risk mitigated.",
-    "hints": ["Never hardcode secrets in YAML.", "Use the secrets context syntax: ${{ secrets.NAME }}"],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c107",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Broken Dependencies",
-    "severity": "MEDIUM",
-    "problem": "The build is failing because it's using an old Node.js version (v12) which is not compatible with the project.",
-    "investigations": {
-      "cat .github/workflows/ci.yml": "    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: node -v"
-    },
-    "fix_commands": ["sed -i '/checkout@v4/a \\      - uses: actions/setup-node@v4\\n        with:\\n          node-version: 20' .github/workflows/ci.yml"],
-    "resolution": "Added 'setup-node' action with version 20. Build dependencies are now compatible.",
-    "hints": ["You can specify the runtime version using a setup action.", "Check the marketplace for 'setup-node'."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c108",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Stale Cache",
-    "severity": "LOW",
-    "problem": "The build is using a corrupted cache. Clear the cache by changing the cache key.",
-    "investigations": {
-      "cat .github/workflows/ci.yml": "      - name: Cache dependencies\n        uses: actions/cache@v4\n        with:\n          path: ~/.npm\n          key: npm-cache-v1"
-    },
-    "fix_commands": ["sed -i 's/npm-cache-v1/npm-cache-v2/' .github/workflows/ci.yml"],
-    "resolution": "Cache key updated to v2. This will force a fresh download of dependencies.",
-    "hints": ["GitHub Actions uses the 'key' to find a cache.", "Changing the key forces a cache bust."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c109",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Permission Denied on Script",
-    "severity": "MEDIUM",
-    "problem": "The 'deploy.sh' step failed with 'Permission denied'.",
-    "investigations": {
-      "cat .github/workflows/deploy.yml": "      - name: Run Deploy\n        run: ./deploy.sh"
-    },
-    "fix_commands": ["sed -i 's/run: .\\/deploy.sh/run: chmod +x deploy.sh \\&\\& .\\/deploy.sh/' .github/workflows/deploy.yml"],
-    "resolution": "Added executable permission to the script before running it.",
-    "hints": ["Scripts must have the 'x' bit set to run in a Linux environment.", "Use 'chmod +x'."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c110",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Wrong Registry Tag",
-    "severity": "MEDIUM",
-    "problem": "The deployment is pulling the 'latest' image, but the pipeline is pushing with a specific version tag. Fix the deployment command.",
-    "investigations": {
-      "cat .github/workflows/deploy.yml": "      - name: Deploy\n        run: kubectl set image deployment/web web=my-app:latest",
-      "git log -n 1": "commit d4e5f6...\n(Pipeline pushes as my-app:d4e5f6)"
-    },
-    "fix_commands": ["sed -i 's/my-app:latest/my-app:${{ github.sha }}/' .github/workflows/deploy.yml"],
-    "resolution": "Deployment command updated to use the commit SHA tag instead of 'latest'.",
-    "hints": ["Using 'latest' is often unreliable in production.", "Use the current commit SHA for a unique, immutable tag."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c111",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Pipeline Secret Leak",
-    "severity": "CRITICAL",
-    "problem": "The pipeline logs are showing a raw password because it wasn't masked. Fix the secret reference.",
-    "investigations": {
-      "cat .github/workflows/main.yml": "      - name: DB Migrate\n        run: ./migrate.sh --pass=${{ env.DB_PASSWORD }}"
-    },
-    "fix_commands": ["sed -i 's/env.DB_PASSWORD/secrets.DB_PASSWORD/' .github/workflows/main.yml"],
-    "resolution": "Changed environment variable reference to a secret reference. GitHub Actions will now automatically mask the output.",
-    "hints": ["Variables in 'env' are not masked by default.", "Use the 'secrets' context for sensitive data."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c112",
-    "module": "cicd",
-    "type": "routine",
-    "title": "Conditional Job",
-    "severity": "LOW",
-    "problem": "Configure the 'deploy' job to only run if the 'test' job completes successfully.",
-    "investigations": {
-      "cat .github/workflows/main.yml": "jobs:\n  test:\n    runs-on: ubuntu-latest\n  deploy:\n    runs-on: ubuntu-latest"
-    },
-    "fix_commands": ["sed -i '/deploy:/a \\    needs: test' .github/workflows/main.yml"],
-    "resolution": "Added 'needs: test' to the deploy job. It now waits for the test job to succeed.",
-    "hints": ["Which keyword defines dependencies between jobs?", "It should be placed under the job ID."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c113",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Build Matrix Failure",
-    "severity": "MEDIUM",
-    "problem": "The build is failing on Node 14 because it's end-of-life. Remove '14' from the build matrix.",
-    "investigations": {
-      "cat .github/workflows/ci.yml": "    strategy:\n      matrix:\n        node: [14, 16, 18, 20]"
-    },
-    "fix_commands": ["sed -i 's/14, //' .github/workflows/ci.yml"],
-    "resolution": "Removed Node 14 from the build matrix. Pipeline is now green on supported versions.",
-    "hints": ["Look for the 'matrix' section under 'strategy'.", "Remove the unsupported version from the list."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c114",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Artifact Path Mismatch",
-    "severity": "MEDIUM",
-    "problem": "The 'upload-artifact' action is failing because it can't find the 'dist' folder. The build actually produces a 'build' folder.",
-    "investigations": {
-      "cat .github/workflows/ci.yml": "      - name: Upload\n        uses: actions/upload-artifact@v4\n        with:\n          path: dist",
-      "ls -F": "src/  public/  build/  package.json"
-    },
-    "fix_commands": ["sed -i 's/path: dist/path: build/' .github/workflows/ci.yml"],
-    "resolution": "Updated artifact path to 'build'. Artifacts are now correctly captured.",
-    "hints": ["Compare the 'path' in the YAML with the actual folder name on disk.", "Use 'ls' to see the current directory structure."],
-    "suggested_tools": ["cat", "ls", "sed"]
-  },
-  {
-    "id": "c115",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Missing Environment Variable",
-    "severity": "MEDIUM",
-    "problem": "The integration tests are failing because the 'DATABASE_URL' environment variable is missing.",
-    "investigations": {
-      "cat .github/workflows/test.yml": "      - name: Run Tests\n        run: npm test"
-    },
-    "fix_commands": ["sed -i '/run: npm test/i \\        env:\\n          DATABASE_URL: mongodb://localhost:27017' .github/workflows/test.yml"],
-    "resolution": "Added 'DATABASE_URL' environment variable to the test step.",
-    "hints": ["Steps can have their own 'env' section.", "Add the required variable before the 'run' command."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c116",
-    "module": "cicd",
-    "type": "routine",
-    "title": "Auto-Assign Reviewers",
-    "severity": "LOW",
-    "problem": "Add a step to the 'pull_request' workflow that uses the 'actions/github-script' to log the PR number.",
-    "investigations": {
-      "cat .github/workflows/pr.yml": "on: pull_request\njobs:\n  info:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4"
-    },
-    "fix_commands": ["sed -i '/checkout@v4/a \\      - name: Log PR\\n        uses: actions/github-script@v7\\n        with:\\n          script: console.log(context.issue.number)' .github/workflows/pr.yml"],
-    "resolution": "Added github-script step to log PR metadata.",
-    "hints": ["Check the marketplace for 'github-script'.", "Use it to interact with the GitHub context."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c117",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Slow Build Cleanup",
-    "severity": "LOW",
-    "problem": "The runner is running out of disk space. Add a step to prune Docker system after the build.",
-    "investigations": {
-      "cat .github/workflows/docker.yml": "      - name: Build\n        run: docker build -t app ."
-    },
-    "fix_commands": ["sed -i '/docker build/a \\      - name: Cleanup\\n        run: docker system prune -f' .github/workflows/docker.yml"],
-    "resolution": "Added Docker cleanup step to reclaim disk space on the runner.",
-    "hints": ["Runners have limited disk space.", "How do you remove unused Docker data?"],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c118",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Tag Trigger Loop",
-    "severity": "HIGH",
-    "problem": "The pipeline is triggering itself in an infinite loop because it creates a Git tag which then triggers another run. Fix the trigger to ignore tags.",
-    "investigations": {
-      "cat .github/workflows/main.yml": "on:\n  push:\n    branches: [ main ]\n    tags: [ '*' ]"
-    },
-    "fix_commands": ["sed -i '/tags:/d' .github/workflows/main.yml"],
-    "resolution": "Removed tag trigger. The pipeline will now only run on branch pushes.",
-    "hints": ["The 'tags' filter in the 'on' section controls tag-based triggers.", "Delete the tags filter to break the loop."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c119",
-    "module": "cicd",
-    "type": "routine",
-    "title": "Concurrency Control",
-    "severity": "LOW",
-    "problem": "Prevent multiple deployments from running at the same time by adding a concurrency group named 'deploy'.",
-    "investigations": {
-      "cat .github/workflows/deploy.yml": "name: Deploy\non: push"
-    },
-    "fix_commands": ["sed -i '/on: push/a concurrency: deploy' .github/workflows/deploy.yml"],
-    "resolution": "Concurrency group added. Subsequent deployments will now cancel previous ones.",
-    "hints": ["Use the 'concurrency' keyword at the top level of the YAML.", "It takes a group name as a value."],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "c120",
-    "module": "cicd",
-    "type": "incident",
-    "title": "Unsupported Runner",
-    "severity": "MEDIUM",
-    "problem": "The job is failing because it's trying to run on 'macos-latest' which is not available for this organization. Switch to 'ubuntu-latest'.",
-    "investigations": {
-      "cat .github/workflows/ci.yml": "jobs:\n  build:\n    runs-on: macos-latest"
-    },
-    "fix_commands": ["sed -i 's/macos-latest/ubuntu-latest/' .github/workflows/ci.yml"],
-    "resolution": "Switched to ubuntu-latest runner. Build now executes on supported infrastructure.",
-    "hints": ["Check the 'runs-on' value.", "What is the most common Linux runner in GitHub Actions?"],
-    "suggested_tools": ["cat", "sed"]
-  },
-  {
-    "id": "501",
-    "module": "terraform",
-    "type": "routine",
-    "title": "Cloud Genesis: S3 Bucket Provisioning",
-    "severity": "LOW",
-    "problem": "Marketing needs a new S3 bucket for assets. Provision it using the standard template.",
-    "fix_commands": ["terraform apply", "terraform apply -auto-approve"],
-    "investigations": {
-      "terraform plan": "Plan: 1 to add, 0 to change, 0 to destroy.\n\n+ aws_s3_bucket.marketing_assets\n    bucket: 'shellcraft-marketing-2024'\n    acl: 'private'",
-      "ls": "main.tf  terraform.tfstate  variables.tf"
-    },
-    "resolution": "S3 bucket 'shellcraft-marketing-2024' successfully provisioned. Access keys rotated and delivered.",
-    "hints": ["Have you initialized the directory?", "Check the plan before applying."],
-    "suggested_tools": ["terraform init", "terraform plan", "terraform apply"]
-  },
-  {
-    "id": "502",
-    "module": "terraform",
-    "type": "incident",
-    "title": "The State Lock Mystery",
-    "severity": "MEDIUM",
-    "problem": "Automation is failing with 'Error acquiring the state lock'. Another developer might have crashed during an apply.",
-    "fix_commands": ["terraform force-unlock 1234-5678-9012"],
-    "investigations": {
-      "terraform apply": "Error: Error acquiring the state lock.\nLock Info:\n  ID: 1234-5678-9012\n  Operation: OperationTypeApply\n  Who: dev-user@workstation-01",
-      "terraform show": "Error: State is locked."
-    },
-    "resolution": "Stale lock cleared. Pipeline is now flowing again.",
-    "hints": ["Look for the Lock ID in the error message.", "Use the 'force-unlock' command if you're sure nobody is applying."],
-    "suggested_tools": ["terraform force-unlock"]
-  },
-  {
-    "id": "503",
-    "module": "terraform",
-    "type": "incident",
-    "title": "Ghost in the Machine: Configuration Drift",
-    "severity": "HIGH",
-    "problem": "A security group rule was manually changed in the console. Terraform needs to revert it to the approved state.",
-    "fix_commands": ["terraform apply", "terraform apply -auto-approve"],
-    "investigations": {
-      "terraform plan": "~ aws_security_group.web_sg\n    ~ ingress {\n        ~ from_port = 0 -> 80\n        ~ to_port   = 65535 -> 80\n        ~ cidr_blocks = ['0.0.0.0/0']\n      }",
-      "terraform refresh": "State updated. 1 resource changed externally."
-    },
-    "resolution": "Security group rules reverted to HCL definitions. Unauthorized manual changes wiped.",
-    "hints": ["Run a plan to see what drifted.", "Terraform will automatically propose reverts for manual changes."],
-    "suggested_tools": ["terraform plan", "terraform refresh"]
-  },
-  {
-    "id": "504",
-    "module": "terraform",
-    "type": "routine",
-    "title": "Scaling the Web Fleet",
-    "severity": "LOW",
-    "problem": "Traffic is increasing. Update the variable to increase the 'web_server' count from 2 to 5.",
-    "fix_commands": ["terraform apply", "terraform apply -var='instance_count=5'"],
-    "investigations": {
-      "cat terraform.tfvars": "instance_count = 2",
-      "terraform plan": "Plan: 3 to add, 0 to change, 0 to destroy."
-    },
-    "resolution": "Web server count increased to 5. Load balancer re-registering new targets.",
-    "hints": ["Check terraform.tfvars or pass the variable via the command line."],
-    "suggested_tools": ["cat", "terraform plan", "terraform apply"]
-  },
-  {
-    "id": "505",
-    "module": "terraform",
-    "type": "incident",
-    "title": "Provider Version Conflict",
-    "severity": "MEDIUM",
-    "problem": "A new developer cannot run init due to a provider version mismatch. Fix the version constraint in required_providers.",
-    "fix_commands": ["terraform init -upgrade"],
-    "investigations": {
-      "terraform init": "Error: Failed to query available provider packages.\nCould not retrieve the list of available versions for provider hashicorp/aws: locked to 4.0.0",
-      "cat versions.tf": "required_providers { aws = { source = 'hashicorp/aws', version = '4.0.0' } }"
-    },
-    "resolution": "Provider plugins upgraded. Local locks synchronized with repository constraints.",
-    "hints": ["Try upgrading the plugins.", "Check if the locked version is still available."],
-    "suggested_tools": ["terraform init -upgrade"]
-  },
-  {
-    "id": "401",
-    "module": "cloud",
-    "type": "incident",
-    "title": "The Leaky Bucket",
-    "severity": "CRITICAL",
-    "problem": "Sensitive customer data is publicly accessible via an S3 bucket URL.",
-    "investigations": {
-      "aws s3api get-bucket-policy --bucket data-vault": "{\"Statement\": [{\"Effect\": \"Allow\", \"Principal\": \"*\", \"Action\": \"s3:GetObject\", ...}]}",
-      "curl https://data-vault.s3.amazonaws.com/passwords.txt": "HTTP/1.1 200 OK"
-    },
-    "fix_commands": ["aws s3api delete-bucket-policy --bucket data-vault", "aws s3api put-bucket-policy --bucket data-vault --policy file://secure.json"],
-    "resolution": "Public bucket policy removed. Bucket is now private.",
-    "hints": ["Check the bucket policy.", "Remove the '*' principal access."],
-    "suggested_tools": ["aws", "curl"]
-  },
-  {
-    "id": "402",
-    "module": "cloud",
-    "type": "incident",
-    "title": "IAM Privilege Escalation",
-    "severity": "HIGH",
-    "problem": "A developer's IAM role has 'AdministratorAccess'. This violates the principle of least privilege.",
-    "investigations": {
-      "aws iam list-attached-role-policies --role-name dev-role": "AttachedPolicies: [ { PolicyName: 'AdministratorAccess' } ]"
-    },
-    "fix_commands": ["aws iam detach-role-policy --role-name dev-role --policy-arn arn:aws:iam::aws:policy/AdministratorAccess && aws iam attach-role-policy --role-name dev-role --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess"],
-    "resolution": "Admin access detached and ReadOnly access attached.",
-    "hints": ["List attached policies for the role.", "Switch Admin access for something more restrictive."],
-    "suggested_tools": ["aws"]
+    "fix_commands": ["gsutil lifecycle set policy.json gs://ace-assets-bucket-unique-99"],
+    "resolution": "Lifecycle policy applied to the bucket.",
+    "hints": ["Use 'gsutil lifecycle set'."],
+    "suggested_tools": ["gsutil"]
   }
 ]

@@ -1,0 +1,322 @@
+[
+  {
+    "id": "gcp_ace_06_01",
+    "title": "GCP Security Overview",
+    "content": "Security in Google Cloud is a shared responsibility. Google secures the underlying infrastructure, while you are responsible for securing your data and applications within the cloud.",
+    "insight": "Understanding the shared responsibility model is fundamental to cloud security.",
+    "next": "IAM Policy Structure",
+    "lab": { "command": "gcloud projects get-iam-policy my-project-id", "output": "bindings:\n- members:\n  - user:admin@example.com\n  role: roles/owner" }
+  },
+  {
+    "id": "gcp_ace_06_02",
+    "title": "IAM Policy Structure",
+    "content": "An IAM policy is a collection of bindings. A binding binds one or more members to a single role. A member can be a user, group, domain, or service account.",
+    "insight": "Policies are hierarchical and are inherited from higher levels (Org -> Folder -> Project).",
+    "next": "IAM Conditions",
+    "lab": { "command": "echo 'IAM policies are represented in JSON or YAML format'", "output": "IAM policies are represented in JSON or YAML format" }
+  },
+  {
+    "id": "gcp_ace_06_03",
+    "title": "IAM Conditions",
+    "content": "IAM Conditions allow you to grant access to resources only if specific conditions are met, such as the request's timing or the resource's attributes.",
+    "insight": "Conditions add an extra layer of context-aware security to your IAM policies.",
+    "next": "IAM Roles: Predefined vs Custom",
+    "lab": { "command": "echo 'Configure conditions in the Console or via gcloud with --condition'", "output": "Configure conditions in the Console or via gcloud with --condition" }
+  },
+  {
+    "id": "gcp_ace_06_04",
+    "title": "Predefined Roles",
+    "content": "Predefined roles are created and maintained by Google. They provide granular access to specific services and are updated as new permissions are added.",
+    "insight": "Always prefer predefined roles over basic roles (Owner, Editor, Viewer) for better granularity.",
+    "next": "Custom Roles",
+    "lab": { "command": "gcloud iam roles list --filter='name:roles/storage.'", "output": "--- \nname: roles/storage.objectAdmin\ntitle: Storage Object Admin" }
+  },
+  {
+    "id": "gcp_ace_06_05",
+    "title": "Custom Roles",
+    "content": "Custom roles allow you to define a specific set of permissions. Use them when predefined roles don't match your requirements.",
+    "insight": "Custom roles are maintained by you and only exist within the project or organization where they were created.",
+    "next": "Service Accounts Deep Dive",
+    "lab": { "command": "gcloud iam roles create myRole --project=my-project --file=role.yaml", "output": "Created role [myRole]." }
+  },
+  {
+    "id": "gcp_ace_06_06",
+    "title": "Service Accounts",
+    "content": "A service account is a special type of Google account that belongs to your application or a VM, instead of an individual end user.",
+    "insight": "Service accounts are both an 'identity' and a 'resource' that can have its own IAM policy.",
+    "next": "Service Account Authentication",
+    "lab": { "command": "gcloud iam service-accounts list", "output": "DISPLAY_NAME  EMAIL\nmy-app-sa     my-app-sa@my-project.iam.gserviceaccount.com" }
+  },
+  {
+    "id": "gcp_ace_06_07",
+    "title": "Service Account Keys",
+    "content": "Service account keys are used for authentication outside of Google Cloud. They are long-lived credentials that must be managed carefully.",
+    "insight": "Avoid downloading keys; use Workload Identity or attach the SA directly to a VM instead.",
+    "next": "Service Account Impersonation",
+    "lab": { "command": "gcloud iam service-accounts keys create key.json --iam-account=my-app-sa@my-project.iam.gserviceaccount.com", "output": "Created key [123] for [my-app-sa@...]." }
+  },
+  {
+    "id": "gcp_ace_06_08",
+    "title": "Service Account Impersonation",
+    "content": "Impersonation allows a user to act as a service account without needing its private key. This is more secure than using static keys.",
+    "insight": "Requires the 'Service Account Token Creator' role on the target service account.",
+    "next": "Workload Identity",
+    "lab": { "command": "gcloud config set auth/impersonate_service_account my-app-sa@my-project.iam.gserviceaccount.com", "output": "Updated property [auth/impersonate_service_account]." }
+  },
+  {
+    "id": "gcp_ace_06_09",
+    "title": "Workload Identity (GKE)",
+    "content": "Workload Identity is the recommended way for your GKE workloads to access Google Cloud services by linking Kubernetes service accounts to GCP service accounts.",
+    "insight": "Ensures that your containers only have the specific permissions they need, without managing secrets.",
+    "next": "Cloud KMS Overview",
+    "lab": { "command": "echo 'Configure via GKE cluster and IAM policy bindings'", "output": "Configure via GKE cluster and IAM policy bindings" }
+  },
+  {
+    "id": "gcp_ace_06_10",
+    "title": "Cloud KMS Overview",
+    "content": "Cloud Key Management Service (KMS) is a managed service that allows you to create, use, rotate, and destroy cryptographic keys.",
+    "insight": "Use KMS for encrypting sensitive data at rest using your own keys (CMEK).",
+    "next": "Key Rings and Keys",
+    "lab": { "command": "gcloud kms keyrings list --location=us-central1", "output": "NAME\nprojects/my-project/locations/us-central1/keyRings/my-keyring" }
+  },
+  {
+    "id": "gcp_ace_06_11",
+    "title": "Key Rings and Keys",
+    "content": "A Key Ring is a logical grouping of Keys. Keys are used to perform cryptographic operations like encryption and decryption.",
+    "insight": "Key Rings cannot be deleted, but individual Keys can be destroyed.",
+    "next": "Envelop Encryption",
+    "lab": { "command": "gcloud kms keys create my-key --location=us-central1 --keyring=my-keyring --purpose=encryption", "output": "Created [my-key]." }
+  },
+  {
+    "id": "gcp_ace_06_12",
+    "title": "Envelope Encryption",
+    "content": "Envelope encryption is the practice of encrypting data with a data encryption key (DEK) and then encrypting the DEK with a key encryption key (KEK).",
+    "insight": "KMS is used to manage the KEK, while your application manages the DEK.",
+    "next": "Secret Manager Overview",
+    "lab": { "command": "echo 'KMS manages the KEK; the DEK encrypts the data'", "output": "KMS manages the KEK; the DEK encrypts the data" }
+  },
+  {
+    "id": "gcp_ace_06_13",
+    "title": "Secret Manager Overview",
+    "content": "Secret Manager is a secure and convenient storage system for sensitive information like API keys, passwords, and certificates.",
+    "insight": "Provides versioning, audit logging, and fine-grained access control for secrets.",
+    "next": "Creating a Secret",
+    "lab": { "command": "gcloud secrets list", "output": "NAME      CREATED              REPLICATION_POLICY  LOCATIONS\ndb-pass   2023-10-10T10:00:00  automatic           -" }
+  },
+  {
+    "id": "gcp_ace_06_14",
+    "title": "Creating a Secret",
+    "content": "You create a secret to hold sensitive data. Each secret can have multiple versions, allowing you to rotate credentials safely.",
+    "insight": "Secret Manager handles replication and availability of your secrets globally or in specific regions.",
+    "next": "Accessing a Secret",
+    "lab": { "command": "gcloud secrets create db-pass --replication-policy=automatic", "output": "Created secret [db-pass]." }
+  },
+  {
+    "id": "gcp_ace_06_15",
+    "title": "Accessing a Secret",
+    "content": "Users or service accounts need the 'Secret Manager Secret Accessor' role to retrieve the value of a secret version.",
+    "insight": "Always reference secrets by version number or the 'latest' alias in your code.",
+    "next": "Identity-Aware Proxy (IAP)",
+    "lab": { "command": "gcloud secrets versions access latest --secret=db-pass", "output": "my-secret-password-123" }
+  },
+  {
+    "id": "gcp_ace_06_16",
+    "title": "Identity-Aware Proxy (IAP)",
+    "content": "IAP allows you to control access to your cloud applications and VMs based on user identity and context, without needing a VPN.",
+    "insight": "IAP works by verifying the user's identity via Google accounts and then checking IAM policies.",
+    "next": "IAP for TCP (SSH/RDP)",
+    "lab": { "command": "echo 'Configure in Security -> Identity-Aware Proxy'", "output": "Configure in Security -> Identity-Aware Proxy" }
+  },
+  {
+    "id": "gcp_ace_06_17",
+    "title": "IAP for TCP Forwarding",
+    "content": "IAP can be used to provide secure SSH and RDP access to VMs that do not have external IP addresses.",
+    "insight": "Eliminates the need for public IPs or bastion hosts for administrative access.",
+    "next": "VPC Service Controls Deep Dive",
+    "lab": { "command": "gcloud compute ssh my-vm --zone=us-central1-a --tunnel-through-iap", "output": "Connecting to my-vm via IAP tunnel..." }
+  },
+  {
+    "id": "gcp_ace_06_18",
+    "title": "VPC Service Controls",
+    "content": "VPC Service Controls allow you to define a security perimeter around your Google Cloud resources to mitigate data exfiltration risks.",
+    "insight": "Ensures that data cannot be moved out of the perimeter to untrusted locations or projects.",
+    "next": "Cloud Armor Policies",
+    "lab": { "command": "echo 'Create perimeters via Security -> VPC Service Controls'", "output": "Create perimeters via Security -> VPC Service Controls" }
+  },
+  {
+    "id": "gcp_ace_06_19",
+    "title": "Cloud Armor Security Policies",
+    "content": "Cloud Armor security policies allow you to filter traffic to your HTTP(S) load balancers based on IP addresses, geographic location, and custom expressions.",
+    "insight": "Use Cloud Armor to protect your applications from DDoS attacks and common web vulnerabilities.",
+    "next": "Security Command Center (SCC)",
+    "lab": { "command": "gcloud compute security-policies create block-ips --description='Block malicious IPs'", "output": "Created [block-ips]." }
+  },
+  {
+    "id": "gcp_ace_06_20",
+    "title": "Security Command Center (SCC)",
+    "content": "SCC is a security and risk management platform that helps you discover, prevent, and detect threats in your Google Cloud environment.",
+    "insight": "Provides a centralized dashboard for viewing security findings and compliance status.",
+    "next": "Cloud Audit Logs: Data Access",
+    "lab": { "command": "echo 'View findings in Security -> Security Command Center'", "output": "View findings in Security -> Security Command Center" }
+  },
+  {
+    "id": "gcp_ace_06_21",
+    "title": "Cloud Data Loss Prevention (DLP)",
+    "content": "Cloud DLP allows you to discover, classify, and protect sensitive data (like PII, credit card numbers) in your datasets and files.",
+    "insight": "Use DLP to de-identify or mask sensitive data before sharing it with other teams or services.",
+    "next": "IAM Recommender",
+    "lab": { "command": "echo 'Create inspection jobs via Security -> Data Loss Prevention'", "output": "Create inspection jobs via Security -> Data Loss Prevention" }
+  },
+  {
+    "id": "gcp_ace_06_22",
+    "title": "IAM Recommender",
+    "content": "The IAM Recommender provides automated recommendations to help you apply the principle of least privilege by identifying over-privileged users.",
+    "insight": "Review and apply recommendations regularly to reduce your project's attack surface.",
+    "next": "Organization Policies",
+    "lab": { "command": "gcloud recommender recommendations list --recommender=google.iam.policy.Recommender --project=my-project --location=global", "output": "--- \ncontent: ...\ndescription: Replace 'roles/editor' with 'roles/storage.objectViewer'..." }
+  },
+  {
+    "id": "gcp_ace_06_23",
+    "title": "Organization Policies",
+    "content": "Organization policies give you centralized, programmatic control over your organization's resources, allowing you to restrict allowed configurations.",
+    "insight": "Enforce policies like 'disable external IP addresses' or 'restrict allowed regions' globally.",
+    "next": "Service Control Policies (SCPs) vs Org Policies",
+    "lab": { "command": "gcloud resource-manager org-policies list --organization=123", "output": "CONSTRAINT\ncompute.disableExternalIp\niam.allowedPolicyMemberDomains" }
+  },
+  {
+    "id": "gcp_ace_06_24",
+    "title": "Resource Manager Organization",
+    "content": "The Organization resource is the root node of the Google Cloud resource hierarchy. It allows for centralized management of all resources.",
+    "insight": "Requires a Google Workspace or Cloud Identity account to create an Organization.",
+    "next": "IAM Best Practices",
+    "lab": { "command": "gcloud organizations list", "output": "DISPLAY_NAME  ID\nexample.com   1234567890" }
+  },
+  {
+    "id": "gcp_ace_06_25",
+    "title": "IAM Best Practices: Groups",
+    "content": "Always manage access using Google Groups instead of granting roles to individual users. This makes team changes much easier to manage.",
+    "insight": "Updating group membership automatically updates access for all group members across all projects.",
+    "next": "IAM Best Practices: Least Privilege",
+    "lab": { "command": "echo 'Add users to groups in the Google Admin Console'", "output": "Add users to groups in the Google Admin Console" }
+  },
+  {
+    "id": "gcp_ace_06_26",
+    "title": "IAM Best Practices: Least Privilege",
+    "content": "Grant only the minimum permissions required for a user or service account to perform its task. Avoid using basic roles (Owner/Editor) in production.",
+    "insight": "Least privilege reduces the impact of compromised credentials.",
+    "next": "Cloud Identity Overview",
+    "lab": { "command": "echo 'Use predefined or custom roles instead of basic roles'", "output": "Use predefined or custom roles instead of basic roles" }
+  },
+  {
+    "id": "gcp_ace_06_27",
+    "title": "Cloud Identity Overview",
+    "content": "Cloud Identity is an Identity as a Service (IDaaS) that helps you manage users and groups. It is the core authentication provider for GCP.",
+    "insight": "Supports Single Sign-On (SSO) with third-party providers like Azure AD and Okta.",
+    "next": "Access Context Manager",
+    "lab": { "command": "echo 'Manage identities in Google Admin Console'", "output": "Manage identities in Google Admin Console" }
+  },
+  {
+    "id": "gcp_ace_06_28",
+    "title": "Access Context Manager",
+    "content": "Access Context Manager allows you to define fine-grained, attribute-based access control for projects and resources based on user identity and request context.",
+    "insight": "Define 'access levels' based on IP range, device state, or user identity.",
+    "next": "OS Login",
+    "lab": { "command": "gcloud access-context-manager levels list --policy=123", "output": "NAME                TITLE\ncorp-ip-only        Corporate IP Only" }
+  },
+  {
+    "id": "gcp_ace_06_29",
+    "title": "OS Login",
+    "content": "OS Login allows you to use IAM roles to manage SSH access to your Compute Engine instances, instead of managing individual SSH keys.",
+    "insight": "Provides centralized lifecycle management of SSH access for your team.",
+    "next": "Binary Authorization",
+    "lab": { "command": "gcloud compute project-info add-metadata --metadata enable-oslogin=TRUE", "output": "Updated [my-project]." }
+  },
+  {
+    "id": "gcp_ace_06_30",
+    "title": "Binary Authorization Overview",
+    "content": "Binary Authorization ensures that only trusted container images are deployed to GKE or Cloud Run by requiring signatures from authorized attestors.",
+    "insight": "Prevents the deployment of unverified or malicious images in your production environment.",
+    "next": "Secret Rotation",
+    "lab": { "command": "echo 'Configure policies in Security -> Binary Authorization'", "output": "Configure policies in Security -> Binary Authorization" }
+  },
+  {
+    "id": "gcp_ace_06_31",
+    "title": "Secret Rotation",
+    "content": "Secret Manager supports automatic rotation of secrets by triggering a Cloud Function to update the credential in both the secret and the target service.",
+    "insight": "Regularly rotating secrets reduces the window of opportunity for stolen credentials.",
+    "next": "Firewall Rules Logging",
+    "lab": { "command": "echo 'Configure rotation period and Cloud Function in Secret settings'", "output": "Configure rotation period and Cloud Function in Secret settings" }
+  },
+  {
+    "id": "gcp_ace_06_32",
+    "title": "Firewall Rules Logging",
+    "content": "Firewall rules logging allows you to record connections that were allowed or denied by specific firewall rules.",
+    "insight": "Use firewall logs to audit network traffic and identify potential security threats or misconfigurations.",
+    "next": "Cloud Key Management (KMS) Rotation",
+    "lab": { "command": "gcloud compute firewall-rules update allow-http --enable-logging", "output": "Updated [allow-http]." }
+  },
+  {
+    "id": "gcp_ace_06_33",
+    "title": "Cloud KMS Key Rotation",
+    "content": "You can configure Cloud KMS to automatically rotate encryption keys on a schedule. Each rotation creates a new key version.",
+    "insight": "Automating key rotation helps comply with security standards and best practices.",
+    "next": "Access Approval",
+    "lab": { "command": "gcloud kms keys update my-key --location=us-central1 --keyring=my-keyring --rotation-period=90d --next-rotation-time=2023-12-31T00:00:00Z", "output": "Updated [my-key]." }
+  },
+  {
+    "id": "gcp_ace_06_34",
+    "title": "Access Approval",
+    "content": "Access Approval ensures that Google personnel must have your explicit approval before they can access your data or configurations for troubleshooting.",
+    "insight": "Adds an extra layer of control over your data, ensuring that access only happens when you request it.",
+    "next": "Security Health Analytics",
+    "lab": { "command": "echo 'Enable in Security -> Access Approval'", "output": "Enable in Security -> Access Approval" }
+  },
+  {
+    "id": "gcp_ace_06_35",
+    "title": "Security Health Analytics",
+    "content": "Security Health Analytics (part of SCC) automatically scans your GCP environment for misconfigurations and security vulnerabilities.",
+    "insight": "Detects issues like public buckets, open firewall ports, and missing audit logs.",
+    "next": "Chronicle Overview",
+    "lab": { "command": "echo 'View findings in SCC dashboard'", "output": "View findings in SCC dashboard" }
+  },
+  {
+    "id": "gcp_ace_06_36",
+    "title": "BeyondCorp Enterprise",
+    "content": "BeyondCorp is Google's implementation of zero-trust security. It ensures that every request is authenticated and authorized based on device and user context.",
+    "insight": "Moves security from the network perimeter to individual users and devices.",
+    "next": "Cloud IDS Overview",
+    "lab": { "command": "echo 'Integrated with IAP and Access Context Manager'", "output": "Integrated with IAP and Access Context Manager" }
+  },
+  {
+    "id": "gcp_ace_06_37",
+    "title": "Cloud IDS",
+    "content": "Cloud Intrusion Detection System (IDS) provides managed network security that detects malware, spyware, and command-and-control attacks.",
+    "insight": "Uses Palo Alto Networks technology to inspect mirrored traffic in your VPC.",
+    "next": "IAM Policy Troubleshooting",
+    "lab": { "command": "gcloud ids endpoints list --region=us-central1", "output": "NAME        NETWORK  STATE\nmy-ids      my-vpc   READY" }
+  },
+  {
+    "id": "gcp_ace_06_38",
+    "title": "Troubleshooting IAM Policies",
+    "content": "Use the IAM Policy Troubleshooter to analyze why a user has or doesn't have a specific permission on a resource.",
+    "insight": "Accounts for role inheritance, conditions, and service-specific permissions.",
+    "next": "Conclusion",
+    "lab": { "command": "echo 'Access via IAM -> Policy Troubleshooter in the Console'", "output": "Access via IAM -> Policy Troubleshooter in the Console" }
+  },
+  {
+    "id": "gcp_ace_06_39",
+    "title": "Shielded VM Security",
+    "content": "Shielded VMs provide verifiable integrity of your VM instances using features like Secure Boot and Virtual Trusted Platform Module (vTPM).",
+    "insight": "Protects against boot-level and kernel-level rootkits and malware.",
+    "next": "Conclusion: Security",
+    "lab": { "command": "gcloud compute instances describe secure-vm --zone=us-central1-a --format='value(shieldedInstanceConfig)'", "output": "enableSecureBoot: true\nenableVtpm: true" }
+  },
+  {
+    "id": "gcp_ace_06_40",
+    "title": "Conclusion: Security on GCP",
+    "content": "You have learned the core tools and best practices for securing your Google Cloud environment, from IAM to encryption and threat detection.",
+    "insight": "Security is an ongoing process of monitoring, hardening, and adapting to new threats.",
+    "next": "Chapter Complete",
+    "lab": { "command": "gcloud projects get-iam-policy my-project-id --limit=1", "output": "bindings:\n- members: ..." }
+  }
+]

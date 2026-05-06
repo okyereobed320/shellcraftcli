@@ -1,0 +1,322 @@
+[
+  {
+    "id": "gcp_ace_05_01",
+    "title": "GCP Operations Suite Overview",
+    "content": "Google Cloud's operations suite (formerly Stackdriver) provides visibility into the performance, uptime, and overall health of your cloud-powered applications.",
+    "insight": "Observability is key to maintaining reliable cloud infrastructure.",
+    "next": "Cloud Logging Overview",
+    "lab": { "command": "gcloud logging logs list", "output": "NAME\nprojects/my-project/logs/cloudaudit.googleapis.com%2Factivity" }
+  },
+  {
+    "id": "gcp_ace_05_02",
+    "title": "Cloud Logging Overview",
+    "content": "Cloud Logging is a fully managed service that allows you to store, search, analyze, monitor, and alert on log data and events from GCP and other sources.",
+    "insight": "Logging is your first line of defense when troubleshooting issues.",
+    "next": "Viewing Logs in the CLI",
+    "lab": { "command": "gcloud logging read 'resource.type=gce_instance' --limit=5", "output": "--- \ninsertId: ...\njsonPayload:\n  message: \"System boot complete\"\nresource:\n  labels:\n    instance_id: '12345'\n    project_id: my-project\n    zone: us-central1-a\n  type: gce_instance" }
+  },
+  {
+    "id": "gcp_ace_05_03",
+    "title": "Log Sinks and Exports",
+    "content": "Log sinks allow you to export your logs to Cloud Storage, BigQuery, or Pub/Sub for long-term storage or advanced analysis.",
+    "insight": "Exporting logs to BigQuery is great for compliance and security audits.",
+    "next": "Creating a Log Sink",
+    "lab": { "command": "gcloud logging sinks list", "output": "NAME      DESTINATION                                    FILTER\n_Default  logging.googleapis.com/projects/my-project/..." }
+  },
+  {
+    "id": "gcp_ace_05_04",
+    "title": "Creating a Log Sink",
+    "content": "You create a sink by specifying a name, a destination, and an optional filter to select which logs to export.",
+    "insight": "Use filters to only export the logs you need, reducing storage and processing costs.",
+    "next": "Log-based Metrics",
+    "lab": { "command": "gcloud logging sinks create my-bq-sink bigquery.googleapis.com/projects/my-project/datasets/my_dataset --log-filter='severity>=ERROR'", "output": "Created [my-bq-sink]." }
+  },
+  {
+    "id": "gcp_ace_05_05",
+    "title": "Log-based Metrics",
+    "content": "Log-based metrics allow you to create numerical metrics from your log data. You can then use these metrics in Cloud Monitoring charts and alerts.",
+    "insight": "Great for tracking events that aren't captured by standard system metrics (e.g., specific application errors).",
+    "next": "Cloud Monitoring Overview",
+    "lab": { "command": "gcloud logging metrics list", "output": "NAME                DESCRIPTION                      FILTER\nerror_count_metric  Counts log entries with ERROR... severity=ERROR" }
+  },
+  {
+    "id": "gcp_ace_05_06",
+    "title": "Cloud Monitoring Overview",
+    "content": "Cloud Monitoring provides dashboards, charts, and alerts to help you understand the performance and health of your services and infrastructure.",
+    "insight": "Monitoring focuses on 'metrics' (numbers over time), while Logging focuses on 'events' (text messages).",
+    "next": "Monitoring Dashboards",
+    "lab": { "command": "gcloud monitoring dashboards list", "output": "NAME                                  DISPLAY_NAME\nprojects/123/dashboards/abc-123       GCE VM Instances" }
+  },
+  {
+    "id": "gcp_ace_05_07",
+    "title": "Monitoring Dashboards",
+    "content": "Dashboards allow you to visualize your metrics using various types of charts, such as line charts, heatmaps, and stacked area charts.",
+    "insight": "Use the predefined dashboards for GCP services to quickly get started.",
+    "next": "Uptime Checks",
+    "lab": { "command": "echo 'Create custom dashboards in Monitoring -> Dashboards'", "output": "Create custom dashboards in Monitoring -> Dashboards" }
+  },
+  {
+    "id": "gcp_ace_05_08",
+    "title": "Uptime Checks",
+    "content": "Uptime checks verify that your web servers and applications are reachable from locations around the world.",
+    "insight": "Checks can be configured for HTTP, HTTPS, or TCP protocols.",
+    "next": "Alerting Policies",
+    "lab": { "command": "gcloud monitoring uptime list", "output": "NAME                                      DISPLAY_NAME\nprojects/my-project/uptimeCheckConfigs/123  My Web App Check" }
+  },
+  {
+    "id": "gcp_ace_05_09",
+    "title": "Alerting Policies",
+    "content": "Alerting policies define the conditions under which you should be notified of a potential issue. You can set thresholds on metrics or uptime checks.",
+    "insight": "Combine multiple conditions into a single policy to reduce alert noise.",
+    "next": "Notification Channels",
+    "lab": { "command": "gcloud monitoring policies list", "output": "NAME                                DISPLAY_NAME\nprojects/my-project/alertPolicies/456  High CPU Alert" }
+  },
+  {
+    "id": "gcp_ace_05_10",
+    "title": "Notification Channels",
+    "content": "Notification channels define how you want to be alerted (e.g., Email, SMS, Slack, PagerDuty, or Pub/Sub).",
+    "insight": "Use different channels for different severity levels (e.g., Slack for warnings, PagerDuty for critical).",
+    "next": "Cloud Trace Overview",
+    "lab": { "command": "gcloud monitoring channels list", "output": "NAME                                    TYPE   DISPLAY_NAME\nprojects/my-project/notificationChannels/789  email  Team Email" }
+  },
+  {
+    "id": "gcp_ace_05_11",
+    "title": "Cloud Trace Overview",
+    "content": "Cloud Trace is a distributed tracing system that collects latency data from your applications and displays it in the Google Cloud Console.",
+    "insight": "Essential for identifying bottlenecks in microservices architectures.",
+    "next": "Cloud Profiler Overview",
+    "lab": { "command": "echo 'View traces in Monitoring -> Trace'", "output": "View traces in Monitoring -> Trace" }
+  },
+  {
+    "id": "gcp_ace_05_12",
+    "title": "Cloud Profiler Overview",
+    "content": "Cloud Profiler is a statistical, low-overhead profiler that continuously gathers CPU usage and memory-allocation information from your applications.",
+    "insight": "Helps you identify performance regressions and optimize your code's resource consumption.",
+    "next": "Error Reporting Overview",
+    "lab": { "command": "echo 'Access via Monitoring -> Profiler'", "output": "Access via Monitoring -> Profiler" }
+  },
+  {
+    "id": "gcp_ace_05_13",
+    "title": "Error Reporting Overview",
+    "content": "Error Reporting counts, analyzes, and aggregates the errors in your running cloud services. It notifies you when new errors are detected.",
+    "insight": "Automatically groups similar errors, so you don't get flooded with individual alerts.",
+    "next": "Monitoring Agent (Ops Agent)",
+    "lab": { "command": "echo 'View errors in Monitoring -> Error Reporting'", "output": "View errors in Monitoring -> Error Reporting" }
+  },
+  {
+    "id": "gcp_ace_05_14",
+    "title": "Google Cloud Ops Agent",
+    "content": "The Ops Agent is the primary agent for collecting telemetry from your Compute Engine instances. It combines logging and monitoring into a single process.",
+    "insight": "Install the Ops Agent on all your VMs for detailed system-level metrics and logs.",
+    "next": "Installing the Ops Agent",
+    "lab": { "command": "echo 'Run installation script on VM instances'", "output": "Run installation script on VM instances" }
+  },
+  {
+    "id": "gcp_ace_05_15",
+    "title": "Managed Service for Prometheus",
+    "content": "GCP provides a fully managed, multi-cloud monitoring service for Prometheus metrics, commonly used in Kubernetes environments.",
+    "insight": "Allows you to use familiar Prometheus queries and tools while Google manages the backend infrastructure.",
+    "next": "Cloud Logging Retention",
+    "lab": { "command": "echo 'Enable Managed Prometheus on GKE clusters'", "output": "Enable Managed Prometheus on GKE clusters" }
+  },
+  {
+    "id": "gcp_ace_05_16",
+    "title": "Log Retention Policies",
+    "content": "You can configure how long logs are kept in Cloud Logging buckets. The default retention is 30 days for the _Default bucket.",
+    "insight": "Increase retention for compliance or decrease it to save storage costs.",
+    "next": "Log Views",
+    "lab": { "command": "gcloud logging buckets list", "output": "NAME      RETENTION_DAYS  LOCATION\n_Default  30              global\n_Required 400             global" }
+  },
+  {
+    "id": "gcp_ace_05_17",
+    "title": "Log Views",
+    "content": "Log views allow you to control which logs a user can see within a bucket. You can grant access to a view rather than the entire bucket.",
+    "insight": "Great for implementing fine-grained access control for logs (e.g., give a team access only to their app's logs).",
+    "next": "Log Analytics",
+    "lab": { "command": "gcloud logging views list --bucket=_Default --location=global", "output": "ID\n_AllLogs" }
+  },
+  {
+    "id": "gcp_ace_05_18",
+    "title": "Log Analytics",
+    "content": "Log Analytics allows you to use SQL to query your logs stored in log buckets. It's powered by BigQuery under the hood.",
+    "insight": "Enables complex analysis of logs without needing to export them to a separate BigQuery dataset.",
+    "next": "Audit Logs Overview",
+    "lab": { "command": "echo 'Enable Log Analytics on a log bucket'", "output": "Enable Log Analytics on a log bucket" }
+  },
+  {
+    "id": "gcp_ace_05_19",
+    "title": "Cloud Audit Logs",
+    "content": "Cloud Audit Logs record 'who did what, where, and when' within your Google Cloud projects. There are three types: Admin Activity, Data Access, and System Event.",
+    "insight": "Admin Activity logs are enabled by default and are free; Data Access logs must be explicitly enabled and can incur costs.",
+    "next": "Viewing Audit Logs",
+    "lab": { "command": "gcloud logging read 'protoPayload.methodName=\"v1.compute.instances.insert\"' --limit=1", "output": "protoPayload:\n  authenticationInfo:\n    principalEmail: user@example.com\n  methodName: v1.compute.instances.insert\n..." }
+  },
+  {
+    "id": "gcp_ace_05_20",
+    "title": "Service Level Objectives (SLOs)",
+    "content": "Monitoring allows you to define and track Service Level Indicators (SLIs) and Service Level Objectives (SLOs) for your applications.",
+    "insight": "SLOs help you balance the need for feature velocity with the need for service reliability.",
+    "next": "Error Budgets",
+    "lab": { "command": "echo 'Configure SLOs in Monitoring -> Services'", "output": "Configure SLOs in Monitoring -> Services" }
+  },
+  {
+    "id": "gcp_ace_05_21",
+    "title": "Error Budgets",
+    "content": "An error budget is the amount of unreliability your service can tolerate before you must stop feature work and focus on stability. It's derived from your SLO.",
+    "insight": "If you exceed your error budget, it's a signal that your service is too unstable for new changes.",
+    "next": "Cloud Debugger (Legacy/Snapshot)",
+    "lab": { "command": "echo 'Monitor error budgets in the SLO dashboard'", "output": "Monitor error budgets in the SLO dashboard" }
+  },
+  {
+    "id": "gcp_ace_05_22",
+    "title": "Cloud Debugger Snapshots",
+    "content": "Cloud Debugger (now integrated into other tools) allows you to inspect the state of a running application at any code location without stopping or slowing it down.",
+    "insight": "Use snapshots to capture the value of variables and the call stack at a specific point in time.",
+    "next": "Network Intelligence Center",
+    "lab": { "command": "echo 'Access via Monitoring -> Debugger (Legacy)'", "output": "Access via Monitoring -> Debugger (Legacy)" }
+  },
+  {
+    "id": "gcp_ace_05_23",
+    "title": "Network Intelligence Center",
+    "content": "Network Intelligence Center provides a suite of tools for monitoring, verifying, and optimizing your GCP network.",
+    "insight": "Tools include Connectivity Tests, Performance Dashboard, and Firewall Insights.",
+    "next": "Connectivity Tests",
+    "lab": { "command": "echo 'Access via Networking -> Network Intelligence Center'", "output": "Access via Networking -> Network Intelligence Center" }
+  },
+  {
+    "id": "gcp_ace_05_24",
+    "title": "Connectivity Tests",
+    "content": "Connectivity tests help you troubleshoot network reachability issues between resources in your VPC, or between GCP and on-premises/internet.",
+    "insight": "Analyzes firewall rules, routes, and load balancers to simulate a packet path.",
+    "next": "Monitoring Resource Groups",
+    "lab": { "command": "gcloud network-management connectivity-tests list", "output": "NAME                DISPLAY_NAME\nvm-to-db-test       VM to Database" }
+  },
+  {
+    "id": "gcp_ace_05_25",
+    "title": "Monitoring Resource Groups",
+    "content": "Resource groups allow you to monitor a set of resources as a single entity. You can define groups based on names, tags, or locations.",
+    "insight": "Useful for monitoring all resources that belong to a specific application or environment.",
+    "next": "Custom Dashboards via API",
+    "lab": { "command": "gcloud monitoring groups list", "output": "NAME                               DISPLAY_NAME\nprojects/my-project/groups/123      Prod Web Servers" }
+  },
+  {
+    "id": "gcp_ace_05_26",
+    "title": "Custom Metrics via API",
+    "content": "You can push custom metrics from your application code to Cloud Monitoring using the Monitoring API or SDKs.",
+    "insight": "Allows you to monitor application-specific business logic (e.g., number of items sold).",
+    "next": "Metric Scopes",
+    "lab": { "command": "echo 'Use Google Cloud client libraries for custom metrics'", "output": "Use Google Cloud client libraries for custom metrics" }
+  },
+  {
+    "id": "gcp_ace_05_27",
+    "title": "Metric Scopes (Multi-project)",
+    "content": "Metric scopes allow you to monitor metrics from multiple GCP projects in a single Cloud Monitoring workspace.",
+    "insight": "Essential for large organizations with many projects that need a centralized monitoring view.",
+    "next": "Monitoring Query Language (MQL)",
+    "lab": { "command": "echo 'Configure scoping project in Monitoring settings'", "output": "Configure scoping project in Monitoring settings" }
+  },
+  {
+    "id": "gcp_ace_05_28",
+    "title": "Monitoring Query Language (MQL)",
+    "content": "MQL is a powerful, expressive language for querying and manipulating time-series data in Cloud Monitoring.",
+    "insight": "Use MQL for complex analysis that can't be done with the standard UI charts.",
+    "next": "Log Exclusions",
+    "lab": { "command": "echo 'Use Query Editor in Monitoring Dashboards'", "output": "Use Query Editor in Monitoring Dashboards" }
+  },
+  {
+    "id": "gcp_ace_05_29",
+    "title": "Log Exclusions",
+    "content": "Log exclusions allow you to filter out specific logs from being stored in Cloud Logging, helping you manage costs.",
+    "insight": "Exclude high-volume, low-value logs (like routine health checks) to save money.",
+    "next": "Cloud Logging Agent (Legacy)",
+    "lab": { "command": "gcloud logging exclusions list", "output": "NAME                FILTER\nexclude-health      jsonPayload.message:\"Health check\"" }
+  },
+  {
+    "id": "gcp_ace_05_30",
+    "title": "Ops Agent Configuration",
+    "content": "The Ops Agent is configured using a YAML file. You can define custom logging sources and monitoring metrics in this file.",
+    "insight": "The configuration file is typically located at /etc/google-cloud-ops-agent/config.yaml.",
+    "next": "Uptime Check Private Locations",
+    "lab": { "command": "echo 'Edit config.yaml and restart the ops-agent service'", "output": "Edit config.yaml and restart the ops-agent service" }
+  },
+  {
+    "id": "gcp_ace_05_31",
+    "title": "Private Uptime Checks",
+    "content": "You can run uptime checks against resources that are not publicly accessible (e.g., internal load balancers) using private checkers.",
+    "insight": "Requires setting up a VPC peering connection for the uptime check service.",
+    "next": "Reporting Errors manually",
+    "lab": { "command": "echo 'Configure private checkers in Uptime Check settings'", "output": "Configure private checkers in Uptime Check settings" }
+  },
+  {
+    "id": "gcp_ace_05_32",
+    "title": "Manual Error Reporting",
+    "content": "You can manually send error reports to Error Reporting from your application using the API or by formatting log entries in a specific way.",
+    "insight": "Ensure your log entries include the 'serviceContext' and 'message' (with stack trace) for proper grouping.",
+    "next": "Cloud Console Mobile App",
+    "lab": { "command": "echo 'Log a JSON object with @type property for Error Reporting'", "output": "Log a JSON object with @type property for Error Reporting" }
+  },
+  {
+    "id": "gcp_ace_05_33",
+    "title": "Cloud Console Mobile App",
+    "content": "The mobile app allows you to monitor your GCP resources, view dashboards, and respond to alerts directly from your phone.",
+    "insight": "Great for on-call engineers who need to check status on the go.",
+    "next": "GKE Dashboard in Console",
+    "lab": { "command": "echo 'Available on iOS and Android'", "output": "Available on iOS and Android" }
+  },
+  {
+    "id": "gcp_ace_05_34",
+    "title": "GKE Observability",
+    "content": "GKE has a specialized observability dashboard that provides a unified view of your clusters, nodes, workloads, and services.",
+    "insight": "Integrated with Cloud Logging and Monitoring for deep-dive analysis of containerized apps.",
+    "next": "Container Logs",
+    "lab": { "command": "echo 'Access via Kubernetes Engine -> Observability'", "output": "Access via Kubernetes Engine -> Observability" }
+  },
+  {
+    "id": "gcp_ace_05_35",
+    "title": "Viewing Container Logs",
+    "content": "Logs from containers running in GKE are automatically collected by Cloud Logging. You can filter them by cluster name, namespace, or pod name.",
+    "insight": "Use 'resource.type=k8s_container' in your log filters.",
+    "next": "Monitoring GKE Usage",
+    "lab": { "command": "gcloud logging read 'resource.type=k8s_container AND resource.labels.namespace_name=default' --limit=5", "output": "--- \ntextPayload: \"Application started...\"\nresource:\n  type: k8s_container\n..." }
+  },
+  {
+    "id": "gcp_ace_05_36",
+    "title": "GKE Usage Metering",
+    "content": "GKE usage metering allows you to export resource usage data (CPU, memory, storage) to BigQuery to analyze costs by namespace or label.",
+    "insight": "Essential for multi-tenant clusters to perform cost allocation and showback/chargeback.",
+    "next": "Cloud Monitoring API Keys",
+    "lab": { "command": "echo 'Enable usage metering in GKE cluster settings'", "output": "Enable usage metering in GKE cluster settings" }
+  },
+  {
+    "id": "gcp_ace_05_37",
+    "title": "Managed Service for Prometheus Querying",
+    "content": "You can query metrics from Managed Service for Prometheus using PromQL in the Cloud Monitoring UI or via the Prometheus API.",
+    "insight": "Provides a consistent querying experience for Kubernetes metrics.",
+    "next": "Alerting on Log counts",
+    "lab": { "command": "echo 'Use PromQL tab in Monitoring Query Editor'", "output": "Use PromQL tab in Monitoring Query Editor" }
+  },
+  {
+    "id": "gcp_ace_05_38",
+    "title": "Alerting on Log Entries",
+    "content": "You can create an alerting policy that triggers when a log-based metric exceeds a threshold (e.g., more than 10 ERROR logs in 1 minute).",
+    "insight": "A proactive way to catch application issues that system metrics might miss.",
+    "next": "Troubleshooting Alerts",
+    "lab": { "command": "echo 'Create alert from the Log-based Metrics page'", "output": "Create alert from the Log-based Metrics page" }
+  },
+  {
+    "id": "gcp_ace_05_39",
+    "title": "Troubleshooting Alerting Policies",
+    "content": "If an alert is not triggering as expected, check the metric values, the threshold condition, and the notification channel configuration.",
+    "insight": "The 'Incident' view in Monitoring shows currently active alerts and their history.",
+    "next": "Conclusion",
+    "lab": { "command": "echo 'Check Alerting -> Incidents for active alerts'", "output": "Check Alerting -> Incidents for active alerts" }
+  },
+  {
+    "id": "gcp_ace_05_40",
+    "title": "Conclusion: Operations on GCP",
+    "content": "You have learned how to use the Google Cloud operations suite to monitor, log, and alert on your infrastructure and applications.",
+    "insight": "Effective operations are about moving from reactive troubleshooting to proactive reliability management.",
+    "next": "Chapter Complete",
+    "lab": { "command": "gcloud monitoring dashboards list --limit=1", "output": "NAME                                  DISPLAY_NAME\nprojects/123/dashboards/abc-123       GCE VM Instances" }
+  }
+]

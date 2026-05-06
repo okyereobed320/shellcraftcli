@@ -1,0 +1,322 @@
+[
+  {
+    "id": "gcp_ace_07_01",
+    "title": "Google Cloud SDK Overview",
+    "content": "The Google Cloud SDK is a set of tools that you use to manage resources and applications hosted on Google Cloud. It includes the gcloud, gsutil, and bq command-line tools.",
+    "insight": "The SDK allows you to automate almost every aspect of your cloud infrastructure.",
+    "next": "gcloud Command Structure",
+    "lab": { "command": "gcloud --version", "output": "Google Cloud SDK 450.0.0\nbq 2.0.98\ncore 2023.10.10\ngsutil 5.25" }
+  },
+  {
+    "id": "gcp_ace_07_02",
+    "title": "gcloud Command Structure",
+    "content": "gcloud commands follow a consistent pattern: gcloud [GROUP] [SUBGROUP] [ACTION] [FLAGS]. For example: gcloud compute instances list.",
+    "insight": "Understanding this pattern makes it easier to discover new commands without checking documentation.",
+    "next": "gcloud Interactive Help",
+    "lab": { "command": "gcloud compute --help", "output": "Usage: gcloud compute [GROUP | COMMAND] ...\nGroups:\n  instances             Read and manipulate Compute Engine virtual machine instances." }
+  },
+  {
+    "id": "gcp_ace_07_03",
+    "title": "gcloud Interactive Help",
+    "content": "Use the '--help' flag with any command to see its usage, available groups, and flags. You can also use 'gcloud help [COMMAND]' for detailed documentation.",
+    "insight": "The built-in help is often faster than searching online.",
+    "next": "gcloud Config Overview",
+    "lab": { "command": "gcloud compute instances create --help", "output": "NAME\n    gcloud compute instances create - create Compute Engine virtual machine instances\n..." }
+  },
+  {
+    "id": "gcp_ace_07_04",
+    "title": "gcloud Configurations",
+    "content": "Configurations allow you to maintain multiple sets of settings (account, project, region, zone). You can switch between them easily for different environments.",
+    "insight": "Essential for managing multiple projects or client accounts safely.",
+    "next": "Creating a Configuration",
+    "lab": { "command": "gcloud config configurations list", "output": "NAME        IS_ACTIVE  ACCOUNT            PROJECT\ndefault     True       user@example.com  my-prod-project" }
+  },
+  {
+    "id": "gcp_ace_07_05",
+    "title": "Creating a Configuration",
+    "content": "You create a new configuration using 'gcloud config configurations create'. You then activate it and set its specific properties.",
+    "insight": "Naming your configurations 'dev', 'staging', and 'prod' is a common practice.",
+    "next": "Setting Properties",
+    "lab": { "command": "gcloud config configurations create dev-env", "output": "Created [dev-env]." }
+  },
+  {
+    "id": "gcp_ace_07_06",
+    "title": "Setting gcloud Properties",
+    "content": "Properties are specific settings within a configuration. Common properties include 'core/project', 'compute/region', and 'compute/zone'.",
+    "insight": "Setting a default region and zone prevents you from having to specify them in every command.",
+    "next": "Filtering Output",
+    "lab": { "command": "gcloud config set project my-dev-project && gcloud config set compute/region us-east1", "output": "Updated property [core/project].\nUpdated property [compute/region]." }
+  },
+  {
+    "id": "gcp_ace_07_07",
+    "title": "Filtering gcloud Output",
+    "content": "The '--filter' flag allows you to narrow down the results of a list command based on resource attributes (e.g., status, name, labels).",
+    "insight": "Filters are executed on the server side, making them faster than client-side parsing for large datasets.",
+    "next": "Formatting Output",
+    "lab": { "command": "gcloud compute instances list --filter='status=RUNNING'", "output": "NAME    ZONE           MACHINE_TYPE  STATUS\nvm-1    us-central1-a  e2-micro      RUNNING" }
+  },
+  {
+    "id": "gcp_ace_07_08",
+    "title": "Formatting gcloud Output",
+    "content": "The '--format' flag allows you to specify the output format, such as table, json, yaml, or csv. You can also select specific fields to display.",
+    "insight": "Use '--format=json' when you need to process gcloud output in a script or tool.",
+    "next": "Using --format and --filter together",
+    "lab": { "command": "gcloud compute instances list --format='table(name, zone, status)'", "output": "NAME    ZONE           STATUS\nvm-1    us-central1-a  RUNNING" }
+  },
+  {
+    "id": "gcp_ace_07_09",
+    "title": "Combining Filter and Format",
+    "content": "Combining '--filter' and '--format' is a powerful way to extract exactly the data you need from your GCP resources.",
+    "insight": "Example: Get the external IP address of a specific running instance.",
+    "next": "gcloud Authentication",
+    "lab": { "command": "gcloud compute instances list --filter='name=my-vm' --format='get(networkInterfaces[0].accessConfigs[0].natIP)'", "output": "34.120.5.10" }
+  },
+  {
+    "id": "gcp_ace_07_10",
+    "title": "gcloud Authentication",
+    "content": "You authenticate the gcloud CLI with your Google account using 'gcloud auth login'. This opens a browser for you to grant permission.",
+    "insight": "This command creates a short-lived token that gcloud uses to authenticate your requests.",
+    "next": "Service Account Authentication",
+    "lab": { "command": "gcloud auth login", "output": "Your browser has been opened to visit...\nAuthenticated as [user@example.com]." }
+  },
+  {
+    "id": "gcp_ace_07_11",
+    "title": "Service Account Authentication",
+    "content": "To authenticate as a service account (common in CI/CD), use 'gcloud auth activate-service-account' with a private key file.",
+    "insight": "This is non-interactive and suitable for automated scripts.",
+    "next": "gcloud Components",
+    "lab": { "command": "gcloud auth activate-service-account my-sa@my-project.iam.gserviceaccount.com --key-file=key.json", "output": "Activated service account [my-sa@...]." }
+  },
+  {
+    "id": "gcp_ace_07_12",
+    "title": "Managing gcloud Components",
+    "content": "gcloud is modular. You can install or remove specific components (like 'kubectl', 'beta', or 'alpha' commands) using the 'components' command group.",
+    "insight": "Keep your SDK updated with 'gcloud components update' to get the latest features and bug fixes.",
+    "next": "gsutil Overview",
+    "lab": { "command": "gcloud components list", "output": "STATE       NAME                     ID\nInstalled   kubectl                  kubectl\nNot Inst... Cloud Spanner Emulator    cloud-spanner-emulator" }
+  },
+  {
+    "id": "gcp_ace_07_13",
+    "title": "gsutil Overview",
+    "content": "gsutil is the command-line tool for interacting with Cloud Storage. It uses a URL-style syntax (gs://[BUCKET_NAME]/[OBJECT_NAME]).",
+    "insight": "gsutil commands often mirror standard Linux commands (ls, cp, mv, rm).",
+    "next": "gsutil mb (Make Bucket)",
+    "lab": { "command": "gsutil --version", "output": "gsutil version: 5.25" }
+  },
+  {
+    "id": "gcp_ace_07_14",
+    "title": "Creating Buckets with gsutil",
+    "content": "Use 'gsutil mb' to create a new storage bucket. You must specify a globally unique name and can also set the location and storage class.",
+    "insight": "Example: gsutil mb -l us-east1 -c nearline gs://my-archive-bucket",
+    "next": "gsutil cp (Copy)",
+    "lab": { "command": "gsutil mb gs://my-new-bucket-99", "output": "Creating gs://my-new-bucket-99/..." }
+  },
+  {
+    "id": "gcp_ace_07_15",
+    "title": "Copying Files with gsutil",
+    "content": "Use 'gsutil cp' to upload files to or download files from Cloud Storage. Use the '-r' flag to copy directories recursively.",
+    "insight": "Use the '-m' flag before 'cp' to perform multi-threaded (parallel) copies for many files.",
+    "next": "gsutil acl (Access Control)",
+    "lab": { "command": "gsutil cp data.csv gs://my-bucket/backups/", "output": "Copying file://data.csv [Content-Type=text/csv]... \n/ [1 files][ 1.2 MiB/ 1.2 MiB] 100%    " }
+  },
+  {
+    "id": "gcp_ace_07_16",
+    "title": "Managing ACLs with gsutil",
+    "content": "Use 'gsutil acl' to manage access control lists for buckets and objects. You can grant read, write, or owner permissions to users or groups.",
+    "insight": "While IAM is preferred, ACLs can provide fine-grained control over individual objects.",
+    "next": "bq Overview",
+    "lab": { "command": "gsutil acl ch -u user@example.com:READ gs://my-bucket/image.png", "output": "Updated ACL on gs://my-bucket/image.png" }
+  },
+  {
+    "id": "gcp_ace_07_17",
+    "title": "bq Overview",
+    "content": "bq is the command-line tool for BigQuery. It allows you to create datasets, tables, load data, and run SQL queries.",
+    "insight": "bq is highly efficient for interacting with massive datasets without using the Console.",
+    "next": "bq query",
+    "lab": { "command": "bq ls", "output": "datasetId\nmy_dataset\nsample_data" }
+  },
+  {
+    "id": "gcp_ace_07_18",
+    "title": "Running Queries with bq",
+    "content": "Use 'bq query' followed by a SQL statement to analyze data in BigQuery. Use the '--use_standard_sql' flag for standard SQL syntax.",
+    "insight": "You can output query results to a table or download them as CSV/JSON.",
+    "next": "kubectl Overview",
+    "lab": { "command": "bq query --use_standard_sql 'SELECT count(*) FROM `my-project.my_dataset.my_table` LIMIT 10'", "output": "Waiting on bqjob_r123... +-------+\n|  f0_  |\n+-------+\n| 15000 |\n+-------+" }
+  },
+  {
+    "id": "gcp_ace_07_19",
+    "title": "kubectl Overview",
+    "content": "kubectl is the command-line tool for controlling Kubernetes clusters. On GCP, it's used to manage your GKE clusters and workloads.",
+    "insight": "kubectl is not GCP-specific, but gcloud handles the authentication and cluster discovery.",
+    "next": "kubectl get",
+    "lab": { "command": "kubectl version --short", "output": "Client Version: v1.25.10\nServer Version: v1.25.10-gke.600" }
+  },
+  {
+    "id": "gcp_ace_07_20",
+    "title": "Viewing Resources with kubectl",
+    "content": "Use 'kubectl get' followed by a resource type (nodes, pods, deployments, services) to see their current status in your cluster.",
+    "insight": "Use the '-o wide' flag to see more details, like node IPs and images.",
+    "next": "gcloud init",
+    "lab": { "command": "kubectl get nodes", "output": "NAME                                  STATUS   ROLES    AGE    VERSION\ngke-my-cluster-default-pool-abc-123   Ready    <none>   10d    v1.25.10-gke.600" }
+  },
+  {
+    "id": "gcp_ace_07_21",
+    "title": "The gcloud init Command",
+    "content": "'gcloud init' is the fastest way to get started. it performs authentication, project selection, and default region/zone configuration in one step.",
+    "insight": "Run this whenever you need to re-initialize your environment or start from scratch.",
+    "next": "gcloud info",
+    "lab": { "command": "echo 'Run gcloud init to start the setup wizard'", "output": "Run gcloud init to start the setup wizard" }
+  },
+  {
+    "id": "gcp_ace_07_22",
+    "title": "Troubleshooting with gcloud info",
+    "content": "'gcloud info' displays information about your gcloud installation and current configuration, including active account and project.",
+    "insight": "Useful for diagnosing authentication issues or checking which SDK version you're running.",
+    "next": "gcloud Beta and Alpha",
+    "lab": { "command": "gcloud info", "output": "Google Cloud SDK [450.0.0]\nActive Configuration: [default]\nAccount: [user@example.com]\nProject: [my-project-123]" }
+  },
+  {
+    "id": "gcp_ace_07_23",
+    "title": "Beta and Alpha Commands",
+    "content": "Some newer GCP features are available via 'gcloud beta' or 'gcloud alpha' command groups before they reach general availability (GA).",
+    "insight": "Alpha/Beta commands might change or be removed without notice, so avoid using them in production scripts.",
+    "next": "gcloud Feedback",
+    "lab": { "command": "gcloud beta compute instances list", "output": "(Same as GA command but might include extra fields)" }
+  },
+  {
+    "id": "gcp_ace_07_24",
+    "title": "Productivity: Auto-completion",
+    "content": "The Cloud SDK supports command auto-completion for bash and zsh. This allows you to press 'tab' to finish commands and flags.",
+    "insight": "Saves time and reduces typing errors.",
+    "next": "Productivity: gcloud Interactive",
+    "lab": { "command": "echo 'Source the completion script in your .bashrc or .zshrc'", "output": "Source the completion script in your .bashrc or .zshrc" }
+  },
+  {
+    "id": "gcp_ace_07_25",
+    "title": "gcloud Interactive Shell",
+    "content": "The 'gcloud beta interactive' component provides an interactive shell with auto-completion, command history, and real-time help text.",
+    "insight": "A great way to learn gcloud commands and explore available options.",
+    "next": "Productivity: Local Aliases",
+    "lab": { "command": "gcloud beta interactive", "output": "Entering gcloud interactive shell... (Type 'exit' to quit)" }
+  },
+  {
+    "id": "gcp_ace_07_26",
+    "title": "Creating gcloud Aliases",
+    "content": "You can create aliases for frequently used gcloud commands. For example, alias 'gcl' to 'gcloud compute instances list'.",
+    "insight": "Custom aliases can significantly speed up your daily workflow.",
+    "next": "Using --quiet Flag",
+    "lab": { "command": "alias gcl='gcloud compute instances list'", "output": "(Alias created in current shell session)" }
+  },
+  {
+    "id": "gcp_ace_07_27",
+    "title": "Non-interactive Mode (--quiet)",
+    "content": "Use the '--quiet' or '-q' flag to disable interactive prompts. This is essential for using gcloud in non-interactive scripts.",
+    "insight": "Automatically accepts default values for all prompts.",
+    "next": "Environment Variables in gcloud",
+    "lab": { "command": "gcloud compute instances delete my-vm --quiet", "output": "Deleted [my-vm]." }
+  },
+  {
+    "id": "gcp_ace_07_28",
+    "title": "Overriding with Environment Variables",
+    "content": "You can override gcloud properties using environment variables like 'CLOUDSDK_CORE_PROJECT' or 'CLOUDSDK_COMPUTE_ZONE'.",
+    "insight": "Useful for temporary overrides in a single shell session or script.",
+    "next": "gcloud Topic Guide",
+    "lab": { "command": "export CLOUDSDK_CORE_PROJECT=another-project && gcloud compute instances list", "output": "(Lists instances for another-project)" }
+  },
+  {
+    "id": "gcp_ace_07_29",
+    "title": "gcloud Topic Guide",
+    "content": "'gcloud topic' provides overview documentation on broad concepts like filtering, formatting, and authentication.",
+    "insight": "Example: 'gcloud topic filters' explains the full syntax of the filter flag.",
+    "next": "gsutil du (Disk Usage)",
+    "lab": { "command": "gcloud topic filters", "output": "TOPIC\n    filters - resource filtering in gcloud\n..." }
+  },
+  {
+    "id": "gcp_ace_07_30",
+    "title": "Checking Disk Usage with gsutil",
+    "content": "Use 'gsutil du -s -h' to see the total size of a bucket or directory in a human-readable format.",
+    "insight": "Helps you monitor storage costs and identify large files.",
+    "next": "gsutil rsync",
+    "lab": { "command": "gsutil du -s -h gs://my-bucket", "output": "1.5 GiB    gs://my-bucket" }
+  },
+  {
+    "id": "gcp_ace_07_31",
+    "title": "Synchronizing with gsutil rsync",
+    "content": "Use 'gsutil rsync' to synchronize data between a local directory and a bucket, or between two buckets.",
+    "insight": "More efficient than 'cp -r' as it only copies changed files. Use the '-d' flag to delete destination files not in the source.",
+    "next": "gsutil lifecycle",
+    "lab": { "command": "gsutil rsync -d -r ./local-data gs://my-bucket/remote-data", "output": "Building synchronization state...\nCopying file://... [Content-Type=...]... " }
+  },
+  {
+    "id": "gcp_ace_07_32",
+    "title": "gsutil Lifecycle Management",
+    "content": "Use 'gsutil lifecycle' to get or set lifecycle policies for your buckets directly from the command line.",
+    "insight": "Allows you to automate data archival and deletion without using the Console.",
+    "next": "bq load",
+    "lab": { "command": "gsutil lifecycle get gs://my-bucket", "output": "{\"rule\": [{\"action\": {\"type\": \"Delete\"}, \"condition\": {\"age\": 365}}]}" }
+  },
+  {
+    "id": "gcp_ace_07_33",
+    "title": "Loading Data with bq load",
+    "content": "Use 'bq load' to import data from local files or Cloud Storage into BigQuery tables. Supports CSV, JSON, Parquet, and Avro formats.",
+    "insight": "You can auto-detect the schema or provide a schema definition file.",
+    "next": "bq extract",
+    "lab": { "command": "bq load --source_format=CSV my_dataset.my_table gs://my-bucket/data.csv name:string,age:integer", "output": "Waiting on bqjob_r456... (success)" }
+  },
+  {
+    "id": "gcp_ace_07_34",
+    "title": "Exporting Data with bq extract",
+    "content": "Use 'bq extract' to export data from a BigQuery table to Cloud Storage.",
+    "insight": "Useful for moving data to other systems or creating backups in GCS.",
+    "next": "kubectl describe",
+    "lab": { "command": "bq extract my_dataset.my_table gs://my-bucket/exported_data.csv", "output": "Waiting on bqjob_r789... (success)" }
+  },
+  {
+    "id": "gcp_ace_07_35",
+    "title": "Inspecting Resources with kubectl describe",
+    "content": "'kubectl describe' provides detailed information about a specific resource, including its configuration, status, and recent events.",
+    "insight": "The first place to look when a Pod is failing to start or a Service is not reachable.",
+    "next": "kubectl logs",
+    "lab": { "command": "kubectl describe pod my-app-123", "output": "Name: my-app-123\nStatus: Pending\nEvents:\n  Type     Reason            Age   From               Message\n  ----     ------            ----  ----               -------\n  Warning  FailedScheduling  30s   default-scheduler  0/3 nodes are available: ..." }
+  },
+  {
+    "id": "gcp_ace_07_36",
+    "title": "Fetching Logs with kubectl logs",
+    "content": "'kubectl logs' prints the standard output (stdout) and standard error (stderr) logs from a container running in a Pod.",
+    "insight": "Use the '-f' flag to stream logs in real-time.",
+    "next": "kubectl exec",
+    "lab": { "command": "kubectl logs my-app-123", "output": "Application started on port 8080..." }
+  },
+  {
+    "id": "gcp_ace_07_37",
+    "title": "Executing Commands with kubectl exec",
+    "content": "'kubectl exec' allows you to run a command inside a running container. Use '-it' for an interactive shell.",
+    "insight": "Use this to debug issues by inspecting files or testing connectivity from inside the container.",
+    "next": "gcloud auth list",
+    "lab": { "command": "kubectl exec -it my-app-123 -- /bin/bash", "output": "root@my-app-123:/# " }
+  },
+  {
+    "id": "gcp_ace_07_38",
+    "title": "Listing Accounts with gcloud auth list",
+    "content": "'gcloud auth list' shows all accounts that you have authenticated with the SDK and highlights the currently active account.",
+    "insight": "Helps you confirm which identity you're using before running critical commands.",
+    "next": "gcloud projects list",
+    "lab": { "command": "gcloud auth list", "output": "      Credentialed Accounts\nACTIVE  ACCOUNT\n*       user@example.com\n        admin@company.com" }
+  },
+  {
+    "id": "gcp_ace_07_39",
+    "title": "Listing Projects with gcloud projects list",
+    "content": "'gcloud projects list' shows all projects that the currently authenticated account has access to view.",
+    "insight": "Use filters to find specific projects by name or ID.",
+    "next": "Conclusion",
+    "lab": { "command": "gcloud projects list --limit=5", "output": "PROJECT_ID        NAME              PROJECT_NUMBER\nmy-project-123    My Project        123456789012" }
+  },
+  {
+    "id": "gcp_ace_07_40",
+    "title": "Conclusion: GCP Command-line mastery",
+    "content": "You have learned the core tools and techniques for managing Google Cloud from the command line. Master these to become a more efficient cloud engineer.",
+    "insight": "CLI proficiency is a superpower for automation and productivity in the cloud.",
+    "next": "Chapter Complete",
+    "lab": { "command": "gcloud info --format='value(config.active_config_name)'", "output": "default" }
+  }
+]

@@ -1,0 +1,322 @@
+[
+  {
+    "id": "gcp_ace_02_01",
+    "title": "Compute Engine Fundamentals",
+    "content": "**LEARNING OBJECTIVE**: Understand Compute Engine (GCE) as an Infrastructure-as-a-Service (IaaS) offering.\n\n**DETAILED EXPLANATION**: Compute Engine allows you to run virtual machines on Google's global infrastructure. Unlike App Engine (PaaS), you are responsible for the operating system, middleware, and application stack. You have full 'root' or 'Administrator' access to the VM. GCE VMs are regional resources, but they live within specific Zones. \n\n**WHY IT MATTERS**: GCE is the go-to service for workloads that require a specific OS version, custom kernels, or legacy software that cannot be containerized easily.\n\n**REAL-WORLD USE**: A company migrating a legacy SQL Server database to the cloud would use Compute Engine to maintain the same OS environment and performance characteristics as their on-premises hardware.\n\n**CLI EXAMPLES**:\n- List all instances: `gcloud compute instances list` \n- Get details of one instance: `gcloud compute instances describe [NAME] --zone [ZONE]`\n\n**SUMMARY POINTS**:\n- GCE is IaaS (User manages OS).\n- Instances are zonal resources.\n- High flexibility, higher management overhead.",
+    "insight": "GCE is like having a physical server in Google's data center that you control via SSH or RDP.",
+    "next": "Machine Types & Families",
+    "lab": { "command": "gcloud compute instances list", "output": "NAME    ZONE           MACHINE_TYPE  INTERNAL_IP  EXTERNAL_IP    STATUS\nvm-1    us-central1-a  n1-standard-1  10.128.0.2   34.120.5.10    RUNNING" }
+  },
+  {
+    "id": "gcp_ace_02_02",
+    "title": "Machine Types & Families",
+    "content": "**LEARNING OBJECTIVE**: Select the right machine family and size for your workload.\n\n**DETAILED EXPLANATION**: GCP categorizes VMs into Families:\n- **General Purpose (E2, N2, N1)**: Best price-performance. Good for web servers.\n- **Compute Optimized (C2)**: High CPU-to-Memory ratio. Best for high-performance computing.\n- **Memory Optimized (M1, M2)**: Massive RAM (up to 12TB). Best for SAP HANA or large in-memory databases.\n- **Accelerator Optimized (A2)**: Powered by NVIDIA GPUs for Machine Learning.\n\n**CUSTOM MACHINE TYPES**: If predefined types don't fit, you can specify exact CPU and RAM amounts (e.g., 6 vCPUs and 22.5GB RAM).\n\n**REAL-WORLD USE**: A data science team uses C2 instances for running complex numerical simulations that need high clock speeds.\n\n**CLI EXAMPLES**:\n- List types in a zone: `gcloud compute machine-types list --zones=us-central1-a` \n\n**SUMMARY POINTS**:\n- Match families to workloads (E2 is default).\n- Custom types reduce waste by avoiding 'over-provisioning'.",
+    "insight": "E2 machines are the most cost-effective because they run on 'shared' physical hardware without a performance penalty for most web apps.",
+    "next": "Creating & Configuring VMs",
+    "lab": { "command": "gcloud compute machine-types list --filter='name:e2-standard*'", "output": "NAME           CPUS  MEMORY_GB\ne2-standard-2  2     8.00\ne2-standard-4  4     16.00" }
+  },
+  {
+    "id": "gcp_ace_02_03",
+    "title": "Creating & Configuring VMs",
+    "content": "**LEARNING OBJECTIVE**: Provision VMs with specific OS and metadata settings via CLI.\n\n**DETAILED EXPLANATION**: When creating a VM, you must define:\n1. **Name and Zone**.\n2. **Machine Type** (e.g., e2-micro).\n3. **Boot Disk**: Image (Debian, Ubuntu, Windows) and Disk Type (Standard, SSD).\n4. **Service Account**: The identity the VM uses to call APIs.\n5. **Firewall Tags**: Labels used to allow traffic (e.g., 'http-server').\n\n**REAL-WORLD USE**: An SRE uses the CLI to spin up 10 temporary worker VMs to process a backlog of video uploads, ensuring they all use the same 'worker-sa' service account for security.\n\n**CLI EXAMPLES**:\n- `gcloud compute instances create [NAME] --zone=us-central1-a --machine-type=e2-medium --image-family=debian-11 --image-project=debian-cloud` \n\n**COMMON MISTAKES**: Forgetting to specify the `--zone` resulting in the CLI prompting you, which breaks automation scripts.\n\n**SUMMARY POINTS**:\n- Specify zone, machine type, and image.\n- Images are chosen by 'family' to get the latest version.",
+    "insight": "Use '--image-family' rather than a specific version name to ensure your automation always gets the latest patched OS version.",
+    "next": "VM Lifecycle & States",
+    "lab": { "command": "gcloud compute instances create web-test --zone=us-central1-a --machine-type=e2-micro", "output": "Created [https://www.googleapis.com/.../web-test].\nSTATUS: RUNNING" }
+  },
+  {
+    "id": "gcp_ace_02_04",
+    "title": "VM Lifecycle & States",
+    "content": "**LEARNING OBJECTIVE**: Understand what happens when you stop, suspend, or reset a VM.\n\n**DETAILED EXPLANATION**:\n- **PROVISIONING**: Resources are being allocated.\n- **STAGING**: Preparation (booting up).\n- **RUNNING**: Fully operational. (Billing for CPU/RAM/IP is active).\n- **STOPPING/TERMINATED**: VM is off. (Billing for CPU/RAM stops, but you still pay for DISK storage).\n- **SUSPENDED**: RAM is saved to disk. (Saves boot time, but costs small 'suspend fee').\n\n**WHY IT MATTERS**: Stopping a VM pauses CPU billing. Deleting a VM stops all billing (including disks). Resetting is a hard reboot (similar to pulling the power cord).\n\n**CLI EXAMPLES**:\n- Stop: `gcloud compute instances stop [NAME]`\n- Start: `gcloud compute instances start [NAME]`\n- Reset: `gcloud compute instances reset [NAME]`\n\n**TROUBLESHOOTING**: If a VM won't start, check if you have enough CPU quota in that region.",
+    "insight": "You still pay for a Static External IP even if the VM is STOPPED (unless it's a Standard Tier IP).",
+    "next": "Persistent Disks (PD)",
+    "lab": { "command": "gcloud compute instances stop web-test --zone=us-central1-a", "output": "Updated [web-test].\nSTATUS: TERMINATED" }
+  },
+  {
+    "id": "gcp_ace_02_05",
+    "title": "Persistent Disks (PD)",
+    "content": "**LEARNING OBJECTIVE**: Manage durable network storage for VM instances.\n\n**DETAILED EXPLANATION**: Persistent Disks are 'network-attached' storage. They are independent of the VM. If a VM is deleted, the PD can survive and be attached to a new VM. \n\n**TYPES**:\n1. **Standard (pd-standard)**: Magnetic drives. Good for large logs.\n2. **Balanced (pd-balanced)**: SSD performance at a lower cost. New default.\n3. **Performance/SSD (pd-ssd)**: High IOPS. Best for databases.\n4. **Extreme (pd-extreme)**: Highest performance for mission-critical apps.\n\n**MULTI-WRITER**: Some PDs can be attached to multiple VMs in 'Read-Only' mode, but rarely 'Read-Write' (requires specific drivers).\n\n**CLI EXAMPLES**:\n- Create disk: `gcloud compute disks create [NAME] --size=50GB --type=pd-balanced` \n- Attach: `gcloud compute instances attach-disk [VM] --disk [DISK]` \n\n**SUMMARY POINTS**:\n- PDs are durable and survive VM deletion.\n- Zonal by default, but Regional PDs exist for HA.",
+    "insight": "Persistent Disk performance scales with size. A 1TB disk is faster than a 100GB disk of the same type.",
+    "next": "Local SSD vs Persistent Disk",
+    "lab": { "command": "gcloud compute disks list", "output": "NAME       ZONE           SIZE_GB  TYPE         STATUS\ndata-disk  us-central1-a  50       pd-balanced  READY" }
+  },
+  {
+    "id": "gcp_ace_02_06",
+    "title": "Local SSD (Ephemeral Speed)",
+    "content": "**LEARNING OBJECTIVE**: Identify when to use Local SSD over Persistent Disk.\n\n**DETAILED EXPLANATION**: Local SSDs are physically attached to the physical server hosting the VM. This results in extremely low latency and high IOPS compared to the network-attached Persistent Disk.\n\n**THE CATCH**: They are **Ephemeral**. If the VM is deleted or the host hardware fails, the data is LOST. Google does NOT back up Local SSDs.\n\n**REAL-WORLD USE**: Great for swap space, 'scratch' disks for media processing, or distributed databases like Cassandra that handle their own replication across multiple nodes.\n\n**CLI EXAMPLES**:\n- Attached during VM creation only: `gcloud compute instances create [VM] --local-ssd=interface=nvme` \n\n**COMMON MISTAKES**: Putting your only copy of a database on a Local SSD without external backups.\n\n**SUMMARY POINTS**:\n- High speed, low latency.\n- Ephemeral (Data lost on VM deletion).\n- Cannot be detached/reattached like a PD.",
+    "insight": "If you STOP a VM with a Local SSD, you might lose the data if GCP moves the VM to a different physical host upon restart.",
+    "next": "Disk Snapshots & Backups",
+    "lab": { "command": "echo 'Local SSD must be added at creation time'", "output": "Local SSD must be added at creation time" }
+  },
+  {
+    "id": "gcp_ace_02_07",
+    "title": "Disk Snapshots & Backups",
+    "content": "**LEARNING OBJECTIVE**: Create point-in-time backups of your persistent disks.\n\n**DETAILED EXPLANATION**: Snapshots are incremental backups. The first snapshot is a full copy; subsequent snapshots only store the data that has changed since the last one. This makes them very cost-effective.\n\n**GLOBAL SCOPE**: Snapshots are stored globally (unlike PDs which are zonal). You can use a snapshot to recreate a disk in a different region entirely.\n\n**BEST PRACTICE**: Always take a snapshot before a risky software upgrade or OS patch.\n\n**CLI EXAMPLES**:\n- Create snapshot: `gcloud compute disks snapshot [DISK_NAME] --snapshot-names=[SNAP_NAME] --zone=[ZONE]` \n- List snapshots: `gcloud compute snapshots list` \n\n**TROUBLESHOOTING**: For the best consistency, flush your OS disk buffers (or unmount the disk) before taking a snapshot.\n\n**SUMMARY POINTS**:\n- Incremental and cost-effective.\n- Stored globally (can restore across regions).\n- Used to create new disks or custom images.",
+    "insight": "Snapshots can be automated using 'Snapshot Schedules' (Resource Policies).",
+    "next": "Custom Images",
+    "lab": { "command": "gcloud compute snapshots list --limit=3", "output": "NAME        DISK_SIZE_GB  SRC_DISK    STATUS\nbackup-v1   10            boot-disk   READY" }
+  },
+  {
+    "id": "gcp_ace_02_08",
+    "title": "Custom Images (Golden Images)",
+    "content": "**LEARNING OBJECTIVE**: Create reusable machine images with pre-installed software.\n\n**DETAILED EXPLANATION**: While Snapshots are for backups, **Images** are for deployment. You create a custom image from a disk or snapshot to capture a specific configuration (e.g., OS + Nginx + your app code).\n\n**IMAGE FAMILIES**: You can group custom images into a 'Family'. When you deploy a VM and point to the family, GCP automatically picks the newest image in that group.\n\n**REAL-WORLD USE**: A company creates a 'hardened' Linux image with all security agents pre-installed. All developers must use this image for their VMs.\n\n**CLI EXAMPLES**:\n- Create image: `gcloud compute images create [IMG_NAME] --source-disk=[DISK] --source-disk-zone=[ZONE]` \n\n**SUMMARY POINTS**:\n- Reusable templates for VMs.\n- Can be shared across projects.\n- Support versioning via Image Families.",
+    "insight": "Images are regional or multi-regional, making them great for global VM scaling.",
+    "next": "Startup & Shutdown Scripts",
+    "lab": { "command": "gcloud compute images list --no-standard-images", "output": "NAME             PROJECT     FAMILY    STATUS\nmy-app-v2024     my-proj     web-app   READY" }
+  },
+  {
+    "id": "gcp_ace_02_09",
+    "title": "Startup & Shutdown Scripts",
+    "content": "**LEARNING OBJECTIVE**: Automate software installation at boot time.\n\n**DETAILED EXPLANATION**: Startup scripts allow you to perform tasks every time a VM boots (installing packages, pulling code from Git, setting environment variables). \n- **Shutdown Scripts**: Run during a stop/delete command. Used to save logs or gracefully exit a database.\n\n**METADATA SERVER**: Scripts are stored in the VM's metadata. You can provide them as raw text or as a URL to a file in a Cloud Storage bucket (recommended for long scripts).\n\n**CLI EXAMPLES**:\n- From file: `gcloud compute instances create [VM] --metadata-from-file startup-script=install.sh` \n- From URL: `gcloud compute instances create [VM] --metadata startup-script-url=gs://bucket/script.sh` \n\n**SUMMARY POINTS**:\n- Automates VM configuration.\n- Stored in metadata.\n- Startup-script-url is best for complex scripts.",
+    "insight": "Startup scripts run as 'root'—no need for 'sudo' inside the script.",
+    "next": "Preemptible & Spot VMs",
+    "lab": { "command": "echo 'gcloud compute instances add-metadata [VM] --metadata startup-script=\"apt update\"'", "output": "gcloud compute instances add-metadata [VM] --metadata startup-script=\"apt update\"" }
+  },
+  {
+    "id": "gcp_ace_02_10",
+    "title": "Spot VMs (Cost Savings)",
+    "content": "**LEARNING OBJECTIVE**: Use spare Google capacity for huge discounts.\n\n**DETAILED EXPLANATION**: **Spot VMs** (formerly Preemptible) are the same hardware as regular VMs but with a 60-91% discount. \n\n**THE TRADE-OFF**: Google can terminate (preempt) these VMs at any time if they need the capacity for a full-price customer. You get a **30-second warning** before the VM is stopped.\n\n**RESTRICTIONS**:\n- No availability guarantee.\n- Cannot be 'Live Migrated' during host maintenance.\n\n**REAL-WORLD USE**: Batch processing, data analysis, or dev/test environments that can handle being restarted.\n\n**CLI EXAMPLES**:\n- Create Spot: `gcloud compute instances create [VM] --provisioning-model=SPOT --instance-termination-action=STOP` \n\n**SUMMARY POINTS**:\n- Massive discounts (up to 91%).\n- Terminated with 30s notice.\n- Best for fault-tolerant workloads.",
+    "insight": "If a Spot VM is terminated, it is just 'stopped'—you can try to 'start' it again later when capacity is available.",
+    "next": "Instance Templates",
+    "lab": { "command": "gcloud compute instances create p-vm --preemptible --zone=us-central1-a", "output": "Created [p-vm].\nPROVISIONING_MODEL: SPOT" }
+  },
+  {
+    "id": "gcp_ace_02_11",
+    "title": "Instance Templates",
+    "content": "**LEARNING OBJECTIVE**: Define a 'Blueprint' for multiple VM instances.\n\n**DETAILED EXPLANATION**: An **Instance Template** is a global resource that stores a VM configuration (machine type, image, labels, tags, startup scripts). It doesn't cost anything to store a template; you only pay when you use it to create a VM.\n\n**IMMUTABLE**: Once created, a template CANNOT be changed. To make a change (like updating the OS), you must create a NEW template.\n\n**WHY IT MATTERS**: It is the foundation for **Managed Instance Groups (MIGs)**. A MIG uses a template to know how to spin up new instances during auto-scaling.\n\n**CLI EXAMPLES**:\n- Create template: `gcloud compute instance-templates create [NAME] --machine-type=e2-medium --image-family=debian-11` \n\n**SUMMARY POINTS**:\n- Global resource (blueprints).\n- Immutable (cannot be edited).\n- Required for Managed Instance Groups.",
+    "insight": "On the ACE exam: If you need to change a VM's configuration in a scaling group, you must create a new template and update the group.",
+    "next": "Managed Instance Groups (MIGs)",
+    "lab": { "command": "gcloud compute instance-templates list", "output": "NAME             MACHINE_TYPE  PREEMPTIBLE  CREATION_TIMESTAMP\nweb-template-v1  e2-medium                  ..." }
+  },
+  {
+    "id": "gcp_ace_02_12",
+    "title": "Managed Instance Groups (MIGs)",
+    "content": "**LEARNING OBJECTIVE**: Manage groups of identical VMs as a single entity.\n\n**DETAILED EXPLANATION**: A **MIG** uses an Instance Template to maintain a fleet of identical VMs. \n\n**KEY FEATURES**:\n- **Auto-healing**: If a VM crashes (fails health check), the MIG automatically deletes and recreates it.\n- **Auto-scaling**: Automatically adds/removes VMs based on CPU load or traffic.\n- **Multi-zone (Regional)**: Spreads VMs across 3 zones for high availability.\n- **Rolling Updates**: Updates your fleet to a new template without downtime.\n\n**REAL-WORLD USE**: Hosting a web application that needs to handle 100 users at night and 10,000 during the day.\n\n**CLI EXAMPLES**:\n- Create MIG: `gcloud compute instance-groups managed create [NAME] --template=[TEMPLATE] --size=3 --zone=[ZONE]` \n\n**SUMMARY POINTS**:\n- Identical VMs based on a template.\n- Provides High Availability (HA) and Scalability.\n- Supports Auto-healing and Rolling Updates.",
+    "insight": "MIGs are the primary way to build 'Self-Healing' infrastructure in GCE.",
+    "next": "Auto-scaling Logic",
+    "lab": { "command": "gcloud compute instance-groups managed list", "output": "NAME      LOCATION       SCOPE  BASE_INSTANCE_NAME  SIZE  TARGET_SIZE\nweb-mig   us-central1-a  zone   web-server          3     3" }
+  },
+  {
+    "id": "gcp_ace_02_13",
+    "title": "Auto-scaling Logic",
+    "content": "**LEARNING OBJECTIVE**: Configure automatic growth and shrinkage of your VM fleet.\n\n**DETAILED EXPLANATION**: Auto-scaling in a MIG is based on **Policies**. You can scale based on:\n- **CPU Utilization**: (e.g., maintain 60% average CPU).\n- **Load Balancing Capacity**: (e.g., scale if one VM is getting too many HTTP requests).\n- **Cloud Monitoring Metrics**: (e.g., number of messages in a queue).\n- **Schedules**: (e.g., scale up at 8 AM every Monday).\n\n**COOLDOWN PERIOD**: The time the autoscaler waits after a change before looking at metrics again (prevents 'flapping' where it scales up and down rapidly).\n\n**CLI EXAMPLES**:\n- Enable autoscaling: `gcloud compute instance-groups managed set-autoscaling [NAME] --max-num-replicas=10 --target-cpu-utilization=0.6` \n\n**SUMMARY POINTS**:\n- Reduces costs by deleting unused VMs.\n- Ensures performance during spikes.\n- Requires a 'Cool-down' period for stability.",
+    "insight": "Always set a '--min-num-replicas' greater than zero for production to avoid scaling to a dead app.",
+    "next": "Auto-healing & Health Checks",
+    "lab": { "command": "gcloud compute instance-groups managed describe web-mig --zone=us-central1-a --format='get(autoscaler)'", "output": "targetCpuUtilization: 0.6, maxNumReplicas: 10" }
+  },
+  {
+    "id": "gcp_ace_02_14",
+    "title": "Auto-healing & Health Checks",
+    "content": "**LEARNING OBJECTIVE**: Ensure your application remains available even if the OS crashes.\n\n**DETAILED EXPLANATION**: A **Health Check** is a service that probes your VM on a specific port (e.g., HTTP 80) to see if it's responding. \n- **The Healing Loop**: If the health check fails X times, the MIG marks the VM as 'unhealthy', deletes it, and creates a fresh one from the template.\n\n**INITIAL DELAY**: How long the MIG waits for a new VM to 'boot up' before it starts checking its health. If this is too short, the MIG will kill the VM before it even finished starting Nginx!\n\n**CLI EXAMPLES**:\n- Update MIG with health check: `gcloud compute instance-groups managed update [NAME] --health-check=[HC_NAME] --initial-delay=90` \n\n**SUMMARY POINTS**:\n- Monitors app-level health (not just VM ping).\n- Replaces failed instances automatically.\n- Requires a properly tuned Initial Delay.",
+    "insight": "On the ACE exam: If your VMs are constantly rebooting in a MIG, check if the Initial Delay is too short.",
+    "next": "Unmanaged Instance Groups",
+    "lab": { "command": "gcloud compute health-checks list", "output": "NAME      TYPE  TERMINATION\nweb-hc    HTTP  ..." }
+  },
+  {
+    "id": "gcp_ace_02_15",
+    "title": "Unmanaged Instance Groups",
+    "content": "**LEARNING OBJECTIVE**: Group heterogeneous VMs for load balancing.\n\n**DETAILED EXPLANATION**: Unlike MIGs (which are identical VMs), an **Unmanaged Instance Group** is a collection of existing VMs that can have different machine types, OS images, and configurations.\n\n**LIMITATIONS**:\n- **No Auto-scaling**.\n- **No Auto-healing**.\n- **No Rolling Updates**.\n\n**WHY IT MATTERS**: Use these only when you have a legacy cluster where each node is unique but you still want to put them behind a Load Balancer.\n\n**CLI EXAMPLES**:\n- Create group: `gcloud compute instance-groups unmanaged create [NAME] --zone=[ZONE]` \n- Add VM: `gcloud compute instance-groups unmanaged add-instances [NAME] --instances=[VM1,VM2]` \n\n**SUMMARY POINTS**:\n- Different VMs in one group.\n- No automation (manual management only).\n- Used mostly for legacy or specialized clusters.",
+    "insight": "Prefer MIGs for 99% of cloud-native use cases.",
+    "next": "Introduction to Cloud Storage (GCS)",
+    "lab": { "command": "gcloud compute instance-groups unmanaged list", "output": "NAME             ZONE           NETWORK   SIZE\nlegacy-cluster   us-central1-a  default   2" }
+  },
+  {
+    "id": "gcp_ace_02_16",
+    "title": "Cloud Storage (Object Storage)",
+    "content": "**LEARNING OBJECTIVE**: Understand the difference between Block Storage (PD) and Object Storage (GCS).\n\n**DETAILED EXPLANATION**: Cloud Storage (GCS) is a global service for storing unstructured data (blobs). It is **not** a file system you 'mount' to a VM (like a hard drive). Instead, you access files via an API or URL.\n\n**BUCKETS**: Files (objects) live in Buckets. Buckets have a **Globally Unique Name** (like a domain name). No two users in the world can have a bucket with the same name.\n\n**LIMITLESS**: There is no minimum or maximum size. You can store 1KB or 1 Petabyte, and Google handles the scaling automatically.\n\n**REAL-WORLD USE**: Storing user profile photos, video files for a streaming app, or database backups.\n\n**CLI EXAMPLES**:\n- List buckets: `gsutil ls` \n\n**SUMMARY POINTS**:\n- Object storage (Blobs).\n- Accessible via API/CLI/URL.\n- Globally unique bucket names.",
+    "insight": "Cloud Storage has 'Infinite' capacity—you never have to provision disk size.",
+    "next": "GCS Storage Classes",
+    "lab": { "command": "gsutil ls", "output": "gs://my-cool-bucket/\ngs://company-logs-99/" }
+  },
+  {
+    "id": "gcp_ace_02_17",
+    "title": "GCS Storage Classes",
+    "content": "**LEARNING OBJECTIVE**: Optimize costs by matching storage frequency to the right class.\n\n**DETAILED EXPLANATION**: You pay for two things in GCS: **At-Rest Storage** and **Data Retrieval**.\n1. **STANDARD**: Highest storage cost, NO retrieval cost. Best for active data.\n2. **NEARLINE**: Cheaper storage, small retrieval cost. Access once a month (e.g., monthly reports).\n3. **COLDLINE**: Much cheaper, higher retrieval cost. Access once a quarter (e.g., quarterly audits).\n4. **ARCHIVE**: Cheapest storage ($0.0012/GB), highest retrieval cost. Access once a year (e.g., legal compliance).\n\n**MINIMUM DURATION**: Nearline/Coldline/Archive have minimum storage time requirements (30, 90, 365 days). If you delete a file after 1 day, you still pay for the full duration.\n\n**CLI EXAMPLES**:\n- Create nearline bucket: `gsutil mb -c nearline gs://my-archive-123` \n\n**SUMMARY POINTS**:\n- Match class to access frequency.\n- Archive is for data you hope to 'never' touch.\n- Standard is for web assets and active code.",
+    "insight": "All storage classes have the same high durability (11 nines) and low latency (milliseconds to first byte).",
+    "next": "GCS Locations: Regional vs Multi-Regional",
+    "lab": { "command": "gsutil stat gs://my-cool-bucket/file.png", "output": "... Storage class: STANDARD ..." }
+  },
+  {
+    "id": "gcp_ace_02_18",
+    "title": "Regional vs Multi-Regional",
+    "content": "**LEARNING OBJECTIVE**: Choose where your data is physically stored for performance and compliance.\n\n**DETAILED EXPLANATION**:\n- **Region**: Data is stored in one specific geographic area (e.g., `us-central1`). Lowest cost. Best for compute nodes in the same region.\n- **Dual-Region**: Data is replicated across two regions (e.g., `us-east1` and `us-west1`). High availability if one region goes down.\n- **Multi-Region**: Data is replicated across a large geographic area (e.g., 'US' or 'EU'). Best for serving content to users across a whole continent.\n\n**WHY IT MATTERS**: For legal reasons (GDPR), you might be forced to keep data in the 'EU' multi-region or a specific country region.\n\n**CLI EXAMPLES**:\n- Create in specific region: `gsutil mb -l us-east1 gs://my-local-bucket` \n\n**SUMMARY POINTS**:\n- Regional = Lowest cost.\n- Multi-Regional = Highest availability / Best for global serving.",
+    "insight": "Multi-regional buckets are perfect for hosting static website assets for a global audience.",
+    "next": "Uploading & Managing Objects",
+    "lab": { "command": "gsutil mb -l us gs://my-global-assets", "output": "Creating gs://my-global-assets/..." }
+  },
+  {
+    "id": "gcp_ace_02_19",
+    "title": "Uploading & Managing Objects",
+    "content": "**LEARNING OBJECTIVE**: Master the `gsutil` commands for data transfer.\n\n**DETAILED EXPLANATION**: `gsutil` is the primary CLI tool for GCS. It mimics Linux file commands.\n- **cp**: Copy (Upload/Download/Bucket-to-Bucket).\n- **mv**: Move (Rename/Transfer).\n- **rm**: Delete.\n- **ls**: List.\n\n**MULTITHREADING**: For large transfers, use the **`-m`** flag (e.g., `gsutil -m cp ...`). This runs multiple uploads in parallel, significantly speeding up the process.\n\n**CLI EXAMPLES**:\n- Upload file: `gsutil cp local.txt gs://my-bucket/remote.txt` \n- Recursively upload folder: `gsutil cp -r ./photos gs://my-bucket/` \n- Multi-threaded: `gsutil -m cp -r ./large-data gs://my-bucket/` \n\n**SUMMARY POINTS**:\n- `gsutil` is the 'Swiss Army Knife' for GCS.\n- Use `-m` for speed on large datasets.\n- Recursive `-r` for folders.",
+    "insight": "GCS objects are immutable. If you 'edit' a file, you are actually overwriting it with a new version.",
+    "next": "Object Lifecycle Management",
+    "lab": { "command": "gsutil cp local-file.txt gs://my-cool-bucket/", "output": "Copying file://... 100% done" }
+  },
+  {
+    "id": "gcp_ace_02_20",
+    "title": "Object Lifecycle Management",
+    "content": "**LEARNING OBJECTIVE**: Automate cost optimization via lifecycle rules.\n\n**DETAILED EXPLANATION**: You don't want to manually move old logs to Archive storage. **Lifecycle Policies** automate this. You define a set of Rules in a JSON file.\n\n**ACTIONS**:\n- **Delete**: Permanently remove old data.\n- **SetStorageClass**: Move data (e.g., Standard -> Coldline).\n\n**CONDITIONS**:\n- **Age**: (e.g., if file is > 30 days old).\n- **CreatedBefore**: (e.g., created before 2023-01-01).\n- **IsLive**: (Used with versioning).\n- **MatchesStorageClass**: (e.g., only move Standard files).\n\n**CLI EXAMPLES**:\n- Apply policy: `gsutil lifecycle set policy.json gs://my-bucket` \n- View policy: `gsutil lifecycle get gs://my-bucket` \n\n**SUMMARY POINTS**:\n- Automates 'Cleanup' and 'Archival'.\n- Defined via JSON rules.\n- Critical for managing storage costs at scale.",
+    "insight": "Lifecycle rules can take up to 24 hours to take effect once applied.",
+    "next": "GCS Versioning",
+    "lab": { "command": "gsutil lifecycle get gs://my-cool-bucket", "output": "{\"rule\": [{\"action\": {\"type\": \"Delete\"}, \"condition\": {\"age\": 365}}]}" }
+  },
+  {
+    "id": "gcp_ace_02_21",
+    "title": "GCS Versioning",
+    "content": "**LEARNING OBJECTIVE**: Protect data from accidental deletion or overwrites.\n\n**DETAILED EXPLANATION**: When **Versioning** is enabled, GCS keeps a history of your objects. If you overwrite `cat.jpg`, GCS stores the new version as 'Live' and the old version as a 'Non-current' version with a unique **Generation Number**.\n\n**WHY IT MATTERS**: It's an insurance policy against human error. If a developer accidentally runs `gsutil rm -r gs://bucket`, you can restore the non-current versions.\n\n**COST**: You pay for every version stored. A 1GB file with 10 versions costs as much as 10GB of storage.\n\n**CLI EXAMPLES**:\n- Enable: `gsutil versioning set on gs://my-bucket` \n- List all versions: `gsutil ls -a gs://my-bucket` \n\n**SUMMARY POINTS**:\n- Protects against accidental loss.\n- Every version has a 'Generation Number'.\n- Increases storage costs.",
+    "insight": "Use Object Lifecycle Management to automatically delete 'non-current' versions after 7 days to keep costs low.",
+    "next": "Bucket Permissions (IAM vs ACLs)",
+    "lab": { "command": "gsutil versioning get gs://my-cool-bucket", "output": "gs://my-cool-bucket: Enabled" }
+  },
+  {
+    "id": "gcp_ace_02_22",
+    "title": "Permissions: IAM vs ACLs",
+    "content": "**LEARNING OBJECTIVE**: Master GCS access control and identify best practices.\n\n**DETAILED EXPLANATION**:\n1. **IAM**: Best Practice. Applied at the Project or Bucket level. Uniform permissions for all objects in the bucket.\n2. **ACLs (Access Control Lists)**: Legacy. Applied at the individual object level (e.g., File A is public, File B is private). Hard to manage at scale.\n\n**UNIFORM BUCKET-LEVEL ACCESS (UBLA)**: A setting that disables ACLs entirely and forces the use of IAM. Google strongly recommends this for all new buckets.\n\n**REAL-WORLD USE**: A security admin enables UBLA on the 'Customer-Data' bucket to ensure that no developer can accidentally make one single file public using an ACL.\n\n**CLI EXAMPLES**:\n- Enable UBLA: `gsutil ubla set on gs://my-bucket` \n\n**SUMMARY POINTS**:\n- IAM is simpler and more secure.\n- UBLA disables legacy ACLs.\n- Use `gsutil iam` to manage bucket access.",
+    "insight": "On the ACE exam: Always choose IAM/Uniform Access as the most secure configuration for GCS.",
+    "next": "Signed URLs (Temporary Access)",
+    "lab": { "command": "gsutil ubla get gs://my-cool-bucket", "output": "Uniform bucket-level access: Enabled" }
+  },
+  {
+    "id": "gcp_ace_02_23",
+    "title": "Signed URLs (Temporary Access)",
+    "content": "**LEARNING OBJECTIVE**: Grant limited-time access to private data without an account.\n\n**DETAILED EXPLANATION**: Imagine you have a private bucket of reports. A user wants to download one report, but they don't have a Google account. A **Signed URL** is a special link that contains a cryptographic signature. Anyone with the link can access the file for a specific duration (e.g., 15 minutes).\n\n**MECHANICS**: You use a Service Account's private key to 'sign' the request. The link is generated locally; no API call to Google is needed to create the link.\n\n**REAL-WORLD USE**: An e-commerce app generates a Signed URL so a customer can download their invoice PDF from a private bucket.\n\n**CLI EXAMPLES**:\n- Create signed URL (10 min): `gsutil signurl -d 10m key.json gs://bucket/file.pdf` \n\n**SUMMARY POINTS**:\n- Temporary access (Time-bound).\n- No Google account required for the downloader.\n- Requires a Service Account key to sign.",
+    "insight": "Signed URLs are the primary way to serve private content from GCS to external end-users.",
+    "next": "GCS Static Website Hosting",
+    "lab": { "command": "echo 'gsutil signurl -d 1h service-account.json gs://bucket/image.png'", "output": "https://storage.googleapis.com/...&Signature=..." }
+  },
+  {
+    "id": "gcp_ace_02_24",
+    "title": "Static Website Hosting",
+    "content": "**LEARNING OBJECTIVE**: Host a website on GCS for pennies a month.\n\n**DETAILED EXPLANATION**: You can use a Cloud Storage bucket to serve static assets (HTML, CSS, JS, Images). It cannot run server-side code (PHP, Python, etc.).\n\n**REQUIREMENTS**:\n1. **Public Access**: Grant `roles/storage.objectViewer` to `allUsers`.\n2. **Special Pages**: Define an Index page (index.html) and a 404 page (404.html).\n3. **Domain**: (Optional) The bucket name must match your domain name (e.g., `www.mysite.com`).\n\n**WHY IT MATTERS**: It is incredibly cheap and scales to millions of users without managing a single server.\n\n**CLI EXAMPLES**:\n- Set main/error pages: `gsutil web set -m index.html -e 404.html gs://my-site-bucket` \n\n**SUMMARY POINTS**:\n- Only for static content.\n- Requires `allUsers` read permission.\n- No servers to manage.",
+    "insight": "GCS website hosting does not support HTTPS natively for custom domains (requires a Load Balancer or Firebase Hosting).",
+    "next": "Cloud Filestore (Managed NFS)",
+    "lab": { "command": "gsutil web get gs://my-site-bucket", "output": "Index page: index.html\nError page: 404.html" }
+  },
+  {
+    "id": "gcp_ace_02_25",
+    "title": "Cloud Filestore (Managed NFS)",
+    "content": "**LEARNING OBJECTIVE**: Provide shared file storage for multiple VM instances.\n\n**DETAILED EXPLANATION**: While Persistent Disks are for one VM and GCS is for objects, **Cloud Filestore** is a managed **NFS (Network File System)**. You can mount it to dozens of VMs at the same time.\n\n**POSIX COMPLIANT**: It acts exactly like a local folder on your Linux VM (`/mnt/shared-data`). You can use standard file operations (open, read, write, lock).\n\n**REAL-WORLD USE**: A pool of web servers sharing a folder of CMS assets (like WordPress uploads) or high-performance rendering farms.\n\n**CLI EXAMPLES**:\n- List instances: `gcloud filestore instances list` \n\n**SUMMARY POINTS**:\n- Shared storage (NFS).\n- Mountable on VMs and GKE nodes.\n- Best for applications requiring a shared file system.",
+    "insight": "Filestore is significantly more expensive than GCS or PD—use it only if your app strictly needs a shared file system.",
+    "next": "VM Metadata Server",
+    "lab": { "command": "gcloud filestore instances list", "output": "INSTANCE_ID  ZONE           TIER      CAPACITY_GB\nnfs-share    us-central1-c  STANDARD  1024" }
+  },
+  {
+    "id": "gcp_ace_02_26",
+    "title": "The Metadata Server",
+    "content": "**LEARNING OBJECTIVE**: Access VM environment info from inside the instance.\n\n**DETAILED EXPLANATION**: Every Compute Engine VM has access to a special internal API called the **Metadata Server** (accessible at `metadata.google.internal`). \n\n**WHAT IS IN THERE?**:\n- The VM's name, zone, and project ID.\n- Custom metadata (e.g., environment variables you set at creation).\n- **OAuth Tokens**: Your code on the VM can fetch a temporary security token from here to authenticate with other GCP services without needing a JSON key file.\n\n**SECURITY**: The metadata server is only reachable from *inside* the VM. It cannot be reached from the public internet.\n\n**CLI EXAMPLES (Inside VM)**:\n- Get Project ID: `curl \"http://metadata.google.internal/computeMetadata/v1/project/project-id\" -H \"Metadata-Flavor: Google\"` \n\n**SUMMARY POINTS**:\n- Internal information source for the VM.\n- Source of security tokens (very important!).\n- Accessible via simple HTTP GET requests.",
+    "insight": "Always include the 'Metadata-Flavor: Google' header in your curl calls to prevent SSRF attacks.",
+    "next": "VM Service Accounts (The Secure Way)",
+    "lab": { "command": "echo 'curl -H \"Metadata-Flavor: Google\" http://metadata.google.internal/computeMetadata/v1/instance/name'", "output": "my-instance-name" }
+  },
+  {
+    "id": "gcp_ace_02_27",
+    "title": "Attaching Service Accounts",
+    "content": "**LEARNING OBJECTIVE**: Securely authorize your VMs to use other GCP services.\n\n**DETAILED EXPLANATION**: Instead of downloading a JSON key to a VM, you **Attach** a Service Account to the VM when you create it. \n\n**HOW IT WORKS**: Your application code uses a Google Cloud Library (like `google-cloud-storage`). The library automatically checks the Metadata Server, gets a token for the attached SA, and uses it to perform the task.\n\n**SCOPE (Legacy)**: Older VMs use 'Access Scopes' (e.g., `https://www.googleapis.com/auth/storage.read_only`). **Best Practice** today is to set the scope to 'Allow full access to all Cloud APIs' and then use IAM roles on the SA to restrict actual permissions.\n\n**CLI EXAMPLES**:\n- Create VM with SA: `gcloud compute instances create [VM] --service-account=[EMAIL] --scopes=cloud-platform` \n\n**SUMMARY POINTS**:\n- No JSON keys needed on disk.\n- Tokens are automatically rotated by Google.\n- Identity is managed via standard IAM.",
+    "insight": "On the exam: Attaching a Service Account is the only 'Correct' way to authorize a VM to access buckets or databases.",
+    "next": "Shielded VMs",
+    "lab": { "command": "gcloud compute instances describe web-test --zone=us-central1-a --format='get(serviceAccounts)'", "output": "email: app-worker@proj.iam.gserviceaccount.com" }
+  },
+  {
+    "id": "gcp_ace_02_28",
+    "title": "Shielded VMs (Hardened Security)",
+    "content": "**LEARNING OBJECTIVE**: Protect VMs against rootkits and boot-level malware.\n\n**DETAILED EXPLANATION**: **Shielded VMs** provide verifiable integrity of your instance's boot state. They use three main features:\n1. **Secure Boot**: Ensures only trusted, signed software boots on the VM.\n2. **vTPM (Virtual Trusted Platform Module)**: Securely stores keys and certificates and validates the boot process.\n3. **Integrity Monitoring**: Alerts you if the boot state has changed from the 'baseline'.\n\n**WHY IT MATTERS**: It prevents an attacker from installing a 'Rootkit' that starts before the Operating System, making the attack invisible to standard antivirus software.\n\n**CLI EXAMPLES**:\n- Create Shielded VM: `gcloud compute instances create [VM] --shielded-secure-boot --shielded-vtpm` \n\n**SUMMARY POINTS**:\n- Protects the boot process.\n- Verifies OS integrity.\n- Recommended for high-security workloads.",
+    "insight": "Shielded features are free and supported by most standard Google images (Debian, Ubuntu, Windows).",
+    "next": "Sole-Tenant Nodes",
+    "lab": { "command": "gcloud compute instances describe web-test --format='get(shieldedInstanceConfig)'", "output": "enableSecureBoot: true, enableVtpm: true" }
+  },
+  {
+    "id": "gcp_ace_02_29",
+    "title": "Sole-Tenant Nodes",
+    "content": "**LEARNING OBJECTIVE**: Comply with licensing or security requirements by using dedicated physical servers.\n\n**DETAILED EXPLANATION**: Standard VMs run on servers shared with other customers (isolated by hypervisors). **Sole-Tenant Nodes** give you a physical server all to yourself. No other Google customers will have VMs on that same hardware.\n\n**WHY IT MATTERS**:\n- **Licensing**: Some software (like older Windows/Oracle licenses) requires you to run on physical hardware you 'own' or dedicate.\n- **Security/Compliance**: Strict regulations may forbid 'co-mingling' hardware with other companies.\n- **Performance**: Eliminates 'noisy neighbor' issues from other customers.\n\n**CLI EXAMPLES**:\n- Requires creating a Node Template and then a Node Group.\n\n**SUMMARY POINTS**:\n- Physical server isolation.\n- Used for BYOL (Bring Your Own License).\n- You pay for the whole server, regardless of how many VMs are on it.",
+    "insight": "Sole-tenancy is the only way to satisfy licenses that are tied to a physical core count.",
+    "next": "Predefined vs Custom Machine Types",
+    "lab": { "command": "gcloud compute sole-tenancy node-templates list", "output": "(Empty list)" }
+  },
+  {
+    "id": "gcp_ace_02_30",
+    "title": "Predefined vs Custom Machines",
+    "content": "**LEARNING OBJECTIVE**: Match machine specs to exact resource requirements.\n\n**DETAILED EXPLANATION**:\n- **Predefined**: Google's 'Menu'. You pick e2-standard-4 (4 CPU, 16GB RAM). Easy and predictable pricing.\n- **Custom**: You specify the exact CPU and RAM. For example, if your app needs 4 CPUs but 32GB of RAM (which isn't a standard 'Menu' item), you can create it.\n\n**LIMITATIONS**: There are rules for custom machines (e.g., RAM must be between 0.9GB and 6.5GB per vCPU, and must be a multiple of 256MB).\n\n**CLI EXAMPLES**:\n- Custom VM: `gcloud compute instances create [VM] --custom-cpu=4 --custom-memory=32GB` \n\n**SUMMARY POINTS**:\n- Custom machines reduce waste (you don't pay for CPU you don't need).\n- Predefined machines are faster to reason about and often slightly cheaper per unit.",
+    "insight": "Use custom machine types to perfectly fit 'weird' legacy workloads being moved to the cloud.",
+    "next": "Disk Resizing (On-the-Fly)",
+    "lab": { "command": "gcloud compute instances create custom-vm --custom-cpu=2 --custom-memory=5GB --zone=us-central1-a", "output": "Created [custom-vm]." }
+  },
+  {
+    "id": "gcp_ace_02_31",
+    "title": "Disk Resizing (On-the-Fly)",
+    "content": "**LEARNING OBJECTIVE**: Increase storage capacity without stopping your VM.\n\n**DETAILED EXPLANATION**: You can increase the size of a Persistent Disk at any time, even while it's attached to a running instance and being actively used.\n\n**CRITICAL STEP**: After you resize the disk in GCP, you **MUST** resize the partition and file system *inside* the Operating System (using commands like `resize2fs` or `growpart` on Linux).\n\n**LIMITATION**: You can **NEVER** decrease the size of a Persistent Disk. If you make it 100GB, you are paying for 100GB forever unless you migrate the data to a new smaller disk.\n\n**CLI EXAMPLES**:\n- Resize to 100GB: `gcloud compute disks resize [DISK_NAME] --size=100 --zone=[ZONE]` \n\n**SUMMARY POINTS**:\n- Can only increase, never decrease.\n- Works while VM is running.\n- Requires OS-level commands to see the new space.",
+    "insight": "Disk performance (IOPS) automatically increases when you resize a disk because it's based on GB size.",
+    "next": "Disk Images vs Snapshots",
+    "lab": { "command": "gcloud compute disks resize boot-disk --size=50 --zone=us-central1-a", "output": "Updated [boot-disk]." }
+  },
+  {
+    "id": "gcp_ace_02_32",
+    "title": "Images vs Snapshots (Summary)",
+    "content": "**LEARNING OBJECTIVE**: Know when to use each storage capture method.\n\n**SNAPSHOTS**:\n- Purpose: Backup and Disaster Recovery.\n- Features: Incremental, global, cost-optimized.\n- Exam Clue: 'Backup', 'Point-in-time', 'Restore'.\n\n**IMAGES**:\n- Purpose: Deployment and Provisioning.\n- Features: Versioning (families), metadata inclusion.\n- Exam Clue: 'Blueprint', 'Clone', 'Reusable Template'.\n\n**COMMON WORKFLOW**: Take a **Snapshot** of a healthy disk -> Create an **Image** from that snapshot -> Use the **Image** in an **Instance Template**.",
+    "insight": "Think of a Snapshot as a 'Save Game' file and an Image as the 'Installer' for the game.",
+    "next": "Storage Transfer Service",
+    "lab": { "command": "echo 'Snapshot = Backup | Image = Deployment Template'", "output": "Snapshot = Backup | Image = Deployment Template" }
+  },
+  {
+    "id": "gcp_ace_02_33",
+    "title": "Storage Transfer Service",
+    "content": "**LEARNING OBJECTIVE**: Move terabytes of data into GCS with ease.\n\n**DETAILED EXPLANATION**: **Storage Transfer Service** is a managed service for moving data from:\n- Other Cloud Providers (AWS S3, Azure Blob).\n- Public URLs (HTTP/HTTPS).\n- Other GCS Buckets.\n- On-premises data (using a local agent).\n\n**FEATURES**:\n- **Scheduling**: Run transfers daily or once.\n- **Filtering**: Only move files with a specific prefix.\n- **Verification**: Automatically check for data integrity after the move.\n\n**CLI EXAMPLES**:\n- List jobs: `gcloud transfer jobs list` \n\n**SUMMARY POINTS**:\n- Automated and scalable.\n- Supports multi-cloud migrations.\n- Handles the 'heavy lifting' of retries and error checking.",
+    "insight": "For petabyte-scale data where internet is too slow, use 'Transfer Appliance' (a physical shipping box).",
+    "next": "GCS Signed Policy Documents",
+    "lab": { "command": "gcloud transfer jobs list", "output": "(Empty list)" }
+  },
+  {
+    "id": "gcp_ace_02_34",
+    "title": "GCS Signed Policies (Advanced)",
+    "content": "**LEARNING OBJECTIVE**: Enable secure direct-to-bucket uploads from a web browser.\n\n**DETAILED EXPLANATION**: A **Signed Policy** is an extension of the Signed URL concept. Instead of just allowing a download, it provides a 'ticket' that allows a browser to upload a file directly to your bucket without touching your server.\n\n**WHY IT MATTERS**: It saves your server's bandwidth and CPU. Your server just generates the small signature, and the client's browser sends the 1GB video file straight to Google.\n\n**SECURITY**: You can specify constraints, like 'file must be < 50MB' and 'content-type must be image/png'.\n\n**SUMMARY POINTS**:\n- Direct-to-bucket uploads.\n- Offloads processing from your app server.\n- Highly secure and controlled.",
+    "insight": "This is how modern apps like YouTube or Google Drive handle massive uploads efficiently.",
+    "next": "Customer-Managed Encryption (CMEK)",
+    "lab": { "command": "echo 'Configure via POST form and signed policy string'", "output": "Configure via POST form and signed policy string" }
+  },
+  {
+    "id": "gcp_ace_02_35",
+    "title": "CMEK (Encryption Keys)",
+    "content": "**LEARNING OBJECTIVE**: Control your own encryption keys for disks and buckets.\n\n**DETAILED EXPLANATION**: By default, GCP encrypts all data at rest using Google-managed keys. **CMEK (Customer-Managed Encryption Keys)** allows you to use your own keys stored in **Cloud KMS**.\n\n**WHY IT MATTERS**: For strict compliance (HIPAA, PCI-DSS), you may need to prove that YOU have the power to 'Revoke' the key at any time, rendering the data unreadable even to Google.\n\n**MECHANICS**: You create a key in KMS, grant the 'Service Agent' service account permission to use it, and specify the key during resource creation.\n\n**CLI EXAMPLES**:\n- Create bucket with CMEK: `gsutil mb -k [KEY_PATH] gs://my-secure-bucket` \n\n**SUMMARY POINTS**:\n- Extra layer of control.\n- Uses Cloud KMS.\n- Compliance requirement for many industries.",
+    "insight": "If you lose/delete your CMEK key, you lose access to the data FOREVER. Google cannot help you recover it.",
+    "next": "VM Internal DNS",
+    "lab": { "command": "echo 'Requires Cloud KMS key and IAM permissions'", "output": "Requires Cloud KMS key and IAM permissions" }
+  },
+  {
+    "id": "gcp_ace_02_36",
+    "title": "Internal DNS (VM Discovery)",
+    "content": "**LEARNING OBJECTIVE**: Connect VMs via name instead of IP address.\n\n**DETAILED EXPLANATION**: Every project has an internal DNS service. When you create a VM, GCP automatically creates a DNS record for it.\n\n**FORMATS**:\n- **Zonal**: `[VM_NAME].[ZONE].c.[PROJECT_ID].internal`\n- **Global**: `[VM_NAME].c.[PROJECT_ID].internal` (Only works if the VM name is unique in the project).\n\n**BENEFIT**: If a VM is deleted and recreated (like in a MIG), its internal IP might change, but its DNS name stays the same. Your application code should always point to the DNS name.\n\n**CLI EXAMPLES (Inside VM)**:\n- `ping web-server.us-central1-a.c.my-proj.internal` \n\n**SUMMARY POINTS**:\n- Automatic and free.\n- Internal only (not reachable from internet).\n- Makes application configuration easier.",
+    "insight": "GCP handles all the DNS management; you don't need to configure a Bind or Active Directory server.",
+    "next": "Storage Transfer Service for On-Prem",
+    "lab": { "command": "echo 'Reach VMs at [NAME].c.[PROJ].internal'", "output": "Reach VMs at [NAME].c.[PROJ].internal" }
+  },
+  {
+    "id": "gcp_ace_02_37",
+    "title": "On-Premises Data Transfer",
+    "content": "**LEARNING OBJECTIVE**: Sync your local data center with Cloud Storage.\n\n**DETAILED EXPLANATION**: To move data from your local servers, you install the **Storage Transfer Service Agent** (a Docker container) on your local machine. It handles:\n- Large-scale directory scanning.\n- Resuming interrupted transfers.\n- Encrypting data before it leaves your network.\n\n**WHY IT MATTERS**: It is more robust than `gsutil` for moving billions of small files or keeping a local folder in sync with a cloud bucket for backup.\n\n**SUMMARY POINTS**:\n- Uses local agents.\n- Robust and resumeable.\n- Perfect for large-scale data migrations.",
+    "insight": "The agent can be run on multiple local machines to parallelize the transfer even further.",
+    "next": "Bucket Locks & Retention",
+    "lab": { "command": "echo 'Run agent via Docker on local hardware'", "output": "Run agent via Docker on local hardware" }
+  },
+  {
+    "id": "gcp_ace_02_38",
+    "title": "Bucket Locks & Retention",
+    "content": "**LEARNING OBJECTIVE**: Prevent data deletion for compliance (WORM).\n\n**DETAILED EXPLANATION**: Some industries require **WORM** (Write Once, Read Many) storage. A **Retention Policy** on a bucket ensures that objects cannot be deleted or overwritten for a specific period (e.g., 7 years).\n\n**BUCKET LOCK**: You can 'Lock' the policy. Once locked, the policy CANNOT be removed or shortened, even by the Project Owner. Only deleting the whole project (after the 30-day grace) can remove it.\n\n**CLI EXAMPLES**:\n- Set 1 year retention: `gsutil retention set 1y gs://legal-archive` \n- Lock policy (DANGER): `gsutil retention lock gs://legal-archive` \n\n**SUMMARY POINTS**:\n- Prevents deletion (WORM).\n- Used for legal/financial compliance.\n- 'Locking' is permanent.",
+    "insight": "On the exam: If data MUST NOT be deleted for 5 years for legal reasons, use a Bucket Retention Policy.",
+    "next": "VM Status Troubleshooting",
+    "lab": { "command": "gsutil retention get gs://legal-archive", "output": "Retention Policy: 31536000 seconds (Locked: False)" }
+  },
+  {
+    "id": "gcp_ace_02_39",
+    "title": "VM Status Troubleshooting",
+    "content": "**LEARNING OBJECTIVE**: Diagnose common 'VM is down' scenarios.\n\n**DETAILED EXPLANATION**:\n- **Status: STOPPING**: VM is shutting down. Check for slow shutdown scripts.\n- **Status: TERMINATED**: VM is off. Try 'Start'.\n- **Status: REPAIRING**: Internal Google hardware failure. Google is moving your VM to new hardware automatically.\n\n**INTERNAL CHECKS**: If status is 'RUNNING' but you can't reach it:\n1. Check **Firewall Rules** (Is port 22/80 open?).\n2. Check **Serial Port Output** to see if the OS crashed during boot.\n3. Check **CPU/RAM** metrics for spikes.\n\n**CLI EXAMPLES**:\n- Get serial logs: `gcloud compute instances get-serial-port-output [VM]` \n\n**SUMMARY POINTS**:\n- Check GCP Console status first.\n- Use serial logs for OS-level crashes.\n- Verify Networking and Firewalls.",
+    "insight": "Serial port output is your 'monitor' into the VM's boot process when SSH fails.",
+    "next": "Compute & Storage Summary",
+    "lab": { "command": "gcloud compute instances get-serial-port-output web-test --zone=us-central1-a --limit=10", "output": "Starting System... [OK] Started LSB: Nginx..." }
+  },
+  {
+    "id": "gcp_ace_02_40",
+    "title": "Compute & Storage Summary",
+    "content": "**CHAPTER COMPLETE**\n\nYou have mastered the core infrastructure primitives of Google Cloud.\n\n**KEY TAKEAWAYS**:\n- **GCE**: Choose the right family (E2/N2/C2) and use Attached Service Accounts for security.\n- **Disks**: Use Balanced PD for most things, Snapshots for backups, and Images for templates.\n- **MIGs**: Use them for self-healing and auto-scaling. Identical VMs = Easy management.\n- **GCS**: Match Storage Classes (Nearline/Archive) to save money. Use IAM and UBLA for security.\n\n**WHAT IS NEXT?**: \nNow that you have servers and storage, you need to connect them. **Chapter 3: Networking** will cover VPCs, Firewalls, Load Balancers, and DNS.",
+    "insight": "VMs and Buckets are the building blocks. How you network them determines the security of your app.",
+    "next": "Chapter Complete",
+    "lab": { "command": "gsutil du -sh gs://my-cool-bucket", "output": "1.2 GiB    gs://my-cool-bucket" }
+  }
+]

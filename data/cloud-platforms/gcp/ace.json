@@ -1,1 +1,695 @@
-[]
+[
+  {
+    "question": "Which Google Cloud service is designed for low-latency, high-throughput NoSQL data?",
+    "options": ["Cloud Storage", "Cloud Bigtable", "Cloud Spanner", "Cloud SQL"],
+    "answer": "Cloud Bigtable",
+    "explanation": "Bigtable is Google's NoSQL big data database service, ideal for large-scale, low-latency workloads.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "You need to host a static website on Google Cloud. What is the most cost-effective service?",
+    "options": ["Google Kubernetes Engine", "Cloud Functions", "Cloud Storage", "Compute Engine"],
+    "answer": "Cloud Storage",
+    "explanation": "Cloud Storage allows you to host static assets (HTML, CSS, JS) in a bucket and serve them as a website.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which command is used to set the default project in the gcloud CLI?",
+    "options": ["gcloud config set project [PROJECT_ID]", "gcloud projects set [PROJECT_ID]", "gcloud init project", "gcloud default project [PROJECT_ID]"],
+    "answer": "gcloud config set project [PROJECT_ID]",
+    "explanation": "'gcloud config set project' updates the local configuration to use the specified project ID for future commands.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the primary purpose of a 'Service Account' in GCP?",
+    "options": ["To allow human users to log in to VMs", "To provide an identity for automated tasks and services", "To manage billing across multiple projects", "To provide a backup for user passwords"],
+    "answer": "To provide an identity for automated tasks and services",
+    "explanation": "Service accounts are special identities used by applications and virtual machines to call APIs without using personal user credentials.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "You want to run a containerized application without managing the underlying infrastructure. Which service should you use?",
+    "options": ["Compute Engine", "Cloud Run", "Cloud Storage", "Identity-Aware Proxy"],
+    "answer": "Cloud Run",
+    "explanation": "Cloud Run is a fully managed serverless platform for running containerized applications.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which GCP service provides global, horizontal scalability with strong consistency for relational data?",
+    "options": ["Cloud SQL", "Cloud Spanner", "Cloud Bigtable", "Firestore"],
+    "answer": "Cloud Spanner",
+    "explanation": "Cloud Spanner is a unique relational database service that combines SQL consistency with global horizontal scale.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How can you ensure that only specific users can access a Compute Engine instance via SSH?",
+    "options": ["Using IAM roles and OS Login", "Disabling the network", "Using a shared password", "Deleting the public IP"],
+    "answer": "Using IAM roles and OS Login",
+    "explanation": "OS Login allows you to manage SSH access to your instances using IAM roles, rather than manually managing SSH keys.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which networking component allows you to connect an on-premises data center to GCP with high-speed, dedicated physical hardware?",
+    "options": ["Cloud VPN", "Cloud Interconnect", "Cloud Router", "Cloud NAT"],
+    "answer": "Cloud Interconnect",
+    "explanation": "Cloud Interconnect provides a direct, physical connection between your on-premises network and Google's network.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "In GCP, what is a 'Region'?",
+    "options": ["A single data center", "A collection of availability zones located in a specific geographic area", "A type of firewall rule", "A billing account grouping"],
+    "answer": "A collection of availability zones located in a specific geographic area",
+    "explanation": "Regions are geographic areas that contain two or more zones. Distributing resources across zones within a region provides high availability.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which service is used for log aggregation and analysis in GCP?",
+    "options": ["Cloud Monitoring", "Cloud Logging", "Cloud Trace", "Cloud Debugger"],
+    "answer": "Cloud Logging",
+    "explanation": "Cloud Logging (part of Operations suite) is the centralized service for storing and analyzing logs from all GCP resources.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which 'gcloud' component is used to manage virtual machines?",
+    "options": ["gcloud compute", "gcloud container", "gcloud app", "gcloud storage"],
+    "answer": "gcloud compute",
+    "explanation": "'gcloud compute' is the group of commands used for interacting with Compute Engine resources like VMs, disks, and firewalls.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What happens to the data on a 'Local SSD' when the Compute Engine instance is deleted?",
+    "options": ["It is moved to Cloud Storage", "It is permanently lost", "It is saved in a snapshot", "It remains attached to the project"],
+    "answer": "It is permanently lost",
+    "explanation": "Local SSDs are physically attached to the server hosting the VM. When the VM is deleted, the data on Local SSD is wiped.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which IAM role allows a user to view, but not modify, most GCP resources?",
+    "options": ["roles/viewer", "roles/editor", "roles/owner", "roles/browser"],
+    "answer": "roles/viewer",
+    "explanation": "The 'Viewer' role (roles/viewer) provides read-only access to existing resources.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which tool allows you to interact with Google Cloud via a command-line interface directly in your web browser?",
+    "options": ["Cloud Console", "Cloud Shell", "Cloud SDK", "Cloud API Explorer"],
+    "answer": "Cloud Shell",
+    "explanation": "Cloud Shell provides a web-based, pre-authenticated terminal with the Cloud SDK already installed.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "You need to distribute incoming HTTP traffic across multiple regions. Which load balancer should you use?",
+    "options": ["Regional External HTTP(S) Load Balancer", "Global External HTTP(S) Load Balancer", "Internal TCP/UDP Load Balancer", "Network Load Balancer"],
+    "answer": "Global External HTTP(S) Load Balancer",
+    "explanation": "The Global HTTP(S) Load Balancer is a proxy-based layer 7 load balancer that can route traffic across multiple regions.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which Google Cloud service is best for processing large amounts of streaming data using Apache Beam?",
+    "options": ["Cloud Dataflow", "Cloud Dataproc", "BigQuery", "Cloud Pub/Sub"],
+    "answer": "Cloud Dataflow",
+    "explanation": "Cloud Dataflow is a fully managed service for executing Apache Beam pipelines for both batch and stream processing.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the purpose of 'Firewall Rules' in a VPC?",
+    "options": ["To encrypt data in transit", "To control which traffic is allowed to enter or leave a VM", "To manage project billing", "To speed up DNS resolution"],
+    "answer": "To control which traffic is allowed to enter or leave a VM",
+    "explanation": "VPC firewall rules let you allow or deny traffic to/from your VM instances based on port, protocol, and IP address.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which service should you use to store Docker images in GCP?",
+    "options": ["Cloud Storage", "Artifact Registry", "Compute Engine", "Cloud Build"],
+    "answer": "Artifact Registry",
+    "explanation": "Artifact Registry (the successor to Container Registry) is the recommended service for storing and managing container images and other artifacts.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "You want to trigger a small piece of code whenever a new file is uploaded to a Cloud Storage bucket. Which service is most appropriate?",
+    "options": ["Compute Engine", "Cloud Functions", "App Engine", "Cloud Dataflow"],
+    "answer": "Cloud Functions",
+    "explanation": "Cloud Functions are event-driven serverless functions that can be triggered by changes in Cloud Storage, Pub/Sub, and other services.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which GCP billing concept allows you to group multiple projects together for payment?",
+    "options": ["Billing Account", "Project Group", "Organization Node", "Payment Profile"],
+    "answer": "Billing Account",
+    "explanation": "A Cloud Billing account is used to pay for Google Cloud projects and Google Maps Platform projects.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Preemptible VM'?",
+    "options": ["A VM with a fixed price", "A low-cost VM that Google can shut down if it needs the capacity elsewhere", "A VM with dedicated hardware", "A VM that cannot be deleted"],
+    "answer": "A low-cost VM that Google can shut down if it needs the capacity elsewhere",
+    "explanation": "Preemptible VMs offer up to 80% discount but can be terminated with a 30-second notice.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which command-line tool is specifically used for managing objects in Cloud Storage?",
+    "options": ["gcloud", "gsutil", "bq", "kubectl"],
+    "answer": "gsutil",
+    "explanation": "gsutil is the command-line utility for interacting with Cloud Storage (Google Storage Utility).",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the function of the 'BigQuery' service?",
+    "options": ["Relational database for high-transaction apps", "Serverless, highly scalable data warehouse for analytics", "Object storage for media files", "NoSQL database for mobile apps"],
+    "answer": "Serverless, highly scalable data warehouse for analytics",
+    "explanation": "BigQuery is a serverless data warehouse that enables super-fast SQL queries using the processing power of Google's infrastructure.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which GKE component is responsible for running your application containers?",
+    "options": ["Control Plane", "Node", "Pod", "Cluster"],
+    "answer": "Node",
+    "explanation": "Nodes are the worker machines (VMs) in a GKE cluster that run the containerized applications.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you enable a specific Google Cloud API (e.g., Vision API) for your project?",
+    "options": ["It is enabled by default", "Enable it via the APIs & Services library in the console", "Contact Google Support", "It is enabled automatically when you use it"],
+    "answer": "Enable it via the APIs & Services library in the console",
+    "explanation": "Most Google Cloud APIs must be explicitly enabled for a project before they can be used.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which service provides managed Redis and Memcached for GCP?",
+    "options": ["Memorystore", "Cloud SQL", "Cloud Spanner", "Firestore"],
+    "answer": "Memorystore",
+    "explanation": "Cloud Memorystore provides fully managed in-memory data store services for Redis and Memcached.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of 'Cloud Deployment Manager'?",
+    "options": ["To monitor application performance", "To automate the creation and management of GCP resources using YAML templates", "To deploy code from GitHub to App Engine", "To manage user identities"],
+    "answer": "To automate the creation and management of GCP resources using YAML templates",
+    "explanation": "Deployment Manager is an infrastructure-as-code service that lets you specify all your resources in a declarative format.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which VPC feature allows you to connect two VPC networks so that resources can communicate via internal IP addresses?",
+    "options": ["VPC Network Peering", "Cloud VPN", "Cloud NAT", "Shared VPC"],
+    "answer": "VPC Network Peering",
+    "explanation": "VPC Network Peering connects two VPC networks so that resources in each network can communicate via internal IP addresses.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which service is best suited for hosting a standard web application with automatic scaling and no server management?",
+    "options": ["Compute Engine", "App Engine", "Cloud Storage", "Cloud Bigtable"],
+    "answer": "App Engine",
+    "explanation": "App Engine is a Platform as a Service (PaaS) that automatically handles scaling, load balancing, and server maintenance.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does 'Least Privilege' mean in the context of IAM?",
+    "options": ["Giving everyone the same permissions", "Giving users only the minimum permissions they need to perform their jobs", "Restricting access to only the project owner", "Only using standard roles"],
+    "answer": "Giving users only the minimum permissions they need to perform their jobs",
+    "explanation": "Least privilege is a security best practice that limits access to only what is absolutely necessary, reducing risk.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "You want to analyze your GCP costs and usage over time. Which tool should you use?",
+    "options": ["Billing Export to BigQuery", "Cloud Logging", "Resource Manager", "Deployment Manager"],
+    "answer": "Billing Export to BigQuery",
+    "explanation": "Exporting billing data to BigQuery allows for detailed analysis and visualization of your cloud spend using SQL or tools like Looker Studio.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which service provides a globally distributed, low-latency messaging service for decoupled applications?",
+    "options": ["Cloud Pub/Sub", "Cloud Tasks", "Cloud Functions", "App Engine"],
+    "answer": "Cloud Pub/Sub",
+    "explanation": "Cloud Pub/Sub is a real-time messaging service that allows you to send and receive messages between independent applications.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the primary benefit of 'Snapshotting' a Compute Engine disk?",
+    "options": ["To increase disk speed", "To create a backup that can be used to restore the disk or create new disks", "To move the disk to a different project", "To encrypt the disk"],
+    "answer": "To create a backup that can be used to restore the disk or create new disks",
+    "explanation": "Snapshots are incremental backups of persistent disks, allowing for point-in-time recovery and easy cloning.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which component of GKE automates the process of creating, updating, and scaling clusters?",
+    "options": ["Autopilot", "Standard Mode", "Cloud Build", "Deployment Manager"],
+    "answer": "Autopilot",
+    "explanation": "GKE Autopilot is a mode of operation where Google manages the entire cluster infrastructure, including nodes and node pools.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which service allows you to run managed Apache Spark and Hadoop clusters in GCP?",
+    "options": ["Cloud Dataproc", "Cloud Dataflow", "BigQuery", "Compute Engine"],
+    "answer": "Cloud Dataproc",
+    "explanation": "Cloud Dataproc is a fast, easy-to-use, fully managed service for running Spark and Hadoop clusters.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the purpose of 'Identity-Aware Proxy' (IAP)?",
+    "options": ["To speed up web traffic", "To control access to cloud applications and VMs based on user identity and context without a VPN", "To manage project billing", "To host static websites"],
+    "answer": "To control access to cloud applications and VMs based on user identity and context without a VPN",
+    "explanation": "IAP lets you use identity and context to guard access to your applications and VMs.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which command is used to list all active gcloud configurations?",
+    "options": ["gcloud config list", "gcloud auth list", "gcloud projects list", "gcloud info"],
+    "answer": "gcloud config list",
+    "explanation": "'gcloud config list' shows the properties in your current active configuration, such as the project and account.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "You need to store large amounts of unstructured data that is rarely accessed but must be available immediately when needed. Which storage class is best?",
+    "options": ["Standard", "Nearline", "Coldline", "Archive"],
+    "answer": "Archive",
+    "explanation": "Archive storage is for data that you plan to store for at least a year and access very rarely, offering the lowest cost.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which service acts as a global content delivery network (CDN) for GCP?",
+    "options": ["Cloud CDN", "Cloud DNS", "Cloud Load Balancing", "Cloud Armor"],
+    "answer": "Cloud CDN",
+    "explanation": "Cloud CDN uses Google's global edge network to serve content closer to users, reducing latency and cost.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the function of 'Cloud Armor'?",
+    "options": ["To encrypt disks", "To provide DDoS protection and WAF (Web Application Firewall) for your load balancers", "To manage user passwords", "To monitor VM performance"],
+    "answer": "To provide DDoS protection and WAF (Web Application Firewall) for your load balancers",
+    "explanation": "Cloud Armor helps protect your services from multiple types of attacks, including DDoS and common web attacks like SQL injection.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which GCP tool provides recommendations for optimizing costs, security, and performance?",
+    "options": ["Recommender", "Cloud Monitoring", "Cloud Advisor", "Resource Manager"],
+    "answer": "Recommender",
+    "explanation": "The Recommender service provides automated recommendations to help you optimize your Google Cloud resources.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is 'Shared VPC'?",
+    "options": ["A VPC shared with other Google customers", "Allowing an organization to connect resources from multiple projects to a common VPC network", "A VPC that is public by default", "A way to share billing accounts"],
+    "answer": "Allowing an organization to connect resources from multiple projects to a common VPC network",
+    "explanation": "Shared VPC allows projects in the same organization to share a common VPC network, maintained in a host project.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which service allows you to create and manage virtual private networks (VPNs) between your VPC and on-premises networks?",
+    "options": ["Cloud VPN", "Cloud Interconnect", "Cloud Router", "Cloud NAT"],
+    "answer": "Cloud VPN",
+    "explanation": "Cloud VPN securely connects your peer network to your VPC network through an IPsec VPN connection.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 'Cloud NAT' used for?",
+    "options": ["To give private VMs access to the internet without a public IP address", "To provide global load balancing", "To manage DNS records", "To encrypt network traffic"],
+    "answer": "To give private VMs access to the internet without a public IP address",
+    "explanation": "Cloud NAT allows instances without public IP addresses to access the internet for updates, patching, etc., while remaining private.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which GCP service is used to manage domain name records?",
+    "options": ["Cloud DNS", "Cloud Domains", "Cloud CDN", "Cloud Router"],
+    "answer": "Cloud DNS",
+    "explanation": "Cloud DNS is a scalable, reliable, and managed authoritative Domain Name System (DNS) service.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the 'Resource Hierarchy' in GCP?",
+    "options": ["A way to rank users", "The structure of Organization > Folder > Project > Resource", "A list of data center locations", "A pricing table"],
+    "answer": "The structure of Organization > Folder > Project > Resource",
+    "explanation": "The resource hierarchy provides a way to organize and manage your Google Cloud resources, allowing for inherited policies and permissions.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which 'gcloud' command is used to authenticate the CLI with your Google account?",
+    "options": ["gcloud auth login", "gcloud init", "gcloud login", "gcloud config set account"],
+    "answer": "gcloud auth login",
+    "explanation": "'gcloud auth login' opens a browser to authorize the Cloud SDK to access Google Cloud with your credentials.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the purpose of 'Labels' in GCP?",
+    "options": ["To encrypt data", "To organize and filter resources for management and billing purposes", "To increase network speed", "To limit user access"],
+    "answer": "To organize and filter resources for management and billing purposes",
+    "explanation": "Labels are key-value pairs that help you categorize and organize resources, making them easier to manage at scale.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which service is a serverless, NoSQL document database that simplifies storing, syncing, and querying data for mobile and web apps?",
+    "options": ["Firestore", "Cloud Bigtable", "Cloud Spanner", "Cloud SQL"],
+    "answer": "Firestore",
+    "explanation": "Firestore is a flexible, scalable database for mobile, web, and server development from Firebase and Google Cloud.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "You want to automate the build and deployment of your code whenever you push to GitHub. Which service should you use?",
+    "options": ["Cloud Build", "Cloud Deploy", "Compute Engine", "Artifact Registry"],
+    "answer": "Cloud Build",
+    "explanation": "Cloud Build is a service that executes your builds on Google Cloud infrastructure. It can import source code from various sources including GitHub.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the default maximum number of projects that can be created in a new Google Cloud account without requesting an increase?",
+    "options": ["5", "10", "25", "Unlimited"],
+    "answer": "25",
+    "explanation": "While it can vary, the typical default project quota for a new account is 25.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which service provides a managed, serverless, and secure data warehouse that lets you run SQL queries in seconds?",
+    "options": ["Cloud SQL", "Cloud Spanner", "BigQuery", "Cloud Bigtable"],
+    "answer": "BigQuery",
+    "explanation": "BigQuery is Google's fully managed, petabyte-scale, serverless data warehouse.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "In GCP, which role allows a user to manage all resources within a project but cannot manage project IAM or billing?",
+    "options": ["roles/owner", "roles/editor", "roles/viewer", "roles/browser"],
+    "answer": "roles/editor",
+    "explanation": "The Editor role includes Viewer permissions plus permissions to modify most resources, but lacks authority over IAM and billing.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which feature of GCP allows you to define a logical group of VM instances and apply load balancing and auto-scaling to them?",
+    "options": ["Target Pool", "Managed Instance Group (MIG)", "Instance Template", "Network Endpoint Group (NEG)"],
+    "answer": "Managed Instance Group (MIG)",
+    "explanation": "MIGs allow you to manage a group of identical VMs as a single entity, providing high availability and automation.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "You want to run a Docker container on Google Cloud without managing a Kubernetes cluster or VMs. Which service is best?",
+    "options": ["App Engine Flexible", "Cloud Run", "Compute Engine", "GKE Standard"],
+    "answer": "Cloud Run",
+    "explanation": "Cloud Run is a managed compute platform that automatically scales your stateless containers.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which VPC component is required to allow a VM with only a private IP address to download updates from the internet?",
+    "options": ["Cloud VPN", "Cloud Router", "Cloud NAT", "Cloud Interconnect"],
+    "answer": "Cloud NAT",
+    "explanation": "Cloud NAT allows instances without external IP addresses to access the internet for outbound-initiated traffic.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which GKE mode provides a hands-off experience by managing the cluster infrastructure, nodes, and security for you?",
+    "options": ["Standard Mode", "Autopilot Mode", "Serverless Mode", "Managed Mode"],
+    "answer": "Autopilot Mode",
+    "explanation": "GKE Autopilot manages the entire cluster architecture according to Google's best practices.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the primary way to perform 'Infrastructure as Code' using Google's native service?",
+    "options": ["Cloud Build", "Deployment Manager", "Cloud Deploy", "Resource Manager"],
+    "answer": "Deployment Manager",
+    "explanation": "Cloud Deployment Manager is a managed service that allows you to specify all your GCP resources in YAML or Python templates.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which storage class should you use for data that you plan to store for at least 90 days and access less than once a quarter?",
+    "options": ["Standard", "Nearline", "Coldline", "Archive"],
+    "answer": "Coldline",
+    "explanation": "Coldline storage is a very low-cost, highly durable storage service for data that is accessed at most once a quarter.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which tool provides distributed tracing for your applications on GCP, helping you identify latency bottlenecks?",
+    "options": ["Cloud Logging", "Cloud Monitoring", "Cloud Trace", "Cloud Profiler"],
+    "answer": "Cloud Trace",
+    "explanation": "Cloud Trace collects latency data from your applications and displays it in the Google Cloud Console.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the purpose of 'Private Google Access'?",
+    "options": ["To allow on-premises users to reach GCP", "To allow VMs with only internal IPs to reach Google APIs and services", "To encrypt traffic between VMs", "To hide the Cloud Console from the public internet"],
+    "answer": "To allow VMs with only internal IPs to reach Google APIs and services",
+    "explanation": "Private Google Access allows instances in a subnet to reach Google APIs and services without a public IP address.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which IAM concept allows you to grant access based on attributes like IP address, time of day, or resource name patterns?",
+    "options": ["Predefined Roles", "Custom Roles", "IAM Conditions", "Policy Analyzer"],
+    "answer": "IAM Conditions",
+    "explanation": "IAM Conditions allow you to define fine-grained, context-aware access control.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How can you securely provide database credentials to a containerized application running on GKE without using environment variables?",
+    "options": ["Hardcode them in the Dockerfile", "Use Secret Manager and mount the secret as a volume", "Store them in a public GCS bucket", "Email them to the Pod"],
+    "answer": "Use Secret Manager and mount the secret as a volume",
+    "explanation": "Using Secret Manager with GKE (often via the Secrets Store CSI Driver) is a secure way to manage sensitive information.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which service acts as a fully managed, global, and scalable DNS service with low latency?",
+    "options": ["Cloud Domains", "Cloud DNS", "Cloud CDN", "Cloud Router"],
+    "answer": "Cloud DNS",
+    "explanation": "Cloud DNS is a reliable and authoritative Domain Name System (DNS) service.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the purpose of a 'Health Check' in a load balancer?",
+    "options": ["To monitor the cost of the VMs", "To determine if a backend instance is capable of receiving traffic", "To scan for viruses in the traffic", "To speed up SSL termination"],
+    "answer": "To determine if a backend instance is capable of receiving traffic",
+    "explanation": "Health checks periodically check if backend instances are responsive on a specific port and path.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which command-line flag is used with 'gcloud' to output results in JSON format?",
+    "options": ["--output json", "-o json", "--format json", "--json"],
+    "answer": "--format json",
+    "explanation": "The '--format' flag is the standard way to specify the output format of gcloud commands.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "You need to transfer petabytes of data from an on-premises data center to Google Cloud and have limited internet bandwidth. Which service should you use?",
+    "options": ["Storage Transfer Service", "Transfer Appliance", "Cloud VPN", "Cloud Interconnect"],
+    "answer": "Transfer Appliance",
+    "explanation": "Transfer Appliance is a high-capacity storage server that you fill with data and ship to a Google data center.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which VPC feature allows you to connect resources from multiple projects in the same organization to a common VPC network?",
+    "options": ["VPC Peering", "Shared VPC", "Cloud VPN", "Network Service Tiers"],
+    "answer": "Shared VPC",
+    "explanation": "Shared VPC allows an organization to connect resources from multiple service projects to a common VPC network maintained in a host project.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the effect of the 'deny all ingress' implicit firewall rule in a GCP VPC?",
+    "options": ["It blocks all traffic leaving the VPC", "It blocks all traffic entering the VPC that is not explicitly allowed", "It blocks all traffic between subnets", "It has no effect"],
+    "answer": "It blocks all traffic entering the VPC that is not explicitly allowed",
+    "explanation": "The implicit deny ingress rule ensures that no traffic can reach your VMs unless you create a rule to allow it.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which service provides managed Redis for low-latency, in-memory caching in GCP?",
+    "options": ["Memorystore", "Firestore", "Cloud Bigtable", "Cloud Spanner"],
+    "answer": "Memorystore",
+    "explanation": "Cloud Memorystore provides a fully managed service for Redis and Memcached.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What does GKE use to automatically adjust the number of nodes in a node pool based on resource demand?",
+    "options": ["Horizontal Pod Autoscaler (HPA)", "Vertical Pod Autoscaler (VPA)", "Cluster Autoscaler", "Node Auto-provisioning"],
+    "answer": "Cluster Autoscaler",
+    "explanation": "The Cluster Autoscaler adds or removes nodes from the cluster to ensure Pods have a place to run while minimizing costs.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which service is an event-driven serverless platform for connecting cloud services and running code in response to events?",
+    "options": ["Cloud Run", "Cloud Functions", "App Engine", "Compute Engine"],
+    "answer": "Cloud Functions",
+    "explanation": "Cloud Functions are scalable, serverless snippets of code that run in response to events.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the purpose of 'Binary Authorization' on GKE?",
+    "options": ["To encrypt container images", "To ensure only trusted container images are deployed", "To speed up container startup", "To manage user identities in Kubernetes"],
+    "answer": "To ensure only trusted container images are deployed",
+    "explanation": "Binary Authorization provides a deploy-time security check that ensures only signed images are deployed.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which IAM role is required for a user to manage all aspects of a Cloud Storage bucket, including its objects and permissions?",
+    "options": ["roles/storage.objectViewer", "roles/storage.objectAdmin", "roles/storage.admin", "roles/storage.objectCreator"],
+    "answer": "roles/storage.admin",
+    "explanation": "The 'Storage Admin' role provides full control over buckets and objects.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which 'gcloud' command group is used to manage GCP Cloud Run services?",
+    "options": ["gcloud compute", "gcloud run", "gcloud app", "gcloud serverless"],
+    "answer": "gcloud run",
+    "explanation": "'gcloud run' is the command group for interacting with Cloud Run.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "In a VPC, what is the priority range for firewall rules?",
+    "options": ["0 to 100", "1 to 65535", "0 to 65535", "-100 to 100"],
+    "answer": "0 to 65535",
+    "explanation": "Firewall rule priorities range from 0 (highest) to 65535 (lowest).",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which tool provides recommendations for resizing VM instances to save costs?",
+    "options": ["Cloud Monitoring", "Recommender", "Cloud Advisor", "Resource Manager"],
+    "answer": "Recommender",
+    "explanation": "The Recommender service automatically provides insights and recommendations for cost, security, and performance.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of 'Cloud Shell'?",
+    "options": ["To host web applications", "To provide a secure, web-based terminal for managing GCP resources", "To store Docker images", "To manage project billing"],
+    "answer": "To provide a secure, web-based terminal for managing GCP resources",
+    "explanation": "Cloud Shell provides a pre-authenticated terminal with the Cloud SDK already installed, accessible from your browser.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which service is a fully managed, scalable, and secure document database from Firebase and Google Cloud?",
+    "options": ["Cloud SQL", "Firestore", "Cloud Spanner", "Cloud Bigtable"],
+    "answer": "Firestore",
+    "explanation": "Firestore is a NoSQL document database built for automatic scaling, high performance, and ease of application development.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "You need to run a high-performance batch job that can be interrupted. Which type of VM instance will save you the most money?",
+    "options": ["Standard VM", "Spot VM", "Shielded VM", "Sole-tenant VM"],
+    "answer": "Spot VM",
+    "explanation": "Spot VMs (formerly Preemptible VMs) offer huge discounts for workloads that are fault-tolerant.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which VPC feature allows a private VM to connect to the internet for updates without a public IP?",
+    "options": ["Cloud VPN", "Cloud Interconnect", "Cloud NAT", "VPC Peering"],
+    "answer": "Cloud NAT",
+    "explanation": "Cloud NAT provides outbound-only connectivity for instances that lack external IP addresses.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which role is recommended for a developer who needs to deploy code to App Engine but should not be able to manage billing?",
+    "options": ["roles/owner", "roles/editor", "roles/appengine.deployer", "roles/appengine.admin"],
+    "answer": "roles/appengine.deployer",
+    "explanation": "The 'App Engine Deployer' role provides the specific permissions needed to deploy but not manage the whole service.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of 'Identity-Aware Proxy' (IAP) for TCP forwarding?",
+    "options": ["To speed up HTTP traffic", "To provide secure SSH and RDP access to VMs without external IPs", "To encrypt data in Cloud Storage", "To manage DNS records"],
+    "answer": "To provide secure SSH and RDP access to VMs without external IPs",
+    "explanation": "IAP for TCP forwarding lets you use SSH or RDP to connect to VMs with only internal IP addresses.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which GCP service provides a fully managed implementation of Apache Spark and Hadoop?",
+    "options": ["Cloud Dataflow", "Cloud Dataproc", "BigQuery", "Cloud Composer"],
+    "answer": "Cloud Dataproc",
+    "explanation": "Cloud Dataproc is the managed service for running Spark and Hadoop clusters.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How can you automate the creation of identical GCP projects for different departments?",
+    "options": ["Manually in the Console", "Using the Resource Manager API and a script (or Terraform)", "By emailing Google Support", "You cannot automate project creation"],
+    "answer": "Using the Resource Manager API and a script (or Terraform)",
+    "explanation": "GCP projects can be programmatically created and managed using APIs and infrastructure-as-code tools.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the function of the 'Cloud SDK'?",
+    "options": ["To provide a GUI for GCP", "To provide command-line tools for managing GCP resources", "To host containerized apps", "To monitor VM uptime"],
+    "answer": "To provide command-line tools for managing GCP resources",
+    "explanation": "The Cloud SDK includes gcloud, gsutil, and bq for CLI-based management of Google Cloud.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which networking service provides a direct physical connection between on-premises and GCP?",
+    "options": ["Cloud VPN", "Cloud Router", "Cloud Interconnect", "Cloud NAT"],
+    "answer": "Cloud Interconnect",
+    "explanation": "Cloud Interconnect (specifically Dedicated Interconnect) provides a direct, physical connection to Google's network.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the purpose of a 'Snapshot' in Cloud Storage?",
+    "options": ["To back up a bucket", "To back up a Persistent Disk", "To take a photo of the data center", "To speed up DNS resolution"],
+    "answer": "To back up a Persistent Disk",
+    "explanation": "In GCP terminology, 'Snapshot' typically refers to a point-in-time backup of a Compute Engine Persistent Disk.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which service allows you to run managed Airflow workflows for data pipeline orchestration?",
+    "options": ["Cloud Dataflow", "Cloud Dataproc", "Cloud Composer", "Cloud Build"],
+    "answer": "Cloud Composer",
+    "explanation": "Cloud Composer is a fully managed workflow orchestration service built on Apache Airflow.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "In GCP, which geographic unit contains multiple zones?",
+    "options": ["Multi-region", "Region", "Edge Location", "Project"],
+    "answer": "Region",
+    "explanation": "A region is a geographic area that consists of two or more availability zones.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which GCP service is designed for storing and managing sensitive information like API keys and passwords?",
+    "options": ["Cloud KMS", "Secret Manager", "Cloud Storage", "Identity-Aware Proxy"],
+    "answer": "Secret Manager",
+    "explanation": "Secret Manager is the recommended service for storing, managing, and accessing secrets.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the primary command used to interact with objects in Cloud Storage?",
+    "options": ["gcloud storage", "gsutil", "bq storage", "kubectl storage"],
+    "answer": "gsutil",
+    "explanation": "While 'gcloud storage' is available, 'gsutil' is the long-standing and standard CLI tool for Cloud Storage.",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Which VPC feature provides a log of network traffic into and out of your VPC subnets?",
+    "options": ["Audit Logs", "Cloud Logging", "VPC Flow Logs", "Network Intelligence Center"],
+    "answer": "VPC Flow Logs",
+    "explanation": "VPC Flow Logs record samples of network flows sent and received by VM instances.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the benefit of using 'Uniform Bucket-Level Access' in Cloud Storage?",
+    "options": ["It makes the bucket faster", "It simplifies access control by disabling object-level ACLs and using only IAM", "It encrypts the data at rest", "It allows for unlimited bucket names"],
+    "answer": "It simplifies access control by disabling object-level ACLs and using only IAM",
+    "explanation": "Uniform access ensures that IAM is the only way to manage permissions, reducing the risk of accidental exposure via complex ACLs.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which GKE component ensures that the actual number of Pods matches the desired number of replicas?",
+    "options": ["Control Plane", "Node", "Service", "Load Balancer"],
+    "answer": "Control Plane",
+    "explanation": "The Kubernetes control plane (specifically the controller manager) manages the state of the cluster, including replica counts.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Which service provides managed security for GKE by ensuring only signed container images are deployed?",
+    "options": ["Cloud Armor", "Binary Authorization", "VPC Service Controls", "Secret Manager"],
+    "answer": "Binary Authorization",
+    "explanation": "Binary Authorization is a deploy-time security control for containerized applications.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the purpose of 'Cloud Build Triggers'?",
+    "options": ["To start a build when code is pushed to a repository", "To monitor VM uptime", "To scale a GKE cluster", "To manage project billing"],
+    "answer": "To start a build when code is pushed to a repository",
+    "explanation": "Triggers automate the start of a build in response to source code changes.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which service acts as a Web Application Firewall (WAF) for your GCP load balancers?",
+    "options": ["Cloud Armor", "Cloud IDS", "VPC Service Controls", "Identity-Aware Proxy"],
+    "answer": "Cloud Armor",
+    "explanation": "Cloud Armor provides WAF and DDoS protection for HTTP(S) load balancers.",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you view the console logs of a Compute Engine instance from the CLI?",
+    "options": ["gcloud logging read", "gcloud compute instances get-serial-port-output", "gsutil logs", "kubectl logs"],
+    "answer": "gcloud compute instances get-serial-port-output",
+    "explanation": "This command allows you to see the serial port output of a VM, which is useful for debugging boot issues.",
+    "difficulty": "hard"
+  }
+]

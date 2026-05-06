@@ -1,0 +1,322 @@
+[
+  {
+    "id": "gcp_ace_04_01",
+    "title": "App Engine Overview",
+    "content": "**LEARNING OBJECTIVE**: Understand App Engine as a high-level Platform-as-a-Service (PaaS).\n\n**DETAILED EXPLANATION**: App Engine is Google's oldest cloud offering. It allows developers to focus entirely on code without worrying about servers, patches, or networking. It scales automatically from zero to thousands of instances based on traffic. You simply provide your application code and a configuration file (`app.yaml`).\n\n**WHY IT MATTERS**: It provides the fastest 'Time to Market'. If you have a web app in Python, Java, or Go, you can deploy it in one command and let Google handle the rest. \n\n**ENVIRONMENTS**:\n- **Standard**: For supported languages. Extremely fast scaling, scales to zero (costs $0 when idle).\n- **Flexible**: Runs Docker containers. Best for apps with custom dependencies or non-standard runtimes.\n\n**SUMMARY POINTS**:\n- Fully managed PaaS.\n- Zero-server management.\n- Automatic scaling and load balancing.",
+    "insight": "App Engine is 'Regional'. Once you choose a region for your app, you cannot change it without creating a new project.",
+    "next": "Standard vs. Flexible Environments",
+    "lab": { "command": "gcloud app versions list", "output": "SERVICE  ID              TRAFFIC_SPLIT  STATUS\ndefault  20231010t120000  1.00           SERVING" }
+  },
+  {
+    "id": "gcp_ace_04_02",
+    "title": "Standard vs. Flexible",
+    "content": "**LEARNING OBJECTIVE**: Choose the right App Engine environment for the exam.\n\n**STANDARD ENVIRONMENT**:\n- Uses sandboxed runtimes (Python, Java, etc.).\n- **Scales to zero** (Cost-effective for low traffic).\n- Fast startup (seconds).\n- Limited to specific language versions.\n\n**FLEXIBLE ENVIRONMENT**:\n- Uses Docker containers.\n- Can use **any** language or library.\n- Does NOT scale to zero (minimum 1 instance).\n- Slower startup (minutes) because it boots GCE VMs under the hood.\n\n**EXAM TIP**: If the requirement is 'Cost-effective' and 'Scales to zero', choose Standard. If the requirement is 'Custom binary' or 'Docker', choose Flexible.",
+    "insight": "Flexible environment is essentially a managed group of VMs—you can even SSH into them for debugging.",
+    "next": "Deploying to App Engine",
+    "lab": { "command": "echo 'runtime: python39' > app.yaml", "output": "(app.yaml created)" }
+  },
+  {
+    "id": "gcp_ace_04_03",
+    "title": "Deploying with gcloud app",
+    "content": "**LEARNING OBJECTIVE**: Master the deployment workflow for App Engine.\n\n**WORKFLOW**: To deploy, you need an `app.yaml` file in your source directory. You then run `gcloud app deploy`. GCP packages your code, uploads it to a bucket, builds the container, and starts the service.\n\n**VERSIONS**: Every deployment creates a new **Version**. You can have multiple versions running at once, which is great for testing.\n\n**TRAFFIC SPLITTING**: By default, the new version gets 100% of traffic. You can use the `--no-promote` flag to deploy a version without sending it traffic immediately.\n\n**CLI EXAMPLES**:\n- Deploy: `gcloud app deploy` \n- List services: `gcloud app services list` \n- Stop a version: `gcloud app versions stop [ID]` \n\n**SUMMARY POINTS**:\n- `gcloud app deploy` is the primary command.\n- Versions allow for safe rollbacks.\n- `app.yaml` is the mandatory config file.",
+    "insight": "The first time you run 'app deploy' in a project, Google will ask you to choose a region. Choose carefully!",
+    "next": "Cloud Run: Serverless Containers",
+    "lab": { "command": "gcloud app deploy --quiet", "output": "Deployed service [default] to [https://...]" }
+  },
+  {
+    "id": "gcp_ace_04_04",
+    "title": "Cloud Run (Serverless Containers)",
+    "content": "**LEARNING OBJECTIVE**: Deploy stateless containers on a fully managed platform.\n\n**CONCEPT**: Cloud Run is the modern middle ground. It combines the ease of App Engine with the flexibility of Docker. You provide a container image (stored in Artifact Registry), and Cloud Run runs it as a web service. \n\n**AUTO-SCALING**: Like App Engine Standard, it **scales to zero**. You are only charged while your container is processing a request (rounded to the nearest 100ms).\n\n**WHY IT MATTERS**: It is the best choice for modern microservices. It's portable (it's just Docker) but has zero operational overhead.\n\n**SUMMARY POINTS**:\n- Managed Knative (Kubernetes-based).\n- Scales to zero.\n- Uses standard Docker images.",
+    "insight": "Cloud Run is 'Stateless'. You cannot save files to the local disk and expect them to be there for the next request.",
+    "next": "Deploying to Cloud Run",
+    "lab": { "command": "gcloud run services list", "output": "SERVICE  REGION       URL\nmy-api   us-central1  https://my-api-abc.run.app" }
+  },
+  {
+    "id": "gcp_ace_04_05",
+    "title": "Deploying to Cloud Run",
+    "content": "**LEARNING OBJECTIVE**: Perform your first container deployment.\n\n**WORKFLOW**: \n1. Build your Docker image.\n2. Push it to **Artifact Registry**.\n3. Run `gcloud run deploy`.\n\n**PUBLIC ACCESS**: By default, services are private. Use the `--allow-unauthenticated` flag to make it a public website.\n\n**CLI EXAMPLES**:\n- Deploy from image: `gcloud run deploy [NAME] --image=[IMAGE_URL] --region=us-central1 --allow-unauthenticated` \n- Deploy from source: `gcloud run deploy --source .` (GCP will build the image for you using Cloud Build).\n\n**SUMMARY POINTS**:\n- `gcloud run deploy` is the primary command.\n- Requires images in Artifact Registry (or Container Registry).\n- Region must be specified.",
+    "insight": "Cloud Run can also run 'Jobs'—containers that run to completion and exit, perfect for database migrations.",
+    "next": "Cloud Run Traffic Splitting (Canary)",
+    "lab": { "command": "gcloud run deploy test-app --image=gcr.io/cloudrun/hello --platform=managed", "output": "Service [test-app] revision [...] has been deployed." }
+  },
+  {
+    "id": "gcp_ace_04_06",
+    "title": "Cloud Run Traffic Splitting",
+    "content": "**LEARNING OBJECTIVE**: Implement Canary deployments and rollbacks.\n\n**DETAILED EXPLANATION**: Every time you deploy to Cloud Run, it creates a new **Revision**. Revisions are immutable (they never change). You can split traffic between them. \n- **Example**: Send 90% of users to 'Revision-A' (Stable) and 10% to 'Revision-B' (New Feature).\n\n**ROLLBACKS**: If the new feature crashes, you can instantly set 100% of traffic back to the old revision in one command. No re-deploying needed!\n\n**CLI EXAMPLES**:\n- Split 50/50: `gcloud run services update-traffic [NAME] --to-revisions=[REV1]=50,[REV2]=50` \n\n**SUMMARY POINTS**:\n- Revisions are immutable snapshots.\n- Traffic can be split by percentage.\n- Enables zero-downtime 'Canary' releases.",
+    "insight": "Revisions that are not receiving traffic are NOT charged for storage or CPU.",
+    "next": "Introduction to GKE",
+    "lab": { "command": "gcloud run revisions list --service=test-app", "output": "REVISION         ACTIVE  CREATED\ntest-app-00002   yes     1 min ago" }
+  },
+  {
+    "id": "gcp_ace_04_07",
+    "title": "GKE Overview (Kubernetes)",
+    "content": "**LEARNING OBJECTIVE**: Understand Google Kubernetes Engine as a managed K8s service.\n\n**CONCEPT**: GKE is the most powerful compute option. It manages a cluster of VMs (Nodes) and automates the deployment, scaling, and health of your containers. While App Engine and Cloud Run are for single services, GKE is for complex architectures with dozens of moving parts.\n\n**WHY IT MATTERS**: It is the industry standard for container orchestration. Google invented Kubernetes, so GKE is widely considered the best-managed version of it.\n\n**COMPONENTS**:\n- **Control Plane**: Managed by Google (The Brain).\n- **Nodes**: VMs that run your containers (The Muscle).\n\n**SUMMARY POINTS**:\n- Managed Kubernetes service.\n- Highest level of control and complexity.\n- Best for microservices and stateful apps.",
+    "insight": "GKE is the 'Heavy Lifter'—if you have complex networking or need GPUs for containers, use GKE.",
+    "next": "GKE Cluster Modes: Autopilot vs Standard",
+    "lab": { "command": "gcloud container clusters list", "output": "(Empty list)" }
+  },
+  {
+    "id": "gcp_ace_04_08",
+    "title": "GKE Autopilot vs. Standard",
+    "content": "**LEARNING OBJECTIVE**: Choose the right GKE mode for operational efficiency.\n\n**AUTOPILOT (Recommended)**:\n- Google manages the nodes, the OS, and the security for you.\n- You only pay for the **Pods** you run (CPU/RAM per pod).\n- Best for users who want Kubernetes without 'managing VMs'.\n\n**STANDARD**:\n- You manage the node pools (pick the VM types, size the disks).\n- You pay for the **VMs (Nodes)** regardless of how many Pods are on them.\n- Best for fine-grained control or high-utilization clusters.\n\n**EXAM TIP**: If the question asks for 'Reduced operational overhead' or 'Pay-per-pod', the answer is Autopilot.",
+    "insight": "Autopilot enforces security best practices by default (e.g., no privileged containers).",
+    "next": "Creating a GKE Cluster",
+    "lab": { "command": "gcloud container clusters create-auto my-cluster --region=us-central1", "output": "Creating cluster my-cluster...done." }
+  },
+  {
+    "id": "gcp_ace_04_09",
+    "title": "Creating a GKE Cluster",
+    "content": "**LEARNING OBJECTIVE**: Provision a Kubernetes cluster via CLI.\n\n**DETAILED EXPLANATION**: When creating a cluster, you must choose between **Zonal** and **Regional**. \n- **Zonal**: One control plane in one zone. If that zone goes down, you can't change the cluster.\n- **Regional**: Three control planes in three zones. Highest availability (SLA 99.95%).\n\n**VPC-NATIVE**: Always ensure the cluster is 'VPC-Native' (uses Alias IPs). This is the default and is required for better integration with GCP firewalls and load balancers.\n\n**CLI EXAMPLES**:\n- Create regional cluster: `gcloud container clusters create [NAME] --region=us-central1 --num-nodes=3` \n\n**SUMMARY POINTS**:\n- Regional clusters are best for production.\n- VPC-Native networking is the standard.\n- Control Plane is managed by Google.",
+    "insight": "A regional cluster actually creates 3 nodes per zone (9 nodes total) by default if you specify --num-nodes=3.",
+    "next": "Configuring kubectl",
+    "lab": { "command": "gcloud container clusters list", "output": "NAME        LOCATION     STATUS\nmy-cluster  us-central1  RUNNING" }
+  },
+  {
+    "id": "gcp_ace_04_10",
+    "title": "Configuring kubectl",
+    "content": "**LEARNING OBJECTIVE**: Connect your local terminal to the GKE cluster.\n\n**DETAILED EXPLANATION**: `gcloud` creates the cluster, but `kubectl` is the tool you use to manage the apps inside it. You must 'get credentials' to populate your local `kubeconfig` file with the cluster's API endpoint and security certificates.\n\n**AUTHENTICATION**: GKE uses your GCP identity to authenticate to the Kubernetes API. \n\n**CLI EXAMPLES**:\n- Get credentials: `gcloud container clusters get-credentials [NAME] --region=[REGION]` \n- Verify connection: `kubectl get nodes` \n\n**SUMMARY POINTS**:\n- `gcloud` = Manage the cluster (VMs/Infrastructure).\n- `kubectl` = Manage the workloads (Pods/Deployments).\n- `get-credentials` is the bridge between the two.",
+    "insight": "In Cloud Shell, kubectl is already installed and often pre-configured for your active project.",
+    "next": "Kubernetes Objects: Pods",
+    "lab": { "command": "gcloud container clusters get-credentials my-cluster --region=us-central1", "output": "kubeconfig entry generated for my-cluster." }
+  },
+  {
+    "id": "gcp_ace_04_11",
+    "title": "Kubernetes Pods",
+    "content": "**LEARNING OBJECTIVE**: Understand the atomic unit of Kubernetes.\n\n**CONCEPT**: A **Pod** is the smallest unit of work in K8s. It is a wrapper for one or more containers (usually just one). Containers in the same Pod share the same Network IP and same storage volumes.\n\n**EPHEMERAL**: Pods are born and they die. They are NOT permanent servers. If a Pod crashes, Kubernetes doesn't 'fix' it; it deletes it and creates a brand new one.\n\n**CLI EXAMPLES**:\n- List pods: `kubectl get pods` \n- View pod details: `kubectl describe pod [NAME]` \n- See pod logs: `kubectl logs [NAME]` \n\n**SUMMARY POINTS**:\n- Wrapper for containers.\n- Shared network/storage.\n- Ephemeral and replaceable.",
+    "insight": "Never create a Pod directly for production; always use a 'Deployment' to manage them.",
+    "next": "Kubernetes Deployments",
+    "lab": { "command": "kubectl get pods", "output": "NAME                     READY   STATUS    RESTARTS\nweb-app-7d4f5d8-abc12    1/1     Running   0" }
+  },
+  {
+    "id": "gcp_ace_04_12",
+    "title": "Kubernetes Deployments",
+    "content": "**LEARNING OBJECTIVE**: Manage scaling and updates for your containers.\n\n**CONCEPT**: A **Deployment** is a 'Controller' that manages a set of identical Pods. You tell it: 'I want 5 replicas of the Nginx image'. The Deployment ensures that 5 Pods are always running. If a node dies, the Deployment starts new Pods on a healthy node.\n\n**ROLLING UPDATES**: When you change the image version, the Deployment replaces Pods one-by-one, ensuring zero downtime.\n\n**CLI EXAMPLES**:\n- Create deployment: `kubectl create deployment web-server --image=nginx` \n- Scale deployment: `kubectl scale deployment web-server --replicas=10` \n\n**SUMMARY POINTS**:\n- Manages replica counts.\n- Handles self-healing (restarts Pods).\n- Automates rolling updates.",
+    "insight": "A Deployment uses a 'ReplicaSet' under the hood to handle the actual count of Pods.",
+    "next": "Kubernetes Services",
+    "lab": { "command": "kubectl get deployments", "output": "NAME        READY   UP-TO-DATE   AVAILABLE\nweb-server  10/10   10           10" }
+  },
+  {
+    "id": "gcp_ace_04_13",
+    "title": "Kubernetes Services",
+    "content": "**LEARNING OBJECTIVE**: Provide stable endpoints for ephemeral Pods.\n\n**PROBLEM**: Pod IPs change every time they are recreated. How does your frontend find the backend?\n\n**SOLUTION**: A **Service** is a stable resource that provides a single IP and DNS name for a group of Pods. It acts as an internal load balancer.\n\n**TYPES**:\n1. **ClusterIP**: Internal only. Best for backend databases.\n2. **NodePort**: Opens a port on every node's IP. (Rarely used).\n3. **LoadBalancer**: Standard for production. Automatically creates a GCP Network Load Balancer and gives your app a public IP.\n\n**SUMMARY POINTS**:\n- Stable IP/DNS for Pods.\n- Load balances traffic internally.\n- 'LoadBalancer' type creates a real cloud resource.",
+    "insight": "Services use 'Labels and Selectors' to know which Pods belong to them.",
+    "next": "GKE Node Pools",
+    "lab": { "command": "kubectl get services", "output": "NAME         TYPE           CLUSTER-IP     EXTERNAL-IP\nweb-service  LoadBalancer   10.96.x.x      35.200.x.x" }
+  },
+  {
+    "id": "gcp_ace_04_14",
+    "title": "GKE Node Pools",
+    "content": "**LEARNING OBJECTIVE**: Manage sets of VMs with different hardware specs.\n\n**DETAILED EXPLANATION**: A cluster can have multiple **Node Pools**. Each pool is a set of identical VMs. \n- **Scenario**: You have a 'standard-pool' of cheap E2 VMs for your web app, and a 'gpu-pool' of expensive N2 VMs with NVIDIA GPUs for your AI processing.\n\n**WHY IT MATTERS**: It allows you to run different types of workloads on the most cost-effective hardware within the same cluster. You can scale these pools independently.\n\n**CLI EXAMPLES**:\n- List pools: `gcloud container node-pools list --cluster=[NAME]` \n- Add pool: `gcloud container node-pools create gpu-pool --cluster=[NAME] --machine-type=n1-standard-4 --accelerator=type=nvidia-tesla-t4,count=1` \n\n**SUMMARY POINTS**:\n- Subset of nodes in a cluster.\n- Allows for hardware specialization.\n- Can be auto-scaled individually.",
+    "insight": "The 'default-pool' is created automatically with the cluster. Many engineers delete it and create custom pools immediately.",
+    "next": "GKE Cluster Autoscaler",
+    "lab": { "command": "gcloud container node-pools list --cluster=my-cluster --region=us-central1", "output": "NAME          MACHINE_TYPE  SIZE\ndefault-pool  e2-medium     3" }
+  },
+  {
+    "id": "gcp_ace_04_15",
+    "title": "GKE Cluster Autoscaler",
+    "content": "**LEARNING OBJECTIVE**: Automatically scale the number of VMs in your cluster.\n\n**DETAILED EXPLANATION**: The **Cluster Autoscaler** looks at Pods that are 'Pending' (meaning they have no room to run). It then tells Compute Engine to add more VMs to the node pool. Conversely, if nodes are mostly empty, it moves Pods and deletes the unused VMs to save money.\n\n**DIFFERENCE**: \n- **Horizontal Pod Autoscaler (HPA)**: Adds more Pods (Software level).\n- **Cluster Autoscaler**: Adds more VMs (Hardware level).\n\n**CLI EXAMPLES**:\n- Enable: `gcloud container clusters update [NAME] --enable-autoscaling --min-nodes=1 --max-nodes=10` \n\n**SUMMARY POINTS**:\n- Scales the number of Nodes (VMs).\n- Triggered by resource demand (CPU/RAM requests).\n- Critical for cost-effective GKE production clusters.",
+    "insight": "On the exam: If Pods are 'Pending' due to 'Insufficient CPU', the answer is to enable or increase the Cluster Autoscaler.",
+    "next": "GKE Horizontal Pod Autoscaler (HPA)",
+    "lab": { "command": "echo 'Enabled: True, Min: 1, Max: 10'", "output": "Enabled: True, Min: 1, Max: 10" }
+  },
+  {
+    "id": "gcp_ace_04_16",
+    "title": "Horizontal Pod Autoscaler (HPA)",
+    "content": "**LEARNING OBJECTIVE**: Automatically scale the number of application replicas.\n\n**DETAILED EXPLANATION**: HPA monitors the actual resource usage (e.g., average CPU usage) of your Pods. If the average CPU goes above your target (e.g., 80%), HPA tells the Deployment to create more replicas (e.g., go from 5 Pods to 8 Pods).\n\n**REQUIREMENT**: You **must** define 'Resource Requests' in your Pod manifest so Kubernetes knows what '100% usage' looks like for your app.\n\n**CLI EXAMPLES**:\n- Create HPA: `kubectl autoscale deployment [NAME] --cpu-percent=80 --min=2 --max=10` \n- View HPA: `kubectl get hpa` \n\n**SUMMARY POINTS**:\n- Scales the number of Pods.\n- Based on real-time metrics (CPU/RAM).\n- Prevents application slowness during traffic spikes.",
+    "insight": "HPA can also scale based on custom metrics like 'requests per second' from a Load Balancer.",
+    "next": "GKE Workload Identity",
+    "lab": { "command": "kubectl get hpa", "output": "NAME       REFERENCE             TARGETS   MINPODS   MAXPODS\nweb-server Deployment/web-server 45%/80%   2         10" }
+  },
+  {
+    "id": "gcp_ace_04_17",
+    "title": "GKE Workload Identity",
+    "content": "**LEARNING OBJECTIVE**: Securely connect containers to GCP APIs.\n\n**THE PROBLEM**: How does a container inside GKE talk to a Cloud Storage bucket? In the old days, you'd put a JSON key file inside the container. **This is insecure.**\n\n**THE SOLUTION**: **Workload Identity** links a Kubernetes Service Account (KSA) to a Google Cloud Service Account (GSA). The container 'becomes' the GSA and gets temporary tokens from the node. No keys on disk!\n\n**WHY IT MATTERS**: It is the **Gold Standard** for GKE security. It follows the Principle of Least Privilege and eliminates key rotation management.\n\n**SUMMARY POINTS**:\n- Preferred way to handle GKE-to-GCP auth.\n- No static JSON keys.\n- Granular permissions per-application.",
+    "insight": "Workload Identity is required in Autopilot and strongly recommended in Standard.",
+    "next": "GKE Private Clusters",
+    "lab": { "command": "echo 'IAM Binding: K8S_SA -> GCP_SA'", "output": "IAM Binding: K8S_SA -> GCP_SA" }
+  },
+  {
+    "id": "gcp_ace_04_18",
+    "title": "GKE Private Clusters",
+    "content": "**LEARNING OBJECTIVE**: Isolate your cluster from the public internet.\n\n**DETAILED EXPLANATION**: In a **Private Cluster**, the nodes (VMs) do NOT have public IP addresses. They are completely invisible to the internet. \n\n**MASTER ACCESS**: You must configure 'Authorized Networks' to tell Google which IP addresses (like your office VPN) are allowed to talk to the Kubernetes Control Plane.\n\n**OUTBOUND TRAFFIC**: Since nodes are private, you must use **Cloud NAT** if your containers need to download anything from the internet (like an npm package or a security update).\n\n**SUMMARY POINTS**:\n- Nodes have internal IPs only.\n- High security for enterprise workloads.\n- Requires 'Authorized Networks' for management access.",
+    "insight": "On the exam: To increase the security posture of a GKE cluster, the best answer is to make it a Private Cluster.",
+    "next": "Artifact Registry (Image Storage)",
+    "lab": { "command": "gcloud container clusters describe my-cluster --format='get(privateClusterConfig)'", "output": "enablePrivateNodes: True" }
+  },
+  {
+    "id": "gcp_ace_04_19",
+    "title": "Artifact Registry",
+    "content": "**LEARNING OBJECTIVE**: Store and manage container images and packages.\n\n**CONCEPT**: Artifact Registry is the successor to Container Registry (GCR). It is a single place to store Docker images, Maven/npm packages, and Python modules. \n\n**FEATURES**:\n- **Regional Storage**: Store images close to your GKE clusters for faster pulls.\n- **Vulnerability Scanning**: Automatically scans your images for security holes when you push them.\n- **IAM Integration**: Use standard GCP roles to control who can push/pull images.\n\n**CLI EXAMPLES**:\n- Create repo: `gcloud artifacts repositories create [REPO] --repository-format=docker --location=us-central1` \n- Auth Docker: `gcloud auth configure-docker us-central1-docker.pkg.dev` \n\n**SUMMARY POINTS**:\n- Managed private registry.\n- Supports many package types (Docker, npm, etc.).\n- Integrated vulnerability scanning.",
+    "insight": "Always use Artifact Registry instead of Container Registry for new projects—it is more flexible and feature-rich.",
+    "next": "Cloud Build (CI/CD)",
+    "lab": { "command": "gcloud artifacts repositories list", "output": "NAME      FORMAT  LOCATION\napp-repo  DOCKER  us-central1" }
+  },
+  {
+    "id": "gcp_ace_04_20",
+    "title": "Cloud Build (Automation)",
+    "content": "**LEARNING OBJECTIVE**: Automate the build, test, and deploy process.\n\n**CONCEPT**: Cloud Build is a serverless CI/CD platform. It executes your build in 'Steps'. Each step is just a Docker container that performs a task (e.g., `git clone`, `docker build`, `kubectl apply`).\n\n**YAML CONFIG**: You define your pipeline in a `cloudbuild.yaml` file. \n\n**TRIGGERS**: You can link Cloud Build to GitHub. When you push code, Cloud Build automatically starts the build, pushes the image to Artifact Registry, and deploys it to Cloud Run or GKE.\n\n**CLI EXAMPLES**:\n- Submit build manually: `gcloud builds submit --config cloudbuild.yaml .` \n\n**SUMMARY POINTS**:\n- Serverless CI/CD.\n- Step-based execution.\n- Integrated with Artifact Registry and Cloud Run.",
+    "insight": "Cloud Build is extremely fast because it runs on Google's private network with access to high-speed caches.",
+    "next": "Kubernetes ConfigMaps & Secrets",
+    "lab": { "command": "gcloud builds list --limit=1", "output": "ID: 123-abc, STATUS: SUCCESS" }
+  },
+  {
+    "id": "gcp_ace_04_21",
+    "title": "ConfigMaps & Secrets",
+    "content": "**LEARNING OBJECTIVE**: Decouple configuration from container images.\n\n**THE PROBLEM**: You don't want to hardcode your database URL or API key inside your Docker image. If you do, you have to rebuild the image just to change a setting.\n\n**THE SOLUTION**:\n- **ConfigMaps**: For non-sensitive data (e.g., `APP_COLOR=blue`).\n- **Secrets**: For sensitive data (e.g., `DB_PASSWORD=secret123`).\n\n**USAGE**: These objects are injected into your container as **Environment Variables** or **Files** mounted in a directory. Your app code just reads them from the environment.\n\n**SUMMARY POINTS**:\n- ConfigMaps = Public config.\n- Secrets = Private/Sensitive config.\n- Allows the same image to run in Dev, Staging, and Prod.",
+    "insight": "Kubernetes Secrets are only Base64 encoded, not encrypted by default! Enable 'Application-layer Secrets Encryption' in GKE for real security.",
+    "next": "Kubernetes Namespaces",
+    "lab": { "command": "kubectl create configmap my-config --from-literal=env=prod", "output": "configmap/my-config created" }
+  },
+  {
+    "id": "gcp_ace_04_22",
+    "title": "Kubernetes Namespaces",
+    "content": "**LEARNING OBJECTIVE**: Partition a single cluster for multi-tenancy.\n\n**CONCEPT**: A **Namespace** is a virtual cluster inside your physical GKE cluster. It allows you to isolate resources between different teams or environments (e.g., a `development` namespace and a `production` namespace).\n\n**BENEFITS**:\n- **Resource Quotas**: Prevent the Dev team from using all the CPU in the cluster.\n- **Naming**: You can have a Service named 'web' in Namespace A and another named 'web' in Namespace B.\n\n**CLI EXAMPLES**:\n- List namespaces: `kubectl get ns` \n- Create one: `kubectl create namespace staging` \n- Switch context: `kubectl config set-context --current --namespace=staging` \n\n**SUMMARY POINTS**:\n- Logical isolation within a cluster.\n- Supports resource limits and quotas.\n- Good for multi-team environments.",
+    "insight": "The 'default' namespace is where everything goes if you don't specify one. Don't use it for production!",
+    "next": "Kubernetes Ingress (Layer 7 LB)",
+    "lab": { "command": "kubectl get ns", "output": "NAME          STATUS\ndefault       Active\nkube-system   Active" }
+  },
+  {
+    "id": "gcp_ace_04_23",
+    "title": "GKE Ingress",
+    "content": "**LEARNING OBJECTIVE**: Expose multiple GKE services via one Load Balancer.\n\n**CONCEPT**: A **Service** of type LoadBalancer creates a Layer 4 LB (one IP per app). This is expensive. **Ingress** is a Layer 7 controller. It creates ONE Global HTTP(S) Load Balancer and uses rules to send traffic to different internal services.\n\n**RULES**:\n- `mysite.com/api` -> Service A\n- `mysite.com/blog` -> Service B\n\n**ADVANTAGE**: You only pay for one Load Balancer, and you get advanced features like Google-managed SSL certificates and Cloud Armor protection.\n\n**SUMMARY POINTS**:\n- Layer 7 external access.\n- Path-based and Host-based routing.\n- Uses the Google Global HTTP(S) Load Balancer.",
+    "insight": "To use Ingress in GKE, you must have the 'HTTP Load Balancing' add-on enabled on your cluster.",
+    "next": "Cloud Functions (Event-Driven)",
+    "lab": { "command": "kubectl get ingress", "output": "NAME       CLASS    HOSTS   ADDRESS" }
+  },
+  {
+    "id": "gcp_ace_04_24",
+    "title": "Cloud Functions",
+    "content": "**LEARNING OBJECTIVE**: Execute code in response to cloud events.\n\n**CONCEPT**: Cloud Functions is 'Function-as-a-Service' (FaaS). You don't even provide a container; you just provide a snippet of code (JavaScript, Python, Go). \n\n**TRIGGERS**: Functions wait for something to happen:\n- **HTTP**: A URL is called.\n- **Cloud Storage**: A file is uploaded to a bucket.\n- **Pub/Sub**: A message arrives in a queue.\n- **Firestore**: A database record is changed.\n\n**WHY IT MATTERS**: Perfect for glue code. Example: When a user uploads a high-res photo to GCS, a Cloud Function automatically triggers to create a thumbnail version.\n\n**SUMMARY POINTS**:\n- Pure serverless code.\n- Event-driven execution.\n- Zero scaling management.",
+    "insight": "Cloud Functions are best for short-running tasks (max 9 minutes). If your task takes longer, use Cloud Run.",
+    "next": "Deploying Cloud Functions",
+    "lab": { "command": "gcloud functions list", "output": "NAME      STATUS  TRIGGER\nimage-fix ACTIVE  HTTP" }
+  },
+  {
+    "id": "gcp_ace_04_25",
+    "title": "Deploying Cloud Functions",
+    "content": "**LEARNING OBJECTIVE**: Master the deployment flags for serverless functions.\n\n**DETAILED EXPLANATION**: When deploying, you must specify the **Runtime** (e.g., `python311`) and the **Trigger Type**.\n\n**CLI EXAMPLES**:\n- HTTP Function: `gcloud functions deploy hello-world --runtime=nodejs20 --trigger-http --allow-unauthenticated` \n- GCS-Triggered: `gcloud functions deploy process-file --runtime=python311 --trigger-resource=my-bucket --trigger-event=google.storage.object.finalize` \n\n**SUMMARY POINTS**:\n- Specify runtime and trigger.\n- Supports environment variables.\n- `allow-unauthenticated` makes HTTP functions public.",
+    "insight": "Cloud Functions (2nd gen) actually runs on top of Cloud Run under the hood, giving it better performance.",
+    "next": "GKE Health Probes (Liveness & Readiness)",
+    "lab": { "command": "gcloud functions deploy my-func --runtime=python39 --trigger-http", "output": "Deploying function (succeeded)..." }
+  },
+  {
+    "id": "gcp_ace_04_26",
+    "title": "Liveness vs. Readiness Probes",
+    "content": "**LEARNING OBJECTIVE**: Differentiate between application health signals in GKE.\n\n**READINESS PROBE**:\n- Question: 'Is the app ready to handle traffic?'\n- Action: If it fails, Kubernetes stops sending traffic to that Pod (removes it from the Service endpoint).\n- Scenario: App is still loading a 2GB database into RAM.\n\n**LIVENESS PROBE**:\n- Question: 'Is the app alive or is it stuck?'\n- Action: If it fails, Kubernetes **kills** the Pod and starts a fresh one.\n- Scenario: App has entered a 'Deadlock' and will never respond again.\n\n**EXAM TIP**: Don't use a Liveness probe to check for backend database health, or your app will reboot in an infinite loop if the DB is down!",
+    "insight": "Probes are defined in the 'spec.containers' section of your Deployment YAML.",
+    "next": "Kubernetes Resource Quotas",
+    "lab": { "command": "echo 'livenessProbe: {httpGet: {path: /healthz, port: 8080}}'", "output": "livenessProbe: {httpGet: {path: /healthz, port: 8080}}" }
+  },
+  {
+    "id": "gcp_ace_04_27",
+    "title": "GKE Resource Quotas",
+    "content": "**LEARNING OBJECTIVE**: Prevent 'Noisy Neighbors' from crashing your cluster.\n\n**DETAILED EXPLANATION**: By default, a Pod can use all the CPU and RAM on a node. If one Pod has a memory leak, it can crash the whole node, killing other innocent Pods. \n\n**RESOURCE QUOTAS**: Applied to a Namespace. It sets a hard limit on the total CPU/RAM all Pods in that namespace can use.\n\n**RESOURCE LIMITS**: Applied to an individual Pod. \n- **Requests**: What the Pod is guaranteed to get.\n- **Limits**: The absolute max the Pod can consume before being throttled or killed.\n\n**SUMMARY POINTS**:\n- Quotas protect the Namespace.\n- Limits protect the Node.\n- Prevents one application from starving others.",
+    "insight": "In GKE Autopilot, Google automatically sets these for you based on your Pod sizes.",
+    "next": "GKE Maintenance Windows",
+    "lab": { "command": "kubectl get resourcequotas", "output": "(Empty list)" }
+  },
+  {
+    "id": "gcp_ace_04_28",
+    "title": "GKE Maintenance Windows",
+    "content": "**LEARNING OBJECTIVE**: Control when Google upgrades your cluster.\n\n**DETAILED EXPLANATION**: Google periodically upgrades your GKE Control Plane and Nodes to the latest security patch. By default, this can happen at any time. A **Maintenance Window** allows you to specify a time (e.g., 2 AM to 6 AM on Sundays) when these upgrades are allowed to start.\n\n**MAINTENANCE EXCLUSIONS**: You can also set a 'No-upgrade' period for up to 30 days. Perfect for 'Freeze Periods' like a major product launch or Black Friday.\n\n**CLI EXAMPLES**:\n- Set window: `gcloud container clusters update [NAME] --maintenance-window=2023-10-10T00:00:00Z --maintenance-window-duration=4h` \n\n**SUMMARY POINTS**:\n- Controls timing of automated upgrades.\n- Essential for preventing mid-day downtime during updates.\n- Can exclude specific dates entirely.",
+    "insight": "Even with maintenance windows, Google may bypass them for 'Critical' security emergencies.",
+    "next": "GKE Binary Authorization",
+    "lab": { "command": "gcloud container clusters describe my-cluster --format='get(maintenancePolicy)'", "output": "window: { startTime: ... }" }
+  },
+  {
+    "id": "gcp_ace_04_29",
+    "title": "Binary Authorization",
+    "content": "**LEARNING OBJECTIVE**: Enforce container security at deployment time.\n\n**CONCEPT**: How do you know the image running in production is the SAME one that passed your security scans? **Binary Authorization** is a 'Gatekeeper'. It requires that an image be 'Signed' by an authorized system (like Cloud Build) before GKE will allow it to run.\n\n**POLICY**: You define a policy: 'Only images signed by the Security-Scan-Attestor are allowed in the Prod-Namespace'.\n\n**WHY IT MATTERS**: It prevents a hacker (or a frustrated developer) from manually pushing an unverified or malicious image to your production cluster.\n\n**SUMMARY POINTS**:\n- Deploy-time security check.\n- Requires 'Attestations' (Signatures).\n- Prevents unauthorized image execution.",
+    "insight": "Binary Authorization is a key requirement for companies seeking 'Supply Chain Security' (SLSA) compliance.",
+    "next": "VM to GKE Migration (Migrate for Anthos)",
+    "lab": { "command": "echo 'Policy: Disallow All, Except Signed Images'", "output": "Policy: Disallow All, Except Signed Images" }
+  },
+  {
+    "id": "gcp_ace_04_30",
+    "title": "GKE Cost Optimization",
+    "content": "**LEARNING OBJECTIVE**: Reduce GKE spend without sacrificing performance.\n\n**TECHNIQUES**:\n1. **Use Autopilot**: Zero waste (you only pay for what your Pod uses).\n2. **Preemptible/Spot Nodes**: Use Spot VMs in your node pools for a 90% discount (great for batch processing or dev clusters).\n3. **Vertical Pod Autoscaler (VPA)**: Automatically adjusts your Pod's CPU/RAM requests based on actual usage, so you don't over-request.\n4. **Namespace Quotas**: Limit the max spend of individual teams.\n\n**SUMMARY POINTS**:\n- Spot nodes for cost savings.\n- VPA for right-sizing.\n- Autopilot for simplicity and efficiency.",
+    "insight": "A common ACE exam question asks how to run a 'Batch' job on GKE for the lowest price—the answer is 'Spot VMs'.",
+    "next": "Cloud Deploy (Managed CD)",
+    "lab": { "command": "gcloud container node-pools create spot-pool --cluster=my-cluster --spot", "output": "Created [spot-pool]." }
+  },
+  {
+    "id": "gcp_ace_04_31",
+    "title": "Cloud Deploy",
+    "content": "**LEARNING OBJECTIVE**: Automate the promotion of code through environments.\n\n**CONCEPT**: Cloud Build is for 'Building'. **Cloud Deploy** is for 'Continuous Delivery'. It allows you to define a **Delivery Pipeline** (e.g., Dev -> Staging -> Prod).\n\n**FEATURES**:\n- **Promote**: One click to move a release from Staging to Prod.\n- **Rollback**: One click to revert to the previous version.\n- **Approval**: Require a manager to approve the deployment to Production.\n\n**TARGETS**: Currently supports GKE, Cloud Run, and GEC (Anthos).\n\n**SUMMARY POINTS**:\n- Managed CD service.\n- Environment promotion logic.\n- Built-in rollbacks and approvals.",
+    "insight": "Cloud Deploy keeps an audit log of every person who promoted code to Production—great for compliance.",
+    "next": "GKE Regional vs Zonal (Deep Dive)",
+    "lab": { "command": "gcloud deploy delivery-pipelines list", "output": "NAME      TARGETS\nweb-pipe  dev-target,prod-target" }
+  },
+  {
+    "id": "gcp_ace_04_32",
+    "title": "Regional Clusters (HA)",
+    "content": "**LEARNING OBJECTIVE**: Design clusters for 99.99% availability.\n\n**ZONAL CLUSTER**:\n- Control plane is in one zone (e.g., `us-central1-a`).\n- If that zone has an outage, you cannot use `kubectl`. Your Pods might keep running, but they can't scale or recover.\n\n**REGIONAL CLUSTER**:\n- Google replicates the Control Plane across 3 zones.\n- Even if an entire zone is destroyed, your cluster remains fully operational.\n- Nodes are also spread across zones automatically.\n\n**COST**: You pay a management fee for the cluster, but the increase in reliability is mandatory for production workloads.\n\n**SUMMARY POINTS**:\n- Regional = 3 Control Planes.\n- Zonal = 1 Control Plane.\n- Use Regional for anything that shouldn't go down.",
+    "insight": "On the ACE exam: If the goal is 'High Availability', the answer is almost always a Regional resource.",
+    "next": "GKE Multi-cluster Ingress",
+    "lab": { "command": "gcloud container clusters describe my-cluster --format='get(location)'", "output": "us-central1" }
+  },
+  {
+    "id": "gcp_ace_04_33",
+    "title": "Multi-cluster Ingress",
+    "content": "**LEARNING OBJECTIVE**: Scale Kubernetes across multiple GCP regions.\n\n**CONCEPT**: You have one GKE cluster in the US and another in Europe. How do you send users to the right one? **Multi-cluster Ingress (MCI)** is a global load balancer that treats multiple clusters as a single backend.\n\n**HOW IT WORKS**: It uses a 'Config Cluster' to store the Ingress rules. The Global LB then sends traffic to the nearest healthy Pod in ANY of your clusters.\n\n**WHY IT MATTERS**: It allows you to build a truly global, disaster-proof application that survives the total failure of an entire GCP region.\n\n**SUMMARY POINTS**:\n- Global load balancing across clusters.\n- Disaster recovery at the regional level.\n- Low latency for global users.",
+    "insight": "MCI is an advanced feature often used by enterprises with strict uptime requirements.",
+    "next": "Container Analysis API",
+    "lab": { "command": "echo 'Configured via MultiClusterIngress YAML'", "output": "Configured via MultiClusterIngress YAML" }
+  },
+  {
+    "id": "gcp_ace_04_34",
+    "title": "Container Analysis",
+    "content": "**LEARNING OBJECTIVE**: Automate the security auditing of your Docker images.\n\n**DETAILED EXPLANATION**: The **Container Analysis API** scans every image pushed to Artifact Registry for known vulnerabilities (CVEs). It gives each image a score (Critical, High, Medium, Low).\n\n**AUTOMATION**: You can set up a Cloud Build trigger that fails the build if the vulnerability scan finds a 'Critical' error. This ensures that 'Dirty' images never make it to your cluster.\n\n**CLI EXAMPLES**:\n- List vulnerabilities: `gcloud artifacts docker images list-vulnerabilities [IMAGE_PATH]` \n\n**SUMMARY POINTS**:\n- Automated security scanning.\n- Integrates with Artifact Registry.\n- Foundation for Binary Authorization.",
+    "insight": "Container scanning is a 'Passive' check—it doesn't stop the deploy unless you use it with Binary Authorization.",
+    "next": "App Engine Cron Jobs",
+    "lab": { "command": "gcloud artifacts docker images list-vulnerabilities us-central1-docker.pkg.dev/my-proj/app-repo/web-v1", "output": "VULNERABILITY  SEVERITY\nCVE-2023-1234  HIGH" }
+  },
+  {
+    "id": "gcp_ace_04_35",
+    "title": "App Engine Cron Jobs",
+    "content": "**LEARNING OBJECTIVE**: Schedule periodic tasks in a serverless environment.\n\n**DETAILED EXPLANATION**: App Engine has a built-in scheduler. You define tasks in a `cron.yaml` file using standard cron syntax (e.g., `every 24 hours`). \n\n**HOW IT WORKS**: At the scheduled time, App Engine sends an HTTP GET request to a specific URL in your app. Your app then executes the logic (e.g., 'Delete old user accounts').\n\n**USE CASE**: Daily database cleanups, generating monthly invoices, or syncing data with an external API.\n\n**CLI EXAMPLES**:\n- Deploy cron: `gcloud app deploy cron.yaml` \n\n**SUMMARY POINTS**:\n- Automated task scheduling.\n- Defined in `cron.yaml`.\n- Triggers via internal HTTP requests.",
+    "insight": "GCP also has a standalone service called 'Cloud Scheduler' which can trigger Cloud Run or Cloud Functions without needing App Engine.",
+    "next": "GKE Workload Identity: The 'Binding'",
+    "lab": { "command": "echo 'cron:\n- description: daily cleanup\n  url: /tasks/cleanup\n  schedule: every 24 hours' > cron.yaml", "output": "(cron.yaml created)" }
+  },
+  {
+    "id": "gcp_ace_04_36",
+    "title": "GKE Workload Identity Setup",
+    "content": "**LEARNING OBJECTIVE**: Understand the technical steps of identity linking.\n\n**STEPS**:\n1. **Enable** Workload Identity on the GKE cluster.\n2. **Create** a Google Service Account (GSA) with the needed GCP roles (e.g., Storage Admin).\n3. **Create** a Kubernetes Service Account (KSA) in your cluster namespace.\n4. **Bind** them: Run a `gcloud` command to allow the KSA to 'impersonate' the GSA.\n5. **Annotate**: Add a label to the KSA so Kubernetes knows which GSA to use.\n\n**WHY SO MANY STEPS?**: This multi-step 'Handshake' ensures that only a specific app in a specific namespace can assume the identity. It is highly secure.\n\n**SUMMARY POINTS**:\n- GSA = GCP Permissions.\n- KSA = Kubernetes Identity.\n- Binding links them securely.",
+    "insight": "On the exam: Workload Identity is the answer for ANY question about 'Securely accessing GCP services from GKE'.",
+    "next": "Deployment Troubleshooting: Pod Events",
+    "lab": { "command": "echo 'gcloud iam service-accounts add-iam-policy-binding ... --role roles/iam.workloadIdentityUser'", "output": "gcloud iam service-accounts add-iam-policy-binding ... --role roles/iam.workloadIdentityUser" }
+  },
+  {
+    "id": "gcp_ace_04_37",
+    "title": "Pod Troubleshooting",
+    "content": "**LEARNING OBJECTIVE**: Use `describe` and `logs` to find deployment errors.\n\n**COMMON FAILURES**:\n- **ImagePullBackOff**: Misspelled image name or GKE has no permission to reach the registry.\n- **CrashLoopBackOff**: The container starts but immediately crashes. (Usually an application bug or missing environment variable).\n- **Pending**: No nodes have enough CPU/RAM to run the Pod.\n\n**FIRST STEPS**:\n1. `kubectl get pods` (See the status).\n2. `kubectl describe pod [NAME]` (Look at the 'Events' at the bottom—this is where the error messages are!).\n3. `kubectl logs [NAME]` (See the app's internal error messages).\n\n**SUMMARY POINTS**:\n- `describe` for K8s errors.\n- `logs` for application errors.\n- Check Events for scheduling failures.",
+    "insight": "Use 'kubectl get events --sort-by=.metadata.creationTimestamp' to see a timeline of what went wrong in your cluster.",
+    "next": "GKE Auto-repair & Auto-upgrade",
+    "lab": { "command": "kubectl describe pod web-pod | tail -n 5", "output": "Events: Warning FailedScheduling ... 0/3 nodes are available: 3 Insufficient memory." }
+  },
+  {
+    "id": "gcp_ace_04_38",
+    "title": "Auto-repair & Auto-upgrade",
+    "content": "**LEARNING OBJECTIVE**: Enable GKE's 'Self-Healing' nodes.\n\n**AUTO-REPAIR**: Google continuously monitors the health of the VMs in your node pool. If a VM becomes unhealthy (e.g., the Kubelet crashes or the disk fails), Google automatically deletes and recreates that VM.\n\n**AUTO-UPGRADE**: Keeps your nodes up to date with the latest stable Kubernetes version. This ensures you have the latest security patches and features without manual intervention.\n\n**CLI EXAMPLES**:\n- Enable on node-pool: `gcloud container node-pools update [POOL] --cluster=[NAME] --enable-autoprovisioning --enable-autorepair` \n\n**SUMMARY POINTS**:\n- Nodes fix themselves (Auto-repair).\n- Nodes stay current (Auto-upgrade).\n- Essential for reducing maintenance 'Drift'.",
+    "insight": "Auto-repair and Auto-upgrade are ON by default in GKE Autopilot.",
+    "next": "Cloud Run Custom Domains",
+    "lab": { "command": "gcloud container node-pools describe default-pool --cluster=my-cluster --region=us-central1 --format='get(management)'", "output": "autoRepair: true, autoUpgrade: true" }
+  },
+  {
+    "id": "gcp_ace_04_39",
+    "title": "Cloud Run Domains",
+    "content": "**LEARNING OBJECTIVE**: Connect your own domain to a serverless service.\n\n**DETAILED EXPLANATION**: By default, Cloud Run gives you a URL like `my-app-abc.a.run.app`. For production, you want `myapp.com`. \n- **Mapping**: You can 'Map' a custom domain in the Cloud Run settings. \n- **SSL**: Google automatically provisions a free Managed SSL certificate for your custom domain.\n\n**LIMITATION**: Domain mapping is not available in every region. In those cases, you must use a Global HTTP(S) Load Balancer to connect your domain.\n\n**CLI EXAMPLES**:\n- Map domain: `gcloud beta run domain-mappings create --service [NAME] --domain [DOMAIN]` \n\n**SUMMARY POINTS**:\n- Replaces default `.run.app` URL.\n- Includes free managed SSL.\n- Limited regional availability (check docs).",
+    "insight": "Cloud Run is the only serverless service with built-in, easy domain mapping and SSL (App Engine also has it, but it is much older).",
+    "next": "Deployment Summary",
+    "lab": { "command": "gcloud beta run domain-mappings list", "output": "DOMAIN       SERVICE\nmyapp.com    test-app" }
+  },
+  {
+    "id": "gcp_ace_04_40",
+    "title": "Deployment Summary",
+    "content": "**CHAPTER COMPLETE**\n\nYou have mastered the 'Compute Brain' of Google Cloud. \n\n**KEY TAKEAWAYS**:\n- **App Engine**: Use Standard for cost/zero-scaling, Flexible for Docker/custom binaries.\n- **Cloud Run**: The best serverless container option. Scales to zero, extremely portable.\n- **GKE**: The professional choice for microservices. Use Autopilot to save time, and Workload Identity for security.\n- **CI/CD**: Use Artifact Registry for storage and Cloud Build for automation.\n\n**WHAT IS NEXT?**: \nYour code is running! Now you need to make sure it *stays* running. **Chapter 5: Operations** will cover Logging, Monitoring, Alerting, and Debugging.",
+    "insight": "Choosing between Cloud Run and GKE is the most common architectural decision in modern GCP engineering.",
+    "next": "Chapter Complete",
+    "lab": { "command": "kubectl get deployments", "output": "NAME      READY   AVAILABLE\nweb-app   5/5     5" }
+  }
+]

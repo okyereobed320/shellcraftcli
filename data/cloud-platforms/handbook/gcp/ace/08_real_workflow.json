@@ -1,0 +1,322 @@
+[
+  {
+    "id": "gcp_ace_08_01",
+    "title": "Real-world GCP Workflow Overview",
+    "content": "In this final chapter, we'll walk through a realistic workflow: from setting up your project and networking to deploying a multi-tier application with CI/CD and monitoring.",
+    "insight": "Building in the cloud is about connecting services to create a robust and scalable system.",
+    "next": "Setting up the Foundation",
+    "lab": { "command": "gcloud projects list --limit=1", "output": "PROJECT_ID  NAME  PROJECT_NUMBER\n..." }
+  },
+  {
+    "id": "gcp_ace_08_02",
+    "title": "Defining the Resource Hierarchy",
+    "content": "Start by creating a new project for your application. This ensures isolation from other workloads and allows for clean billing and access control.",
+    "insight": "Use a consistent naming convention for your projects, such as [org]-[app]-[env].",
+    "next": "Configuring the Network",
+    "lab": { "command": "gcloud projects create ace-workflow-prod --name='ACE Workflow Production'", "output": "Created [ace-workflow-prod]." }
+  },
+  {
+    "id": "gcp_ace_08_03",
+    "title": "Creating the Custom VPC",
+    "content": "Create a custom-mode VPC network to have full control over your subnet ranges and regions.",
+    "insight": "Avoid the 'default' VPC for production workloads to maintain a clean security posture.",
+    "next": "Adding Subnets for Tiers",
+    "lab": { "command": "gcloud compute networks create app-vpc --subnet-mode=custom", "output": "Created [app-vpc]." }
+  },
+  {
+    "id": "gcp_ace_08_04",
+    "title": "Designing Subnets for Tiers",
+    "content": "Create separate subnets for your web tier and database tier. This allows you to apply different security policies to each tier.",
+    "insight": "Place your database in a private subnet without an external IP address.",
+    "next": "Setting up Firewall Rules",
+    "lab": { "command": "gcloud compute networks subnets create web-subnet --network=app-vpc --region=us-central1 --range=10.0.1.0/24", "output": "Created [web-subnet]." }
+  },
+  {
+    "id": "gcp_ace_08_05",
+    "title": "Hardening with Firewall Rules",
+    "content": "Create firewall rules that allow only necessary traffic. For example, allow HTTP/HTTPS to the web tier and only allow traffic from the web tier to the database tier.",
+    "insight": "Use network tags or service accounts as the source/target for your rules for better maintainability.",
+    "next": "Reserving Static IPs",
+    "lab": { "command": "gcloud compute firewall-rules create allow-lb-to-web --network=app-vpc --allow=tcp:8080 --source-ranges=130.211.0.0/22,35.191.0.0/16 --target-tags=web-server", "output": "Created [allow-lb-to-web]." }
+  },
+  {
+    "id": "gcp_ace_08_06",
+    "title": "Reserving Front-end IPs",
+    "content": "Reserve a global static IP address for your application's load balancer. This provides a stable entry point for your users.",
+    "insight": "You'll point your domain name's A record to this IP address.",
+    "next": "Configuring Service Accounts",
+    "lab": { "command": "gcloud compute addresses create lb-ip --global", "output": "Created [lb-ip]." }
+  },
+  {
+    "id": "gcp_ace_08_07",
+    "title": "Creating Tier-specific Service Accounts",
+    "content": "Create separate service accounts for each component of your application. For example, 'web-sa' and 'db-sa'.",
+    "insight": "Service accounts represent the 'identity' of your code, not the users.",
+    "next": "Granting Least Privilege",
+    "lab": { "command": "gcloud iam service-accounts create web-sa --display-name='Web Tier Service Account'", "output": "Created [web-sa]." }
+  },
+  {
+    "id": "gcp_ace_08_08",
+    "title": "Applying Least Privilege",
+    "content": "Grant each service account only the roles it needs. 'web-sa' might need access to a specific Cloud Storage bucket, while 'db-sa' needs access to Cloud SQL.",
+    "insight": "Never use the default Compute Engine service account for your production workloads.",
+    "next": "Creating the Artifact Repository",
+    "lab": { "command": "gcloud projects add-iam-policy-binding ace-workflow-prod --member='serviceAccount:web-sa@ace-workflow-prod.iam.gserviceaccount.com' --role='roles/logging.logWriter'", "output": "Updated IAM policy." }
+  },
+  {
+    "id": "gcp_ace_08_09",
+    "title": "Setting up Artifact Registry",
+    "content": "Create a Docker repository in Artifact Registry to store your application's container images.",
+    "insight": "Use regional repositories to reduce latency and egress costs during deployments.",
+    "next": "Creating the Cloud SQL Instance",
+    "lab": { "command": "gcloud artifacts repositories create app-repo --repository-format=docker --location=us-central1", "output": "Created [app-repo]." }
+  },
+  {
+    "id": "gcp_ace_08_10",
+    "title": "Deploying Cloud SQL",
+    "content": "Create a managed Cloud SQL instance for your database. Use Private IP to ensure the database is not accessible from the internet.",
+    "insight": "Managed databases handle backups, patching, and failover for you.",
+    "next": "Storing Secrets",
+    "lab": { "command": "gcloud beta sql instances create app-db --database-version=POSTGRES_15 --tier=db-f1-micro --region=us-central1 --network=app-vpc --no-assign-ip", "output": "Creating Cloud SQL instance...done." }
+  },
+  {
+    "id": "gcp_ace_08_11",
+    "title": "Securing Credentials in Secret Manager",
+    "content": "Store your database password and other sensitive information in Secret Manager instead of hardcoding them in your application or config files.",
+    "insight": "Secrets are versioned and can be rotated without redeploying your entire application.",
+    "next": "Configuring Cloud Build",
+    "lab": { "command": "gcloud secrets create db-password --replication-policy=automatic && echo -n 'my-secret-pass' | gcloud secrets versions add db-password --data-file=-", "output": "Created secret [db-password].\nCreated version [1]." }
+  },
+  {
+    "id": "gcp_ace_08_12",
+    "title": "Automating with Cloud Build",
+    "content": "Create a 'cloudbuild.yaml' file that defines the steps to build your Docker image and push it to Artifact Registry.",
+    "insight": "Cloud Build runs your builds in a secure, isolated environment.",
+    "next": "Creating a Build Trigger",
+    "lab": { "command": "echo 'steps:\n- name: gcr.io/cloud-builders/docker\n  args: [build, -t, us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/web-app:$COMMIT_SHA, .]\n- name: gcr.io/cloud-builders/docker\n  args: [push, us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/web-app:$COMMIT_SHA]' > cloudbuild.yaml", "output": "(cloudbuild.yaml created)" }
+  },
+  {
+    "id": "gcp_ace_08_13",
+    "title": "Linking Source Control",
+    "content": "Create a trigger in Cloud Build that connects to your GitHub or GitLab repository. The build will start automatically whenever you push new code.",
+    "insight": "This is the 'Continuous Integration' part of your pipeline.",
+    "next": "Deploying to GKE",
+    "lab": { "command": "echo 'Create trigger via Cloud Build -> Triggers'", "output": "Create trigger via Cloud Build -> Triggers" }
+  },
+  {
+    "id": "gcp_ace_08_14",
+    "title": "Deploying to GKE Autopilot",
+    "content": "Create a GKE Autopilot cluster for a hands-off, secure, and cost-effective way to run your containerized application.",
+    "insight": "Autopilot manages the nodes and security configuration for you, following best practices.",
+    "next": "Configuring Workload Identity",
+    "lab": { "command": "gcloud container clusters create-auto app-cluster --region=us-central1", "output": "Creating cluster app-cluster...done." }
+  },
+  {
+    "id": "gcp_ace_08_15",
+    "title": "Connecting GKE to GCP Services",
+    "content": "Use Workload Identity to allow your GKE Pods to securely access other GCP services like Cloud SQL or Secret Manager.",
+    "insight": "This eliminates the need to manage long-lived service account keys inside your cluster.",
+    "next": "Writing Kubernetes Manifests",
+    "lab": { "command": "echo 'Enable Workload Identity and bind Kubernetes SA to GCP SA'", "output": "Enable Workload Identity and bind Kubernetes SA to GCP SA" }
+  },
+  {
+    "id": "gcp_ace_08_16",
+    "title": "Defining Kubernetes Manifests",
+    "content": "Create a Deployment manifest to run your application and a Service manifest to expose it internally within the cluster.",
+    "insight": "Use environment variables to pass configuration to your containers.",
+    "next": "Applying Manifests",
+    "lab": { "command": "echo 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web-app\n...' > deployment.yaml", "output": "(deployment.yaml created)" }
+  },
+  {
+    "id": "gcp_ace_08_17",
+    "title": "Deploying the Application",
+    "content": "Use 'kubectl apply' to deploy your application to the GKE cluster. Kubernetes will ensure that the desired number of Pods are running.",
+    "insight": "Use 'kubectl get pods' to monitor the progress of your deployment.",
+    "next": "Setting up the Load Balancer",
+    "lab": { "command": "kubectl apply -f deployment.yaml", "output": "deployment.apps/web-app created" }
+  },
+  {
+    "id": "gcp_ace_08_18",
+    "title": "Configuring Global Load Balancing",
+    "content": "Create an Ingress resource to set up a Global HTTP(S) Load Balancer. This will route external traffic to your GKE service.",
+    "insight": "The Ingress resource also handles SSL/TLS termination using managed certificates.",
+    "next": "Adding Managed Certificates",
+    "lab": { "command": "echo 'apiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: app-ingress\n...' > ingress.yaml", "output": "(ingress.yaml created)" }
+  },
+  {
+    "id": "gcp_ace_08_19",
+    "title": "Enabling HTTPS with Managed Certificates",
+    "content": "Google can automatically provision and renew SSL certificates for your domain. Simply create a ManagedCertificate resource and reference it in your Ingress.",
+    "insight": "Encrypting all traffic is essential for modern web security.",
+    "next": "Configuring Cloud DNS",
+    "lab": { "command": "echo 'apiVersion: networking.gke.io/v1\nkind: ManagedCertificate\nmetadata:\n  name: app-cert\nspec:\n  domains:\n    - myapp.example.com' > certificate.yaml", "output": "(certificate.yaml created)" }
+  },
+  {
+    "id": "gcp_ace_08_20",
+    "title": "Point-to-IP with Cloud DNS",
+    "content": "Update your Cloud DNS managed zone to point your domain name to the static IP address of the load balancer.",
+    "insight": "Your application is now accessible to the world via your custom domain.",
+    "next": "Implementing Health Checks",
+    "lab": { "command": "gcloud dns record-sets transaction start --zone=my-zone && gcloud dns record-sets transaction add --zone=my-zone --name='myapp.example.com.' --type=A --ttl=300 '34.120.x.x' && gcloud dns record-sets transaction execute --zone=my-zone", "output": "Transaction executed successfully." }
+  },
+  {
+    "id": "gcp_ace_08_21",
+    "title": "Defining Readiness and Liveness Probes",
+    "content": "Configure health checks in your Kubernetes manifests. Liveness probes check if your container is running; readiness probes check if it's ready to handle traffic.",
+    "insight": "Probes prevent Kubernetes from sending traffic to a Pod that is still starting up or has crashed.",
+    "next": "Enabling Cloud Logging",
+    "lab": { "command": "echo 'livenessProbe:\n  httpGet:\n    path: /healthz\n    port: 8080' >> deployment.yaml", "output": "(updated deployment.yaml)" }
+  },
+  {
+    "id": "gcp_ace_08_22",
+    "title": "Centralizing Logs",
+    "content": "Ensure all your application tiers are sending logs to Cloud Logging. This provides a unified view for troubleshooting across your entire system.",
+    "insight": "In GKE, anything written to stdout or stderr is automatically captured by Cloud Logging.",
+    "next": "Creating Monitoring Dashboards",
+    "lab": { "command": "gcloud logging read 'resource.type=k8s_container' --limit=1", "output": "--- \ntextPayload: \"Server listening on port 8080...\"\n..." }
+  },
+  {
+    "id": "gcp_ace_08_23",
+    "title": "Visualizing Health with Dashboards",
+    "content": "Create a custom Cloud Monitoring dashboard to track key metrics like request latency, error rates, and resource utilization for all your tiers.",
+    "insight": "A good dashboard allows you to see the health of your system at a glance.",
+    "next": "Setting up Uptime Checks",
+    "lab": { "command": "echo 'Create custom dashboard in Monitoring -> Dashboards'", "output": "Create custom dashboard in Monitoring -> Dashboards" }
+  },
+  {
+    "id": "gcp_ace_08_24",
+    "title": "Verifying External Availability",
+    "content": "Configure a Cloud Monitoring uptime check to periodically verify that your application is reachable from different regions globally.",
+    "insight": "Uptime checks tell you if your application is 'up' from the perspective of your users.",
+    "next": "Creating Alerting Policies",
+    "lab": { "command": "echo 'Configure uptime check for https://myapp.example.com'", "output": "Configure uptime check for https://myapp.example.com" }
+  },
+  {
+    "id": "gcp_ace_08_25",
+    "title": "Responding to Issues with Alerts",
+    "content": "Create alerting policies to notify your team via Slack or Email if the uptime check fails or if error rates exceed a certain threshold.",
+    "insight": "Alerts allow you to respond to issues before they significantly impact your users.",
+    "next": "Implementing Auto-scaling",
+    "lab": { "command": "echo 'Setup alert policy in Monitoring -> Alerting'", "output": "Setup alert policy in Monitoring -> Alerting" }
+  },
+  {
+    "id": "gcp_ace_08_26",
+    "title": "Scaling Automatically",
+    "content": "Enable Horizontal Pod Auto-scaling (HPA) to automatically increase the number of replicas as traffic increases, ensuring consistent performance.",
+    "insight": "HPA helps you handle traffic spikes efficiently and cost-effectively.",
+    "next": "Managing Infrastructure as Code",
+    "lab": { "command": "kubectl autoscale deployment web-app --cpu-percent=70 --min=2 --max=20", "output": "horizontalpodautoscaler.autoscaling/web-app autoscaled" }
+  },
+  {
+    "id": "gcp_ace_08_27",
+    "title": "Using Infrastructure as Code (IaC)",
+    "content": "Instead of using the CLI or Console for everything, use tools like Terraform or Cloud Deployment Manager to define your infrastructure in code.",
+    "insight": "IaC ensures that your environment is reproducible, versioned, and easily shared.",
+    "next": "Performing a Rolling Update",
+    "lab": { "command": "echo 'Define VPC, Subnets, and GKE in Terraform (.tf files)'", "output": "Define VPC, Subnets, and GKE in Terraform (.tf files)" }
+  },
+  {
+    "id": "gcp_ace_08_28",
+    "title": "Safe Updates with Rolling Strategy",
+    "content": "When deploying a new version of your app, Kubernetes performs a rolling update, replacing old Pods with new ones one by one to avoid downtime.",
+    "insight": "You can control the speed and safety of the update using 'maxUnavailable' and 'maxSurge' settings.",
+    "next": "Testing Rollbacks",
+    "lab": { "command": "kubectl set image deployment/web-app web-app=us-central1-docker.pkg.dev/my-project/app-repo/web-app:v2", "output": "deployment.apps/web-app image updated" }
+  },
+  {
+    "id": "gcp_ace_08_29",
+    "title": "Rolling Back Changes",
+    "content": "If a new deployment has issues, you can instantly roll back to a previous healthy version using 'kubectl rollout undo'.",
+    "insight": "Rollbacks are a critical safety net for production environments.",
+    "next": "Monitoring Resource Costs",
+    "lab": { "command": "kubectl rollout undo deployment/web-app", "output": "deployment.apps/web-app rolled back" }
+  },
+  {
+    "id": "gcp_ace_08_30",
+    "title": "Optimizing Costs",
+    "content": "Use the Billing dashboard and reports to monitor your cloud spend. Export your billing data to BigQuery for deep analysis.",
+    "insight": "Cost optimization is a continuous process of rightsizing resources and deleting unused ones.",
+    "next": "Implementing Cloud Armor",
+    "lab": { "command": "echo 'Check Billing -> Reports for spend breakdown'", "output": "Check Billing -> Reports for spend breakdown" }
+  },
+  {
+    "id": "gcp_ace_08_31",
+    "title": "Protecting with Cloud Armor",
+    "content": "Add a Cloud Armor security policy to your load balancer to protect against common web attacks and block malicious traffic.",
+    "insight": "Layer 7 security is essential for any public-facing application.",
+    "next": "Implementing Cloud CDN",
+    "lab": { "command": "gcloud compute security-policies create protect-app --description='Policy for web-app'", "output": "Created [protect-app]." }
+  },
+  {
+    "id": "gcp_ace_08_32",
+    "title": "Accelerating with Cloud CDN",
+    "content": "Enable Cloud CDN on your load balancer's backend service to cache static assets at the edge, reducing latency for your users.",
+    "insight": "CDN also reduces egress costs and decreases the load on your origin servers.",
+    "next": "Implementing Binary Authorization",
+    "lab": { "command": "gcloud compute backend-services update web-backend --global --enable-cdn", "output": "Updated [web-backend]." }
+  },
+  {
+    "id": "gcp_ace_08_33",
+    "title": "Enforcing Trust with Binary Authorization",
+    "content": "Configure Binary Authorization to ensure that only images signed by your Cloud Build pipeline can be deployed to the production GKE cluster.",
+    "insight": "Prevents the deployment of unauthorized or tampered container images.",
+    "next": "Implementing VPC Flow Logs",
+    "lab": { "command": "echo 'Enable Binary Authorization and configure attestors'", "output": "Enable Binary Authorization and configure attestors" }
+  },
+  {
+    "id": "gcp_ace_08_34",
+    "title": "Auditing Traffic with VPC Flow Logs",
+    "content": "Enable VPC flow logs on your subnets to record all network traffic. Use these logs for auditing, security analysis, and troubleshooting connectivity.",
+    "insight": "Flow logs provide deep visibility into how your microservices are communicating.",
+    "next": "Testing Disaster Recovery",
+    "lab": { "command": "gcloud compute networks subnets update web-subnet --region=us-central1 --enable-flow-logs", "output": "Updated [web-subnet]." }
+  },
+  {
+    "id": "gcp_ace_08_35",
+    "title": "Disaster Recovery Planning",
+    "content": "Simulate failures (e.g., a zone outage or a database crash) to test your recovery procedures and ensure your RPO and RTO are met.",
+    "insight": "A disaster recovery plan is only as good as its last successful test.",
+    "next": "Implementing Log Sinks",
+    "lab": { "command": "echo 'Perform chaos engineering tests on dev/staging environment'", "output": "Perform chaos engineering tests on dev/staging environment" }
+  },
+  {
+    "id": "gcp_ace_08_36",
+    "title": "Exporting Logs for Compliance",
+    "content": "Create a log sink to export your audit and application logs to Cloud Storage for long-term retention and compliance requirements.",
+    "insight": "GCS is a very cost-effective way to store large volumes of historical log data.",
+    "next": "Setting up Log-based Alerts",
+    "lab": { "command": "gcloud logging sinks create archive-sink storage.googleapis.com/projects/my-project/buckets/audit-logs --log-filter='severity>=INFO'", "output": "Created [archive-sink]." }
+  },
+  {
+    "id": "gcp_ace_08_37",
+    "title": "Alerting on Critical Log Events",
+    "content": "Create log-based metrics and alerts for specific application-level events, such as 'successful payment' or 'failed login attempt'.",
+    "insight": "Log-based alerts provide insights that standard infrastructure metrics can't capture.",
+    "next": "Performing a Security Audit",
+    "lab": { "command": "echo 'Create log-based metric for \"authentication failed\"'", "output": "Create log-based metric for \"authentication failed\"" }
+  },
+  {
+    "id": "gcp_ace_08_38",
+    "title": "Regular Security Audits",
+    "content": "Use Security Command Center and IAM Recommender to perform regular audits of your environment and identify potential risks.",
+    "insight": "Security is not a one-time setup, but a continuous cycle of improvement.",
+    "next": "Final Review",
+    "lab": { "command": "echo 'Review SCC findings and IAM recommendations'", "output": "Review SCC findings and IAM recommendations" }
+  },
+  {
+    "id": "gcp_ace_08_39",
+    "title": "The Lifecycle of a Cloud Engineer",
+    "content": "You have now seen the full lifecycle of a cloud application: Design, Build, Deploy, Operate, and Secure. Each step is critical for success.",
+    "insight": "Continuous learning and automation are the hallmarks of a great Cloud Engineer.",
+    "next": "Conclusion",
+    "lab": { "command": "gcloud info --format='value(config.project)'", "output": "ace-workflow-prod" }
+  },
+  {
+    "id": "gcp_ace_08_40",
+    "title": "Conclusion: Your GCP ACE Journey",
+    "content": "Congratulations! You have completed the GCP ACE handbook. You are now equipped with the knowledge and practical skills to build and manage professional workloads on Google Cloud.",
+    "insight": "The real journey begins now. Go forth and build amazing things in the cloud!",
+    "next": "Chapter Complete",
+    "lab": { "command": "echo 'GCP ACE Module Completed. Well done!'", "output": "GCP ACE Module Completed. Well done!" }
+  }
+]

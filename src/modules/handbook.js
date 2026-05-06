@@ -101,9 +101,9 @@ async function runChapter(filePath, chapterId, startIndex = 0) {
     displayHeader(`📖 CHAPTER: ${chapterId.replace(/^\d+_/, '').toUpperCase()} | ${currentIndex + 1}/${lessons.length}`, COLORS.primary);
     console.log(` ${COLORS.highlight.bold(lesson.title)}\n`);
     
-    const paragraphs = lesson.content.split('. ');
+    const paragraphs = lesson.content.split('\n\n');
     paragraphs.forEach(p => {
-      if (p.trim()) console.log(` ${COLORS.highlight(p.trim() + '.')}\n`);
+      if (p.trim()) console.log(` ${COLORS.highlight(p.trim())}\n`);
     });
     
     displayDivider(COLORS.muted);
