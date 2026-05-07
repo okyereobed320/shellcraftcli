@@ -8,6 +8,7 @@ import { startHandbook } from './modules/handbook.js';
 import { searchHandbook } from './modules/search.js';
 import { setupAI } from './modules/setup_ai.js';
 import { startTutor } from './modules/tutor.js';
+import { startMarketplace } from './modules/marketplace.js';
 import { getProgress, setFirstRunComplete, setName } from './utils/progress.js';
 import { COLORS, displayWelcome, displayDivider, displayLogo } from './utils/ui.js';
 
@@ -85,6 +86,14 @@ program
 
 // Cloud Platforms Group
 const cloudPlatforms = program.command('cloud-platforms').description('Cloud Platforms (AWS, GCP, Azure)');
+
+program
+  .command('marketplace')
+  .description('Browse and install community modules')
+  .action(async () => {
+    preActionHook('marketplace');
+    await startMarketplace();
+  });
 
 ['aws', 'gcp', 'azure'].forEach(provider => {
   const providerCmd = cloudPlatforms.command(provider);
@@ -253,6 +262,7 @@ async function interactiveMenu() {
           { name: `☁️  ${COLORS.highlight('Cloud Engineering Basics')}`, value: 'cloud-basics' },
           { name: `♾️  ${COLORS.highlight('DevOps Pipeline')}`, value: 'devops' },
           { name: `🌐 ${COLORS.highlight('Cloud Platforms')}`, value: 'cloud-platforms' },
+          { name: `🛒 ${COLORS.highlight('Marketplace')} (Community)`, value: 'marketplace' },
           new inquirer.Separator(),
           { name: `🤖 ${COLORS.highlight('Chat with AI Tutor')}`, value: 'tutor' },
           { name: `📊 ${COLORS.highlight('View My Progress')}`, value: 'score' },
@@ -270,6 +280,11 @@ async function interactiveMenu() {
 
     if (mainAction === 'ai') {
       await setupAI();
+      continue;
+    }
+
+    if (mainAction === 'marketplace') {
+      await startMarketplace();
       continue;
     }
 

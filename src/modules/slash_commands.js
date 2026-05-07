@@ -31,6 +31,12 @@ export async function handleSlashCommand(command) {
     }
     const fullMod = `${module}/${parts[2]}`;
     await handleAction(fullMod, parts[3] || 'learn');
+  } else if (group === 'community') {
+    if (!module) {
+      console.log(COLORS.info('\nCommunity Modules: /community <module-id> [learn/quiz/sim]'));
+      return;
+    }
+    await handleAction(`community/${module}`, action || 'learn');
   } else {
     console.log(COLORS.error(`\n Unknown slash command: /${group}`));
   }
