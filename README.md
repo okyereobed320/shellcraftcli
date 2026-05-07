@@ -12,11 +12,12 @@ Shellcraft is an open-source, terminal-based training platform designed to take 
 ## ✨ Features
 
 - **🏗️ Structured Learning Groups:** Modules organized into Core Engineering, Cloud Basics, and Cloud Platforms.
-- **📖 Interactive Handbook:** Deep-dive content from foundations to cloud-native primitives.
-- **🌐 Cloud Platforms:** Dedicated tracks for **AWS**, **GCP**, and **Azure** (Practitioner, Architect, and more).
+- **📖 Interactive Handbook:** Deep-dive content with optimized readability and paragraph-based formatting.
+- **🌐 Cloud Platforms:** Dedicated tracks for **AWS**, **GCP**, and **Azure**.
+- **🛒 Shellcraft Marketplace:** Browse, install, and even post your own community-contributed courses.
 - **🎯 Mission Maps:** Structured missions covering everything from filesystem navigation to server deployment.
-- **💼 On-Duty Simulations (Shellcraft Shift):** Step into the shoes of a Senior Systems Administrator. Resolve CRITICAL incidents in a simulated environment.
-- **⚡ Slash Command System:** Navigate instantly with `/core`, `/cloud-basics`, and `/cloud-platforms` from any interactive mode.
+- **💼 On-Duty Simulations (Google Cloud Eng Role):** Experience realistic engineering tickets with an intelligent command normalization engine that understands real-world CLI usage.
+- **⚡ Slash Command System:** Navigate instantly with `/core`, `/cloud-basics`, `/cloud-platforms`, and `/community`.
 - **⭐ XP & Rank System:** Earn experience points and level up as you master the craft.
 
 ---
@@ -52,14 +53,15 @@ shellcraft
 | :--- | :--- |
 | `shellcraft core <module>` | Access Core Engineering (linux, networking, git, etc.) |
 | `shellcraft cloud-basics` | Jump into Cloud Engineering fundamentals |
-| `shellcraft cloud-platforms <provider> <track>` | Start a Cloud Platform track (e.g., aws practitioner) |
+| `shellcraft cloud-platforms <provider> <track>` | Start a Cloud Platform track (e.g., gcp ace) |
+| `shellcraft marketplace` | Browse and install community modules |
 | `shellcraft progress` | View your XP, Rank, and earned Badges |
 
 ### Examples
 
 - `shellcraft core git learn` - Start learning Git
-- `shellcraft core linux quiz` - Take a Linux quiz
-- `shellcraft cloud-platforms aws practitioner learn` - Start the AWS Practitioner track
+- `shellcraft cloud-platforms gcp ace learn` - Start the expanded GCP ACE track (320+ lessons)
+- `shellcraft marketplace browse` - See what the community has built
 
 ---
 
@@ -77,10 +79,9 @@ The bridge to the cloud.
 - **Fundamentals:** Shared Responsibility, IAM, VPC, and Compute.
 - **Architecture:** Designing scalable and resilient systems.
 
-### 3. Cloud Platforms
-Specialized tracks for major providers.
+### 3. Cloud Platforms (Professional Tracks)
+- **GCP (Expanded):** Associate Cloud Engineer (ACE) with 8 deep-dive chapters, 100+ scenario-based questions, and 20 realistic engineering tickets.
 - **AWS:** Practitioner & Solutions Architect.
-- **GCP:** Associate Cloud Engineer (ACE) & Professional.
 - **Azure:** AZ-900 & AZ-104.
 
 ---
@@ -91,6 +92,7 @@ When inside an interactive session, use these shortcuts:
 - `/core <module> <action>` - Switch to a core module.
 - `/cloud-basics <action>` - Switch to cloud basics.
 - `/cloud-platforms <aws|gcp|azure> <track> <action>` - Switch to a specific cloud platform.
+- `/community <module-id> <action>` - Access installed marketplace modules.
 
 ---
 
@@ -107,9 +109,10 @@ When inside an interactive session, use these shortcuts:
 ## 🤝 Contributing
 
 We welcome contributors! Help us build the best DevOps training tool.
-- Add new **Quiz Questions** in `data/core/` or `data/cloud-platforms/`.
-- Design new **Missions** in `data/missions.json`.
-- Create **Simulation Scenarios** in `data/shift_scenarios.json`.
+- **Marketplace:** Create your own course (JSON format) and share it.
+- **Quiz Questions:** Add new challenges in `data/core/` or `data/cloud-platforms/`.
+- **Missions:** Design new path-based missions in `data/missions.json`.
+- **Scenarios:** Design realistic tickets in `data/shift_scenarios.json`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
