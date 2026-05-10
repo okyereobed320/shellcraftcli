@@ -1,5 +1,6 @@
 import inquirer from 'inquirer';
 import Conf from 'conf';
+import fs from 'fs';
 import { PROVIDERS, askAI } from './ai.js';
 import { COLORS, displayDivider } from '../utils/ui.js';
 
@@ -67,7 +68,15 @@ export async function setupAI() {
     model: answers.model
   });
 
+  // Security Hardening: Restrict file permissions to 600
+  try {
+    fs.chmodSync(config.path, 0o600);
+  } catch (err) {
+    console.log(COLORS.warning(`\n⚠ Could not restrict permissions on ${config.path}`));
+  }
+
   console.log(`\n${COLORS.accent('✔ AI configuration saved!')}`);
+  console.log(COLORS.muted('💡 Security Tip: You can also set the SHELLCRAFT_AI_API_KEY environment variable to avoid storing your key on disk.'));
   
   const { test } = await inquirer.prompt([
     {

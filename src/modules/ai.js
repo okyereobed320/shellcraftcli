@@ -23,15 +23,19 @@ export const PROVIDERS = {
  */
 export async function askAI(prompt, systemPrompt = 'You are Shellcraft AI, a Linux and Cloud Engineering mentor.') {
   const aiConfig = config.get('ai', {});
+  const envKey = process.env.SHELLCRAFT_AI_API_KEY;
+  const apiKey = envKey || aiConfig.apiKey;
   
-  if (!aiConfig.provider || !aiConfig.apiKey) {
-    throw new Error('AI not configured. Please run AI Setup first.');
+  if (!aiConfig.provider || !apiKey) {
+    throw new Error('AI not configured. Please run AI Setup first or set SHELLCRAFT_AI_API_KEY.');
   }
 
+  const effectiveConfig = { ...aiConfig, apiKey };
+
   if (aiConfig.provider === 'gemini') {
-    return callGemini(prompt, systemPrompt, aiConfig);
+    return callGemini(prompt, systemPrompt, effectiveConfig);
   } else {
-    return callOpenAICompatible(prompt, systemPrompt, aiConfig);
+    return callOpenAICompatible(prompt, systemPrompt, effectiveConfig);
   }
 }
 
@@ -86,5 +90,6 @@ async function callOpenAICompatible(prompt, systemPrompt, aiConfig) {
 
 export function isAIConfigured() {
   const aiConfig = config.get('ai', {});
-  return !!(aiConfig.provider && aiConfig.apiKey);
+  const envKey = process.env.SHELLCRAFT_AI_API_KEY;
+  return !!(aiConfig.provider && (envKey || aiConfig.apiKey));
 }
