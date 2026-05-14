@@ -7,11 +7,19 @@ import { addHistory } from '../utils/progress.js';
 import { handleSlashCommand } from './slash_commands.js';
 
 export async function startModuleREPL(moduleName) {
+  const actions = ['learn', 'quiz', 'sim', 'exit', 'back'];
+  
+  const completer = (line) => {
+    const hits = actions.filter((c) => c.startsWith(line));
+    return [hits.length ? hits : actions, line];
+  };
+
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     terminal: true,
-    prompt: COLORS.accent(`[${moduleName} mode] > `)
+    prompt: COLORS.accent(`[${moduleName} mode] > `),
+    completer
   });
 
   console.clear();

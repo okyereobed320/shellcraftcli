@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -31,6 +32,16 @@ export function getModulePath(moduleName) {
 
   // Fallback to core
   return { group: 'core', path: moduleName };
+}
+
+export async function getInstalledModules() {
+  const communityPath = path.join(__dirname, '../../data/community');
+  try {
+    const files = await fs.readdir(communityPath, { withFileTypes: true });
+    return files.filter(f => f.isDirectory()).map(f => f.name);
+  } catch (err) {
+    return [];
+  }
 }
 
 export function getDataPath(moduleName) {

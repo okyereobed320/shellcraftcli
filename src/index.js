@@ -16,7 +16,12 @@ import { startModuleREPL } from './modules/repl.js';
 import { explainCommand } from './modules/explain.js';
 import { showHistory } from './modules/history.js';
 import { addHistory, getHistory } from './utils/progress.js';
-import { GROUPS } from './utils/paths.js';
+import { GROUPS, getInstalledModules } from './utils/paths.js';
+
+import { showDashboard } from './modules/dashboard.js';
+import { startDailyChallenge } from './modules/daily.js';
+import { showBadges } from './modules/badges.js';
+import { startDynamicScenario } from './modules/dynamic_scenarios.js';
 
 const program = new Command();
 
@@ -249,28 +254,41 @@ async function displayFirstRun() {
 async function interactiveMenu() {
   while (true) {
     const progress = getProgress();
+    const installedModules = await getInstalledModules();
     displayWelcome(progress);
 
     const { mainAction } = await inquirer.prompt([
       {
         type: 'list',
         name: 'mainAction',
-        message: 'Where would you like to focus today?',
+        message: COLORS.muted('❯ Select Command:'),
         pageSize: 15,
         choices: [
-          new inquirer.Separator('--- 🚀 TRAINING PATHS ---'),
-          { name: `🏗️  ${COLORS.highlight('Core Engineering')}`, value: 'core' },
-          { name: `☁️  ${COLORS.highlight('Cloud Engineering Basics')}`, value: 'cloud-basics' },
-          { name: `♾️  ${COLORS.highlight('DevOps Pipeline')}`, value: 'devops' },
-          { name: `🌐 ${COLORS.highlight('Cloud Platforms')}`, value: 'cloud-platforms' },
-          new inquirer.Separator('--- 🛒 COMMUNITY & EXTENSIONS ---'),
-          { name: `🛒 ${COLORS.highlight('Marketplace')} (Browse Courses)`, value: 'marketplace' },
-          new inquirer.Separator('--- 🛠️  PERSONAL TOOLS ---'),
-          { name: `🤖 ${COLORS.highlight('Chat with AI Tutor')}`, value: 'tutor' },
-          { name: `📊 ${COLORS.highlight('View My Progress')}`, value: 'score' },
-          { name: `⚙️  ${COLORS.highlight('AI Settings')}`, value: 'ai' },
-          new inquirer.Separator(),
-          { name: `👋 ${COLORS.muted('Exit Shellcraft')}`, value: 'exit' }
+          new inquirer.Separator(`  ${COLORS.primary('▰▰')} ${COLORS.highlight('CENTRAL_COMMAND')} ${COLORS.primary('▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰')}`),
+          { name: `  ${COLORS.primary('█')} ${COLORS.highlight('DASHBOARD')}   [Progress] ${COLORS.muted('→ monitoring & status')}`, value: 'dashboard' },
+          { name: `  ${COLORS.primary('█')} ${COLORS.highlight('DAILY_QUEST')} [Challenge] ${COLORS.muted('→ active challenge')}`, value: 'daily' },
+          
+          new inquirer.Separator(' '),
+          new inquirer.Separator(`  ${COLORS.secondary('▰▰')} ${COLORS.highlight('TRAINING_SECTORS')} ${COLORS.secondary('▰▰▰▰▰▰▰▰▰▰▰▰▰▰')}`),
+          { name: `  ${COLORS.secondary('█')} ${COLORS.highlight('CORE_ENG')}    [Core Engineering] ${COLORS.muted('→ linux, docker, git')}`, value: 'core' },
+          { name: `  ${COLORS.secondary('█')} ${COLORS.highlight('CLOUD_BASE')}  [Cloud Basics] ${COLORS.muted('→ fundamentals')}`, value: 'cloud-basics' },
+          { name: `  ${COLORS.secondary('█')} ${COLORS.highlight('PLATFORMS')}   [Cloud Platforms] ${COLORS.muted('→ aws, gcp, azure')}`, value: 'cloud-platforms' },
+          
+          new inquirer.Separator(' '),
+          new inquirer.Separator(`  ${COLORS.market('▰▰')} ${COLORS.highlight('COMMUNITY_EXTENSIONS')} ${COLORS.market('▰▰▰▰▰▰▰▰▰▰')}`),
+          { name: `  ${COLORS.market('█')} ${COLORS.highlight('MARKETPLACE')}    [Marketplace] ${COLORS.muted('→ browse & install modules')}`, value: 'marketplace' },
+          { name: `  ${COLORS.market('█')} ${COLORS.highlight('SHELLCRAFT_SYLLABI')} [Installed] ${COLORS.muted('→ your technical mastery tracks')}`, value: 'community' },
+          
+          new inquirer.Separator(' '),
+          new inquirer.Separator(`  ${COLORS.accent('▰▰')} ${COLORS.highlight('UTILITY_TOOLS')} ${COLORS.accent('▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰')}`),
+          { name: `  ${COLORS.accent('█')} ${COLORS.highlight('AI_TUTOR')}    [Chat AI] ${COLORS.muted('→ intelligent support')}`, value: 'tutor' },
+          { name: `  ${COLORS.accent('█')} ${COLORS.highlight('MASTERY')}     [Badges] ${COLORS.muted('→ badges & trophies')}`, value: 'badges' },
+          { name: `  ${COLORS.accent('█')} ${COLORS.highlight('SETTINGS')}    [AI Setup] ${COLORS.muted('→ system configuration')}`, value: 'ai' },
+          
+          new inquirer.Separator(' '),
+          new inquirer.Separator(`  ${COLORS.muted('─'.repeat(40))}`),
+          { name: `  ${COLORS.muted('◀ DISCONNECT')}    ${COLORS.muted('[exit_session]')}`, value: 'exit' },
+          new inquirer.Separator(' ')
         ]
       }
     ]);
@@ -278,6 +296,21 @@ async function interactiveMenu() {
     if (mainAction === 'exit') {
       console.log(`\n${COLORS.muted('Thanks for training with')} ${COLORS.primary.bold('Shellcraft')}${COLORS.muted('! See you soon. 👋\n')}`);
       process.exit(0);
+    }
+
+    if (mainAction === 'dashboard') {
+      await showDashboard();
+      continue;
+    }
+
+    if (mainAction === 'daily') {
+      await startDailyChallenge();
+      continue;
+    }
+
+    if (mainAction === 'badges') {
+      await showBadges();
+      continue;
     }
 
     if (mainAction === 'ai') {
@@ -317,7 +350,7 @@ async function interactiveMenu() {
       continue;
     }
 
-    if (['core', 'cloud-basics', 'devops', 'cloud-platforms'].includes(mainAction)) {
+    if (['core', 'cloud-basics', 'devops', 'cloud-platforms', 'community'].includes(mainAction)) {
       console.clear();
       await runGroupSession(mainAction);
     }
@@ -330,21 +363,28 @@ async function runGroupSession(group) {
     'core': 'Core Engineering',
     'cloud-basics': 'Cloud Engineering Basics',
     'devops': 'DevOps Pipeline',
-    'cloud-platforms': 'Cloud Platforms'
+    'cloud-platforms': 'Cloud Platforms',
+    'community': 'Shellcraft Syllabi'
   };
 
-  console.log(COLORS.primary.bold(`\n📁 ${groupNames[group].toUpperCase()}\n`));
+  console.log(COLORS.primary.bold(`\n 📂 SECTOR: ${groupNames[group].toUpperCase()}\n`));
 
   let moduleChoices = [];
   if (group === 'core') {
     moduleChoices = [
-      { name: COLORS.highlight('Linux (Basic Mastery)'), value: 'linux' },
-      { name: COLORS.highlight('Networking (Connectivity)'), value: 'networking' },
-      { name: COLORS.highlight('Git (Version Control)'), value: 'git' },
-      { name: COLORS.highlight('Docker (Containerization)'), value: 'docker' },
-      { name: COLORS.highlight('CI/CD (Automation)'), value: 'cicd' },
-      { name: COLORS.highlight('Terraform (IaC)'), value: 'terraform' }
+      { name: ` 🐧 ${COLORS.highlight('Linux')}        (Kernel & CLI Mastery)`, value: 'linux' },
+      { name: ` 🌐 ${COLORS.highlight('Networking')}   (Connectivity & Protocols)`, value: 'networking' },
+      { name: ` 🌿 ${COLORS.highlight('Git')}          (Version Control)`, value: 'git' },
+      { name: ` 🐋 ${COLORS.highlight('Docker')}       (Containerization)`, value: 'docker' },
+      { name: ` ♾️  ${COLORS.highlight('CI/CD')}        (Automation Pipelines)`, value: 'cicd' },
+      { name: ` 🏗️  ${COLORS.highlight('Terraform')}   (Infrastructure as Code)`, value: 'terraform' }
     ];
+  } else if (group === 'community') {
+    const installed = await getInstalledModules();
+    moduleChoices = installed.map(m => ({
+      name: ` █ ${COLORS.highlight('MASTERY_TRK')} :: ${m.toUpperCase()}`,
+      value: `community/${m}`
+    }));
   } else if (group === 'cloud-basics') {
     return await runLearningSession('cloud');
   } else if (group === 'devops') {
@@ -356,13 +396,13 @@ async function runGroupSession(group) {
       {
         type: 'list',
         name: 'provider',
-        message: 'Select a Cloud Provider:',
+        message: COLORS.muted('Select a Cloud Provider:'),
         choices: [
-          { name: COLORS.highlight('AWS (Amazon Web Services)'), value: 'aws' },
-          { name: COLORS.highlight('GCP (Google Cloud Platform)'), value: 'gcp' },
-          { name: COLORS.highlight('Azure (Microsoft Azure)'), value: 'azure' },
-          new inquirer.Separator(),
-          { name: `🏠 ${COLORS.muted('Back')}`, value: 'back' }
+          { name: ` 🅰️  ${COLORS.highlight('AWS')}   (Amazon Web Services)`, value: 'aws' },
+          { name: ` 🇬  ${COLORS.highlight('GCP')}   (Google Cloud Platform)`, value: 'gcp' },
+          { name: ` Ⓜ️  ${COLORS.highlight('Azure')} (Microsoft Azure)`, value: 'azure' },
+          new inquirer.Separator('──────────────────────────────'),
+          { name: ` 🏠 ${COLORS.muted('Return to Main Menu')}`, value: 'back' }
         ]
       }
     ]);
@@ -370,16 +410,16 @@ async function runGroupSession(group) {
 
     const tracks = {
       aws: [
-        { name: 'AWS Certified Cloud Practitioner', value: 'aws/practitioner' },
-        { name: 'AWS Certified Solutions Architect', value: 'aws/solutions-architect' }
+        { name: '  📜 AWS Certified Cloud Practitioner', value: 'aws/practitioner' },
+        { name: '  📜 AWS Certified Solutions Architect', value: 'aws/solutions-architect' }
       ],
       gcp: [
-        { name: 'GCP Associate Cloud Engineer (ACE)', value: 'gcp/ace' },
-        { name: 'GCP Professional Cloud Architect', value: 'gcp/professional' }
+        { name: '  📜 GCP Associate Cloud Engineer (ACE)', value: 'gcp/ace' },
+        { name: '  📜 GCP Professional Cloud Architect', value: 'gcp/professional' }
       ],
       azure: [
-        { name: 'Azure Fundamentals (AZ-900)', value: 'azure/az900' },
-        { name: 'Azure Administrator (AZ-104)', value: 'azure/az104' }
+        { name: '  📜 Azure Fundamentals (AZ-900)', value: 'azure/az900' },
+        { name: '  📜 Azure Administrator (AZ-104)', value: 'azure/az104' }
       ]
     };
 
@@ -387,8 +427,12 @@ async function runGroupSession(group) {
       {
         type: 'list',
         name: 'track',
-        message: 'Select a Track:',
-        choices: [...tracks[provider], new inquirer.Separator(), { name: `🏠 ${COLORS.muted('Back')}`, value: 'back' }]
+        message: COLORS.muted(`Select a track for ${provider.toUpperCase()}:`),
+        choices: [
+          ...tracks[provider], 
+          new inquirer.Separator('──────────────────────────────'), 
+          { name: ` 🏠 ${COLORS.muted('Back to Providers')}`, value: 'back' }
+        ]
       }
     ]);
     if (track === 'back') return runGroupSession(group);
@@ -399,8 +443,12 @@ async function runGroupSession(group) {
     {
       type: 'list',
       name: 'module',
-      message: 'Select a Module:',
-      choices: [...moduleChoices, new inquirer.Separator(), { name: `🏠 ${COLORS.muted('Back')}`, value: 'back' }]
+      message: COLORS.muted('Select a target module:'),
+      choices: [
+        ...moduleChoices, 
+        new inquirer.Separator('──────────────────────────────'), 
+        { name: ` 🏠 ${COLORS.muted('Return to Main Menu')}`, value: 'back' }
+      ]
     }
   ]);
 
@@ -413,13 +461,13 @@ async function runLearningSession(module) {
     {
       type: 'list',
       name: 'category',
-      message: `Training for ${module.toUpperCase()}:`,
+      message: `${COLORS.muted('Operative Mode for')} ${COLORS.primary.bold(module.toUpperCase())}:`,
       choices: [
-        { name: `📖 ${COLORS.highlight('Learn')}           (Step-by-Step Handbook)`, value: 'learn' },
-        { name: `🎯 ${COLORS.highlight('Quiz')}            (Challenges & Missions)`, value: 'quiz' },
-        { name: `💼 ${COLORS.highlight('Simulation')}      (Real-world Scenarios)`, value: 'simulation' },
-        new inquirer.Separator(),
-        { name: `↩️  ${COLORS.muted('Back')}`, value: 'back' }
+        { name: ` 📖 ${COLORS.highlight('Theoretical')} [Learn] (Handbook & Search)`, value: 'learn' },
+        { name: ` 🎯 ${COLORS.highlight('Tactical')}    [Quiz]  (Quizzes & Missions)`, value: 'quiz' },
+        { name: ` 💼 ${COLORS.highlight('Operational')} [Shift] (Real-world Simulations)`, value: 'simulation' },
+        new inquirer.Separator('──────────────────────────────'),
+        { name: ` ↩️  ${COLORS.muted('Return to Sector')}`, value: 'back' }
       ]
     }
   ]);
@@ -431,18 +479,19 @@ async function runLearningSession(module) {
       {
         type: 'list',
         name: 'learnAction',
-        message: 'Learn Mode:',
+        message: COLORS.muted('Theoretical Mode:'),
         choices: [
-          { name: `📖 ${COLORS.highlight('Browse Chapters')}`, value: 'browse' },
-          { name: `🔍 ${COLORS.highlight('Search Concepts')}`, value: 'search' },
-          { name: `↩️  ${COLORS.muted('Back')}`, value: 'back' }
+          { name: `  📖 ${COLORS.highlight('Browse Chapters')}`, value: 'browse' },
+          { name: `  🔍 ${COLORS.highlight('Search Concepts')}`, value: 'search' },
+          new inquirer.Separator('──────────────────────────────'),
+          { name: `  ↩️  ${COLORS.muted('Back')}`, value: 'back' }
         ]
       }
     ]);
 
     if (learnAction === 'back') return runLearningSession(module);
     if (learnAction === 'search') {
-      const { query } = await inquirer.prompt([{ type: 'input', name: 'query', message: 'Enter search term:' }]);
+      const { query } = await inquirer.prompt([{ type: 'input', name: 'query', message: COLORS.primary('Enter search term:') }]);
       await searchHandbook(query, module);
       return runLearningSession(module);
     }
@@ -456,14 +505,14 @@ async function runLearningSession(module) {
       {
         type: 'list',
         name: 'quizMode',
-        message: 'Select Quiz Mode:',
+        message: COLORS.muted('Tactical Mode Selection:'),
         choices: [
-          { name: `🎯 ${COLORS.highlight('Normal Mode')}           (Standard Quiz)`, value: 'normal' },
-          { name: `⭐ ${COLORS.highlight('Shellcraft XP Rank')}    (Earn XP & Rank Up)`, value: 'xp_rank' },
-          { name: `❤️  ${COLORS.highlight('Shellcraft Life')}       (3 Lives Survival)`, value: 'life' },
-          { name: `🗺️  ${COLORS.highlight('Shellcraft Missions')}   (Mission Path)`, value: 'missions' },
-          new inquirer.Separator(),
-          { name: `↩️  ${COLORS.muted('Back')}`, value: 'back' }
+          { name: `  🎯 ${COLORS.highlight('Standard Evaluation')}  (Normal Quiz)`, value: 'normal' },
+          { name: `  ⭐ ${COLORS.highlight('Competitive Rank')}     (Earn XP & Rank Up)`, value: 'xp_rank' },
+          { name: `  ❤️  ${COLORS.highlight('Survival Mode')}        (3 Lives Survival)`, value: 'life' },
+          { name: `  🗺️  ${COLORS.highlight('Strategic Mission')}    (Structured Path)`, value: 'missions' },
+          new inquirer.Separator('──────────────────────────────'),
+          { name: `  ↩️  ${COLORS.muted('Back')}`, value: 'back' }
         ]
       }
     ]);
@@ -483,17 +532,19 @@ async function runLearningSession(module) {
       {
         type: 'list',
         name: 'simMode',
-        message: 'Select Simulation:',
+        message: COLORS.muted('Operational Simulation:'),
         choices: [
-          { name: `💼 ${COLORS.highlight('Shellcraft Shift')}      (On Duty Simulation)`, value: 'shift' },
-          new inquirer.Separator(),
-          { name: `↩️  ${COLORS.muted('Back')}`, value: 'back' }
+          { name: `  💼 ${COLORS.highlight('On-Duty Shift')}       (Scenario Simulation)`, value: 'shift' },
+          { name: `  🤖 ${COLORS.highlight('Dynamic Intel')}       (Custom AI Scenario)`, value: 'dynamic' },
+          new inquirer.Separator('──────────────────────────────'),
+          { name: `  ↩️  ${COLORS.muted('Back')}`, value: 'back' }
         ]
       }
     ]);
 
     if (simMode === 'back') return runLearningSession(module);
     if (simMode === 'shift') await startShift(module);
+    if (simMode === 'dynamic') await startDynamicScenario();
     return runLearningSession(module);
   }
 }

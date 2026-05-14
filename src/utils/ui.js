@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { RANKS } from './progress.js';
 
 export const COLORS = {
   primary: chalk.hex('#4285F4'),    // Gemini Blue
@@ -6,21 +7,23 @@ export const COLORS = {
   accent: chalk.hex('#34A853'),     // Green
   warning: chalk.hex('#FBBC05'),    // Yellow
   error: chalk.hex('#EA4335'),      // Red
+  market: chalk.hex('#FF9800'),     // Orange/Gold
   muted: chalk.hex('#5F6368'),      // Gray
   highlight: chalk.hex('#FFFFFF').bold
 };
 
 export function displayLogo() {
   const logo = `
-   _____ __         ____                 ________ 
-  / ___// /_  ___  / / /__________  ____/ __/ /_ 
-  \\__ \\\\/ __ \\\\/ _ \\\\/ / / ___/ ___/ __ \`/ /_/ __/ 
- ___/ / / / /  __/ / / /__/ /  / /_/ / __/ /_   
-/____/_/ /_/\\___/_/_/\\___/_/   \\__,_/_/  \\__/   
+  ${COLORS.primary.bold('██████╗ ██╗  ██╗███████╗██╗     ██╗      ██████╗██████╗  █████╗ ███████╗████████╗')}
+  ${COLORS.primary.bold('██╔════╝ ██║  ██║██╔════╝██║     ██║     ██╔════╝██╔══██╗██╔══██╗██╔════╝╚══██╔══╝')}
+  ${COLORS.primary.bold('╚█████╗  ███████║█████╗  ██║     ██║     ██║     ██████╔╝███████║█████╗     ██║   ')}
+  ${COLORS.primary.bold(' ╚═══██╗ ██╔══██║██╔══╝  ██║     ██║     ██║     ██╔══██╗██╔══██║██╔══╝     ██║   ')}
+  ${COLORS.primary.bold('██████╔╝ ██║  ██║███████╗███████╗███████╗╚██████╗██║  ██║██║  ██║██║        ██║   ')}
+  ${COLORS.primary.bold('╚═════╝  ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝   ')}
   `;
   
-  console.log(COLORS.primary.bold(logo));
-  console.log(COLORS.highlight(' The terminal-based training platform for Cloud Engineering\n'));
+  console.log(logo);
+  console.log(COLORS.highlight('   > TERMINAL-BASED CLOUD ENGINEERING DECK_v0.1.0\n'));
 }
 
 export function displayDivider(color = COLORS.muted) {
@@ -34,12 +37,42 @@ export function displayHeader(text, color = COLORS.primary) {
 }
 
 export function displayWelcome(progress) {
+  console.clear();
   displayLogo();
   
   const { xp, rank, name } = progress;
-  console.log(`${COLORS.highlight('Welcome back,')} ${COLORS.secondary.bold(name)}`);
-  console.log(`${COLORS.muted('Rank:')} ${COLORS.warning(rank)}   ${COLORS.muted('XP:')} ${COLORS.accent(xp)}\n`);
+  const width = Math.max(process.stdout.columns || 60, 60);
   
-  displayDivider();
-  console.log('');
+  console.log(`  ${COLORS.primary.bold('▐')} ${COLORS.highlight('SHELLCRAFT_CLI')} ${COLORS.muted('::')} ${COLORS.secondary('CLOUD_LEARNING_DECK')}`);
+  console.log(`  ${COLORS.muted('╟─')} ${COLORS.highlight('DECK_NODE:')}    ${COLORS.accent(name.toUpperCase())}`);
+  console.log(`  ${COLORS.muted('╟─')} ${COLORS.highlight('CORE_MASTERY:')} ${COLORS.warning(rank.toUpperCase())}`);
+  console.log(`  ${COLORS.muted('╙─')} ${COLORS.highlight('SYNC_STATUS:')}  ${drawProgressBar(xp % 100, 100, 20)} ${COLORS.muted(`[${xp} XP]`)}`);
+  console.log(`  ${COLORS.muted('─'.repeat(width - 4))}\n`);
+}
+
+export function drawProgressBar(value, max, length = 30) {
+  const percentage = Math.min(Math.max(value / max, 0), 1);
+  const filledLength = Math.round(length * percentage);
+  const emptyLength = length - filledLength;
+  
+  const bar = COLORS.accent('█'.repeat(filledLength)) + COLORS.muted('░'.repeat(emptyLength));
+  const percentStr = Math.round(percentage * 100) + '%';
+  
+  return `[${bar}] ${COLORS.highlight(percentStr)}`;
+}
+
+export function drawBox(content, title = '', color = COLORS.primary) {
+  const lines = content.split('\n');
+  const width = Math.max(...lines.map(l => l.length), title.length) + 4;
+  
+  const top = color('┌' + '─'.repeat(width - 2) + '┐');
+  const bottom = color('└' + '─'.repeat(width - 2) + '┘');
+  const titleLine = title ? color('│ ') + COLORS.highlight(title.padEnd(width - 4)) + color(' │\n') + color('├' + '─'.repeat(width - 2) + '┤') : '';
+  
+  const body = lines.map(line => color('│ ') + line.padEnd(width - 4) + color(' │')).join('\n');
+  
+  console.log(top);
+  if (titleLine) console.log(titleLine);
+  console.log(body);
+  console.log(bottom);
 }

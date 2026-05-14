@@ -1,0 +1,14 @@
+[
+  {
+    "question": "Which command is used to manage multiple environments in Terraform?",
+    "options": [
+      "terraform env",
+      "terraform workspace",
+      "terraform stage",
+      "terraform switch"
+    ],
+    "answer": "terraform workspace",
+    "difficulty": "medium",
+    "explanation": "Terraform workspaces allow you to manage multiple states for the same configuration."
+  }
+]

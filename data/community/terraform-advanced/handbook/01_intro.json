@@ -1,0 +1,9 @@
+{
+  "title": "Advanced Workspaces",
+  "content": [
+    {
+      "title": "Introduction to Workspaces",
+      "text": "Workspaces allow you to manage separate state files for the same configuration directory. This is useful for Dev/Staging/Prod environments."
+    }
+  ]
+}
