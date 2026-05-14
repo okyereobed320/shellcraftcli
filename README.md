@@ -11,14 +11,15 @@ Shellcraft is an open-source, terminal-based training platform designed to take 
 
 ## ✨ Features
 
-- **🏗️ Structured Learning Groups:** Modules organized into Core Engineering, Cloud Basics, and Cloud Platforms.
-- **📖 Interactive Handbook:** Deep-dive content with optimized readability and paragraph-based formatting.
-- **🌐 Cloud Platforms:** Dedicated tracks for **AWS**, **GCP**, and **Azure**.
-- **🛒 Shellcraft Marketplace:** Browse, install, and even post your own community-contributed courses.
-- **🎯 Mission Maps:** Structured missions covering everything from filesystem navigation to server deployment.
-- **💼 On-Duty Simulations (Google Cloud Eng Role):** Experience realistic engineering tickets with an intelligent command normalization engine that understands real-world CLI usage.
-- **⚡ Slash Command System:** Navigate instantly with `/core`, `/cloud-basics`, `/cloud-platforms`, and `/community`.
-- **⭐ XP & Rank System:** Earn experience points and level up as you master the craft.
+- **💎 Prism-Sleek UI:** A high-fidelity 'Cloud Learning Deck' interface with a dynamic session HUD and professional 'Monolith' styling.
+- **📊 Command Center (Dashboard):** Real-time monitoring of your professional standing, rank progress, and skill mastery.
+- **⚡ Daily Quick-Fire:** High-intensity, timed (60s) challenges to sharpen your terminal reflexes and earn bonus XP.
+- **🛡️ Hall of Mastery:** A visual trophy case for your earned badges, celebrating your technical proficiency across modules.
+- **🤖 Dynamic AI Intel:** Generate custom, one-of-a-kind engineering scenarios on the fly based on any topic you describe.
+- **🏗️ Structured Learning Sectors:** Comprehensive modules for Core Engineering, Cloud Basics, and Cloud Platforms.
+- **🛒 Shellcraft Syllabi & Marketplace:** Browse, install (via Registry or URL), and even scaffold your own courses with the **Course Creation Wizard**.
+- **⌨️ Pro-REPL System:** Context-aware Tab-completion for seamless navigation during interactive training sessions.
+- **⭐ XP & Rank System:** Earn experience points and level up from a Shell Apprentice to a Shell Overlord.
 
 ---
 
@@ -42,7 +43,7 @@ sudo npm link
 
 ## 🚀 Quick Start
 
-Launch the interactive dashboard:
+Launch the **Cloud Learning Deck**:
 ```bash
 shellcraft
 ```
@@ -54,14 +55,14 @@ shellcraft
 | `shellcraft core <module>` | Access Core Engineering (linux, networking, git, etc.) |
 | `shellcraft cloud-basics` | Jump into Cloud Engineering fundamentals |
 | `shellcraft cloud-platforms <provider> <track>` | Start a Cloud Platform track (e.g., gcp ace) |
-| `shellcraft marketplace` | Browse and install community modules |
-| `shellcraft progress` | View your XP, Rank, and earned Badges |
+| `shellcraft marketplace` | Browse, import, or scaffold technical syllabi |
+| `shellcraft progress` | View your XP, Rank, and professional standing |
 
 ### Examples
 
-- `shellcraft core git learn` - Start learning Git
-- `shellcraft cloud-platforms gcp ace learn` - Start the expanded GCP ACE track (320+ lessons)
-- `shellcraft marketplace browse` - See what the community has built
+- `shellcraft core git learn` - Start the theoretical track for Git
+- `shellcraft cloud-platforms gcp ace quiz` - Start a tactical evaluation for GCP ACE
+- `shellcraft marketplace browse` - Explore community-contributed mastery tracks
 
 ---
 
