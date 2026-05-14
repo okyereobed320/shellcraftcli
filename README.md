@@ -9,6 +9,14 @@ Shellcraft is an open-source, terminal-based training platform designed to take 
 
 ---
 
+## 🖼️ Visuals
+
+Explore the aesthetics of the Cloud Engineering Deck:
+- **[View Brand Logo](./LOGO.md)**
+- **[Interactive UI Preview](./UI_PREVIEW.md)**
+
+---
+
 ## ✨ Features
 
 - **💎 Prism-Sleek UI:** A high-fidelity 'Cloud Learning Deck' interface with a dynamic session HUD and professional 'Monolith' styling.

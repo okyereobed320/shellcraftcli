@@ -1,86 +1,81 @@
-# 🖥️ Shellcraft UI Preview
+# 💎 Shellcraft UI Preview
 
-This document showcases the interactive terminal interface of **Shellcraft**.
+This document showcases the high-fidelity **Prism-Sleek** interface of the Shellcraft Cloud Engineering Deck.
 
-## 🏠 Main Menu
-```bash
-  _____ _          _ _                 __ _   
- / ____| |        | | |               / _| |  
-| (___ | |__   ___| | | ___ _ __ __ _| |_| |_ 
- \___ \| '_ \ / _ \ | |/ __| '__/ _` |  _| __|
- ____) | | | |  __/ | | (__| | | (_| | | | |_ 
-|_____/|_| |_|\___|_|_|\___|_|  \__,_|_|  \__|
-                                              
-             [ THE CLI TRAINING SUITE ]
+## 🚀 The Launch Experience
+The modern brand logo and session HUD greet the operator upon initialization.
 
-? What would you like to do? (Use arrow keys)
-❯ 🚀 Start Training
-  🏆 View High Scores
-  ⚙️ Settings
-  📖 Help
-  👋 Exit
+```text
+  ██████╗ ██╗  ██╗███████╗██╗     ██╗      ██████╗██████╗  █████╗ ███████╗████████╗
+  ██╔════╝ ██║  ██║██╔════╝██║     ██║     ██╔════╝██╔══██╗██╔══██╗██╔════╝╚══██╔══╝
+  ╚█████╗  ███████║█████╗  ██║     ██║     ██║     ██████╔╝███████║█████╗     ██║   
+   ╚═══██╗ ██╔══██║██╔══╝  ██║     ██║     ██║     ██╔══██╗██╔══██║██╔══╝     ██║   
+  ██████╔╝ ██║  ██║███████╗███████╗███████╗╚██████╗██║  ██║██║  ██║██║        ██║   
+  ╚═════╝  ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝   
+
+   > TERMINAL-BASED CLOUD ENGINEERING DECK_v0.1.0
+
+  ▐ SHELLCRAFT_CLI :: CLOUD_LEARNING_DECK
+  ╟─ DECK_NODE:    OPERATOR
+  ╟─ CORE_MASTERY: SHELL APPRENTICE
+  ╙─ SYNC_STATUS:  [███████████████░░░░░░░░░░░░░░░] 50% [120 XP]
+  ────────────────────────────────────────────────────────
 ```
 
-## 🌐 Networking Module (Isolated Path)
-When you select the Networking module, the entire suite adapts to the connectivity domain.
+## 🎮 Main Command Menu
+Clean, color-coded functional blocks for intuitive navigation.
 
-```bash
-? Select a Module:
-  Linux (Basic Mastery)
-❯ Networking (Modern Connectivity)
-  Docker (Coming Soon)
+```text
+❯ Select Command:
+  ▰▰ CENTRAL_COMMAND ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
+  █ DASHBOARD   [Progress] → monitoring & status
+  █ DAILY_QUEST [Challenge] → active challenge
+  
+  ▰▰ TRAINING_SECTORS ▰▰▰▰▰▰▰▰▰▰▰▰▰▰
+  █ CORE_ENG    [Core Engineering] → linux, docker, git
+  █ CLOUD_BASE  [Cloud Basics] → fundamentals
+  █ PLATFORMS   [Cloud Platforms] → aws, gcp, azure
+  
+  ▰▰ COMMUNITY_EXTENSIONS ▰▰▰▰▰▰▰▰▰▰
+  █ MARKETPLACE    [Marketplace] → browse & install modules
+  █ SHELLCRAFT_SYLLABI [Installed] → your technical mastery tracks
+  
+  ▰▰ UTILITY_TOOLS ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
+  █ AI_TUTOR    [Chat AI] → intelligent support
+  █ MASTERY     [Badges] → badges & trophies
+  █ SETTINGS    [AI Setup] → system configuration
 ```
 
-## 📖 Handbook Mode
-```bash
-------------------------------------------------------------
- NETWORKING | 01_INTRO | 1/70
-------------------------------------------------------------
- What is Global Cloud Infrastructure?
+## 📊 Command Center (Dashboard)
+A deep-dive into your professional standing.
 
- Cloud providers like AWS, Azure, and GCP operate a global
- network of data centers. These are organized into Regions,
- which are physical locations around the world where
- multiple Availability Zones (AZs) reside.
+```text
+┌──────────────────────────────────────────────────────────┐
+│ 📊 PERSONAL STATS                                        │
+├──────────────────────────────────────────────────────────┤
+│ Rank: Shell Apprentice                                   │
+│ XP:   120                                                │
+│ Missions: 2                                              │
+│ Badges:   0                                              │
+└──────────────────────────────────────────────────────────┘
 
- 💡 Pro Insight: Choosing the right region can reduce 
-    latency and meet data residency requirements.
-
-? Next: What is an Availability Zone?
-❯ [Continue]  [Exit to Menu]
+┌──────────────────────────────────────────────────────────┐
+│ 📈 RANK PROGRESS                                         │
+├──────────────────────────────────────────────────────────┤
+│ Next Rank: Shell Operator (180 XP more)                  │
+│ [████░░░░░░░░░░░░░░░░░░░░] 20%                           │
+└──────────────────────────────────────────────────────────┘
 ```
 
-## 🧠 Quiz Mode (XP Rank)
-```bash
-? Which port is used for HTTPS?
-  21
-  22
-  80
-❯ 443
+## 🛡️ Hall of Mastery (Badges)
+Visual icons for every technical domain mastered.
 
-✅ CORRECT! +15 XP
-Rank: [Shell Operator]  Next: [Shell Master]
-------------------------------------------------------------
-```
+```text
+🛡️  THE HALL OF MASTERY 🛡️
+Displaying your hard-earned credentials.
 
-## 🚀 Shift Mode (Simulation)
-```bash
-------------------------------------------------------------
- 🚨 TICKET #112: Website Not Loading (Firewall Issue)
-------------------------------------------------------------
- PROBLEM: A user reports that your website is not loading.
- Nginx is running, but the site is unreachable from outside.
+   🐧 LINUX   |   🌿 GIT
+   🐋 DOCKER  |   🏗️  TERRAFORM
 
- investigations:
- $ ufw status
- Status: active
- To Action From
- -- ------ ----
- 22 ALLOW Anywhere
-
-? Enter fix command:
-❯ ufw allow 80
-
-✅ RESOLVED: Port 80 (HTTP) was blocked by the firewall. Access restored!
-------------------------------------------------------------
+──────────────────────────────────────────────────────────
 ```
